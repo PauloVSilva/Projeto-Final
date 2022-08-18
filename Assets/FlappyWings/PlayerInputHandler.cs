@@ -7,9 +7,12 @@ public class PlayerInputHandler : MonoBehaviour{
     public GameObject playerPrefab;
     PlayerController playerController;
 
+    Vector3 startPos = new Vector3(0, 0, 0);
+
     private void Awake(){
         if(playerPrefab != null){
-            playerController = playerPrefab.GetComponent<PlayerController>();
+            playerController = GameObject.Instantiate(playerPrefab, startPos, transform.rotation).GetComponent<PlayerController>();
+            transform.parent = playerController.transform;
         }
     }
 
