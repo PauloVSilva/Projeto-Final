@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
     }
 
     void OnPlayerLeft(PlayerInput playerInput){
-        Debug.Log("Player left - Hello!");
+        Debug.Log("Player left - Goodbye!");
     }
 
     void JoinAction(InputAction.CallbackContext context){
@@ -56,6 +56,23 @@ public class GameManager : MonoBehaviour
     }
 
     void LeaveAction(InputAction.CallbackContext context){
-        
+        if (playerList.Count > 1){
+            foreach(var player in playerList){
+                foreach (var device in player.devices){
+                    if (device != null && context.control.device == device){
+                        UnregisterPlayer(player);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    void UnregisterPlayer(PlayerInput playerInput){
+        playerList.Remove(playerInput);
+        if(PlayerLeftGame != null){
+            PlayerLeftGame(playerInput);
+        }
+        Destroy(playerInput.transform.parent.gameObject);
     }
 }
