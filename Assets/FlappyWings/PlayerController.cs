@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour{
     [SerializeField] private float jumpHeight = 1.0f;
     private float gravityValue = -9.81f;
 
+    public int score;
+
     private Vector3 move;
 
     private void Awake(){
@@ -43,5 +45,10 @@ public class PlayerController : MonoBehaviour{
     public void OnMove(InputAction.CallbackContext context){
         Vector2 movement = context.ReadValue<Vector2>();
         move = new Vector3(movement.x, 0, movement.y);
+    }
+
+    public void IncreaseScore(int value){
+        score += value;
+        Debug.Log("Player score: " + score);
     }
 }
