@@ -75,7 +75,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0.05731578, g: 0.5283019, b: 0.1835473, a: 1}
+  m_Color: {r: 0.6431373, g: 0.1372549, b: 0.16821231, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -115,7 +115,7 @@ GameObject:
   - component: {fileID: 8463049207392376648}
   - component: {fileID: 8463049207392376654}
   m_Layer: 0
-  m_Name: PlayerPrefab
+  m_Name: PlayerPrefab Red
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -150,7 +150,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerSpeed: 2
-  jumpHeight: 1
+  score: 0
+  thisPlayerColor: 1
 --- !u!143 &8463049207392376654
 CharacterController:
   m_ObjectHideFlags: 0

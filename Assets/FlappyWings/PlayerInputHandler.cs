@@ -4,14 +4,14 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerInputHandler : MonoBehaviour{
-    public GameObject playerPrefab;
-    PlayerController playerController;
+    public GameObject[] playerPrefabs;
+    public PlayerController playerController;
 
     Vector3 startPos = new Vector3(0, 0, 0);
 
     private void Awake(){
-        if(playerPrefab != null){
-            playerController = GameObject.Instantiate(playerPrefab, GameManager.instance.spawnPoints[0].transform.position, transform.rotation).GetComponent<PlayerController>();
+        if(playerPrefabs != null){
+            playerController = GameObject.Instantiate(playerPrefabs[GetComponent<PlayerInput>().playerIndex], GameManager.instance.spawnPoints[0].transform.position, transform.rotation).GetComponent<PlayerController>();
             transform.parent = playerController.transform;
             transform.position = playerController.transform.position;
         }

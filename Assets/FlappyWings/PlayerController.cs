@@ -10,12 +10,18 @@ public class PlayerController : MonoBehaviour{
     private Vector3 playerVelocity;
     private bool groundedPlayer;
     [SerializeField] private float playerSpeed = 2.0f;
-    [SerializeField] private float jumpHeight = 1.0f;
+    //[SerializeField] private float jumpHeight = 1.0f;
     private float gravityValue = -9.81f;
-
-    public int score;
-
     private Vector3 move;
+
+
+    public int score = 0;
+    public enum playerColor{
+        blue, red, green, yellow
+    }
+    public playerColor thisPlayerColor = playerColor.blue;
+
+    public event System.Action<int> OnScoreChanged;
 
     private void Awake(){
         controller = GetComponent<CharacterController>();
@@ -49,6 +55,9 @@ public class PlayerController : MonoBehaviour{
 
     public void IncreaseScore(int value){
         score += value;
+        if(OnScoreChanged != null){
+            OnScoreChanged(score);
+        }
         Debug.Log("Player score: " + score);
     }
 }
