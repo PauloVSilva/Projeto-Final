@@ -20,7 +20,7 @@ public class CoinSpawner : MonoBehaviour{
         while (spawnerEnabled){
             yield return new WaitForSeconds(Random.Range(minSpawnInterval, maxSpawnInterval));
             if(GameManager.instance.playerList.Count > 1){
-                Instantiate(coins[0], RandomNewSpawnPosition(), transform.rotation);
+                Instantiate(coins[Random.Range(0, coins.Length)], RandomNewSpawnPosition(), transform.rotation);
             }
         }
     }
@@ -28,6 +28,6 @@ public class CoinSpawner : MonoBehaviour{
     Vector3 RandomNewSpawnPosition(){
         float randomX = Random.Range(XMin, XMax);
         float randomZ = Random.Range(ZMin, ZMax);
-        return new Vector3(randomX, 0.5f, randomZ);
+        return new Vector3(randomX, this.transform.position.y, randomZ);
     }
 }

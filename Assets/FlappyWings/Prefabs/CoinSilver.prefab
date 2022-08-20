@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5f37643065b9d824c80b71775cec750c, type: 2}
+  - {fileID: 2100000, guid: f3aedb53a806c8d4a9c7148e467ea1d2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -111,7 +111,7 @@ GameObject:
   - component: {fileID: 2784413684905434360}
   - component: {fileID: 7690747701783756440}
   m_Layer: 0
-  m_Name: Coin
+  m_Name: CoinSilver
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -158,9 +158,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c54ec4c507502dd41b3ad10edadec179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pickUpRadius: 1.5
+  pickUpRadius: 0.5
   rotationSpeed: 100
-  value: 1
+  value: 10
 --- !u!54 &7690747701783756440
 Rigidbody:
   m_ObjectHideFlags: 0
