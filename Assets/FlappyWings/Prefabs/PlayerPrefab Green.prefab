@@ -149,7 +149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91d2d932c9bd60b42b0f3a263a7da2bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerSpeed: 2
+  playerSpeed: 4
   score: 0
   thisPlayerColor: 2
 --- !u!143 &8463049207392376654

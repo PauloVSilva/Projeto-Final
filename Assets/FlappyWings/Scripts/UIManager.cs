@@ -7,12 +7,13 @@ public class UIManager : MonoBehaviour{
     public GameObject[] playerUIPanels;
     public GameObject[] joinMessages;
 
-    private void Start(){
+    private void Awake(){
         GameManager.instance.PlayerJoinedGame += PlayerJoinedGame;
         GameManager.instance.PlayerLeftGame += PlayerLeftGame;
     }
 
     void PlayerJoinedGame(PlayerInput playerInput){
+        Debug.Log("PlayerJoinedGame");
         ShowUIPanel(playerInput);
     }
 

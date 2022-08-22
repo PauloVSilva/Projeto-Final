@@ -14,7 +14,15 @@ public class PlayerUIPanel : MonoBehaviour{
         UpdateScore(0);
     }
 
+    private void Update(){
+        if (player != null){
+            playerScore.text = player.score.ToString();
+            playerName.text = player.thisPlayerColor.ToString();
+        }
+    }
+
     public void AssignPlayer(int index){
+        //Debug.Log("AssignPlayer");
         StartCoroutine(AssignPlayerDelay(index));
     }
 
