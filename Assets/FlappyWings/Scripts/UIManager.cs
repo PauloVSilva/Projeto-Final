@@ -13,7 +13,7 @@ public class UIManager : MonoBehaviour{
     }
 
     void PlayerJoinedGame(PlayerInput playerInput){
-        Debug.Log("PlayerJoinedGame");
+        //Debug.Log("PlayerJoinedGame");
         ShowUIPanel(playerInput);
     }
 
