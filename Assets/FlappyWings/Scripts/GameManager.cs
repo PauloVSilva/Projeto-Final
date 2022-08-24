@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Linq;
 
-public class GameManager : MonoBehaviour
-{
+public class GameManager : MonoBehaviour{
     public GameObject[] spawnPoints;
 
     public List<PlayerInput> playerList = new List<PlayerInput>();
@@ -43,9 +43,9 @@ public class GameManager : MonoBehaviour
 
     void OnPlayerJoined(PlayerInput playerInput){
         playerList.Add(playerInput);
-        if (PlayerJoinedGame != null){
+        //if (PlayerJoinedGame != null){
             PlayerJoinedGame(playerInput);
-        }
+        //}
     }
 
     void OnPlayerLeft(PlayerInput playerInput){

@@ -7,8 +7,9 @@ using TMPro;
 public class PlayerUIPanel : MonoBehaviour{
     public TextMeshProUGUI playerName;
     public TextMeshProUGUI playerScore;
+    public TextMeshProUGUI pressToJoin;
 
-    PlayerController player;
+    public PlayerController player;
 
     private void Start(){
         UpdateScore(0);
@@ -18,6 +19,12 @@ public class PlayerUIPanel : MonoBehaviour{
         if (player != null){
             playerScore.text = player.score.ToString();
             playerName.text = player.thisPlayerColor.ToString();
+            pressToJoin.text = null;
+        }
+        else {
+            playerScore.text = null;
+            playerName.text = null;
+            pressToJoin.text = "Press X to Join";
         }
     }
 
@@ -27,10 +34,16 @@ public class PlayerUIPanel : MonoBehaviour{
     }
 
     IEnumerator AssignPlayerDelay(int index){
-        yield return new WaitForSeconds(0.01f);
+        yield return new WaitForSeconds(0.05f);
         player = GameManager.instance.playerList[index].GetComponent<PlayerInputHandler>().playerController;
 
-        SetUpInfoPanel();
+        //SetUpInfoPanel();
+    }
+
+    public void UnassignPlayer(){
+        player = null;
+
+        //SetUpInfoPanel();
     }
 
     void SetUpInfoPanel(){
