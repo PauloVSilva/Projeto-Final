@@ -112,8 +112,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8463049207392376649}
-  - component: {fileID: 8463049207392376648}
   - component: {fileID: 8463049207392376654}
+  - component: {fileID: 8463049207392376648}
+  - component: {fileID: 8862573670174819220}
   m_Layer: 0
   m_Name: PlayerPrefab Red
   m_TagString: Player
@@ -137,21 +138,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8463049207392376648
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8463049207392376651}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91d2d932c9bd60b42b0f3a263a7da2bf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerSpeed: 4
-  score: 0
-  thisPlayerColor: 1
 --- !u!143 &8463049207392376654
 CharacterController:
   m_ObjectHideFlags: 0
@@ -170,3 +156,36 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8463049207392376648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8463049207392376651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91d2d932c9bd60b42b0f3a263a7da2bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerSpeed: 4
+  score: 0
+  thisPlayerColor: 1
+--- !u!114 &8862573670174819220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8463049207392376651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6f0a793dfaf0c241b2c3d0eae535890, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interactionPoint: {fileID: 8463049207392376649}
+  _interactionPointRadius: 1.5
+  _interactableMask:
+    serializedVersion: 2
+    m_Bits: 64
+  _numFound: 0

@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
+    path: Assets/Scenes/MainHub.unity
+    guid: 5fa59cc6986c0f940ac2d906e9ed4d68
+  - enabled: 1
     path: Assets/Scenes/FlappyWings.unity
     guid: 6c408c09f1a22c748b509ce4500d0df9
   m_configObjects: {}

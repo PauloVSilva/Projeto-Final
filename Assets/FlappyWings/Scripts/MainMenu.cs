@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class MainMenu : MonoBehaviour{
     public void PlayFlappyWings(){
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-        SceneManager.LoadScene("FlappyWings");
+        SceneManager.LoadScene("MainHub");
     }
 
     public void QuitGame(){
