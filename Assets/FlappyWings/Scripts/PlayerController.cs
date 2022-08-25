@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour{
         playerVelocity.y += gravityValue * Time.deltaTime;
         controller.Move(playerVelocity * Time.deltaTime);
 
-        transform.rotation = Quaternion.Euler(0, 180, 0);
+        //transform.rotation = Quaternion.Euler(0, 180, 0);
     }
 
     public void OnMove(InputAction.CallbackContext context){

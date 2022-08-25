@@ -7,23 +7,34 @@ public class Interactor : MonoBehaviour{
     [SerializeField] private Transform _interactionPoint;
     [SerializeField] private float _interactionPointRadius;
     [SerializeField] private LayerMask _interactableMask;
+    [SerializeField] private InteractionPromptUI _interactionPromptUI;
+
     private readonly Collider[] _collider = new Collider[3];
     [SerializeField] private int _numFound;
 
+    private InteractorInterface _interactable;
+
     private void Update(){
         _numFound = Physics.OverlapSphereNonAlloc(_interactionPoint.position, _interactionPointRadius, _collider, _interactableMask);
+        
+        if (_numFound > 0){
+            _interactable = _collider[0].GetComponent<InteractorInterface>();
+            if (_interactable != null){
+                if (!_interactionPromptUI.isDisplayed) {
+                    _interactionPromptUI.SetUp(_interactable.InteractionPromp);
+                }
+            }
+        }
+        else{
+            if (_interactable != null) _interactable = null;
+            if (_interactionPromptUI.isDisplayed) _interactionPromptUI.ClosePanel();
+        }
     }
 
     public void KeyIsPressed(float context){
-        if (_numFound < 1) return;
-
-        var interactable = _collider[0].GetComponent<InteractorInterface>();
-        if (interactable == null) return;
-
-        //if(Keyboard.current.eKey.wasPressedThisFrame){
         if(context == 1f){
             Debug.Log("Input detected");
-            interactable.Interact(this);
+            _interactable.Interact(this);
         }
     }
 

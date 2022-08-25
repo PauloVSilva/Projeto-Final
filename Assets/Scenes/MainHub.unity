@@ -1068,7 +1068,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 081f58ce106f604459b543d172c3a769, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fixedOffset: {x: 0, y: 10, z: -10}
+  fixedOffset: {x: 0, y: 5, z: -5}
   dynamicOffset: {x: 0, y: 0, z: 0}
   smoothSpeed: 5
 --- !u!81 &1737681282
@@ -1169,7 +1169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e86a8d1b86ccb4c488988b30b261edd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _prompt: 
+  _prompt: Play DimeDrop!
 --- !u!136 &1863662785
 CapsuleCollider:
   m_ObjectHideFlags: 0
