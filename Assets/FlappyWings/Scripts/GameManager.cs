@@ -5,15 +5,15 @@ using UnityEngine.InputSystem;
 using System.Linq;
 
 public class GameManager : MonoBehaviour{
-    public GameObject[] spawnPoints;
-
-    public List<PlayerInput> playerList = new List<PlayerInput>();
-
-    [SerializeField] InputAction joinAction;
-    [SerializeField] InputAction leaveAction;
-
     //INSTANCES
     public static GameManager instance = null;
+
+    public GameObject spawnPointPrefab;
+    public GameObject[] spawnPoints;
+    public List<PlayerInput> playerList = new List<PlayerInput>();
+
+    [SerializeField] public InputAction joinAction;
+    [SerializeField] public InputAction leaveAction;
 
     //EVENTS
     public event System.Action<PlayerInput> PlayerJoinedGame;
@@ -22,18 +22,35 @@ public class GameManager : MonoBehaviour{
     private void Awake(){
         if (instance == null){
             instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else if (instance != null){
             Destroy(gameObject);
         }
 
-        spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
+        SetSpawnPoint();
 
         joinAction.Enable();
         joinAction.performed += context => JoinAction(context);
 
         leaveAction.Enable();
         leaveAction.performed += context => LeaveAction(context);
+    }
+
+    void FindSpawnPoints(){
+        spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
+    }
+
+    void CreateSpawnPoint(){
+        Instantiate(spawnPointPrefab, GameManager.instance.transform.position, Quaternion.identity); 
+    }
+
+    public void SetSpawnPoint(){
+        FindSpawnPoints();
+        if (spawnPoints.Length < 1){
+            CreateSpawnPoint();
+        }
+        FindSpawnPoints();
     }
 
     private void Start(){
@@ -49,7 +66,7 @@ public class GameManager : MonoBehaviour{
     }
 
     void OnPlayerLeft(PlayerInput playerInput){
-        Debug.Log("Player left - Goodbye!");
+        //Debug.Log("Player left - Goodbye!");
     }
 
     void JoinAction(InputAction.CallbackContext context){

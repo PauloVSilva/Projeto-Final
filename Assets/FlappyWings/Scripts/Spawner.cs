@@ -6,7 +6,8 @@ public class Spawner : MonoBehaviour{
     public GameObject[] objectsToBeSpawned;
     public LayerMask layerMask;
 
-    public float XMin, XMax, ZMin, ZMax;
+    //public float XMin, XMax, ZMin, ZMax;
+    public float spawnRange;
 
     Vector3 spawnPosition;
     //Vector3 gizmoPos;
@@ -15,10 +16,10 @@ public class Spawner : MonoBehaviour{
     [SerializeField] bool spawnerEnabled = true;
     
     private void Start(){
-        StartCoroutine(SpawnCoins());
+        StartCoroutine(SpawnEntity());
     }
 
-    IEnumerator SpawnCoins(){
+    IEnumerator SpawnEntity(){
         while (spawnerEnabled){
             yield return new WaitForSeconds(Random.Range(minSpawnInterval, maxSpawnInterval));
 
@@ -36,8 +37,11 @@ public class Spawner : MonoBehaviour{
     }
 
     Vector3 RandomNewSpawnPosition(){
-        float randomX = Random.Range(XMin, XMax);
-        float randomZ = Random.Range(ZMin, ZMax);
-        return new Vector3(this.transform.position.x + randomX, this.transform.position.y, this.transform.position.z + randomZ);
+        //float randomX = Random.Range(XMin, XMax);
+        //float randomZ = Random.Range(ZMin, ZMax);
+        //return new Vector3(this.transform.position.x + randomX, this.transform.position.y, this.transform.position.z + randomZ);
+        float randomPosX = Random.Range(-spawnRange, spawnRange);
+        float randomPosZ = Random.Range(-spawnRange, spawnRange);
+        return new Vector3(this.transform.position.x + randomPosX, this.transform.position.y, this.transform.position.z + randomPosZ);
     }
 }

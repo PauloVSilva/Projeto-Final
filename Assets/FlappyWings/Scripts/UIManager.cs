@@ -14,15 +14,15 @@ public class UIManager : MonoBehaviour{
     }
 
     void PlayerJoinedGame(PlayerInput playerInput){
-        Debug.Log("PlayerJoinedGame");
-        playerUIPanels[playerInput.playerIndex].GetComponent<PlayerUIPanel>().AssignPlayer(playerInput.playerIndex);
-        ReorderPanels();
+        //Debug.Log("PlayerJoinedGame");
+        //playerUIPanels[playerInput.playerIndex].GetComponent<PlayerUIPanel>().AssignPlayer(playerInput.playerIndex);
+        //ReorderPanels();
     }
 
     void PlayerLeftGame(PlayerInput playerInput){
-        Debug.Log("PlayerLeftGame");
-        playerUIPanels[playerInput.playerIndex].GetComponent<PlayerUIPanel>().UnassignPlayer();
-        ReorderPanels();
+        //Debug.Log("PlayerLeftGame");
+        //playerUIPanels[playerInput.playerIndex].GetComponent<PlayerUIPanel>().UnassignPlayer();
+        //ReorderPanels();
     }
 
     void ReorderPanels(){

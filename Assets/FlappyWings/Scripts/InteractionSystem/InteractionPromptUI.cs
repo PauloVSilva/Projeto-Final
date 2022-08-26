@@ -14,6 +14,9 @@ public class InteractionPromptUI : MonoBehaviour{
     }
 
     private void LateUpdate(){
+        if(_mainCam == null){
+            _mainCam = Camera.main;
+        }
         var rotation = _mainCam.transform.rotation;
         transform.LookAt(transform.position + rotation * Vector3.forward, rotation * Vector3.up);
     }

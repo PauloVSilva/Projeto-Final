@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class InteractableCoin : MonoBehaviour, InteractorInterface{
+public class InteractableToy : MonoBehaviour, InteractorInterface{
     [SerializeField] private string _prompt;
+    [SerializeField] private string _name;
     public string InteractionPromp => _prompt;
 
     public bool Interact (Interactor interactor){
         Debug.Log("Interacting with " + InteractionPromp);
-        SceneManager.LoadScene("FlappyWings");
+        SceneManager.LoadScene(_name);
         return true;
     }
 }

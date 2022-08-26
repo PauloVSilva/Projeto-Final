@@ -18,10 +18,26 @@ public class PlayerInputHandler : MonoBehaviour{
     }
 
     public void OnMove(InputAction.CallbackContext context){
-        playerController.OnMove(context);
+        if(playerPrefabs != null){
+            playerController.OnMove(context);
+        }
+    }
+
+    public void OnJump(InputAction.CallbackContext context){
+        if(playerPrefabs != null){
+            playerController.OnJump(context);
+        }
+    }
+
+    public void OnDash(InputAction.CallbackContext context){
+        if(playerPrefabs != null){
+            playerController.OnDash(context);
+        }
     }
 
     public void OnInteractWithObject(InputAction.CallbackContext context){
-        playerController.OnInteractWithObject(context);
+        if(playerPrefabs != null){
+            playerController.OnInteractWithObject(context);
+        }
     }
 }

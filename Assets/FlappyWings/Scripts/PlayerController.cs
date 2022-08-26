@@ -9,12 +9,19 @@ public class PlayerController : MonoBehaviour{
     private CharacterController controller;
     private Interactor interactor;
 
-    private Vector3 playerVelocity;
-    private bool groundedPlayer;
+    [SerializeField] private Vector3 playerVelocity;
+    [SerializeField] private bool groundedPlayer;
+
     [SerializeField] private float playerSpeed = 2.0f;
-    //[SerializeField] private float jumpHeight = 1.0f;
+    [SerializeField] private float jumpHeight = 1.0f;
+    [SerializeField] private int extraJumps = 1;
+    [SerializeField] private int extraJumpsRemaining;
+    [SerializeField] private float maxStamina = 100.0f;
+    [SerializeField] private float currentStamina = 100.0f;
+    [SerializeField] private float staminaRegenRate = 5.0f;
+
     private float gravityValue = -9.81f;
-    private Vector3 move;
+    [SerializeField] private Vector3 move;
 
     public int score = 0;
     public enum playerColor{blue, red, green, yellow}
@@ -26,6 +33,7 @@ public class PlayerController : MonoBehaviour{
     private void Awake(){
         controller = GetComponent<CharacterController>();
         interactor = GetComponent<Interactor>();
+        transform.parent = GameManager.instance.transform;
     }
 
     void Update(){
@@ -34,21 +42,40 @@ public class PlayerController : MonoBehaviour{
             playerVelocity.y = 0f;
         }
 
+        if (groundedPlayer){
+            extraJumpsRemaining = extraJumps;
+        }
+
         controller.Move(move * Time.deltaTime * playerSpeed);
 
         if (move != Vector3.zero){
             gameObject.transform.forward = move;
         }
 
-        // // Changes the height position of the player..
-        // if (Input.GetButtonDown("Jump") && groundedPlayer){
-        //     playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
-        // }
-
         playerVelocity.y += gravityValue * Time.deltaTime;
         controller.Move(playerVelocity * Time.deltaTime);
 
+        LerpRotation();
+        StaminaRegen();
+    }
+
+    public void LerpRotation(){
         //transform.rotation = Quaternion.Euler(0, 180, 0);
+        if(transform.rotation.y > 0 && transform.rotation.y < 180){
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(transform.rotation.x, 90f, transform.rotation.z), 5 * Time.deltaTime);
+        }
+        else {
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(transform.rotation.x, -90f, transform.rotation.z), 5 * Time.deltaTime);
+        }
+    }
+
+    public void StaminaRegen(){
+        if(currentStamina < maxStamina){
+            currentStamina = currentStamina + staminaRegenRate * Time.deltaTime;
+        }
+        if (currentStamina > maxStamina){
+            currentStamina = maxStamina;
+        }
     }
 
     public void OnMove(InputAction.CallbackContext context){
@@ -56,9 +83,33 @@ public class PlayerController : MonoBehaviour{
         move = new Vector3(movement.x, 0, movement.y);
     }
 
+    public void OnJump(InputAction.CallbackContext context){
+        if(context.performed){
+            if(currentStamina > 15f){
+                if(extraJumpsRemaining > 0){
+                    playerVelocity.y = Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
+                    if(!groundedPlayer){
+                        extraJumpsRemaining--;
+                    }
+                }
+                currentStamina -= 15f;
+            }
+        }
+    }
+
+    public void OnDash(InputAction.CallbackContext context){
+        if(context.performed){
+            if(currentStamina > 10f){
+                controller.Move(transform.forward * playerSpeed);
+                currentStamina -= 10f;
+            }
+        }
+    }
+
     public void OnInteractWithObject(InputAction.CallbackContext context){
-        //float pressedButton = context.ReadValue<float>();
-        interactor.KeyIsPressed(context.ReadValue<float>());
+        if(context.performed){
+            interactor.KeyIsPressed(context.ReadValue<float>());
+        }
     }
 
     public void IncreaseScore(int value){
