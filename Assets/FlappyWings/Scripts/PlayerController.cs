@@ -55,7 +55,7 @@ public class PlayerController : MonoBehaviour{
         playerVelocity.y += gravityValue * Time.deltaTime;
         controller.Move(playerVelocity * Time.deltaTime);
 
-        LerpRotation();
+        //LerpRotation();
         StaminaRegen();
     }
 
@@ -117,6 +117,6 @@ public class PlayerController : MonoBehaviour{
         if(OnScoreChanged != null){
             OnScoreChanged(score);
         }
-        Debug.Log("Player score: " + score);
+        //Debug.Log("Player score: " + score);
     }
 }

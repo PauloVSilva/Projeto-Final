@@ -10,11 +10,20 @@ public class PlayerInputHandler : MonoBehaviour{
     Vector3 startPos = new Vector3(0, 0, 0);
 
     private void Awake(){
+        Spawn();
+    }
+
+    public void Spawn(){
         if(playerPrefabs != null){
-            playerController = GameObject.Instantiate(playerPrefabs[GetComponent<PlayerInput>().playerIndex], GameManager.instance.spawnPoints[0].transform.position, transform.rotation).GetComponent<PlayerController>();
+
+            int index = GameManager.instance.spawnPoints.Length;
+            int randomIndex = Random.Range(0, index);
+
+            playerController = GameObject.Instantiate(playerPrefabs[GetComponent<PlayerInput>().playerIndex], GameManager.instance.spawnPoints[randomIndex].transform.position, transform.rotation).GetComponent<PlayerController>();
             transform.parent = playerController.transform;
             transform.position = playerController.transform.position;
         }
+
     }
 
     public void OnMove(InputAction.CallbackContext context){

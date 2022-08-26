@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using System.Linq;
 
 public class GameManager : MonoBehaviour{
@@ -28,8 +29,6 @@ public class GameManager : MonoBehaviour{
             Destroy(gameObject);
         }
 
-        SetSpawnPoint();
-
         joinAction.Enable();
         joinAction.performed += context => JoinAction(context);
 
@@ -37,25 +36,46 @@ public class GameManager : MonoBehaviour{
         leaveAction.performed += context => LeaveAction(context);
     }
 
-    void FindSpawnPoints(){
-        spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
+    private void Start(){
+        SetSpawnPoint();
+        //PlayerInputManager.instance.JoinPlayer(0, -1, null);
+        //Debug.Log(PlayerJoinedGame);
     }
 
-    void CreateSpawnPoint(){
-        Instantiate(spawnPointPrefab, GameManager.instance.transform.position, Quaternion.identity); 
+    public void ReturnToMainHub(){
+        SceneManager.LoadScene("MainHub");
+        StartCoroutine(SetSpawnPointDelayed());
+    }
+
+    IEnumerator SetSpawnPointDelayed(){
+        yield return new WaitForSeconds(0.01f);
+        FindSpawnPoints();
+        if (spawnPoints.Count() < 1 || spawnPoints[0] == null){
+            CreateSpawnPoint();
+        }
+        FindSpawnPoints();
+        foreach(var player in playerList){
+            Debug.Log("teleporting");
+            player.transform.parent.position = spawnPoints[0].transform.position;
+        }
     }
 
     public void SetSpawnPoint(){
         FindSpawnPoints();
-        if (spawnPoints.Length < 1){
+        if (spawnPoints.Count() < 1 || spawnPoints[0] == null){
             CreateSpawnPoint();
         }
         FindSpawnPoints();
     }
 
-    private void Start(){
-        //PlayerInputManager.instance.JoinPlayer(0, -1, null);
-        //Debug.Log(PlayerJoinedGame);
+    void FindSpawnPoints(){
+        //Debug.Log("Finding SpawnPoint");
+        spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
+    }
+
+    void CreateSpawnPoint(){
+        //Debug.Log("Creating SpawnPoint");
+        Instantiate(spawnPointPrefab, GameManager.instance.transform.position, Quaternion.identity); 
     }
 
     void OnPlayerJoined(PlayerInput playerInput){
