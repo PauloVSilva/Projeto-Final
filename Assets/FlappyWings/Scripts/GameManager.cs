@@ -9,9 +9,11 @@ public class GameManager : MonoBehaviour{
     //INSTANCES
     public static GameManager instance = null;
 
+    public List<PlayerInput> playerList = new List<PlayerInput>();
     public GameObject spawnPointPrefab;
     public GameObject[] spawnPoints;
-    public List<PlayerInput> playerList = new List<PlayerInput>();
+    public GameObject[] playerPrefabs;
+    public GameObject[] dimeDropPrefabs;
 
     [SerializeField] public InputAction joinAction;
     [SerializeField] public InputAction leaveAction;
@@ -44,20 +46,24 @@ public class GameManager : MonoBehaviour{
 
     public void ReturnToMainHub(){
         SceneManager.LoadScene("MainHub");
-        StartCoroutine(SetSpawnPointDelayed());
+        StartCoroutine(ReturnToMainHubDelayed());
     }
 
-    IEnumerator SetSpawnPointDelayed(){
+    IEnumerator ReturnToMainHubDelayed(){
         yield return new WaitForSeconds(0.01f);
         FindSpawnPoints();
         if (spawnPoints.Count() < 1 || spawnPoints[0] == null){
             CreateSpawnPoint();
         }
         FindSpawnPoints();
-        foreach(var player in playerList){
-            Debug.Log("teleporting");
-            player.transform.parent.position = spawnPoints[0].transform.position;
+        foreach(var playerInput in playerList){
+            //Debug.Log("teleporting");
+            playerInput.GetComponent<PlayerInputHandler>().Destroy();
+            playerInput.GetComponent<PlayerInputHandler>().Spawn();
+            playerInput.transform.GetChild(0).position = GameManager.instance.spawnPoints[0].transform.position;
         }
+        joinAction.Enable();
+        leaveAction.Enable();
     }
 
     public void SetSpawnPoint(){
@@ -80,9 +86,9 @@ public class GameManager : MonoBehaviour{
 
     void OnPlayerJoined(PlayerInput playerInput){
         playerList.Add(playerInput);
-        //if (PlayerJoinedGame != null){
+        if (PlayerJoinedGame != null){
             PlayerJoinedGame(playerInput);
-        //}
+        }
     }
 
     void OnPlayerLeft(PlayerInput playerInput){
@@ -94,7 +100,7 @@ public class GameManager : MonoBehaviour{
     }
 
     void LeaveAction(InputAction.CallbackContext context){
-        if (playerList.Count > 1){
+        if (playerList.Count > 0){
             foreach(var player in playerList){
                 foreach (var device in player.devices){
                     if (device != null && context.control.device == device){
@@ -111,6 +117,6 @@ public class GameManager : MonoBehaviour{
         if(PlayerLeftGame != null){
             PlayerLeftGame(playerInput);
         }
-        Destroy(playerInput.transform.parent.gameObject);
+        Destroy(playerInput.transform.gameObject);
     }
 }

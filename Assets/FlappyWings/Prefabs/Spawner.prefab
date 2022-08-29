@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4499459319332150870}
   m_Layer: 0
   m_Name: Spawner
-  m_TagString: Untagged
+  m_TagString: Spawner
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -51,13 +51,10 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 0
-  XMin: -1
-  XMax: 1
-  ZMin: -1
-  ZMax: 1
-  minSpawnInterval: 1
-  maxSpawnInterval: 3
+  spawnRange: 0
   spawnerEnabled: 1
+  cooldown: 1
+  ready: 1
 --- !u!23 &4499459319332150871
 MeshRenderer:
   m_ObjectHideFlags: 0

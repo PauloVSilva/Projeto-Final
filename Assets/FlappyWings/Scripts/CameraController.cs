@@ -13,7 +13,7 @@ public class CameraController : MonoBehaviour{
 
     void FixedUpdate(){
         if (GameManager.instance.playerList.Count == 1){
-            Vector3 desiredPosition = GameManager.instance.playerList[0].transform.position + fixedOffset;
+            Vector3 desiredPosition = GameManager.instance.playerList[0].transform.GetChild(0).position + fixedOffset;
             Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * Time.deltaTime);
             transform.position = smoothedPosition;
         }
@@ -30,7 +30,7 @@ public class CameraController : MonoBehaviour{
     Vector3 FindCentroid(){
         Vector3 centerPos = new Vector3(0, 0, 0);
         foreach(var player in GameManager.instance.playerList){
-            centerPos += player.transform.parent.transform.position;
+            centerPos += player.transform.GetChild(0).position;
         }
         centerPos /= GameManager.instance.playerList.Count;
 

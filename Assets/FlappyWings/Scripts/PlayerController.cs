@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour{
     private void Awake(){
         controller = GetComponent<CharacterController>();
         interactor = GetComponent<Interactor>();
-        transform.parent = GameManager.instance.transform;
+        //transform.parent = GameManager.instance.transform;
     }
 
     void Update(){

@@ -12,9 +12,9 @@ public class Spawner : MonoBehaviour{
     //Vector3 gizmoPos;
 
     //[SerializeField] float minSpawnInterval = 1f, maxSpawnInterval = 3f;
-    [SerializeField] bool spawnerEnabled = true;
-    [SerializeField] float cooldown = 1f;
-    [SerializeField] float ready = 1f;
+    public bool spawnerEnabled = true;
+    public float cooldown = 1f;
+    public float ready = 1f;
     
     private void Start(){
         //StartCoroutine(SpawnEntity());

@@ -416,9 +416,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ffa7d5962dfe094fb2c6beae87fc869, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerList: []
   spawnPointPrefab: {fileID: 3866286568957964134, guid: c725afe3b701bdc4ebbe27c35634a89f, type: 3}
   spawnPoints: []
-  playerList: []
+  playerPrefabs:
+  - {fileID: 8463049207392376651, guid: 585d5ce6f3879b647a8b9e3a549b46ce, type: 3}
+  - {fileID: 8463049207392376651, guid: c4932da71cc95a041b49167cd17204a2, type: 3}
+  - {fileID: 8463049207392376651, guid: ea4717c650c5d2747aaed44f142794b7, type: 3}
+  - {fileID: 8463049207392376651, guid: 3e64e295b079df446aa368fdb7e0f01e, type: 3}
+  dimeDropPrefabs:
+  - {fileID: 8463049207392376651, guid: 26d07592619c8ba4883c69ede0af3b8e, type: 3}
   joinAction:
     m_Name: Join
     m_Type: 0

@@ -486,9 +486,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5f746321b8de2f4f84f8c9b9f708d99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnersList: []
   thisGameState: 0
-  countDown: 1
-  goal: 10000
+  countDown: 10
+  goal: 1000
 --- !u!4 &826944107
 Transform:
   m_ObjectHideFlags: 0

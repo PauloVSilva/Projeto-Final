@@ -7,10 +7,15 @@ using System.Linq;
 public class DimeDropManager : MonoBehaviour{
     //INSTANCES
     public static DimeDropManager instance = null;
+    
+    //public GameObject[] playerPrefabs;
+    public GameObject[] spawnersList;
 
     public enum gameState{
         preparation,
+        gameIsRunningSetUp,
         gameIsRunning,
+        gameIsOverSetUp,
         gameIsOver
     }
     [SerializeField] private gameState thisGameState = gameState.preparation;
@@ -27,12 +32,21 @@ public class DimeDropManager : MonoBehaviour{
         }
 
         GameManager.instance.SetSpawnPoint();
-        foreach(var player in GameManager.instance.playerList){
-            player.transform.parent.position = GameManager.instance.spawnPoints[0].transform.position;
+
+        
+        spawnersList = GameObject.FindGameObjectsWithTag("Spawner");
+
+        //move players to spawn
+        foreach(var playerInput in GameManager.instance.playerList){
+            playerInput.GetComponent<PlayerInputHandler>().Destroy();
+            playerInput.GetComponent<PlayerInputHandler>().Spawn(GameManager.instance.dimeDropPrefabs, 0);
+            playerInput.transform.GetChild(0).position = GameManager.instance.spawnPoints[0].transform.position;
         }
 
-        //GameManager.instance.joinAction.Disable();
-        //GameManager.instance.leaveAction.Disable();
+
+
+        GameManager.instance.joinAction.Disable();
+        GameManager.instance.leaveAction.Disable();
     }
 
     private void Update(){
@@ -41,10 +55,18 @@ public class DimeDropManager : MonoBehaviour{
         }
 
         if((int)thisGameState == 1){
-            GameIsRunning();
+            GameIsRunningSetUp();
         }
 
         if((int)thisGameState == 2){
+            GameIsRunning();
+        }
+
+        if((int)thisGameState == 3){
+            GameIsOverSetUp();
+        }
+
+        if((int)thisGameState == 4){
             GameIsOver();
         }
 
@@ -60,17 +82,38 @@ public class DimeDropManager : MonoBehaviour{
         }
     }
 
+    private void GameIsRunningSetUp(){
+        thisGameState++;
+        foreach(var spawner in spawnersList){
+            spawner.GetComponent<Spawner>().spawnerEnabled = true;
+        }
+    }
+
     private void GameIsRunning(){
         foreach(var player in GameManager.instance.playerList){
-            if (player.transform.parent.GetComponent<PlayerController>().score >= goal){
-                Debug.Log("Player " + player.transform.parent.GetComponent<PlayerController>().thisPlayerColor.ToString() + " is the winner");
+            if (player.transform.GetChild(0).GetComponent<PlayerController>().score >= goal){
+                Debug.Log("Player " + player.transform.GetChild(0).GetComponent<PlayerController>().thisPlayerColor.ToString() + " is the winner");
                 thisGameState++;
             }
         }
     }
 
+    private void GameIsOverSetUp(){
+        countDown = 10;
+        thisGameState++;
+        foreach(var spawner in spawnersList){
+            spawner.GetComponent<Spawner>().spawnerEnabled = false;
+        }
+    }
+
     private void GameIsOver(){
-        GameManager.instance.ReturnToMainHub();
+        if(countDown > 0){
+            countDown -= 1 * Time.deltaTime;
+        }
+        else {
+            GameManager.instance.ReturnToMainHub();
+            Debug.Log("Returning to MainHub");
+        }
     }
 
 }
