@@ -8,11 +8,10 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour{
     private CharacterController controller;
     private Interactor interactor;
+    [SerializeField] private GunSystem gunSystem;
 
     [SerializeField] private Vector3 playerVelocity;
     [SerializeField] private bool groundedPlayer;
-
-    [SerializeField] private float health = 100f;
 
     [SerializeField] private float playerSpeed = 2.0f;
     [SerializeField] private float sprintSpeed = 4.0f;
@@ -25,10 +24,6 @@ public class PlayerController : MonoBehaviour{
     [SerializeField] private float maxStamina = 100.0f;
     [SerializeField] private float currentStamina = 100.0f;
     [SerializeField] private float staminaRegenRate = 5.0f;
-
-    [SerializeField] private int ammo = 6;
-    [SerializeField] bool hammerIsCocked = false;
-    [SerializeField] private int extraAmmo = 10;
 
     private float gravityValue = -9.81f;
     [SerializeField] private Vector3 move;
@@ -44,6 +39,7 @@ public class PlayerController : MonoBehaviour{
         controller = GetComponent<CharacterController>();
         interactor = GetComponent<Interactor>();
         //transform.parent = GameManager.instance.transform;
+        gunSystem = this.transform.Find("Revolver0").GetComponent<GunSystem>();
     }
 
     void Update(){
@@ -125,36 +121,15 @@ public class PlayerController : MonoBehaviour{
     }
 
     public void OnCockHammer(InputAction.CallbackContext context){
-        if(context.performed){
-            Debug.Log("hammer pressed");
-            hammerIsCocked = true;
-        }
+        gunSystem.OnCockHammer(context);
     }
 
     public void OnPressTrigger(InputAction.CallbackContext context){
-        if(context.performed){
-            Debug.Log("trigger pressed");
-            if(hammerIsCocked){
-                if(ammo > 0){
-                    Debug.Log("Fire!");
-                    ammo--;
-                    hammerIsCocked = false;
-                }
-                else{
-                    Debug.Log("clic clic D;");
-                }
-            }
-        }
+        gunSystem.OnPressTrigger(context);
     }
 
     public void OnReload(InputAction.CallbackContext context){
-        if(context.performed){
-            Debug.Log("reloading");
-            while (ammo < 6 && extraAmmo > 0){
-                extraAmmo--;
-                ammo++;
-            }
-        }
+        gunSystem.OnReload(context);
     }
 
     public void OnInteractWithObject(InputAction.CallbackContext context){
@@ -169,9 +144,5 @@ public class PlayerController : MonoBehaviour{
             OnScoreChanged(score);
         }
         //Debug.Log("Player score: " + score);
-    }
-
-    public void TakeDamage(float damage){
-        health -= damage;
     }
 }
