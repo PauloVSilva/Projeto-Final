@@ -54,6 +54,22 @@ public class PlayerInputHandler : MonoBehaviour{
         playerController.OnDash(context);
     }
 
+    public void OnCockHammer(InputAction.CallbackContext context){
+        playerController.OnCockHammer(context);
+    }
+
+    public void OnPressTrigger(InputAction.CallbackContext context){
+        playerController.OnPressTrigger(context);
+    }
+
+    public void OnSprint(InputAction.CallbackContext context){
+        playerController.OnSprint(context);
+    }
+
+    public void OnReload(InputAction.CallbackContext context){
+        playerController.OnReload(context);
+    }
+
     public void OnInteractWithObject(InputAction.CallbackContext context){
         playerController.OnInteractWithObject(context);
     }

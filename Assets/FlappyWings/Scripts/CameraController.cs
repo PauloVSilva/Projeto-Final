@@ -43,14 +43,14 @@ public class CameraController : MonoBehaviour{
         float minY = float.MaxValue;
         float minZ = float.MaxValue;
         foreach(var player in GameManager.instance.playerList){
-            if(player.transform.parent.transform.position.x < minX){
-                minX = player.transform.parent.transform.position.x;
+            if(player.transform.GetChild(0).transform.position.x < minX){
+                minX = player.transform.GetChild(0).transform.position.x;
             }
-            if(player.transform.parent.transform.position.y < minY){
-                minY = player.transform.parent.transform.position.y;
+            if(player.transform.GetChild(0).transform.position.y < minY){
+                minY = player.transform.GetChild(0).transform.position.y;
             }
-            if(player.transform.parent.transform.position.z < minZ){
-                minZ = player.transform.parent.transform.position.z;
+            if(player.transform.GetChild(0).transform.position.z < minZ){
+                minZ = player.transform.GetChild(0).transform.position.z;
             }
         }
         return new Vector3(minX, minY, minZ);
@@ -62,14 +62,14 @@ public class CameraController : MonoBehaviour{
         float maxY = float.MinValue;
         float maxZ = float.MinValue;
         foreach(var player in GameManager.instance.playerList){
-            if(player.transform.parent.transform.position.x > maxX){
-                maxX = player.transform.parent.transform.position.x;
+            if(player.transform.GetChild(0).transform.position.x > maxX){
+                maxX = player.transform.GetChild(0).transform.position.x;
             }
-            if(player.transform.parent.transform.position.y > maxY){
-                maxY = player.transform.parent.transform.position.y;
+            if(player.transform.GetChild(0).transform.position.y > maxY){
+                maxY = player.transform.GetChild(0).transform.position.y;
             }
-            if(player.transform.parent.transform.position.z > maxZ){
-                maxZ = player.transform.parent.transform.position.z;
+            if(player.transform.GetChild(0).transform.position.z > maxZ){
+                maxZ = player.transform.GetChild(0).transform.position.z;
             }
         }
         return new Vector3(maxX, maxY, maxZ);

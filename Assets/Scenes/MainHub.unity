@@ -243,7 +243,7 @@ GameObject:
   - component: {fileID: 295753835}
   - component: {fileID: 295753834}
   m_Layer: 6
-  m_Name: WoozyWings
+  m_Name: Sharpshooter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -261,8 +261,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e86a8d1b86ccb4c488988b30b261edd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _prompt: Play WoozyWings!
-  _name: WoozyWings
+  _prompt: Play Sharpshooter!
+  _name: Sharpshooter
 --- !u!136 &295753835
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -426,6 +426,8 @@ MonoBehaviour:
   - {fileID: 8463049207392376651, guid: 3e64e295b079df446aa368fdb7e0f01e, type: 3}
   dimeDropPrefabs:
   - {fileID: 8463049207392376651, guid: 26d07592619c8ba4883c69ede0af3b8e, type: 3}
+  sharpshooterPrefabs:
+  - {fileID: 8463049207392376651, guid: 3f96d5f18f1e5ea48b018eb6a62ff301, type: 3}
   joinAction:
     m_Name: Join
     m_Type: 0

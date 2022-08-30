@@ -12,13 +12,23 @@ public class PlayerController : MonoBehaviour{
     [SerializeField] private Vector3 playerVelocity;
     [SerializeField] private bool groundedPlayer;
 
+    [SerializeField] private float health = 100f;
+
     [SerializeField] private float playerSpeed = 2.0f;
+    [SerializeField] private float sprintSpeed = 4.0f;
+    [SerializeField] private bool isSprinting = false;
+
     [SerializeField] private float jumpHeight = 1.0f;
     [SerializeField] private int extraJumps = 1;
     [SerializeField] private int extraJumpsRemaining;
+
     [SerializeField] private float maxStamina = 100.0f;
     [SerializeField] private float currentStamina = 100.0f;
     [SerializeField] private float staminaRegenRate = 5.0f;
+
+    [SerializeField] private int ammo = 6;
+    [SerializeField] bool hammerIsCocked = false;
+    [SerializeField] private int extraAmmo = 10;
 
     private float gravityValue = -9.81f;
     [SerializeField] private Vector3 move;
@@ -83,6 +93,14 @@ public class PlayerController : MonoBehaviour{
         move = new Vector3(movement.x, 0, movement.y);
     }
 
+    public void OnSprint(InputAction.CallbackContext context){
+        if(context.started){
+            if(currentStamina > 0){
+                isSprinting = true;
+            }
+        }
+    }
+
     public void OnJump(InputAction.CallbackContext context){
         if(context.performed){
             if(currentStamina > 15f){
@@ -106,6 +124,39 @@ public class PlayerController : MonoBehaviour{
         }
     }
 
+    public void OnCockHammer(InputAction.CallbackContext context){
+        if(context.performed){
+            Debug.Log("hammer pressed");
+            hammerIsCocked = true;
+        }
+    }
+
+    public void OnPressTrigger(InputAction.CallbackContext context){
+        if(context.performed){
+            Debug.Log("trigger pressed");
+            if(hammerIsCocked){
+                if(ammo > 0){
+                    Debug.Log("Fire!");
+                    ammo--;
+                    hammerIsCocked = false;
+                }
+                else{
+                    Debug.Log("clic clic D;");
+                }
+            }
+        }
+    }
+
+    public void OnReload(InputAction.CallbackContext context){
+        if(context.performed){
+            Debug.Log("reloading");
+            while (ammo < 6 && extraAmmo > 0){
+                extraAmmo--;
+                ammo++;
+            }
+        }
+    }
+
     public void OnInteractWithObject(InputAction.CallbackContext context){
         if(context.performed){
             interactor.KeyIsPressed(context.ReadValue<float>());
@@ -118,5 +169,9 @@ public class PlayerController : MonoBehaviour{
             OnScoreChanged(score);
         }
         //Debug.Log("Player score: " + score);
+    }
+
+    public void TakeDamage(float damage){
+        health -= damage;
     }
 }

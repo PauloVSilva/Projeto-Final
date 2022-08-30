@@ -13,7 +13,9 @@ public class GameManager : MonoBehaviour{
     public GameObject spawnPointPrefab;
     public GameObject[] spawnPoints;
     public GameObject[] playerPrefabs;
+
     public GameObject[] dimeDropPrefabs;
+    public GameObject[] sharpshooterPrefabs;
 
     [SerializeField] public InputAction joinAction;
     [SerializeField] public InputAction leaveAction;

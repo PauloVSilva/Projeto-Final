@@ -122,6 +122,70 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 4a396afb-24f2-46fa-af83-987a7c3e9702
     m_ActionName: Player/Dash[/Keyboard/f,/DualShock4GamepadHID/buttonEast]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7408531066293585715}
+        m_TargetAssemblyTypeName: PlayerInputHandler, Assembly-CSharp
+        m_MethodName: OnCockHammer
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 2508eb02-76ec-4f17-82fb-863490316c5d
+    m_ActionName: Player/CockHammer[/Mouse/rightButton,/DualShock4GamepadHID/rightStick/down]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7408531066293585715}
+        m_TargetAssemblyTypeName: PlayerInputHandler, Assembly-CSharp
+        m_MethodName: OnPressTrigger
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 7109d714-3273-4a3e-bf8f-39528b8bb9d6
+    m_ActionName: Player/PressTrigger[/Mouse/leftButton,/DualShock4GamepadHID/rightTrigger]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7408531066293585715}
+        m_TargetAssemblyTypeName: PlayerInputHandler, Assembly-CSharp
+        m_MethodName: OnReload
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 16799694-9ddd-4288-b11f-5957eae188dd
+    m_ActionName: Player/ReloadWeapon[/Keyboard/r,/DualShock4GamepadHID/buttonWest]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7408531066293585715}
+        m_TargetAssemblyTypeName: PlayerInputHandler, Assembly-CSharp
+        m_MethodName: OnSprint
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: ed2a7086-5a45-4131-9f98-eefd8a9d34b5
+    m_ActionName: Player/Sprint[/Keyboard/leftShift,/DualShock4GamepadHID/leftStickPress]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -139,9 +203,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 760507c666cece24c9286a9874f79632, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefabs:
-  - {fileID: 8463049207392376651, guid: 585d5ce6f3879b647a8b9e3a549b46ce, type: 3}
-  - {fileID: 8463049207392376651, guid: c4932da71cc95a041b49167cd17204a2, type: 3}
-  - {fileID: 8463049207392376651, guid: ea4717c650c5d2747aaed44f142794b7, type: 3}
-  - {fileID: 8463049207392376651, guid: 3e64e295b079df446aa368fdb7e0f01e, type: 3}
   playerController: {fileID: 0}

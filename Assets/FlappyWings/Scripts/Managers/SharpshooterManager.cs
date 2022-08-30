@@ -1,15 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using System.Linq;
 
-public class DimeDropManager : MonoBehaviour{
+public class SharpshooterManager : MonoBehaviour{
     //INSTANCES
-    public static DimeDropManager instance = null;
+    public static SharpshooterManager instance = null;
     
     //public GameObject[] playerPrefabs;
     public GameObject[] spawnersList;
+
+    public GameObject[] playersAlive;
 
     public enum gameState{
         preparation,
@@ -21,7 +21,6 @@ public class DimeDropManager : MonoBehaviour{
     [SerializeField] private gameState thisGameState = gameState.preparation;
 
     public float countDown = 10;
-    public int goal = 100000;
 
     private void Awake(){
         if (instance == null){
@@ -33,17 +32,14 @@ public class DimeDropManager : MonoBehaviour{
 
         GameManager.instance.SetSpawnPoint();
 
-        
         spawnersList = GameObject.FindGameObjectsWithTag("Spawner");
 
         //move players to spawn
         foreach(var playerInput in GameManager.instance.playerList){
             playerInput.GetComponent<PlayerInputHandler>().Destroy();
-            playerInput.GetComponent<PlayerInputHandler>().Spawn(GameManager.instance.dimeDropPrefabs, 0);
+            playerInput.GetComponent<PlayerInputHandler>().Spawn(GameManager.instance.sharpshooterPrefabs, 0);
             playerInput.transform.GetChild(0).position = GameManager.instance.spawnPoints[0].transform.position;
         }
-
-
 
         GameManager.instance.joinAction.Disable();
         GameManager.instance.leaveAction.Disable();
@@ -90,11 +86,9 @@ public class DimeDropManager : MonoBehaviour{
     }
 
     private void GameIsRunning(){
-        foreach(var player in GameManager.instance.playerList){
-            if (player.transform.GetChild(0).GetComponent<PlayerController>().score >= goal){
-                Debug.Log("Player " + player.transform.GetChild(0).GetComponent<PlayerController>().thisPlayerColor.ToString() + " is the winner");
-                thisGameState++;
-            }
+        if (playersAlive.Length == 5){
+            Debug.Log("Player " + playersAlive[0].transform.GetChild(0).GetComponent<PlayerController>().thisPlayerColor.ToString() + " is the winner");
+            thisGameState++;
         }
     }
 
@@ -104,6 +98,7 @@ public class DimeDropManager : MonoBehaviour{
         foreach(var spawner in spawnersList){
             spawner.GetComponent<Spawner>().spawnerEnabled = false;
         }
+
     }
 
     private void GameIsOver(){
