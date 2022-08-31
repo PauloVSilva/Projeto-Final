@@ -8,14 +8,14 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour{
     private CharacterController controller;
     private Interactor interactor;
-    [SerializeField] private GunSystem gunSystem;
+    [SerializeField] private GunSystem gunSystem = null;
 
     [SerializeField] private Vector3 playerVelocity;
     [SerializeField] private bool groundedPlayer;
 
     [SerializeField] private float playerSpeed = 2.0f;
-    [SerializeField] private float sprintSpeed = 4.0f;
-    [SerializeField] private bool isSprinting = false;
+    //[SerializeField] private float sprintSpeed = 4.0f;
+    //[SerializeField] private bool isSprinting = false;
 
     [SerializeField] private float jumpHeight = 1.0f;
     [SerializeField] private int extraJumps = 1;
@@ -39,7 +39,15 @@ public class PlayerController : MonoBehaviour{
         controller = GetComponent<CharacterController>();
         interactor = GetComponent<Interactor>();
         //transform.parent = GameManager.instance.transform;
-        gunSystem = this.transform.Find("Revolver0").GetComponent<GunSystem>();
+        foreach (Transform eachChild in transform) {
+            if (eachChild.name == "Revolver0") {
+                //Debug.Log ("Child found. Name: " + eachChild.name);
+                gunSystem = this.transform.Find("Revolver0").GetComponent<GunSystem>();
+            }
+            else {
+                //Debug.Log("Gun not found");
+            }
+        }
     }
 
     void Update(){
@@ -90,11 +98,11 @@ public class PlayerController : MonoBehaviour{
     }
 
     public void OnSprint(InputAction.CallbackContext context){
-        if(context.started){
-            if(currentStamina > 0){
-                isSprinting = true;
-            }
-        }
+        //if(context.started){
+        //    if(currentStamina > 0){
+        //        isSprinting = true;
+        //    }
+        //}
     }
 
     public void OnJump(InputAction.CallbackContext context){
@@ -121,15 +129,21 @@ public class PlayerController : MonoBehaviour{
     }
 
     public void OnCockHammer(InputAction.CallbackContext context){
-        gunSystem.OnCockHammer(context);
+        if(gunSystem != null){
+            gunSystem.OnCockHammer(context);
+        }
     }
 
     public void OnPressTrigger(InputAction.CallbackContext context){
-        gunSystem.OnPressTrigger(context);
+        if(gunSystem != null){
+            gunSystem.OnPressTrigger(context);
+        }
     }
 
     public void OnReload(InputAction.CallbackContext context){
-        gunSystem.OnReload(context);
+        if(gunSystem != null){
+            gunSystem.OnReload(context);
+        }
     }
 
     public void OnInteractWithObject(InputAction.CallbackContext context){

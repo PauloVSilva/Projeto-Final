@@ -3,22 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class HealthSystem : MonoBehaviour{
-    [SerializeField] private float maxHealth = 100f;
-    [SerializeField] private float currentHealth;
-    [SerializeField] private float healthRegenRate;
-    [SerializeField] private bool isAlive = true;
+    public float maxHealth = 100f;
+    public float currentHealth;
+    public float healthRegenRate;
+    public bool isAlive = true;
 
     private void Awake(){
         currentHealth = maxHealth;
     }
 
-    public void TakeDamage(float damageTaken){
-        currentHealth -= damageTaken;
-        print(currentHealth);
+    private void Update(){
         if(currentHealth <= 0){
             //print("died");
             isAlive = false;
         }
+    }
+
+    public void TakeDamage(float damageTaken){
+        currentHealth -= damageTaken;
+        print(currentHealth);
     }
 
     public void Heal(float heal){
@@ -27,6 +30,15 @@ public class HealthSystem : MonoBehaviour{
         if(currentHealth > maxHealth){
             currentHealth = maxHealth;
         }
+    }
+
+    public void Kill(){
+        currentHealth = 0;
+    }
+
+    public void Respawn(){
+        currentHealth = maxHealth;
+        isAlive = true;
     }
 
 }

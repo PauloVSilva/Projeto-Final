@@ -474,6 +474,7 @@ GameObject:
   - component: {fileID: 8463049207392376649}
   - component: {fileID: 8463049207392376654}
   - component: {fileID: 8463049207392376648}
+  - component: {fileID: 6349406926210537683}
   - component: {fileID: 576238479873586051}
   m_Layer: 0
   m_Name: DimeDropPrefab0
@@ -530,6 +531,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91d2d932c9bd60b42b0f3a263a7da2bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gunSystem: {fileID: 0}
   playerVelocity: {x: 0, y: 0, z: 0}
   groundedPlayer: 0
   playerSpeed: 4
@@ -542,6 +544,22 @@ MonoBehaviour:
   move: {x: 0, y: 0, z: 0}
   score: 0
   thisPlayerColor: 0
+--- !u!114 &6349406926210537683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8463049207392376651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19fdf17d92b22b54d8883798d470d205, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  currentHealth: 0
+  healthRegenRate: 0
+  isAlive: 1
 --- !u!114 &576238479873586051
 MonoBehaviour:
   m_ObjectHideFlags: 0

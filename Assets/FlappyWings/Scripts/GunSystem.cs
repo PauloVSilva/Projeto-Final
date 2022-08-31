@@ -11,25 +11,25 @@ public class GunSystem : MonoBehaviour{
     [SerializeField] private int extraAmmo = 0;
 
     [SerializeField] bool hammerIsCocked = false;
-    [SerializeField] private float timeBetweenShots = 1f;
-    private float currentCastTimer;
+    //[SerializeField] private float timeBetweenShots = 1f;
+    //private float currentCastTimer;
 
     [SerializeField] private Transform castPoint;
 
-    private bool shooting = false;
+    //private bool shooting = false;
 
-    private PlayerControls playerControls;
+    //private PlayerControls playerControls;
 
     private void Awake(){
-        playerControls = new PlayerControls();
+        //playerControls = new PlayerControls();
     }
 
     private void OnEnable(){
-        playerControls.Enable();
+        //playerControls.Enable();
     }
 
     private void OnDisable(){
-        playerControls.Disable();
+        //playerControls.Disable();
     }
 
     private void Update(){
@@ -55,23 +55,23 @@ public class GunSystem : MonoBehaviour{
 
     public void OnCockHammer(InputAction.CallbackContext context){
         if(context.performed){
-            Debug.Log("hammer pressed");
+            //Debug.Log("hammer pressed");
             hammerIsCocked = true;
         }
     }
 
     public void OnPressTrigger(InputAction.CallbackContext context){
         if(context.performed){
-            Debug.Log("trigger pressed");
+            //Debug.Log("trigger pressed");
             if(hammerIsCocked){
                 if(ammo > 0){
-                    Debug.Log("Fire!");
+                    //Debug.Log("Fire!");
                     CastProjectile();
                     ammo--;
                     hammerIsCocked = false;
                 }
                 else{
-                    Debug.Log("clic clic D;");
+                    //Debug.Log("clic clic D;");
                 }
             }
         }
@@ -79,7 +79,7 @@ public class GunSystem : MonoBehaviour{
 
     public void OnReload(InputAction.CallbackContext context){
         if(context.performed){
-            Debug.Log("reloading");
+            //Debug.Log("reloading");
             while (ammo < maxAmmo && extraAmmo > 0){
                 extraAmmo--;
                 ammo++;

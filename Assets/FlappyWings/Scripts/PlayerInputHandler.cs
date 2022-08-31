@@ -17,9 +17,11 @@ public class PlayerInputHandler : MonoBehaviour{
         int index = GameManager.instance.spawnPoints.Length;
         int randomIndex = Random.Range(0, index);
 
-        playerController = GameObject.Instantiate(GameManager.instance.playerPrefabs[GetComponent<PlayerInput>().playerIndex], GameManager.instance.spawnPoints[randomIndex].transform.position, transform.rotation).GetComponent<PlayerController>();
+        //playerController = GameObject.Instantiate(GameManager.instance.playerPrefabs[GetComponent<PlayerInput>().playerIndex], GameManager.instance.spawnPoints[randomIndex].transform.position, transform.rotation).GetComponent<PlayerController>();
         //transform.parent = playerController.transform;
         //transform.position = playerController.transform.position;
+        
+        playerController = GameObject.Instantiate(GameManager.instance.playerPrefabs[0], GameManager.instance.spawnPoints[randomIndex].transform.position, transform.rotation).GetComponent<PlayerController>();
         transform.parent = GameManager.instance.transform;
         playerController.transform.parent = this.transform;
         //Debug.Log("spawning player character");

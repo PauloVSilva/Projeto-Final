@@ -46,6 +46,15 @@ public class GameManager : MonoBehaviour{
         //Debug.Log(PlayerJoinedGame);
     }
 
+    private void Update(){
+        foreach(var player in playerList){
+            if(player.transform.GetChild(0).GetComponent<HealthSystem>().isAlive == false){
+                player.GetComponent<PlayerInputHandler>().Destroy();
+                player.GetComponent<PlayerInputHandler>().Spawn();
+            }
+        }
+    }
+
     public void ReturnToMainHub(){
         SceneManager.LoadScene("MainHub");
         StartCoroutine(ReturnToMainHubDelayed());

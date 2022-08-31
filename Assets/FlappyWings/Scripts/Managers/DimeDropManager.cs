@@ -7,6 +7,8 @@ using System.Linq;
 public class DimeDropManager : MonoBehaviour{
     //INSTANCES
     public static DimeDropManager instance = null;
+
+    public Camera mainCamera;
     
     //public GameObject[] playerPrefabs;
     public GameObject[] spawnersList;

@@ -1,15 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
+using System.Linq;
 
 public class SharpshooterManager : MonoBehaviour{
     //INSTANCES
     public static SharpshooterManager instance = null;
+
+    public Camera mainCamera;
     
     //public GameObject[] playerPrefabs;
     public GameObject[] spawnersList;
 
-    public GameObject[] playersAlive;
+    public List<PlayerInput> playersAlive = new List<PlayerInput>();
 
     public enum gameState{
         preparation,
@@ -41,11 +46,14 @@ public class SharpshooterManager : MonoBehaviour{
             playerInput.transform.GetChild(0).position = GameManager.instance.spawnPoints[0].transform.position;
         }
 
+
         GameManager.instance.joinAction.Disable();
         GameManager.instance.leaveAction.Disable();
     }
 
     private void Update(){
+        mainCamera.GetComponent<CameraController>().playersToKeepTrackOf = playersAlive;
+        
         if((int)thisGameState == 0){
             Preparation();
         }
@@ -81,12 +89,21 @@ public class SharpshooterManager : MonoBehaviour{
     private void GameIsRunningSetUp(){
         thisGameState++;
         foreach(var spawner in spawnersList){
-            spawner.GetComponent<Spawner>().spawnerEnabled = true;
+            //spawner.GetComponent<Spawner>().spawnerEnabled = true;
+        }
+        foreach(var player in GameManager.instance.playerList){
+            playersAlive.Add(player);
         }
     }
 
     private void GameIsRunning(){
-        if (playersAlive.Length == 5){
+        foreach(var player in GameManager.instance.playerList){
+            if(player.transform.GetChild(0).GetComponent<HealthSystem>().isAlive == false){
+                Debug.Log("player died");
+                playersAlive.Remove(player);
+            }
+        }
+        if (playersAlive.Count == 1){
             Debug.Log("Player " + playersAlive[0].transform.GetChild(0).GetComponent<PlayerController>().thisPlayerColor.ToString() + " is the winner");
             thisGameState++;
         }

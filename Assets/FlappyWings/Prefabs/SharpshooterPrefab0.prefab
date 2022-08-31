@@ -375,7 +375,7 @@ MonoBehaviour:
   projectileToCast: {fileID: 1874502773355404356, guid: 61ec75cf4b7a1ed4ab2f67fc7dd2eeff, type: 3}
   maxAmmo: 6
   ammo: 6
-  extraAmmo: 0
+  extraAmmo: 999
   hammerIsCocked: 0
   timeBetweenShots: 1
   castPoint: {fileID: 6746552951631321323}

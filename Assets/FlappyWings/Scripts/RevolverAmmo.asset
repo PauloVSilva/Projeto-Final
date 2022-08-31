@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DamageAmount: 10
   Cost: 1
-  LifeTime: 2
-  Speed: 15
+  LifeTime: 0.2
+  Speed: 50
   ProjectileRadius: 0.5
