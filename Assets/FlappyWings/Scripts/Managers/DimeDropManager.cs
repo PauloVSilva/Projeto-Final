@@ -10,7 +10,6 @@ public class DimeDropManager : MonoBehaviour{
 
     public Camera mainCamera;
     
-    //public GameObject[] playerPrefabs;
     public GameObject[] spawnersList;
     public GameObject[] coins;
 

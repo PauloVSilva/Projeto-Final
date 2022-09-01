@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System;
 
 [RequireComponent(typeof(CharacterController))]
 
@@ -32,7 +33,7 @@ public class PlayerController : MonoBehaviour{
     public enum playerColor{blue, red, green, yellow}
     public playerColor thisPlayerColor = playerColor.blue;
 
-    public event System.Action<int> OnScoreChanged;
+    public event Action<int> OnScoreChanged;
 
 
     private void Awake(){
@@ -154,9 +155,6 @@ public class PlayerController : MonoBehaviour{
 
     public void IncreaseScore(int value){
         score += value;
-        if(OnScoreChanged != null){
-            OnScoreChanged(score);
-        }
-        //Debug.Log("Player score: " + score);
+        OnScoreChanged?.Invoke(score);
     }
 }

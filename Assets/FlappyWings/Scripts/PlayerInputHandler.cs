@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System;
 
 public class PlayerInputHandler : MonoBehaviour{
     //public GameObject[] playerPrefabs;
@@ -13,35 +14,39 @@ public class PlayerInputHandler : MonoBehaviour{
         Spawn();
     }
 
+    public void RespawnPlayer(GameObject gameObject){
+        float delay = gameObject.GetComponent<HealthSystem>().timeToRespawn;
+        StartCoroutine(RespawnPlayerDelay(delay));
+    }
+
+    IEnumerator RespawnPlayerDelay(float delay){
+        yield return new WaitForSeconds(delay);
+        Destroy();
+        Spawn();
+    }
+
     public void Spawn(){
         int index = GameManager.instance.spawnPoints.Length;
-        int randomIndex = Random.Range(0, index);
+        int randomIndex = UnityEngine.Random.Range(0, index);
 
-        //playerController = GameObject.Instantiate(GameManager.instance.playerPrefabs[GetComponent<PlayerInput>().playerIndex], GameManager.instance.spawnPoints[randomIndex].transform.position, transform.rotation).GetComponent<PlayerController>();
-        //transform.parent = playerController.transform;
-        //transform.position = playerController.transform.position;
-        
-        playerController = GameObject.Instantiate(GameManager.instance.playerPrefabs[0], GameManager.instance.spawnPoints[randomIndex].transform.position, transform.rotation).GetComponent<PlayerController>();
+        playerController = GameObject.Instantiate(GameManager.instance.playerPrefabs[GetComponent<PlayerInput>().playerIndex], GameManager.instance.spawnPoints[randomIndex].transform.position, transform.rotation).GetComponent<PlayerController>();
+        //playerController = GameObject.Instantiate(GameManager.instance.playerPrefabs[0], GameManager.instance.spawnPoints[randomIndex].transform.position, transform.rotation).GetComponent<PlayerController>();
         transform.parent = GameManager.instance.transform;
         playerController.transform.parent = this.transform;
-        //Debug.Log("spawning player character");
     }
 
     public void Spawn(GameObject[] prefabsList, int characterIndex){
         int index = GameManager.instance.spawnPoints.Length;
-        int randomIndex = Random.Range(0, index);
+        int randomIndex = UnityEngine.Random.Range(0, index);
 
         playerController = GameObject.Instantiate(prefabsList[characterIndex], GameManager.instance.spawnPoints[randomIndex].transform.position, transform.rotation).GetComponent<PlayerController>();
-        //transform.parent = playerController.transform;
-        //transform.position = playerController.transform.position;
         transform.parent = GameManager.instance.transform;
         playerController.transform.parent = this.transform;
-        //Debug.Log("spawning player character");
     }
 
     public void Destroy(){
-        GameObject.Destroy(transform.GetChild(0).gameObject);
-        //Debug.Log("destroying player character");
+        //print("player destroyed");
+        GameObject.Destroy(this.transform.GetChild(0).gameObject);
     }
 
     public void OnMove(InputAction.CallbackContext context){

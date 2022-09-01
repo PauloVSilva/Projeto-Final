@@ -12,7 +12,7 @@ public class HellProtection : MonoBehaviour{
 
     private void OnTriggerEnter(Collider other){
         if(other.gameObject.CompareTag("Player")){
-            print("player detected");
+            //print("player detected");
             HealthSystem enemyHealth = other.GetComponent<HealthSystem>();
             enemyHealth.Kill();
         }

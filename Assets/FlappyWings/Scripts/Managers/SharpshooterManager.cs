@@ -11,7 +11,6 @@ public class SharpshooterManager : MonoBehaviour{
 
     public Camera mainCamera;
     
-    //public GameObject[] playerPrefabs;
     public GameObject[] spawnersList;
 
     public List<PlayerInput> playersAlive = new List<PlayerInput>();
@@ -52,7 +51,7 @@ public class SharpshooterManager : MonoBehaviour{
     }
 
     private void Update(){
-        mainCamera.GetComponent<CameraController>().playersToKeepTrackOf = playersAlive;
+        //mainCamera.GetComponent<CameraController>().playersToKeepTrackOf = playersAlive;
         
         if((int)thisGameState == 0){
             Preparation();
