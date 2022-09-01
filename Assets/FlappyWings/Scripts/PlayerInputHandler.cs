@@ -45,7 +45,6 @@ public class PlayerInputHandler : MonoBehaviour{
     }
 
     public void Destroy(){
-        //print("player destroyed");
         GameObject.Destroy(this.transform.GetChild(0).gameObject);
     }
 

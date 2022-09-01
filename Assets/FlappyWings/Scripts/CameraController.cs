@@ -8,20 +8,39 @@ public class CameraController : MonoBehaviour{
     public Vector3 fixedOffset, dynamicOffset;
     public float smoothSpeed;
 
-    public List<PlayerInput> playersToKeepTrackOf = new List<PlayerInput>();
+    //public List<PlayerInput> playersToKeepTrackOf = new List<PlayerInput>();
+    public List<GameObject> objectsTracked = new List<GameObject>();
 
     void Start(){
         //StartCoroutine(CameraStartDelay());
-        playersToKeepTrackOf = GameManager.instance.playerList;
+        //playersToKeepTrackOf = GameManager.instance.playerList;
+    }
+    
+    private void OnEnable(){
+        HealthSystem.OnPlayerDied += RemovePlayer;
+        HealthSystem.OnPlayerReborn += AddPlayer;
+    }
+
+    private void OnDisable(){
+        HealthSystem.OnPlayerDied -= RemovePlayer;
+        HealthSystem.OnPlayerReborn -= AddPlayer;
+    }
+
+    public void RemovePlayer(GameObject gameObject){
+        objectsTracked.Remove(gameObject);
+    }
+
+    public void AddPlayer(GameObject gameObject){
+        objectsTracked.Add(gameObject);
     }
 
     void FixedUpdate(){
-        if (playersToKeepTrackOf.Count == 1){
-            Vector3 desiredPosition = playersToKeepTrackOf[0].transform.GetChild(0).position + fixedOffset;
+        if (objectsTracked.Count == 1){
+            Vector3 desiredPosition = objectsTracked[0].transform.position + fixedOffset;
             Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * Time.deltaTime);
             transform.position = smoothedPosition;
         }
-        else if (playersToKeepTrackOf.Count > 1){
+        else if (objectsTracked.Count > 1){
             Vector3 desiredPosition = FindCentroid() + fixedOffset;
             Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition + FindDynamicOffset(), smoothSpeed * Time.deltaTime);
             transform.position = smoothedPosition;
@@ -33,10 +52,10 @@ public class CameraController : MonoBehaviour{
 
     Vector3 FindCentroid(){
         Vector3 centerPos = new Vector3(0, 0, 0);
-        foreach(var player in playersToKeepTrackOf){
-            centerPos += player.transform.GetChild(0).position;
+        foreach(var player in objectsTracked){
+            centerPos += player.transform.position;
         }
-        centerPos /= playersToKeepTrackOf.Count;
+        centerPos /= objectsTracked.Count;
 
         return centerPos;
     }
@@ -46,15 +65,15 @@ public class CameraController : MonoBehaviour{
         float minX = float.MaxValue;
         float minY = float.MaxValue;
         float minZ = float.MaxValue;
-        foreach(var player in playersToKeepTrackOf){
-            if(player.transform.GetChild(0).transform.position.x < minX){
-                minX = player.transform.GetChild(0).transform.position.x;
+        foreach(var player in objectsTracked){
+            if(player.transform.position.x < minX){
+                minX = player.transform.position.x;
             }
-            if(player.transform.GetChild(0).transform.position.y < minY){
-                minY = player.transform.GetChild(0).transform.position.y;
+            if(player.transform.position.y < minY){
+                minY = player.transform.position.y;
             }
-            if(player.transform.GetChild(0).transform.position.z < minZ){
-                minZ = player.transform.GetChild(0).transform.position.z;
+            if(player.transform.position.z < minZ){
+                minZ = player.transform.position.z;
             }
         }
         return new Vector3(minX, minY, minZ);
@@ -65,15 +84,15 @@ public class CameraController : MonoBehaviour{
         float maxX = float.MinValue;
         float maxY = float.MinValue;
         float maxZ = float.MinValue;
-        foreach(var player in playersToKeepTrackOf){
-            if(player.transform.GetChild(0).transform.position.x > maxX){
-                maxX = player.transform.GetChild(0).transform.position.x;
+        foreach(var player in objectsTracked){
+            if(player.transform.position.x > maxX){
+                maxX = player.transform.position.x;
             }
-            if(player.transform.GetChild(0).transform.position.y > maxY){
-                maxY = player.transform.GetChild(0).transform.position.y;
+            if(player.transform.position.y > maxY){
+                maxY = player.transform.position.y;
             }
-            if(player.transform.GetChild(0).transform.position.z > maxZ){
-                maxZ = player.transform.GetChild(0).transform.position.z;
+            if(player.transform.position.z > maxZ){
+                maxZ = player.transform.position.z;
             }
         }
         return new Vector3(maxX, maxY, maxZ);

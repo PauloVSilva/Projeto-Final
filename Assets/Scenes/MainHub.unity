@@ -1406,7 +1406,7 @@ MonoBehaviour:
   fixedOffset: {x: 0, y: 5, z: -5}
   dynamicOffset: {x: 0, y: 0, z: 0}
   smoothSpeed: 5
-  playersToKeepTrackOf: []
+  objectsTracked: []
 --- !u!81 &1737681282
 AudioListener:
   m_ObjectHideFlags: 0

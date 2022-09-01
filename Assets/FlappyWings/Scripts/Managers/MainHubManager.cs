@@ -11,25 +11,35 @@ public class MainHubManager : MonoBehaviour{
 
     public void Start(){
         GameManager.instance.SetSpawnPoint();
-        foreach(var playerInput in GameManager.instance.playerList){
-            //Debug.Log("teleporting");
-            playerInput.GetComponent<PlayerInputHandler>().Destroy();
-            playerInput.GetComponent<PlayerInputHandler>().Spawn();
-            playerInput.transform.GetChild(0).position = GameManager.instance.spawnPoints[0].transform.position;
+        if(GameManager.instance.playerList.Count > 0){
+            foreach(var playerInput in GameManager.instance.playerList){
+                //Debug.Log("teleporting");
+                playerInput.GetComponent<PlayerInputHandler>().Destroy();
+                playerInput.GetComponent<PlayerInputHandler>().Spawn();
+                playerInput.transform.GetChild(0).position = GameManager.instance.spawnPoints[0].transform.position;
+                playerInput.GetComponent<PlayerInput>().actions["Movement"].Enable();
+            }
         }
         GameManager.instance.joinAction.Enable();
         GameManager.instance.leaveAction.Enable();
     }
 
     private void OnEnable(){
-        HealthSystem.OnPlayerDied += RespawnPlayer;
+        HealthSystem.OnPlayerDied += PlayerKilled;
+        HealthSystem.OnPlayerReborn += PlayerReborn;
     }
 
     private void OnDisable(){
-        HealthSystem.OnPlayerDied -= RespawnPlayer;
+        HealthSystem.OnPlayerDied -= PlayerKilled;
+        HealthSystem.OnPlayerReborn -= PlayerReborn;
     }
 
-    private void RespawnPlayer(GameObject gameObject){
+    private void PlayerKilled(GameObject gameObject){
         gameObject.transform.parent.GetComponent<PlayerInputHandler>().RespawnPlayer(gameObject);
+        gameObject.transform.parent.GetComponent<PlayerInput>().actions.Disable();
+    }
+
+    private void PlayerReborn(GameObject gameObject){
+        gameObject.transform.parent.GetComponent<PlayerInput>().actions.Enable();
     }
 }

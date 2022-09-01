@@ -20,6 +20,10 @@ public class HealthSystem : MonoBehaviour{
         currentHealth = maxHealth;
     }
 
+    private void Start(){
+        OnPlayerReborn?.Invoke(gameObject);
+    }
+
     public void TakeDamage(float damageTaken){
         currentHealth -= damageTaken;
         //print(currentHealth);

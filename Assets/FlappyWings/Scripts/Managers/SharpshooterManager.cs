@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 using System.Linq;
 
 public class SharpshooterManager : MonoBehaviour{
@@ -10,11 +9,9 @@ public class SharpshooterManager : MonoBehaviour{
     public static SharpshooterManager instance = null;
 
     public Camera mainCamera;
-    
     public GameObject[] spawnersList;
-
     public List<PlayerInput> playersAlive = new List<PlayerInput>();
-
+    public float countDown = 10;
     public enum gameState{
         preparation,
         gameIsRunningSetUp,
@@ -22,9 +19,8 @@ public class SharpshooterManager : MonoBehaviour{
         gameIsOverSetUp,
         gameIsOver
     }
-    [SerializeField] private gameState thisGameState = gameState.preparation;
 
-    public float countDown = 10;
+    [SerializeField] private gameState thisGameState = gameState.preparation;
 
     private void Awake(){
         if (instance == null){
@@ -34,8 +30,9 @@ public class SharpshooterManager : MonoBehaviour{
             Destroy(gameObject);
         }
 
+        GameManager.instance.joinAction.Disable();
+        GameManager.instance.leaveAction.Disable();
         GameManager.instance.SetSpawnPoint();
-
         spawnersList = GameObject.FindGameObjectsWithTag("Spawner");
 
         //move players to spawn
@@ -43,16 +40,30 @@ public class SharpshooterManager : MonoBehaviour{
             playerInput.GetComponent<PlayerInputHandler>().Destroy();
             playerInput.GetComponent<PlayerInputHandler>().Spawn(GameManager.instance.sharpshooterPrefabs, 0);
             playerInput.transform.GetChild(0).position = GameManager.instance.spawnPoints[0].transform.position;
+            playerInput.GetComponent<PlayerInput>().actions.Disable();
         }
+    }
 
+    private void OnEnable(){
+        HealthSystem.OnPlayerDied += PlayerKilled;
+        HealthSystem.OnPlayerReborn += PlayerReborn;
+    }
 
-        GameManager.instance.joinAction.Disable();
-        GameManager.instance.leaveAction.Disable();
+    private void OnDisable(){
+        HealthSystem.OnPlayerDied -= PlayerKilled;
+        HealthSystem.OnPlayerReborn -= PlayerReborn;
+    }
+
+    private void PlayerKilled(GameObject gameObject){
+        //gameObject.transform.parent.GetComponent<PlayerInputHandler>().RespawnPlayer(gameObject);
+        playersAlive.Remove(gameObject.transform.parent.GetComponent<PlayerInput>());
+        gameObject.transform.parent.GetComponent<PlayerInput>().actions.Disable();
+    }
+
+    private void PlayerReborn(GameObject gameObject){
     }
 
     private void Update(){
-        //mainCamera.GetComponent<CameraController>().playersToKeepTrackOf = playersAlive;
-        
         if((int)thisGameState == 0){
             Preparation();
         }
@@ -72,7 +83,6 @@ public class SharpshooterManager : MonoBehaviour{
         if((int)thisGameState == 4){
             GameIsOver();
         }
-
     }
 
     private void Preparation(){
@@ -80,28 +90,29 @@ public class SharpshooterManager : MonoBehaviour{
             countDown -= 1 * Time.deltaTime;
         }
         else {
-            thisGameState++;
             Debug.Log("Preparation time ended");
+            thisGameState++;
         }
     }
 
     private void GameIsRunningSetUp(){
-        thisGameState++;
-        foreach(var spawner in spawnersList){
-            //spawner.GetComponent<Spawner>().spawnerEnabled = true;
-        }
         foreach(var player in GameManager.instance.playerList){
             playersAlive.Add(player);
         }
+        foreach(var playerInput in GameManager.instance.playerList){
+            playerInput.GetComponent<PlayerInput>().actions["Movement"].Enable();
+            playerInput.GetComponent<PlayerInput>().actions["Sprint"].Enable();
+            playerInput.GetComponent<PlayerInput>().actions["Jump"].Enable();
+            playerInput.GetComponent<PlayerInput>().actions["Dash"].Enable();
+            playerInput.GetComponent<PlayerInput>().actions["Interact"].Enable();
+            playerInput.GetComponent<PlayerInput>().actions["CockHammer"].Enable();
+            playerInput.GetComponent<PlayerInput>().actions["PressTrigger"].Enable();
+            playerInput.GetComponent<PlayerInput>().actions["ReloadWeapon"].Enable();
+        }
+        thisGameState++;
     }
 
     private void GameIsRunning(){
-        foreach(var player in GameManager.instance.playerList){
-            if(player.transform.GetChild(0).GetComponent<HealthSystem>().isAlive == false){
-                Debug.Log("player died");
-                playersAlive.Remove(player);
-            }
-        }
         if (playersAlive.Count == 1){
             Debug.Log("Player " + playersAlive[0].transform.GetChild(0).GetComponent<PlayerController>().thisPlayerColor.ToString() + " is the winner");
             thisGameState++;
@@ -111,10 +122,6 @@ public class SharpshooterManager : MonoBehaviour{
     private void GameIsOverSetUp(){
         countDown = 10;
         thisGameState++;
-        foreach(var spawner in spawnersList){
-            spawner.GetComponent<Spawner>().spawnerEnabled = false;
-        }
-
     }
 
     private void GameIsOver(){

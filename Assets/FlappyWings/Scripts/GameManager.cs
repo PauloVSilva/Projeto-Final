@@ -18,8 +18,8 @@ public class GameManager : MonoBehaviour{
     public GameObject[] dimeDropPrefabs;
     public GameObject[] sharpshooterPrefabs;
 
-    [SerializeField] public InputAction joinAction;
-    [SerializeField] public InputAction leaveAction;
+    public InputAction joinAction;
+    public InputAction leaveAction;
 
     //EVENTS
     public event Action<PlayerInput> PlayerJoinedGame;

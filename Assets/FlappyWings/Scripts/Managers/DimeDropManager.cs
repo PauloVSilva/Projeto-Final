@@ -9,10 +9,10 @@ public class DimeDropManager : MonoBehaviour{
     public static DimeDropManager instance = null;
 
     public Camera mainCamera;
-    
     public GameObject[] spawnersList;
     public GameObject[] coins;
-
+    public float countDown = 10;
+    public int goal = 100000;
     public enum gameState{
         preparation,
         gameIsRunningSetUp,
@@ -22,9 +22,6 @@ public class DimeDropManager : MonoBehaviour{
     }
     [SerializeField] private gameState thisGameState = gameState.preparation;
 
-    public float countDown = 10;
-    public int goal = 100000;
-
     private void Awake(){
         if (instance == null){
             instance = this;
@@ -33,8 +30,9 @@ public class DimeDropManager : MonoBehaviour{
             Destroy(gameObject);
         }
 
+        GameManager.instance.joinAction.Disable();
+        GameManager.instance.leaveAction.Disable();
         GameManager.instance.SetSpawnPoint();
-
         spawnersList = GameObject.FindGameObjectsWithTag("Spawner");
 
         //move players to spawn
@@ -42,10 +40,25 @@ public class DimeDropManager : MonoBehaviour{
             playerInput.GetComponent<PlayerInputHandler>().Destroy();
             playerInput.GetComponent<PlayerInputHandler>().Spawn(GameManager.instance.dimeDropPrefabs, 0);
             playerInput.transform.GetChild(0).position = GameManager.instance.spawnPoints[0].transform.position;
+            playerInput.GetComponent<PlayerInput>().actions.Disable();
         }
+    }
 
-        GameManager.instance.joinAction.Disable();
-        GameManager.instance.leaveAction.Disable();
+    private void OnEnable(){
+        HealthSystem.OnPlayerDied += PlayerKilled;
+        HealthSystem.OnPlayerReborn += PlayerReborn;
+    }
+
+    private void OnDisable(){
+        HealthSystem.OnPlayerDied -= PlayerKilled;
+        HealthSystem.OnPlayerReborn -= PlayerReborn;
+    }
+
+    private void PlayerKilled(GameObject gameObject){
+        gameObject.transform.parent.GetComponent<PlayerInputHandler>().RespawnPlayer(gameObject);
+    }
+
+    private void PlayerReborn(GameObject gameObject){
     }
 
     private void Update(){
@@ -68,7 +81,6 @@ public class DimeDropManager : MonoBehaviour{
         if((int)thisGameState == 4){
             GameIsOver();
         }
-
     }
 
     private void Preparation(){
@@ -76,16 +88,23 @@ public class DimeDropManager : MonoBehaviour{
             countDown -= 1 * Time.deltaTime;
         }
         else {
-            thisGameState++;
             Debug.Log("Preparation time ended");
+            thisGameState++;
         }
     }
 
     private void GameIsRunningSetUp(){
-        thisGameState++;
         foreach(var spawner in spawnersList){
             spawner.GetComponent<Spawner>().spawnerEnabled = true;
         }
+        foreach(var playerInput in GameManager.instance.playerList){
+            playerInput.GetComponent<PlayerInput>().actions["Movement"].Enable();
+            playerInput.GetComponent<PlayerInput>().actions["Sprint"].Enable();
+            playerInput.GetComponent<PlayerInput>().actions["Jump"].Enable();
+            playerInput.GetComponent<PlayerInput>().actions["Dash"].Enable();
+            playerInput.GetComponent<PlayerInput>().actions["Interact"].Enable();
+        }
+        thisGameState++;
     }
 
     private void GameIsRunning(){
@@ -99,7 +118,6 @@ public class DimeDropManager : MonoBehaviour{
 
     private void GameIsOverSetUp(){
         countDown = 10;
-        thisGameState++;
         foreach(var spawner in spawnersList){
             spawner.GetComponent<Spawner>().spawnerEnabled = false;
         }
@@ -108,7 +126,7 @@ public class DimeDropManager : MonoBehaviour{
         foreach(var coin in coins){
             coin.GetComponent<Coin>().canBePickedUp = false;
         }
-
+        thisGameState++;
     }
 
     private void GameIsOver(){

@@ -42,11 +42,7 @@ public class PlayerController : MonoBehaviour{
         //transform.parent = GameManager.instance.transform;
         foreach (Transform eachChild in transform) {
             if (eachChild.name == "Revolver0") {
-                //Debug.Log ("Child found. Name: " + eachChild.name);
                 gunSystem = this.transform.Find("Revolver0").GetComponent<GunSystem>();
-            }
-            else {
-                //Debug.Log("Gun not found");
             }
         }
     }
