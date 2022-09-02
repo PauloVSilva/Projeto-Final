@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour{
     private CharacterController controller;
     private Interactor interactor;
     [SerializeField] private GunSystem gunSystem = null;
+    [SerializeField] private PlayerStatManager playerStatManager;
 
     [SerializeField] private Vector3 playerVelocity;
     [SerializeField] private bool groundedPlayer;
@@ -29,12 +30,6 @@ public class PlayerController : MonoBehaviour{
     private float gravityValue = -9.81f;
     [SerializeField] private Vector3 move;
 
-    public int score = 0;
-    public enum playerColor{blue, red, green, yellow}
-    public playerColor thisPlayerColor = playerColor.blue;
-
-    public event Action<int> OnScoreChanged;
-
 
     private void Awake(){
         controller = GetComponent<CharacterController>();
@@ -45,6 +40,15 @@ public class PlayerController : MonoBehaviour{
                 gunSystem = this.transform.Find("Revolver0").GetComponent<GunSystem>();
             }
         }
+    }
+
+    private void Start(){
+        playerStatManager = this.transform.parent.GetComponent<PlayerStatManager>();
+    }
+
+    public void OnTriggerEnter(Collider other){
+        print("PlayerController detected collision");
+        this.transform.parent.GetComponent<PlayerStatManager>().FilterCollision(gameObject, other.gameObject);
     }
 
     void Update(){
@@ -68,6 +72,7 @@ public class PlayerController : MonoBehaviour{
 
         //LerpRotation();
         StaminaRegen();
+
     }
 
     public void LerpRotation(){
@@ -147,10 +152,5 @@ public class PlayerController : MonoBehaviour{
         if(context.performed){
             interactor.KeyIsPressed(context.ReadValue<float>());
         }
-    }
-
-    public void IncreaseScore(int value){
-        score += value;
-        OnScoreChanged?.Invoke(score);
     }
 }

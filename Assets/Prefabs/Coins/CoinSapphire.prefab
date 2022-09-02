@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 52328fa145057064abd0de1f48f62c76, type: 2}
+  - {fileID: 2100000, guid: 10be1ab409e95674ebd7f4dbe203b253, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -111,8 +111,8 @@ GameObject:
   - component: {fileID: 2784413684905434360}
   - component: {fileID: 7690747701783756440}
   m_Layer: 0
-  m_Name: CoinAmethyst
-  m_TagString: Untagged
+  m_Name: CoinSapphire
+  m_TagString: Coin
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -141,7 +141,7 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2784413684905434342}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
@@ -158,9 +158,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c54ec4c507502dd41b3ad10edadec179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  age: 0
+  canBePickedUp: 1
   pickUpRadius: 0.5
-  rotationSpeed: 800
-  value: 10000
+  rotationSpeed: 400
+  value: 1000
+  renderer: {fileID: 0}
 --- !u!54 &7690747701783756440
 Rigidbody:
   m_ObjectHideFlags: 0

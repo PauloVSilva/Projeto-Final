@@ -13,11 +13,10 @@ public class MainHubManager : MonoBehaviour{
         GameManager.instance.SetSpawnPoint();
         if(GameManager.instance.playerList.Count > 0){
             foreach(var playerInput in GameManager.instance.playerList){
-                //Debug.Log("teleporting");
                 playerInput.GetComponent<PlayerInputHandler>().Destroy();
                 playerInput.GetComponent<PlayerInputHandler>().Spawn();
-                playerInput.transform.GetChild(0).position = GameManager.instance.spawnPoints[0].transform.position;
                 playerInput.GetComponent<PlayerInput>().actions["Movement"].Enable();
+                playerInput.GetComponent<PlayerStatManager>().ResetScores();
             }
         }
         GameManager.instance.joinAction.Enable();

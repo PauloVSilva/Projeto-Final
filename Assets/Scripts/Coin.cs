@@ -59,20 +59,4 @@ public class Coin : MonoBehaviour{
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, pickUpRadius);
     }
-
-    public void OnTriggerEnter(Collider other){
-        PickUpCoin(other);
-    }
-
-    public void PickUpCoin(Collider other){
-        if(canBePickedUp){
-            if(other.gameObject.CompareTag("Player")){
-                PlayerController player = other.gameObject.GetComponent<PlayerController>();
-                if(player != null){
-                    player.IncreaseScore(value);
-                }
-                Destroy(this.gameObject);
-            }
-        }
-    }
 }

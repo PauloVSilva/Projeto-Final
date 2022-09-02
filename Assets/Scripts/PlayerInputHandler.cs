@@ -23,6 +23,9 @@ public class PlayerInputHandler : MonoBehaviour{
         yield return new WaitForSeconds(delay);
         Destroy();
         Spawn();
+        //int index = GameManager.instance.spawnPoints.Length;
+        //int randomIndex = UnityEngine.Random.Range(0, index);
+        //playerController.transform.position = GameManager.instance.spawnPoints[randomIndex].transform.position;
     }
 
     public void Spawn(){

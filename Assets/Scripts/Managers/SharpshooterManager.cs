@@ -4,15 +4,14 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Linq;
 
-public class DimeDropManager : MonoBehaviour{
+public class SharpshooterManager : MonoBehaviour{
     //INSTANCES
-    public static DimeDropManager instance = null;
+    public static SharpshooterManager instance = null;
 
     public Camera mainCamera;
     public GameObject[] spawnersList;
-    public GameObject[] coins;
+    public List<PlayerInput> playersAlive = new List<PlayerInput>();
     public float countDown = 10;
-    public int goal = 100000;
     public enum gameState{
         preparation,
         gameIsRunningSetUp,
@@ -20,6 +19,7 @@ public class DimeDropManager : MonoBehaviour{
         gameIsOverSetUp,
         gameIsOver
     }
+
     [SerializeField] private gameState thisGameState = gameState.preparation;
 
     private void Awake(){
@@ -38,7 +38,7 @@ public class DimeDropManager : MonoBehaviour{
         //move players to spawn
         foreach(var playerInput in GameManager.instance.playerList){
             playerInput.GetComponent<PlayerInputHandler>().Destroy();
-            playerInput.GetComponent<PlayerInputHandler>().Spawn(GameManager.instance.dimeDropPrefabs, 0);
+            playerInput.GetComponent<PlayerInputHandler>().Spawn(GameManager.instance.sharpshooterPrefabs, 0);
             playerInput.transform.GetChild(0).position = GameManager.instance.spawnPoints[0].transform.position;
             playerInput.GetComponent<PlayerInput>().actions.Disable();
         }
@@ -55,7 +55,9 @@ public class DimeDropManager : MonoBehaviour{
     }
 
     private void PlayerKilled(GameObject gameObject){
-        gameObject.transform.parent.GetComponent<PlayerInputHandler>().RespawnPlayer(gameObject);
+        //gameObject.transform.parent.GetComponent<PlayerInputHandler>().RespawnPlayer(gameObject);
+        playersAlive.Remove(gameObject.transform.parent.GetComponent<PlayerInput>());
+        gameObject.transform.parent.GetComponent<PlayerInput>().actions.Disable();
     }
 
     private void PlayerReborn(GameObject gameObject){
@@ -94,8 +96,8 @@ public class DimeDropManager : MonoBehaviour{
     }
 
     private void GameIsRunningSetUp(){
-        foreach(var spawner in spawnersList){
-            spawner.GetComponent<Spawner>().spawnerEnabled = true;
+        foreach(var player in GameManager.instance.playerList){
+            playersAlive.Add(player);
         }
         foreach(var playerInput in GameManager.instance.playerList){
             playerInput.GetComponent<PlayerInput>().actions["Movement"].Enable();
@@ -103,29 +105,22 @@ public class DimeDropManager : MonoBehaviour{
             playerInput.GetComponent<PlayerInput>().actions["Jump"].Enable();
             playerInput.GetComponent<PlayerInput>().actions["Dash"].Enable();
             playerInput.GetComponent<PlayerInput>().actions["Interact"].Enable();
+            playerInput.GetComponent<PlayerInput>().actions["CockHammer"].Enable();
+            playerInput.GetComponent<PlayerInput>().actions["PressTrigger"].Enable();
+            playerInput.GetComponent<PlayerInput>().actions["ReloadWeapon"].Enable();
         }
         thisGameState++;
     }
 
     private void GameIsRunning(){
-        foreach(var player in GameManager.instance.playerList){
-            if (player.transform.GetChild(0).GetComponent<PlayerController>().score >= goal){
-                Debug.Log("Player " + player.transform.GetChild(0).GetComponent<PlayerController>().thisPlayerColor.ToString() + " is the winner");
-                thisGameState++;
-            }
+        if (playersAlive.Count == 1){
+            Debug.Log("Player " + playersAlive[0].transform.GetComponent<PlayerStatManager>().thisPlayerColor.ToString() + " is the winner");
+            thisGameState++;
         }
     }
 
     private void GameIsOverSetUp(){
         countDown = 10;
-        foreach(var spawner in spawnersList){
-            spawner.GetComponent<Spawner>().spawnerEnabled = false;
-        }
-
-        coins = GameObject.FindGameObjectsWithTag("Coin");
-        foreach(var coin in coins){
-            coin.GetComponent<Coin>().canBePickedUp = false;
-        }
         thisGameState++;
     }
 

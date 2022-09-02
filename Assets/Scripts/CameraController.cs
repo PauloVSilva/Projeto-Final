@@ -17,17 +17,23 @@ public class CameraController : MonoBehaviour{
     }
     
     private void OnEnable(){
-        HealthSystem.OnPlayerDied += RemovePlayer;
         HealthSystem.OnPlayerReborn += AddPlayer;
+        HealthSystem.OnPlayerDied += RemovePlayer;
+        GameManager.instance.PlayerLeftGame += RemovePlayer;
     }
 
     private void OnDisable(){
-        HealthSystem.OnPlayerDied -= RemovePlayer;
         HealthSystem.OnPlayerReborn -= AddPlayer;
+        HealthSystem.OnPlayerDied -= RemovePlayer;
+        GameManager.instance.PlayerLeftGame -= RemovePlayer;
     }
 
     public void RemovePlayer(GameObject gameObject){
         objectsTracked.Remove(gameObject);
+    }
+
+    public void RemovePlayer(PlayerInput playerInput){
+        objectsTracked.Remove(playerInput.transform.GetChild(0).gameObject);
     }
 
     public void AddPlayer(GameObject gameObject){
@@ -47,6 +53,11 @@ public class CameraController : MonoBehaviour{
             gizmoPos = FindCentroid();
             gizmoPosMin = FindMinPos();
             gizmoPosMax = FindMaxPos();
+        }
+        else{
+            Vector3 desiredPosition = new Vector3(0, 0, 0) + fixedOffset;
+            Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * Time.deltaTime);
+            transform.position = smoothedPosition;
         }
     }
 

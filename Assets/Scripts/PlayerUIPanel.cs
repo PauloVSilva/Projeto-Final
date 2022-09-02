@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 using TMPro;
 
 public class PlayerUIPanel : MonoBehaviour{
@@ -9,7 +10,8 @@ public class PlayerUIPanel : MonoBehaviour{
     public TextMeshProUGUI playerScore;
     public TextMeshProUGUI pressToJoin;
 
-    public PlayerController player;
+    //public PlayerController player;
+    public PlayerInput player;
 
     private void Start(){
         //UpdateScore(0);
@@ -25,7 +27,8 @@ public class PlayerUIPanel : MonoBehaviour{
     IEnumerator AssignPlayerDelay(int index){
         yield return new WaitForSeconds(0.1f);
         //print("Player assigned");
-        player = GameManager.instance.playerList[index].GetComponent<PlayerInputHandler>().playerController;
+        //player = GameManager.instance.playerList[index].GetComponent<PlayerInputHandler>().playerController;
+        player = GameManager.instance.playerList[index];
         SetUpInfoPanel();
     }
 
@@ -36,10 +39,9 @@ public class PlayerUIPanel : MonoBehaviour{
 
     void SetUpInfoPanel(){
         if(player != null){
-            player.OnScoreChanged += UpdateScore;
-
-            playerScore.text = player.GetComponent<PlayerController>().score.ToString();
-            playerName.text = player.thisPlayerColor.ToString();
+            player.transform.GetComponent<PlayerStatManager>().OnScoreChanged += UpdateScore;
+            playerScore.text = player.transform.GetComponent<PlayerStatManager>().score.ToString();
+            playerName.text = player.transform.GetComponent<PlayerStatManager>().thisPlayerColor.ToString();
             pressToJoin.text = null;
         }
         else{
