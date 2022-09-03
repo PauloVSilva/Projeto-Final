@@ -9,7 +9,7 @@ using System;
 public class PlayerController : MonoBehaviour{
     private CharacterController controller;
     private Interactor interactor;
-    [SerializeField] private GunSystem gunSystem = null;
+    [SerializeField] private Weapon weapon = null;
 
     [SerializeField] private Vector3 playerVelocity;
     [SerializeField] private bool groundedPlayer;
@@ -34,8 +34,8 @@ public class PlayerController : MonoBehaviour{
         interactor = GetComponent<Interactor>();
         //transform.parent = GameManager.instance.transform;
         foreach (Transform eachChild in transform) {
-            if (eachChild.name == "Revolver0") {
-                gunSystem = this.transform.Find("Revolver0").GetComponent<GunSystem>();
+            if (eachChild.CompareTag("Weapon")) {
+                weapon = eachChild.GetComponent<Weapon>();
             }
         }
     }
@@ -125,20 +125,20 @@ public class PlayerController : MonoBehaviour{
     }
 
     public void OnCockHammer(InputAction.CallbackContext context){
-        if(gunSystem != null){
-            gunSystem.OnCockHammer(context);
+        if(weapon != null){
+            weapon.OnCockHammer(context);
         }
     }
 
     public void OnPressTrigger(InputAction.CallbackContext context){
-        if(gunSystem != null){
-            gunSystem.OnPressTrigger(context);
+        if(weapon != null){
+            weapon.OnPressTrigger(context);
         }
     }
 
     public void OnReload(InputAction.CallbackContext context){
-        if(gunSystem != null){
-            gunSystem.OnReload(context);
+        if(weapon != null){
+            weapon.OnReload(context);
         }
     }
 

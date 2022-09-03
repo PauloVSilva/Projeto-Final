@@ -8,6 +8,7 @@ TagManager:
   - Spawner
   - Coin
   - Instadeath
+  - Weapon
   layers:
   - Default
   - TransparentFX
