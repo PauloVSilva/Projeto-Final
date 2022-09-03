@@ -7,7 +7,7 @@ TagManager:
   - SpawnPoint
   - Spawner
   - Coin
-  - GameProtection
+  - Instadeath
   layers:
   - Default
   - TransparentFX

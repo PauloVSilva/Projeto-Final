@@ -10,7 +10,6 @@ public class PlayerController : MonoBehaviour{
     private CharacterController controller;
     private Interactor interactor;
     [SerializeField] private GunSystem gunSystem = null;
-    [SerializeField] private PlayerStatManager playerStatManager;
 
     [SerializeField] private Vector3 playerVelocity;
     [SerializeField] private bool groundedPlayer;
@@ -30,7 +29,6 @@ public class PlayerController : MonoBehaviour{
     private float gravityValue = -9.81f;
     [SerializeField] private Vector3 move;
 
-
     private void Awake(){
         controller = GetComponent<CharacterController>();
         interactor = GetComponent<Interactor>();
@@ -42,16 +40,12 @@ public class PlayerController : MonoBehaviour{
         }
     }
 
-    private void Start(){
-        playerStatManager = this.transform.parent.GetComponent<PlayerStatManager>();
-    }
-
     public void OnTriggerEnter(Collider other){
-        print("PlayerController detected collision");
+        //print("PlayerController detected collision");
         this.transform.parent.GetComponent<PlayerStatManager>().FilterCollision(gameObject, other.gameObject);
     }
 
-    void Update(){
+    void FixedUpdate(){
         groundedPlayer = controller.isGrounded;
         if (groundedPlayer && playerVelocity.y < 0){
             playerVelocity.y = 0f;

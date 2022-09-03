@@ -14,18 +14,15 @@ public class PlayerInputHandler : MonoBehaviour{
         Spawn();
     }
 
-    public void RespawnPlayer(GameObject gameObject){
-        float delay = gameObject.GetComponent<HealthSystem>().timeToRespawn;
+    public void RespawnPlayer(float delay){
+        Instantiate(GameManager.instance.DeathSpot, playerController.transform.position, Quaternion.Euler(0, 0, 0));
+        Destroy();
         StartCoroutine(RespawnPlayerDelay(delay));
     }
 
     IEnumerator RespawnPlayerDelay(float delay){
         yield return new WaitForSeconds(delay);
-        Destroy();
         Spawn();
-        //int index = GameManager.instance.spawnPoints.Length;
-        //int randomIndex = UnityEngine.Random.Range(0, index);
-        //playerController.transform.position = GameManager.instance.spawnPoints[randomIndex].transform.position;
     }
 
     public void Spawn(){

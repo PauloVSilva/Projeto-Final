@@ -13,8 +13,8 @@ public class HealthSystem : MonoBehaviour{
     public bool isAlive = true;
 
     public static event Action<GameObject> OnPlayerDied;
+    public static event Action<GameObject> OnPlayerScoredKill;
     public static event Action<GameObject> OnPlayerReborn;
-
 
     private void Awake(){
         currentHealth = maxHealth;
@@ -26,11 +26,23 @@ public class HealthSystem : MonoBehaviour{
 
     public void TakeDamage(float damageTaken){
         currentHealth -= damageTaken;
+        print(currentHealth);
+        if(currentHealth <= 0){
+            print("died");
+            isAlive = false;
+            OnPlayerDied?.Invoke(gameObject);
+        }
+    }
+
+    public void TakeDamage(GameObject damageSource, float damageTaken){
+        currentHealth -= damageTaken;
+        //print(damageSource + " damaged " + gameObject.transform.parent);
         //print(currentHealth);
         if(currentHealth <= 0){
             //print("died");
             isAlive = false;
             OnPlayerDied?.Invoke(gameObject);
+            OnPlayerScoredKill?.Invoke(damageSource);
         }
     }
 

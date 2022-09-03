@@ -19,7 +19,7 @@ public class Projectile : MonoBehaviour{
         Destroy(this.gameObject, ProjectileToCast.LifeTime);
     }
 
-    void Update(){
+    void FixedUpdate(){
         if(ProjectileToCast.Speed > 0){
             transform.Translate(Vector3.forward * ProjectileToCast.Speed * Time.deltaTime);
         }
@@ -27,8 +27,10 @@ public class Projectile : MonoBehaviour{
 
     private void OnTriggerEnter(Collider other){
         if(other.gameObject.CompareTag("Player")){
-            HealthSystem enemyHealth = other.GetComponent<HealthSystem>();
-            enemyHealth.TakeDamage(ProjectileToCast.DamageAmount);
+            //HealthSystem enemyHealth = other.GetComponent<HealthSystem>();
+            //enemyHealth.TakeDamage(ProjectileToCast.DamageAmount);
+            GameObject damageSource = this.transform.parent.parent.parent.gameObject;
+            other.GetComponent<HealthSystem>().TakeDamage(damageSource, ProjectileToCast.DamageAmount);
         }
 
         Destroy(this.gameObject);

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d79c6840759bfe44db0c88b5c211004d, type: 3}
   m_Name: RevolverAmmo
   m_EditorClassIdentifier: 
-  DamageAmount: 10
+  DamageAmount: 100
   Cost: 1
-  LifeTime: 0.2
-  Speed: 50
+  LifeTime: 3
+  Speed: 100
   ProjectileRadius: 0.5

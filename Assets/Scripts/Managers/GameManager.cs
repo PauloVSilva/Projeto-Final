@@ -13,10 +13,12 @@ public class GameManager : MonoBehaviour{
     public List<PlayerInput> playerList = new List<PlayerInput>();
     public GameObject spawnPointPrefab;
     public GameObject[] spawnPoints;
-    public GameObject[] playerPrefabs;
 
+    public GameObject[] playerPrefabs;
     public GameObject[] dimeDropPrefabs;
     public GameObject[] sharpshooterPrefabs;
+
+    public GameObject DeathSpot;
 
     public InputAction joinAction;
     public InputAction leaveAction;

@@ -45,19 +45,20 @@ public class SharpshooterManager : MonoBehaviour{
     }
 
     private void OnEnable(){
-        HealthSystem.OnPlayerDied += PlayerKilled;
+        HealthSystem.OnPlayerDied += PlayerDied;
         HealthSystem.OnPlayerReborn += PlayerReborn;
     }
 
     private void OnDisable(){
-        HealthSystem.OnPlayerDied -= PlayerKilled;
+        HealthSystem.OnPlayerDied -= PlayerDied;
         HealthSystem.OnPlayerReborn -= PlayerReborn;
     }
 
-    private void PlayerKilled(GameObject gameObject){
+    private void PlayerDied(GameObject gameObject){
         //gameObject.transform.parent.GetComponent<PlayerInputHandler>().RespawnPlayer(gameObject);
         playersAlive.Remove(gameObject.transform.parent.GetComponent<PlayerInput>());
         gameObject.transform.parent.GetComponent<PlayerInput>().actions.Disable();
+        gameObject.transform.parent.GetComponent<PlayerStatManager>().IncreaseDeathCount();
     }
 
     private void PlayerReborn(GameObject gameObject){

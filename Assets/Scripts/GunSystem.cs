@@ -88,6 +88,6 @@ public class GunSystem : MonoBehaviour{
     }
 
     public void CastProjectile(){
-        Instantiate(projectileToCast, castPoint.position, castPoint.rotation);
+        Instantiate(projectileToCast, castPoint.position, castPoint.rotation, this.transform);
     }
 }

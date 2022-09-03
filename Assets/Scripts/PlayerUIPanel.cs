@@ -8,6 +8,9 @@ using TMPro;
 public class PlayerUIPanel : MonoBehaviour{
     public TextMeshProUGUI playerName;
     public TextMeshProUGUI playerScore;
+    public TextMeshProUGUI playerKillCount;
+    public TextMeshProUGUI playerDeathCount;
+
     public TextMeshProUGUI pressToJoin;
 
     //public PlayerController player;
@@ -15,8 +18,11 @@ public class PlayerUIPanel : MonoBehaviour{
 
     private void Start(){
         //UpdateScore(0);
-        playerScore.text = null;
         playerName.text = null;
+        playerScore.text = null;
+        playerKillCount.text = null;
+        playerDeathCount.text = null;
+
         pressToJoin.text = "Press X to Join";
     }
 
@@ -40,18 +46,35 @@ public class PlayerUIPanel : MonoBehaviour{
     void SetUpInfoPanel(){
         if(player != null){
             player.transform.GetComponent<PlayerStatManager>().OnScoreChanged += UpdateScore;
-            playerScore.text = player.transform.GetComponent<PlayerStatManager>().score.ToString();
+            player.transform.GetComponent<PlayerStatManager>().OnKillsChanged += UpdateKillCount;
+            player.transform.GetComponent<PlayerStatManager>().OnDeathsChanged += UpdateDeathCount;
+
             playerName.text = player.transform.GetComponent<PlayerStatManager>().thisPlayerColor.ToString();
+            playerScore.text = player.transform.GetComponent<PlayerStatManager>().score.ToString();
+            playerKillCount.text = player.transform.GetComponent<PlayerStatManager>().kills.ToString();
+            playerDeathCount.text = player.transform.GetComponent<PlayerStatManager>().deaths.ToString();
+            
             pressToJoin.text = null;
         }
         else{
-            playerScore.text = null;
             playerName.text = null;
+            playerScore.text = null;
+            playerKillCount.text = null;
+            playerDeathCount.text = null;
+
             pressToJoin.text = "Press X to Join";
         }
     }
 
     private void UpdateScore(int score){
         playerScore.text = score.ToString();
+    }
+
+    private void UpdateKillCount(int killCount){
+        playerKillCount.text = killCount.ToString();
+    }
+
+    private void UpdateDeathCount(int deathCount){
+        playerDeathCount.text = deathCount.ToString();
     }
 }

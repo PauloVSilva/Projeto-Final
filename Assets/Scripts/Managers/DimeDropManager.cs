@@ -45,20 +45,24 @@ public class DimeDropManager : MonoBehaviour{
     }
 
     private void OnEnable(){
-        HealthSystem.OnPlayerDied += PlayerKilled;
+        HealthSystem.OnPlayerDied += PlayerDied;
         HealthSystem.OnPlayerReborn += PlayerReborn;
     }
 
     private void OnDisable(){
-        HealthSystem.OnPlayerDied -= PlayerKilled;
+        HealthSystem.OnPlayerDied -= PlayerDied;
         HealthSystem.OnPlayerReborn -= PlayerReborn;
     }
 
-    private void PlayerKilled(GameObject gameObject){
-        gameObject.transform.parent.GetComponent<PlayerInputHandler>().RespawnPlayer(gameObject);
+    private void PlayerDied(GameObject gameObject){
+        float delay = gameObject.GetComponent<HealthSystem>().timeToRespawn; 
+        gameObject.transform.parent.GetComponent<PlayerInputHandler>().RespawnPlayer(delay);
+        //gameObject.transform.parent.GetComponent<PlayerInput>().actions.Disable();
+        gameObject.transform.parent.GetComponent<PlayerStatManager>().IncreaseDeathCount();
     }
 
     private void PlayerReborn(GameObject gameObject){
+        //gameObject.transform.parent.GetComponent<PlayerInput>().actions.Enable();
     }
 
     private void Update(){
