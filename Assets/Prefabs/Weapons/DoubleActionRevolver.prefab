@@ -48,12 +48,16 @@ MonoBehaviour:
   FireWeapon: {fileID: 11400000, guid: d1e7c59ab49e75d4d8b77d4c0059aba8, type: 2}
   projectileToCast: {fileID: 1874502773355404356, guid: 61ec75cf4b7a1ed4ab2f67fc7dd2eeff, type: 3}
   actionType: 1
+  chamberReloadType: 0
+  size: 0
   ammoCapacity: 0
-  fireRate: 0
+  fireRate: 1
   ammo: 0
   extraAmmo: 0
-  currentShotTimer: 0
+  fullAutoClock: 0
+  fullAutoReady: 0
   shooting: 0
+  canShoot: 1
   hammerIsCocked: 0
   pumpIsReady: 0
   castPoint: {fileID: 3190837847479944288}

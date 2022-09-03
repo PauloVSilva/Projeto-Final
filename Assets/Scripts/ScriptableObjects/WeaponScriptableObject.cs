@@ -12,6 +12,6 @@ public class WeaponScriptableObject : ScriptableObject{
     public ActionType actionType;
     public ChamberReloadType chamberReloadType;
     public Size size;
-    public int ammoCapacity = 6;
-    public float fireRate = 0f; //how long it takes between shots for fullautos
+    public int ammoCapacity;
+    public float fireRate = 1;
 }

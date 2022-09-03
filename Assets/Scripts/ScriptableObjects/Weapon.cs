@@ -15,12 +15,14 @@ public class Weapon : MonoBehaviour{
     public ChamberReloadType chamberReloadType;
     public Size size;
     public int ammoCapacity;
-    public float fireRate;
+    public float fireRate; //how many times it can shoot per second
 
     public int ammo = 0;
     public int extraAmmo = 0;
-    public float currentShotTimer; //firerate clock
-    public bool shooting = false; //to determine when to reset the firerate clock
+    public float fullAutoClock = 0;
+    public float fullAutoReady; //firerate clock
+    public bool shooting = false;
+    public bool canShoot = true;
     public bool hammerIsCocked = false; //for revolvers
     public bool pumpIsReady = false; //for shotguns
 
@@ -38,7 +40,7 @@ public class Weapon : MonoBehaviour{
     public void Start(){
         ammo = ammoCapacity;
         extraAmmo = 999;
-        currentShotTimer = 0;
+        fullAutoReady = 1 / FireWeapon.fireRate;
         shooting = false;
 
         if(actionType.ToString() == "manual"){
@@ -61,28 +63,22 @@ public class Weapon : MonoBehaviour{
     }
 
     public void OnPressTrigger(InputAction.CallbackContext context){
-        if(actionType.ToString() != "fullAuto"){
-            if(context.performed){
-                if(ammo - (int)projectileToCast.ProjectileToCast.Cost >= 0){
-                    if(actionType.ToString() == "manual" && hammerIsCocked){
-                        CastProjectile();
-                        ammo -= (int)projectileToCast.ProjectileToCast.Cost;
-                        hammerIsCocked = false;
-                    }
-                    if(actionType.ToString() == "semiAuto"){
-                        CastProjectile();
-                        ammo -= (int)projectileToCast.ProjectileToCast.Cost;
-                    }
+        if(context.performed){
+            if(ammo - (int)projectileToCast.ProjectileToCast.Cost >= 0){
+                if(actionType.ToString() == "manual" && hammerIsCocked && canShoot){
+                    Fire();
+                }
+                if(actionType.ToString() == "semiAuto" && canShoot){
+                    Fire();
+                }
+                if(actionType.ToString() == "fullAuto"){
+                    shooting = true;
                 }
             }
         }
-        if(actionType.ToString() == "fullAuto"){
-            if(context.started){
-                if(ammo - (int)projectileToCast.ProjectileToCast.Cost >= 0){
-                    CastProjectile();
-                    ammo -= (int)projectileToCast.ProjectileToCast.Cost;
-                }
-            }
+        if(context.canceled){
+            canShoot = true;
+            shooting = false;
         }
     }
 
@@ -93,6 +89,25 @@ public class Weapon : MonoBehaviour{
                 extraAmmo--;
                 ammo++;
             }
+        }
+    }
+
+    private void Update() {
+        if(actionType.ToString() == "fullAuto"){
+            if(shooting && fullAutoClock >= fullAutoReady){
+                Fire();
+            }
+            fullAutoClock += Time.deltaTime;
+        }
+    }
+
+    public void Fire(){
+        if(ammo - (int)projectileToCast.ProjectileToCast.Cost >= 0){
+            CastProjectile();
+            ammo -= (int)projectileToCast.ProjectileToCast.Cost;
+            hammerIsCocked = false;
+            canShoot = false;
+            fullAutoClock = 0;
         }
     }
 
