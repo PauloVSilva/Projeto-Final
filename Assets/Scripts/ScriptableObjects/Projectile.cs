@@ -14,15 +14,13 @@ public class Projectile : MonoBehaviour{
         myCollider.radius = ProjectileToCast.ProjectileRadius;
 
         myRigidbody = GetComponent<Rigidbody>();
-        myRigidbody.isKinematic = true;
+        //myRigidbody.isKinematic = true;
 
         Destroy(this.gameObject, ProjectileToCast.LifeTime);
     }
 
-    void FixedUpdate(){
-        if(ProjectileToCast.Speed > 0){
-            transform.Translate(Vector3.forward * ProjectileToCast.Speed * Time.deltaTime);
-        }
+    void Start(){
+        myRigidbody.AddForce(transform.forward * ProjectileToCast.Speed, ForceMode.Impulse);
     }
 
     private void OnTriggerEnter(Collider other){
