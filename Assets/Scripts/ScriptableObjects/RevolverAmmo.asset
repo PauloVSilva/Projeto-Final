@@ -15,5 +15,5 @@ MonoBehaviour:
   DamageAmount: 100
   Cost: 1
   LifeTime: 3
-  Speed: 100
+  Speed: 50
   ProjectileRadius: 0.5
