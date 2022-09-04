@@ -27,7 +27,7 @@ public class Projectile : MonoBehaviour{
         if(other.gameObject.CompareTag("Player")){
             //HealthSystem enemyHealth = other.GetComponent<HealthSystem>();
             //enemyHealth.TakeDamage(ProjectileToCast.DamageAmount);
-            GameObject damageSource = this.transform.parent.parent.parent.gameObject;
+            GameObject damageSource = this.transform.parent.parent.parent.gameObject; //this.transform.root.gameObject
             other.GetComponent<HealthSystem>().TakeDamage(damageSource, ProjectileToCast.DamageAmount);
         }
 
