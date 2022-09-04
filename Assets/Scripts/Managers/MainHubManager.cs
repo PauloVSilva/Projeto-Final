@@ -37,9 +37,16 @@ public class MainHubManager : MonoBehaviour{
 
     private void PlayerDied(GameObject gameObject){
         float delay = gameObject.GetComponent<HealthSystem>().timeToRespawn; 
-        gameObject.transform.parent.GetComponent<PlayerInputHandler>().RespawnPlayer(delay);
         gameObject.transform.parent.GetComponent<PlayerInput>().actions.Disable();
         gameObject.transform.parent.GetComponent<PlayerStatManager>().IncreaseDeathCount();
+        gameObject.SetActive(false);
+        StartCoroutine(RespawnPlzFix(gameObject, delay));
+    }
+    IEnumerator RespawnPlzFix(GameObject gameObject, float delay){
+        yield return new WaitForSeconds(delay);
+        gameObject.SetActive(true);
+        gameObject.transform.GetComponent<HealthSystem>().Respawn();
+
     }
 
     private void PlayerScoredKill(GameObject gameObject){
@@ -47,6 +54,8 @@ public class MainHubManager : MonoBehaviour{
     }
 
     private void PlayerReborn(GameObject gameObject){
+        gameObject.SetActive(true);
+        gameObject.transform.position = GameManager.instance.spawnPoints[0].transform.position;
         gameObject.transform.parent.GetComponent<PlayerInput>().actions.Enable();
     }
 }

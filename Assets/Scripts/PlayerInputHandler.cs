@@ -8,20 +8,7 @@ public class PlayerInputHandler : MonoBehaviour{
     //public GameObject[] playerPrefabs;
     public PlayerController playerController;
 
-    Vector3 startPos = new Vector3(0, 0, 0);
-
     private void Awake(){
-        Spawn();
-    }
-
-    public void RespawnPlayer(float delay){
-        Instantiate(GameManager.instance.DeathSpot, playerController.transform.position, Quaternion.Euler(0, 0, 0));
-        Destroy();
-        StartCoroutine(RespawnPlayerDelay(delay));
-    }
-
-    IEnumerator RespawnPlayerDelay(float delay){
-        yield return new WaitForSeconds(delay);
         Spawn();
     }
 

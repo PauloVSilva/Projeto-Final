@@ -41,6 +41,7 @@ public class HealthSystem : MonoBehaviour{
         if(currentHealth <= 0){
             //print("died");
             isAlive = false;
+            Instantiate(GameManager.instance.DeathSpot, this.transform.position, Quaternion.Euler(0, 0, 0));
             OnPlayerDied?.Invoke(gameObject);
             OnPlayerScoredKill?.Invoke(damageSource);
         }
@@ -61,6 +62,6 @@ public class HealthSystem : MonoBehaviour{
     public void Respawn(){
         currentHealth = maxHealth;
         isAlive = true;
+        OnPlayerReborn?.Invoke(gameObject);
     }
-
 }

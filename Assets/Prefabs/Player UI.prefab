@@ -233,6 +233,7 @@ MonoBehaviour:
   playerScore: {fileID: 5814374981318216248}
   playerKillCount: {fileID: 5629831507165190851}
   playerDeathCount: {fileID: 3966650621513205367}
+  coin: {fileID: 0}
   pressToJoin: {fileID: 0}
   player: {fileID: 0}
 --- !u!1 &5662928049316357803

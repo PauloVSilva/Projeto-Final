@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour{
         this.transform.parent.GetComponent<PlayerStatManager>().FilterCollision(gameObject, other.gameObject);
     }
 
-    void FixedUpdate(){
+    void Update(){
         groundedPlayer = controller.isGrounded;
         if (groundedPlayer && playerVelocity.y < 0){
             playerVelocity.y = 0f;

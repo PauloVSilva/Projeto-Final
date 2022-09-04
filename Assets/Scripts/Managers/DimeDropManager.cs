@@ -55,8 +55,8 @@ public class DimeDropManager : MonoBehaviour{
     }
 
     private void PlayerDied(GameObject gameObject){
-        float delay = gameObject.GetComponent<HealthSystem>().timeToRespawn; 
-        gameObject.transform.parent.GetComponent<PlayerInputHandler>().RespawnPlayer(delay);
+        //float delay = gameObject.GetComponent<HealthSystem>().timeToRespawn; 
+        //gameObject.transform.parent.GetComponent<PlayerInputHandler>().RespawnPlayer(delay);
         //gameObject.transform.parent.GetComponent<PlayerInput>().actions.Disable();
         gameObject.transform.parent.GetComponent<PlayerStatManager>().IncreaseDeathCount();
     }
