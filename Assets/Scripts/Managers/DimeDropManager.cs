@@ -2,25 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System.Linq;
+using System;
 
 public class DimeDropManager : MonoBehaviour{
     //INSTANCES
     public static DimeDropManager instance = null;
 
-    public Camera mainCamera;
-    public GameObject[] spawnersList;
-    public GameObject[] coins;
-    public float countDown = 10;
-    public int goal = 100000;
-    public enum gameState{
-        preparation,
-        gameIsRunningSetUp,
-        gameIsRunning,
-        gameIsOverSetUp,
-        gameIsOver
-    }
-    [SerializeField] private gameState thisGameState = gameState.preparation;
+    //ENUMS
+    private enum gameState{preparation, gameIsRunningSetUp, gameIsRunning, gameIsOverSetUp, gameIsOver}
+    private enum gameGoal{time, amount}
+
+    //VARIABLES
+    [SerializeField] private Camera mainCamera;
+    [SerializeField] private GameObject[] spawnersList;
+    [SerializeField] private GameObject[] coins;
+    [SerializeField] private gameState thisGameState;
+    [SerializeField] private gameGoal thisGameGoal;
+    [SerializeField] private float countDown;
+    [SerializeField] private int amountGoal;
+
+    //EVENTS
+    public static event Action<float> OnCountDownTicks;
 
     private void Awake(){
         if (instance == null){
@@ -34,41 +36,27 @@ public class DimeDropManager : MonoBehaviour{
         GameManager.instance.leaveAction.Disable();
         GameManager.instance.SetSpawnPoint();
         spawnersList = GameObject.FindGameObjectsWithTag("Spawner");
+    }
 
+    private void Start(){
         //move players to spawn
         foreach(var playerInput in GameManager.instance.playerList){
-            playerInput.GetComponent<PlayerInputHandler>().Destroy();
-            playerInput.GetComponent<PlayerInputHandler>().Spawn(GameManager.instance.dimeDropPrefabs, 0);
             playerInput.transform.GetChild(0).position = GameManager.instance.spawnPoints[0].transform.position;
             playerInput.GetComponent<PlayerInput>().actions.Disable();
+            playerInput.GetComponent<PlayerInput>().actions["Jump"].Enable();
+            mainCamera.GetComponent<CameraController>().AddPlayer(playerInput);
         }
-    }
-
-    private void OnEnable(){
-        HealthSystem.OnPlayerDied += PlayerDied;
-        HealthSystem.OnPlayerReborn += PlayerReborn;
-    }
-
-    private void OnDisable(){
-        HealthSystem.OnPlayerDied -= PlayerDied;
-        HealthSystem.OnPlayerReborn -= PlayerReborn;
-    }
-
-    private void PlayerDied(GameObject gameObject){
-        //float delay = gameObject.GetComponent<HealthSystem>().timeToRespawn; 
-        //gameObject.transform.parent.GetComponent<PlayerInputHandler>().RespawnPlayer(delay);
-        //gameObject.transform.parent.GetComponent<PlayerInput>().actions.Disable();
-        gameObject.transform.parent.GetComponent<PlayerStatManager>().IncreaseDeathCount();
-    }
-
-    private void PlayerReborn(GameObject gameObject){
-        //gameObject.transform.parent.GetComponent<PlayerInput>().actions.Enable();
+        thisGameState = gameState.preparation;
+        thisGameGoal = gameGoal.amount;
+        countDown = 10;
+        amountGoal = 10000;
+        StartCoroutine(Preparation());
     }
 
     private void Update(){
-        if((int)thisGameState == 0){
-            Preparation();
-        }
+        //if((int)thisGameState == 0){
+        //    Preparation();
+        //}
 
         if((int)thisGameState == 1){
             GameIsRunningSetUp();
@@ -87,9 +75,13 @@ public class DimeDropManager : MonoBehaviour{
         }
     }
 
-    private void Preparation(){
+    IEnumerator Preparation(){
+        yield return new WaitForSeconds(1f);
         if(countDown > 0){
-            countDown -= 1 * Time.deltaTime;
+            //countDown -= 1 * Time.deltaTime;
+            countDown--;
+            OnCountDownTicks?.Invoke(countDown);
+            StartCoroutine(Preparation());
         }
         else {
             Debug.Log("Preparation time ended");
@@ -113,7 +105,7 @@ public class DimeDropManager : MonoBehaviour{
 
     private void GameIsRunning(){
         foreach(var player in GameManager.instance.playerList){
-            if (player.transform.GetComponent<PlayerStatManager>().score >= goal){
+            if (player.transform.GetComponent<PlayerStatManager>().score >= amountGoal){
                 Debug.Log("Player " + player.transform.GetComponent<PlayerStatManager>().thisPlayerColor.ToString() + " is the winner");
                 thisGameState++;
             }

@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour{
     //EVENTS
     public event Action<PlayerInput> PlayerJoinedGame;
     public event Action<PlayerInput> PlayerLeftGame;
+    public static event Action MiniGameStarted;
 
     private void Awake(){
         if (instance == null){

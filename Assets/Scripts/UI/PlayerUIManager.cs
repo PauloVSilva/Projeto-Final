@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Linq;
 
-public class UIManager : MonoBehaviour{
+public class PlayerUIManager : MonoBehaviour{
     public GameObject[] playerUIPanels;
     //public GameObject[] joinMessages;
 

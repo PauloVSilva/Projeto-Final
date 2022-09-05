@@ -12,13 +12,7 @@ public class SharpshooterManager : MonoBehaviour{
     public GameObject[] spawnersList;
     public List<PlayerInput> playersAlive = new List<PlayerInput>();
     public float countDown = 10;
-    public enum gameState{
-        preparation,
-        gameIsRunningSetUp,
-        gameIsRunning,
-        gameIsOverSetUp,
-        gameIsOver
-    }
+    public enum gameState{preparation, gameIsRunningSetUp, gameIsRunning, gameIsOverSetUp, gameIsOver}
 
     [SerializeField] private gameState thisGameState = gameState.preparation;
 
@@ -34,34 +28,16 @@ public class SharpshooterManager : MonoBehaviour{
         GameManager.instance.leaveAction.Disable();
         GameManager.instance.SetSpawnPoint();
         spawnersList = GameObject.FindGameObjectsWithTag("Spawner");
+    }
 
+    private void Start(){
         //move players to spawn
         foreach(var playerInput in GameManager.instance.playerList){
-            playerInput.GetComponent<PlayerInputHandler>().Destroy();
-            playerInput.GetComponent<PlayerInputHandler>().Spawn(GameManager.instance.sharpshooterPrefabs, 0);
             playerInput.transform.GetChild(0).position = GameManager.instance.spawnPoints[0].transform.position;
             playerInput.GetComponent<PlayerInput>().actions.Disable();
+            playerInput.GetComponent<PlayerInput>().actions["Jump"].Enable();
+            mainCamera.GetComponent<CameraController>().AddPlayer(playerInput);
         }
-    }
-
-    private void OnEnable(){
-        HealthSystem.OnPlayerDied += PlayerDied;
-        HealthSystem.OnPlayerReborn += PlayerReborn;
-    }
-
-    private void OnDisable(){
-        HealthSystem.OnPlayerDied -= PlayerDied;
-        HealthSystem.OnPlayerReborn -= PlayerReborn;
-    }
-
-    private void PlayerDied(GameObject gameObject){
-        //gameObject.transform.parent.GetComponent<PlayerInputHandler>().RespawnPlayer(gameObject);
-        playersAlive.Remove(gameObject.transform.parent.GetComponent<PlayerInput>());
-        gameObject.transform.parent.GetComponent<PlayerInput>().actions.Disable();
-        gameObject.transform.parent.GetComponent<PlayerStatManager>().IncreaseDeathCount();
-    }
-
-    private void PlayerReborn(GameObject gameObject){
     }
 
     private void Update(){

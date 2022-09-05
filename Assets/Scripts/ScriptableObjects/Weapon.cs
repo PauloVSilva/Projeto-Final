@@ -97,7 +97,9 @@ public class Weapon : MonoBehaviour{
             if(shooting && fullAutoClock >= fullAutoReady){
                 Fire();
             }
-            fullAutoClock += Time.deltaTime;
+            if(fullAutoClock <= fullAutoReady){
+                fullAutoClock += Time.deltaTime;
+            }
         }
     }
 

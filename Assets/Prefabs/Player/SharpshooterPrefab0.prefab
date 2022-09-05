@@ -77,37 +77,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!1 &3870481724672369710
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8202589005732293883}
-  m_Layer: 0
-  m_Name: InteractionPoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8202589005732293883
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3870481724672369710}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8463049207392376649}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3956367017075125924
 GameObject:
   m_ObjectHideFlags: 0
@@ -277,7 +246,7 @@ RectTransform:
   m_Children:
   - {fileID: 4173207562121068037}
   m_Father: {fileID: 8463049207392376649}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -496,7 +465,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8463049206784566915}
-  - {fileID: 8202589005732293883}
   - {fileID: 5406847653483679901}
   - {fileID: 4303554028239233580}
   m_Father: {fileID: 0}
@@ -558,8 +526,6 @@ MonoBehaviour:
   maxHealth: 100
   currentHealth: 0
   healthRegenRate: 0
-  timeToRespawn: 3
-  extraLifes: 1
   isAlive: 1
 --- !u!114 &576238479873586051
 MonoBehaviour:
@@ -573,7 +539,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6f0a793dfaf0c241b2c3d0eae535890, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _interactionPoint: {fileID: 8202589005732293883}
+  _interactionPoint: {fileID: 8463049207392376649}
   _interactionPointRadius: 1.5
   _interactableMask:
     serializedVersion: 2
@@ -597,7 +563,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3190837847479944288, guid: a4b73a376005e53498b7eca416ef3bac, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3190837847479944288, guid: a4b73a376005e53498b7eca416ef3bac, type: 3}
       propertyPath: m_LocalPosition.x

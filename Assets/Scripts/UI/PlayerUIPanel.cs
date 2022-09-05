@@ -7,6 +7,7 @@ using TMPro;
 
 public class PlayerUIPanel : MonoBehaviour{
     public TextMeshProUGUI playerName;
+    public TextMeshProUGUI playerHealth;
     public TextMeshProUGUI playerScore;
     public TextMeshProUGUI playerKillCount;
     public TextMeshProUGUI playerDeathCount;
@@ -16,14 +17,18 @@ public class PlayerUIPanel : MonoBehaviour{
     //public PlayerController player;
     public PlayerInput player;
 
+    private void Awake() {
+        pressToJoin.text = "Press X to join";
+    }
+
     private void Start(){
         //UpdateScore(0);
-        playerName.text = null;
-        playerScore.text = null;
-        playerKillCount.text = null;
-        playerDeathCount.text = null;
-
-        pressToJoin.text = "Press X to Join";
+        playerName.gameObject.SetActive(false);
+        playerHealth.gameObject.SetActive(false);
+        playerScore.gameObject.SetActive(false);
+        playerKillCount.gameObject.SetActive(false);
+        playerDeathCount.gameObject.SetActive(false);
+        pressToJoin.gameObject.SetActive(true);
     }
 
     public void AssignPlayer(int index){
@@ -45,25 +50,37 @@ public class PlayerUIPanel : MonoBehaviour{
 
     void SetUpInfoPanel(){
         if(player != null){
+            playerName.gameObject.SetActive(true);
+            playerHealth.gameObject.SetActive(true);
+            playerScore.gameObject.SetActive(true);
+            playerKillCount.gameObject.SetActive(true);
+            playerDeathCount.gameObject.SetActive(true);
+            pressToJoin.gameObject.SetActive(false);
+
+            player.transform.GetComponent<PlayerStatManager>().OnHealthUpdated += UpdateHealth;
             player.transform.GetComponent<PlayerStatManager>().OnScoreChanged += UpdateScore;
             player.transform.GetComponent<PlayerStatManager>().OnKillsChanged += UpdateKillCount;
             player.transform.GetComponent<PlayerStatManager>().OnDeathsChanged += UpdateDeathCount;
 
             playerName.text = player.transform.GetComponent<PlayerStatManager>().thisPlayerColor.ToString();
+            playerHealth.text = player.transform.GetChild(0).GetComponent<HealthSystem>().currentHealth.ToString();
             playerScore.text = player.transform.GetComponent<PlayerStatManager>().score.ToString();
             playerKillCount.text = player.transform.GetComponent<PlayerStatManager>().kills.ToString();
             playerDeathCount.text = player.transform.GetComponent<PlayerStatManager>().deaths.ToString();
-            
-            pressToJoin.text = null;
         }
         else{
-            playerName.text = null;
-            playerScore.text = null;
-            playerKillCount.text = null;
-            playerDeathCount.text = null;
-
-            pressToJoin.text = "Press X to Join";
+            playerName.gameObject.SetActive(false);
+            playerHealth.gameObject.SetActive(false);
+            playerScore.gameObject.SetActive(false);
+            playerKillCount.gameObject.SetActive(false);
+            playerDeathCount.gameObject.SetActive(false);
+            pressToJoin.gameObject.SetActive(true);
         }
+    }
+
+    private void UpdateHealth(float health){
+        health = (int)health;
+        playerHealth.text = health.ToString();
     }
 
     private void UpdateScore(int score){

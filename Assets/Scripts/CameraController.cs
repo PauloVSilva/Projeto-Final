@@ -17,27 +17,31 @@ public class CameraController : MonoBehaviour{
     }
     
     private void OnEnable(){
-        HealthSystem.OnPlayerReborn += AddPlayer;
-        HealthSystem.OnPlayerDied += RemovePlayer;
+        PlayerStatManager.OnPlayerReborn += AddPlayer;
+        PlayerStatManager.OnPlayerDied += RemovePlayer;
         GameManager.instance.PlayerLeftGame += RemovePlayer;
     }
 
     private void OnDisable(){
-        HealthSystem.OnPlayerReborn -= AddPlayer;
-        HealthSystem.OnPlayerDied -= RemovePlayer;
+        PlayerStatManager.OnPlayerReborn -= AddPlayer;
+        PlayerStatManager.OnPlayerDied -= RemovePlayer;
         GameManager.instance.PlayerLeftGame -= RemovePlayer;
     }
 
-    public void RemovePlayer(GameObject gameObject){
-        objectsTracked.Remove(gameObject);
+    public void RemovePlayer(GameObject player){
+        objectsTracked.Remove(player.transform.GetChild(0).gameObject);
     }
 
     public void RemovePlayer(PlayerInput playerInput){
         objectsTracked.Remove(playerInput.transform.GetChild(0).gameObject);
     }
 
-    public void AddPlayer(GameObject gameObject){
-        objectsTracked.Add(gameObject);
+    public void AddPlayer(GameObject player){
+        objectsTracked.Add(player.transform.GetChild(0).gameObject);
+    }
+
+    public void AddPlayer(PlayerInput playerInput){
+        objectsTracked.Add(playerInput.transform.GetChild(0).gameObject);
     }
 
     void FixedUpdate(){

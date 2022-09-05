@@ -5,63 +5,74 @@ using System;
 using UnityEngine.InputSystem;
 
 public class HealthSystem : MonoBehaviour{
-    public float maxHealth = 100f;
+    public float maxHealth;
     public float currentHealth;
     public float healthRegenRate;
-    public float timeToRespawn = 3f;
-    public int extraLifes = 1;
-    public bool isAlive = true;
+    public bool isAlive;
 
-    public static event Action<GameObject> OnPlayerDied;
-    public static event Action<GameObject> OnPlayerScoredKill;
-    public static event Action<GameObject> OnPlayerReborn;
+    public event Action<GameObject> OnEntityDied;
+    public event Action<GameObject> OnEntityScoredKill;
+    public event Action<GameObject> OnEntityBorn;
+    public event Action<float> OnEntityTookDamage;
+    public event Action<float> OnEntityHealed;
+    public event Action<float> OnEntityHealthUpdated;
 
     private void Awake(){
-        currentHealth = maxHealth;
+        Spawn();
     }
 
-    private void Start(){
-        OnPlayerReborn?.Invoke(gameObject);
+    private void Update(){
+        Regenerate();
     }
 
-    public void TakeDamage(float damageTaken){
-        currentHealth -= damageTaken;
-        print(currentHealth);
-        if(currentHealth <= 0){
-            print("died");
-            isAlive = false;
-            OnPlayerDied?.Invoke(gameObject);
+    private void Regenerate(){
+        if(currentHealth < maxHealth){
+            currentHealth += healthRegenRate * Time.deltaTime;
+            OnEntityHealthUpdated?.Invoke(currentHealth);
         }
-    }
-
-    public void TakeDamage(GameObject damageSource, float damageTaken){
-        currentHealth -= damageTaken;
-        //print(damageSource + " damaged " + gameObject.transform.parent);
-        //print(currentHealth);
-        if(currentHealth <= 0){
-            //print("died");
-            isAlive = false;
-            Instantiate(GameManager.instance.DeathSpot, this.transform.position, Quaternion.Euler(0, 0, 0));
-            OnPlayerDied?.Invoke(gameObject);
-            OnPlayerScoredKill?.Invoke(damageSource);
-        }
-    }
-
-    public void Heal(float heal){
-        currentHealth += heal;
-        //print(currentHealth);
         if(currentHealth > maxHealth){
             currentHealth = maxHealth;
         }
     }
 
-    public void Kill(){
-        TakeDamage(float.MaxValue);
+    public void TakeDamage(GameObject damageSource, float damageTaken){
+        currentHealth -= damageTaken;
+        if(currentHealth <= 0){
+            Die(damageSource);
+        }
+        OnEntityTookDamage?.Invoke(damageTaken);
+        OnEntityHealthUpdated?.Invoke(currentHealth);
     }
 
-    public void Respawn(){
-        currentHealth = maxHealth;
+    public void Heal(float heal){
+        currentHealth += heal;
+        if(currentHealth > maxHealth){
+            currentHealth = maxHealth;
+        }
+        OnEntityHealed?.Invoke(heal);
+        OnEntityHealthUpdated?.Invoke(currentHealth);
+    }
+
+    public void Kill(){
+        TakeDamage(GameManager.instance.gameObject, float.MaxValue);
+    }
+
+    public void Die(GameObject damageSource){
+        isAlive = false;
+        currentHealth = 0;
+        Instantiate(GameManager.instance.DeathSpot, this.transform.position, Quaternion.Euler(0, 0, 0));
+        OnEntityDied?.Invoke(gameObject);
+        if(damageSource.CompareTag("Player")){
+            OnEntityScoredKill?.Invoke(damageSource);
+        }
+    }
+
+    public void Spawn(){
         isAlive = true;
-        OnPlayerReborn?.Invoke(gameObject);
+        currentHealth = maxHealth;
+        healthRegenRate = 2f;
+        maxHealth = 100f;
+        OnEntityBorn?.Invoke(gameObject);
+        OnEntityHealthUpdated?.Invoke(currentHealth);
     }
 }
