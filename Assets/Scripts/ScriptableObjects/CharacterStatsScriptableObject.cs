@@ -4,7 +4,7 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Character", menuName = "CharacterStats")]
 
-public class CharacterStatScriptableObject : ScriptableObject{
+public class CharacterStatsScriptableObject : ScriptableObject{
     [SerializeField] public enum Animal{hedgehog, pangolin, threeBandedArmadillo}
 
     [Header("Race")]

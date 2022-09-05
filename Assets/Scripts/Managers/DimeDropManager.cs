@@ -17,7 +17,7 @@ public class DimeDropManager : MonoBehaviour{
     [SerializeField] private GameObject[] spawnersList;
     [SerializeField] private GameObject[] coins;
     [SerializeField] private gameState thisGameState;
-    [SerializeField] private gameGoal thisGameGoal;
+    //[SerializeField] private gameGoal thisGameGoal;
     [SerializeField] private float countDown;
     [SerializeField] private int amountGoal;
 
@@ -47,7 +47,7 @@ public class DimeDropManager : MonoBehaviour{
             mainCamera.GetComponent<CameraController>().AddPlayer(playerInput);
         }
         thisGameState = gameState.preparation;
-        thisGameGoal = gameGoal.amount;
+        //thisGameGoal = gameGoal.amount;
         countDown = 10;
         amountGoal = 10000;
         StartCoroutine(Preparation());

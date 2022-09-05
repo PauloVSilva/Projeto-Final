@@ -9,11 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d79c6840759bfe44db0c88b5c211004d, type: 3}
-  m_Name: ProjectileSO_RevolverAmmo
+  m_Script: {fileID: 11500000, guid: 8e24147a9db9bab4faf85e6a3a675b7d, type: 3}
+  m_Name: CharacterStatsSO_Pangolin
   m_EditorClassIdentifier: 
-  DamageAmount: 20
-  Cost: 1
-  LifeTime: 3
-  Speed: 50
-  ProjectileRadius: 1
+  _animal: 1
+  _maxHealth: 150
+  _healthRegenRate: 5
+  _movSpeed: 3
+  _sprintSpeed: 5
+  _maxStamina: 100
+  _staminaRegenRate: 3
+  _jumpStrength: 3
+  _extraJumps: 0

@@ -29,7 +29,7 @@ public class Weapon : MonoBehaviour{
     [SerializeField] private bool shooting;
     [SerializeField] private bool canShoot;
     [SerializeField] private bool hammerIsCocked; //for revolvers
-    [SerializeField] private bool pumpIsReady; //for shotguns
+    //[SerializeField] private bool pumpIsReady; //for shotguns
     [SerializeField] private bool canReload;
     [SerializeField] private Transform castPoint;
 
@@ -63,7 +63,7 @@ public class Weapon : MonoBehaviour{
         shooting = false;
         canShoot = true;
         hammerIsCocked = false;
-        pumpIsReady = false;
+        //pumpIsReady = false;
         canReload = true;
         castPoint = this.transform;
     }

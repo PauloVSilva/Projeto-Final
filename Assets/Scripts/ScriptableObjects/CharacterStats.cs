@@ -2,14 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-
-public class CharacterStat : MonoBehaviour{
-    public CharacterStatScriptableObject Character;
+public class CharacterStats : MonoBehaviour{
+    public CharacterStatsScriptableObject Character;
 
     [SerializeField] public enum Animal{hedgehog, pangolin, threeBandedArmadillo}
 
-    [SerializeField] public enum PlayerColor{blue, red, green, yellow}
+    [SerializeField] public enum TeamColor{blue, red, green, yellow}
 
     //VARIABLES THAT WILL COME FROM SCRIPTABLE OBJECT
     [SerializeField] private Animal animal;
@@ -23,7 +21,7 @@ public class CharacterStat : MonoBehaviour{
     [SerializeField] private int extraJumps;
 
     //OTHER VARIABLES THAT WILL BE USEFUL INGAME
-    [SerializeField] public PlayerColor playerColor;
+    [SerializeField] public TeamColor teamColor;
     [SerializeField] public int score;
     [SerializeField] public int kills;
     [SerializeField] public int deaths;
@@ -31,20 +29,13 @@ public class CharacterStat : MonoBehaviour{
     [SerializeField] public int extraLives;
     [SerializeField] public float timeToRespawn;
 
-    //EVENTS
-    public event Action<int> OnScoreChanged;
-    public event Action<int> OnKillsChanged;
-    public event Action<int> OnDeathsChanged;
-    public event Action<float> OnHealthUpdated; 
-    public event Action<float> OnWasHealed;
-    public event Action<float> OnWasDamaged;
-
     private void Awake(){
         GetScriptableObjectVariables();
     }
 
     private void Start(){
         InitializeInternalVariables();
+        SubscribeToEvents();
     }
 
     private void GetScriptableObjectVariables(){
@@ -60,12 +51,32 @@ public class CharacterStat : MonoBehaviour{
     }
 
     private void InitializeInternalVariables(){
-        playerColor = PlayerColor.blue;
+        teamColor = TeamColor.blue;
         score = 0;
         kills = 0;
         deaths = 0;
         unlimitedLives = true;
         extraLives = 0;
         timeToRespawn = 3f;
-    } 
+    }
+
+    private void SubscribeToEvents(){
+
+    }
+
+    public void SetTeam(TeamColor _teamColor){
+        teamColor = _teamColor;
+    }
+
+    public void IncreaseScore(int _score){
+        score += _score;
+    }
+
+    public void IncreaseKills(){
+        kills++;
+    }
+
+    public void IncreaseDeaths(){
+        deaths++;
+    }
 }
