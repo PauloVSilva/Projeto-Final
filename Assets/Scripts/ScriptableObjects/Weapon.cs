@@ -8,51 +8,78 @@ public class Weapon : MonoBehaviour{
     public WeaponScriptableObject FireWeapon;
     public Projectile projectileToCast;
     
-    public enum ActionType{manual, semiAuto, fullAuto}
-    public enum ChamberReloadType{pump, revolver}
-    public enum Size{handGun, longGun}
-    public ActionType actionType;
-    public ChamberReloadType chamberReloadType;
-    public Size size;
-    public int ammoCapacity;
-    public float fireRate; //how many times it can shoot per second
+    [SerializeField] private enum ActionType{manual, semiAuto, fullAuto}
+    [SerializeField] private enum ChamberReloadType{pump, revolver}
+    [SerializeField] private enum Size{handGun, longGun}
+     
+    //VARIABLES THAT WILL COME FROM SCRIPTABLE OBJECT
+    [SerializeField] private ActionType actionType;
+    [SerializeField] private ChamberReloadType chamberReloadType;
+    [SerializeField] private Size size;
+    [SerializeField] private int ammoCapacity;
+    [SerializeField] private float fireRate; //how many times it can shoot per second
+    [SerializeField] private float weight;
+    [SerializeField] private float reloadTime;
 
-    public int ammo = 0;
-    public int extraAmmo = 0;
-    public float fullAutoClock = 0;
-    public float fullAutoReady; //firerate clock
-    public bool shooting = false;
-    public bool canShoot = true;
-    public bool hammerIsCocked = false; //for revolvers
-    public bool pumpIsReady = false; //for shotguns
+    //VARIABLES FOR INTERNAL USE
+    [SerializeField] private int ammo = 0;
+    [SerializeField] private int extraAmmo = 0;
+    [SerializeField] private float fullAutoClock;
+    [SerializeField] private float fullAutoReady; //firerate clock
+    [SerializeField] private bool shooting;
+    [SerializeField] private bool canShoot;
+    [SerializeField] private bool hammerIsCocked; //for revolvers
+    [SerializeField] private bool pumpIsReady; //for shotguns
+    [SerializeField] private bool canReload;
+    [SerializeField] private Transform castPoint;
 
-    public Transform castPoint;
+    private void Awake(){
+        GetScriptableObjectVariables();
+    }
 
-    public void Awake(){
+    private void Start(){
+        InitializeInternalVariables();
+    }
+
+    private void Update(){
+        FullAutoBehavior();
+    }
+
+    private void GetScriptableObjectVariables(){
         actionType = (ActionType)FireWeapon.actionType;
         chamberReloadType = (ChamberReloadType)FireWeapon.chamberReloadType;
         size = (Size)FireWeapon.size;
         ammoCapacity = FireWeapon.ammoCapacity;
         fireRate = FireWeapon.fireRate;
-        
+        weight = FireWeapon.weight;
+        reloadTime = FireWeapon.reloadTime;
     }
 
-    public void Start(){
+    private void InitializeInternalVariables(){
         ammo = ammoCapacity;
         extraAmmo = 999;
-        fullAutoReady = 1 / FireWeapon.fireRate;
+        fullAutoClock = 0;
+        fullAutoReady = 1 / fireRate;
         shooting = false;
-
-        if(actionType.ToString() == "manual"){
-            hammerIsCocked = false;
-        }
-        else{
-            hammerIsCocked = true;
-        }
-
+        canShoot = true;
+        hammerIsCocked = false;
         pumpIsReady = false;
-
+        canReload = true;
         castPoint = this.transform;
+    }
+
+    private void FullAutoBehavior(){
+        if(actionType.ToString() == "fullAuto"){
+            if(shooting && fullAutoClock >= 1 / fireRate){
+                Fire();
+            }
+            if(fullAutoClock > 1 / fireRate){
+                fullAutoClock = 1 / fireRate;
+            }
+            if(fullAutoClock < 1 / fireRate){
+                fullAutoClock += Time.deltaTime;
+            }
+        }
     }
 
     public void OnCockHammer(InputAction.CallbackContext context){
@@ -75,35 +102,27 @@ public class Weapon : MonoBehaviour{
                     shooting = true;
                 }
             }
+            canReload = false;
         }
         if(context.canceled){
+            if(actionType.ToString() == "semiAuto"){
+                hammerIsCocked = true;
+            }
             canShoot = true;
             shooting = false;
+            canReload = true;
         }
     }
 
     public void OnReload(InputAction.CallbackContext context){
         if(context.performed){
-            //Debug.Log("reloading");
-            while (ammo < FireWeapon.ammoCapacity && extraAmmo > 0){
-                extraAmmo--;
-                ammo++;
+            if(canReload){
+                StartCoroutine(Reload(reloadTime));
             }
         }
     }
 
-    private void Update() {
-        if(actionType.ToString() == "fullAuto"){
-            if(shooting && fullAutoClock >= fullAutoReady){
-                Fire();
-            }
-            if(fullAutoClock <= fullAutoReady){
-                fullAutoClock += Time.deltaTime;
-            }
-        }
-    }
-
-    public void Fire(){
+    private void Fire(){
         if(ammo - (int)projectileToCast.ProjectileToCast.Cost >= 0){
             CastProjectile();
             ammo -= (int)projectileToCast.ProjectileToCast.Cost;
@@ -113,7 +132,15 @@ public class Weapon : MonoBehaviour{
         }
     }
 
-    public void CastProjectile(){
+    IEnumerator Reload(float reloadTime){
+        yield return new WaitForSeconds(reloadTime);
+        while (ammo < ammoCapacity && extraAmmo > 0){
+            extraAmmo--;
+            ammo++;
+        }
+    }
+
+    private void CastProjectile(){
         Instantiate(projectileToCast, castPoint.position, castPoint.rotation, this.transform);
     }
 }

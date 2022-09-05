@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d79c6840759bfe44db0c88b5c211004d, type: 3}
-  m_Name: RevolverAmmo
+  m_Name: ProjectileSO_RevolverAmmo
   m_EditorClassIdentifier: 
   DamageAmount: 50
   Cost: 1

@@ -13,5 +13,7 @@ public class WeaponScriptableObject : ScriptableObject{
     public ChamberReloadType chamberReloadType;
     public Size size;
     public int ammoCapacity;
-    public float fireRate = 1;
+    public float fireRate;
+    public float weight;
+    public float reloadTime;
 }

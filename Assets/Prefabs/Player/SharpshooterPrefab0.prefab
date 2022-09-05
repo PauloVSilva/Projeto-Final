@@ -554,6 +554,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 8463049207392376649}
     m_Modifications:
     - target: {fileID: -6847266752148747554, guid: a4b73a376005e53498b7eca416ef3bac, type: 3}
+      propertyPath: FireWeapon
+      value: 
+      objectReference: {fileID: 11400000, guid: 8a794cf3a90b5f246be5e3e1bd35faa5, type: 2}
+    - target: {fileID: -6847266752148747554, guid: a4b73a376005e53498b7eca416ef3bac, type: 3}
       propertyPath: actionType
       value: 0
       objectReference: {fileID: 0}

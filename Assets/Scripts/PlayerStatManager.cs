@@ -11,10 +11,9 @@ public class PlayerStatManager : MonoBehaviour{
     public int score;
     public int kills;
     public int deaths;
-    private bool infinityLives;
-    private int extraLives;
-    private int ammo;
-    private float timeToRespawn;
+    public bool infinityLives;
+    public int extraLives;
+    public float timeToRespawn;
 
     //EVENTS
     public event Action<int> OnScoreChanged;
@@ -34,7 +33,6 @@ public class PlayerStatManager : MonoBehaviour{
         deaths = 0;
         infinityLives = true;
         extraLives = 1;
-        ammo = 0;
         timeToRespawn = 3f;
     }
 
@@ -118,7 +116,6 @@ public class PlayerStatManager : MonoBehaviour{
         deaths = 0;
         infinityLives = true;
         extraLives = 1;
-        ammo = 0;
         timeToRespawn = 3f;
     }
 }

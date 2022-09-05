@@ -9,11 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf820d9f4a8ef754f9837c2c80bddd38, type: 3}
-  m_Name: DoubleActionRevolver
+  m_Script: {fileID: 11500000, guid: 8e24147a9db9bab4faf85e6a3a675b7d, type: 3}
+  m_Name: CharacterStatSO_Hedgehog
   m_EditorClassIdentifier: 
-  actionType: 0
-  chamberReloadType: 1
-  size: 0
-  ammoCapacity: 6
-  fireRate: 0
+  _animal: 0
+  _maxHealth: 100
+  _healthRegenRate: 5
+  _movSpeed: 4
+  _sprintSpeed: 6
+  _maxStamina: 100
+  _staminaRegenRate: 5
+  _jumpStrength: 2
+  _extraJumps: 1

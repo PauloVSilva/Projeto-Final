@@ -10,10 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bf820d9f4a8ef754f9837c2c80bddd38, type: 3}
-  m_Name: Revolver
+  m_Name: WeaponSO_Revolver
   m_EditorClassIdentifier: 
   actionType: 0
   chamberReloadType: 1
   size: 0
   ammoCapacity: 6
   fireRate: 1
+  weight: 0
+  reloadTime: 0

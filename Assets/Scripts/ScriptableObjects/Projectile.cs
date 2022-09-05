@@ -7,6 +7,8 @@ public class Projectile : MonoBehaviour{
 
     private SphereCollider myCollider;
     private Rigidbody myRigidbody;
+    [SerializeField] private GameObject caster;
+    [SerializeField] private GameObject weaponOfOrigin;
 
     void Awake(){
         myCollider = GetComponent<SphereCollider>();
@@ -21,14 +23,16 @@ public class Projectile : MonoBehaviour{
 
     void Start(){
         myRigidbody.AddForce(transform.forward * ProjectileToCast.Speed, ForceMode.Impulse);
+        caster = this.transform.parent.parent.parent.gameObject;
+        weaponOfOrigin = this.transform.parent.gameObject;
+        this.transform.parent = null;
     }
 
     private void OnTriggerEnter(Collider other){
         if(other.gameObject.CompareTag("Player")){
             //HealthSystem enemyHealth = other.GetComponent<HealthSystem>();
             //enemyHealth.TakeDamage(ProjectileToCast.DamageAmount);
-            GameObject damageSource = this.transform.parent.parent.parent.gameObject; //this.transform.root.gameObject
-            other.GetComponent<HealthSystem>().TakeDamage(damageSource, ProjectileToCast.DamageAmount);
+            other.GetComponent<HealthSystem>().TakeDamage(caster, ProjectileToCast.DamageAmount);
         }
 
         Destroy(this.gameObject);
