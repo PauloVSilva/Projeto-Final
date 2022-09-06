@@ -14,12 +14,12 @@ public class MovementSystem : MonoBehaviour{
     public float MaxStamina {get; protected set;}
     public float StaminaRegenRate {get; protected set;}
     public float JumpStrength {get; protected set;}
-    public int ExtraJumps {get; protected set;}
+    public int TotalJumps {get; protected set;}
     
     //VARIABLES FOR INTERNAL USE
     public bool IsSprinting {get; protected set;}
     public float CurrentStamina {get; protected set;}
-    public int ExtraJumpsRemaining {get; protected set;}
+    public int JumpsRemaining {get; protected set;}
 
     //OTHER VARIABLES
     [SerializeField] private CharacterController controller;
@@ -33,7 +33,7 @@ public class MovementSystem : MonoBehaviour{
     //EVENTS
     public event System.Action<float> OnEntityStaminaUpdated;
 
-    private void Awake(){
+    private void Start(){
         characterStats = gameObject.transform.parent.GetComponent<CharacterStats>();
         controller = GetComponent<CharacterController>();
         interactor = GetComponent<Interactor>();
@@ -52,7 +52,7 @@ public class MovementSystem : MonoBehaviour{
         }
 
         if (groundedPlayer){
-            ExtraJumpsRemaining = ExtraJumps;
+            JumpsRemaining = TotalJumps;
         }
 
         controller.Move(move * Time.deltaTime * MovSpeed);
@@ -74,11 +74,11 @@ public class MovementSystem : MonoBehaviour{
         MaxStamina = characterStats.MaxStamina;
         StaminaRegenRate = characterStats.StaminaRegenRate;
         JumpStrength = characterStats.JumpStrength;
-        ExtraJumps = characterStats.ExtraJumps;
+        TotalJumps = characterStats.TotalJumps;
 
         IsSprinting = false;
         CurrentStamina = MaxStamina;
-        ExtraJumpsRemaining = ExtraJumps;
+        JumpsRemaining = TotalJumps;
     }
 
     public void ResetStats(){
@@ -115,10 +115,10 @@ public class MovementSystem : MonoBehaviour{
     public void OnJump(InputAction.CallbackContext context){
         if(context.performed){
             if(CurrentStamina > 15f){
-                if(ExtraJumpsRemaining > 0){
+                if(JumpsRemaining > 0){
                     playerVelocity.y = Mathf.Sqrt(JumpStrength * -3.0f * gravityValue);
                     if(!groundedPlayer){
-                        ExtraJumpsRemaining--;
+                        JumpsRemaining--;
                     }
                 }
                 CurrentStamina -= 15f;

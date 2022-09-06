@@ -205,7 +205,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 760507c666cece24c9286a9874f79632, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerController: {fileID: 0}
+  movementSystem: {fileID: 0}
 --- !u!114 &-6532263821112973344
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,7 +218,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51de381b12768864181f6a37b345a307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Character: {fileID: 0}
+  Character: {fileID: 11400000, guid: c7e2521efd0808b42b9c18ec74ba4f18, type: 2}
   animal: 0
   maxHealth: 0
   healthRegenRate: 0
@@ -227,13 +227,13 @@ MonoBehaviour:
   maxStamina: 0
   staminaRegenRate: 0
   jumpStrength: 0
-  extraJumps: 0
+  totalJumps: 0
   teamColor: 0
   score: 0
   kills: 0
   deaths: 0
   unlimitedLives: 0
-  extraLives: 0
+  totalLives: 0
   timeToRespawn: 0
 --- !u!114 &-7353346912697764937
 MonoBehaviour:
@@ -247,3 +247,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7953278b864e5f64eaae0dbc1978718a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterStats: {fileID: 0}

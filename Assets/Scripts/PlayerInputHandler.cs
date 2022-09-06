@@ -5,8 +5,7 @@ using UnityEngine.InputSystem;
 using System;
 
 public class PlayerInputHandler : MonoBehaviour{
-    //public GameObject[] playerPrefabs;
-    public OldPlayerController playerController;
+    [SerializeField] private MovementSystem movementSystem;
 
     private void Awake(){
         Spawn();
@@ -16,41 +15,40 @@ public class PlayerInputHandler : MonoBehaviour{
         int index = GameManager.instance.spawnPoints.Length;
         int randomIndex = UnityEngine.Random.Range(0, index);
 
-        //playerController = GameObject.Instantiate(GameManager.instance.playerPrefabs[GetComponent<PlayerInput>().playerIndex], GameManager.instance.spawnPoints[randomIndex].transform.position, transform.rotation).GetComponent<PlayerController>();
-        playerController = GameObject.Instantiate(GameManager.instance.playerPrefabs[0], GameManager.instance.spawnPoints[randomIndex].transform.position, transform.rotation).GetComponent<OldPlayerController>();
+        movementSystem = GameObject.Instantiate(GameManager.instance.playerPrefabs[0], GameManager.instance.spawnPoints[randomIndex].transform.position, transform.rotation).GetComponent<MovementSystem>();
         transform.parent = GameManager.instance.transform;
-        playerController.transform.parent = this.transform;
+        movementSystem.transform.parent = this.transform;
     }
 
     public void OnMove(InputAction.CallbackContext context){
-        playerController.OnMove(context);
+        movementSystem.OnMove(context);
     }
 
     public void OnJump(InputAction.CallbackContext context){
-        playerController.OnJump(context);
+        movementSystem.OnJump(context);
     }
 
     public void OnDash(InputAction.CallbackContext context){
-        playerController.OnDash(context);
+        movementSystem.OnDash(context);
     }
 
     public void OnCockHammer(InputAction.CallbackContext context){
-        playerController.OnCockHammer(context);
+        movementSystem.OnCockHammer(context);
     }
 
     public void OnPressTrigger(InputAction.CallbackContext context){
-        playerController.OnPressTrigger(context);
+        movementSystem.OnPressTrigger(context);
     }
 
     public void OnSprint(InputAction.CallbackContext context){
-        playerController.OnSprint(context);
+        movementSystem.OnSprint(context);
     }
 
     public void OnReload(InputAction.CallbackContext context){
-        playerController.OnReload(context);
+        movementSystem.OnReload(context);
     }
 
     public void OnInteractWithObject(InputAction.CallbackContext context){
-        playerController.OnInteractWithObject(context);
+        movementSystem.OnInteractWithObject(context);
     }
 }

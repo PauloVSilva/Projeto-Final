@@ -42,13 +42,13 @@ public class CharacterEvents : MonoBehaviour{
         gameObject.transform.GetChild(0).GetComponent<MovementSystem>().OnEntityStaminaUpdated += PlayerStaminaUpdated;
     }
 
-    public void SubscribeToPlayerEvents(GameObject manager){ //allow managers to subscribe to this class' events
-        //GameManager.instance.OnPlayerScoredKill +=;
-        //GameManager.instance.OnPlayerDied +=;
-        //GameManager.instance.OnPlayerBorn +=;
+    public void SubscribeToPlayerEvents(){ //allow managers to subscribe to this class' events
+        OnPlayerScoredKill += GameManager.instance.GameManagerCharacterKilled;
+        OnPlayerDied += GameManager.instance.GameManagerCharacterDied;
+        OnPlayerBorn += GameManager.instance.GameManagerCharacterSpawned;
     }
 
-    public void UnsubscribeFromPlayerEvents(GameObject manager){ //allow managers to subscribe to this class' events
+    public void UnsubscribeFromPlayerEvents(){ //allow managers to subscribe to this class' events
     }
 
 
@@ -74,23 +74,23 @@ public class CharacterEvents : MonoBehaviour{
         OnPlayerScoreChanged?.Invoke(characterStats.score);
     }
 
-    private void PlayerScoredKill(GameObject player){ //other player
-        player.GetComponent<CharacterStats>().IncreaseKills();
-        player.GetComponent<CharacterEvents>().UpdateKills();
+    private void PlayerScoredKill(GameObject character){ //other player
+        character.transform.parent.GetComponent<CharacterStats>().IncreaseKills();
+        character.transform.parent.GetComponent<CharacterEvents>().UpdateKills();
     }
 
     private void UpdateKills(){ //calling this directly on the above method doesn't work 
-        OnPlayerScoredKill?.Invoke(gameObject); //other player sends themselves
+        OnPlayerScoredKill?.Invoke(gameObject.transform.GetChild(0).gameObject); //other player sends their character
     }
 
-    private void PlayerDied(GameObject player){ //themselves
-        player.GetComponent<CharacterStats>().IncreaseDeaths();
-        OnPlayerDied?.Invoke(player);
+    private void PlayerDied(GameObject character){ //themselves
+        character.transform.parent.GetComponent<CharacterStats>().IncreaseDeaths();
+        OnPlayerDied?.Invoke(character);
     }
 
-    private void PlayerBorn(GameObject player){ //themselves
-        player.GetComponent<CharacterStats>().DecreaseLives();
-        OnPlayerBorn?.Invoke(player);
+    private void PlayerBorn(GameObject character){ //themselves
+        character.transform.parent.GetComponent<CharacterStats>().DecreaseLives();
+        OnPlayerBorn?.Invoke(character);
     }
 
     private void PlayerWasDamaged(float damage){

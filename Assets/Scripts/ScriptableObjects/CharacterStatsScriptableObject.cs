@@ -21,6 +21,6 @@ public class CharacterStatsScriptableObject : ScriptableObject{
     [SerializeField] public float _maxStamina;
     [SerializeField] public float _staminaRegenRate;
     [SerializeField] public float _jumpStrength;
-    [SerializeField] public int _extraJumps;
+    [SerializeField] public int _totalJumps;
 
 } 

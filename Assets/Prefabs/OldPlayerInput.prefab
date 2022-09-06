@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7408531066293585713}
   - component: {fileID: 7408531066293585714}
-  - component: {fileID: -1165795019576054572}
   - component: {fileID: 7408531066293585715}
+  - component: {fileID: -1165795019576054572}
   m_Layer: 0
   m_Name: OldPlayerInput
   m_TagString: Player
@@ -41,7 +41,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7408531066293585716}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
   m_Name: 
@@ -192,6 +192,20 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &7408531066293585715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7408531066293585716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 760507c666cece24c9286a9874f79632, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerController: {fileID: 0}
+  movementSystem: {fileID: 0}
 --- !u!114 &-1165795019576054572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -211,16 +225,3 @@ MonoBehaviour:
   infinityLives: 0
   extraLives: 0
   timeToRespawn: 0
---- !u!114 &7408531066293585715
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7408531066293585716}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 760507c666cece24c9286a9874f79632, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerController: {fileID: 0}

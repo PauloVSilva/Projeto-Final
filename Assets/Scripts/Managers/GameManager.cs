@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour{
     //INSTANCES
     public static GameManager instance = null;
 
+    public Camera mainCamera;
+    
     public List<PlayerInput> playerList = new List<PlayerInput>();
     public GameObject spawnPointPrefab;
     public GameObject[] spawnPoints;
@@ -56,17 +58,41 @@ public class GameManager : MonoBehaviour{
         FindSpawnPoints();
     }
 
-    void FindSpawnPoints(){
+    private void FindSpawnPoints(){
         spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
     }
 
-    void CreateSpawnPoint(){
+    private void CreateSpawnPoint(){
         Instantiate(spawnPointPrefab, GameManager.instance.transform.position, Quaternion.identity); 
     }
 
 
 
+    public void GameManagerCharacterKilled(GameObject character){
+        print("GameManager detected kill" + character.transform.parent.GetComponent<CharacterStats>().teamColor);
+    }
 
+    public void GameManagerCharacterDied(GameObject character){
+        print("GameManager detected death" + character.transform.parent.GetComponent<CharacterStats>().teamColor);
+        mainCamera.GetComponent<CameraController>().RemovePlayer(character);
+
+        if(character.transform.parent.GetComponent<CharacterStats>().CanRespawn()){
+            StartCoroutine(RespawnCharacter(character));
+        }
+        character.transform.position = GameManager.instance.spawnPoints[0].transform.position;
+        character.SetActive(false);
+    }
+
+    IEnumerator RespawnCharacter(GameObject character){
+        yield return new WaitForSeconds(5f);
+        character.SetActive(true);
+        character.transform.parent.GetComponent<CharacterEvents>().RefreshStatsUponRespawning();
+    }
+
+    public void GameManagerCharacterSpawned(GameObject character){
+        print("GameManager detected spawn" + character.transform.parent.GetComponent<CharacterStats>().teamColor);
+        mainCamera.GetComponent<CameraController>().AddPlayer(character);
+    }
 
 
     void OnPlayerJoined(PlayerInput playerInput){ //THIS METHOD COMES FROM UNITY ITSELF
@@ -74,7 +100,7 @@ public class GameManager : MonoBehaviour{
         OnPlayerJoinedGame?.Invoke(playerInput);
 
         //hope this works
-        //playerInput.transform.GetComponent<CharacterEvents>().SubscribeToEvents(gameObject);
+        playerInput.transform.GetComponent<CharacterEvents>().SubscribeToPlayerEvents();
     }
 
     void OnPlayerLeft(PlayerInput playerInput){ //THIS METHOD COMES FROM UNITY ITSELF
@@ -100,6 +126,7 @@ public class GameManager : MonoBehaviour{
 
     void UnregisterPlayer(PlayerInput playerInput){
         playerList.Remove(playerInput);
+        mainCamera.GetComponent<CameraController>().RemovePlayer(playerInput.transform.GetChild(0).gameObject);
         OnPlayerLeftGame?.Invoke(playerInput);
         Destroy(playerInput.transform.gameObject);
     }

@@ -57,16 +57,16 @@ public class PlayerUIPanel : MonoBehaviour{
             playerDeathCount.gameObject.SetActive(true);
             pressToJoin.gameObject.SetActive(false);
 
-            player.transform.GetComponent<OldPlayerStatManager>().OnHealthUpdated += UpdateHealth;
-            player.transform.GetComponent<OldPlayerStatManager>().OnScoreChanged += UpdateScore;
-            player.transform.GetComponent<OldPlayerStatManager>().OnKillsChanged += UpdateKillCount;
-            player.transform.GetComponent<OldPlayerStatManager>().OnDeathsChanged += UpdateDeathCount;
+            player.transform.GetComponent<CharacterEvents>().OnPlayerHealthUpdated += UpdateHealth;
+            player.transform.GetComponent<CharacterEvents>().OnPlayerScoreChanged += UpdateScore;
+            player.transform.GetComponent<CharacterEvents>().OnPlayerScoredKill += UpdateKillCount;
+            player.transform.GetComponent<CharacterEvents>().OnPlayerDied += UpdateDeathCount;
 
-            playerName.text = player.transform.GetComponent<OldPlayerStatManager>().thisPlayerColor.ToString();
-            playerHealth.text = player.transform.GetChild(0).GetComponent<OldHealthSystem>().currentHealth.ToString();
-            playerScore.text = player.transform.GetComponent<OldPlayerStatManager>().score.ToString();
-            playerKillCount.text = player.transform.GetComponent<OldPlayerStatManager>().kills.ToString();
-            playerDeathCount.text = player.transform.GetComponent<OldPlayerStatManager>().deaths.ToString();
+            playerName.text = player.transform.GetComponent<CharacterStats>().teamColor.ToString();
+            playerHealth.text = player.transform.GetChild(0).GetComponent<HealthSystem>().CurrentHealth.ToString();
+            playerScore.text = player.transform.GetComponent<CharacterStats>().score.ToString();
+            playerKillCount.text = player.transform.GetComponent<CharacterStats>().kills.ToString();
+            playerDeathCount.text = player.transform.GetComponent<CharacterStats>().deaths.ToString();
         }
         else{
             playerName.gameObject.SetActive(false);
@@ -87,11 +87,13 @@ public class PlayerUIPanel : MonoBehaviour{
         playerScore.text = score.ToString();
     }
 
-    private void UpdateKillCount(int killCount){
+    private void UpdateKillCount(GameObject character){
+        int killCount = character.transform.parent.GetComponent<CharacterStats>().kills;
         playerKillCount.text = killCount.ToString();
     }
 
-    private void UpdateDeathCount(int deathCount){
+    private void UpdateDeathCount(GameObject character){
+        int deathCount = character.transform.parent.GetComponent<CharacterStats>().deaths;
         playerDeathCount.text = deathCount.ToString();
     }
 }

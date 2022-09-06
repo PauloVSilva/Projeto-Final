@@ -21,7 +21,7 @@ public class HealthSystem : MonoBehaviour{
     public event System.Action<float> OnEntityHealed;
     public event System.Action<float> OnEntityHealthUpdated;
 
-    private void Awake(){
+    private void Start(){
         characterStats = gameObject.transform.parent.GetComponent<CharacterStats>();
         InitializeVariables();
     }
@@ -36,9 +36,13 @@ public class HealthSystem : MonoBehaviour{
 
         CurrentHealth = MaxHealth;
         IsAlive = true;
-
-        OnEntityBorn?.Invoke(gameObject);
+        StartCoroutine(OnEntityBornDelay());
         OnEntityHealthUpdated?.Invoke(CurrentHealth);
+    }
+
+    IEnumerator OnEntityBornDelay(){
+        yield return new WaitForSeconds(0.05f);
+        OnEntityBorn?.Invoke(gameObject);
     }
 
     public void ResetStats(){

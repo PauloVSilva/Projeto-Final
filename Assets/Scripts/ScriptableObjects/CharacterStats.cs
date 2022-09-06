@@ -10,7 +10,7 @@ public class CharacterStats : MonoBehaviour{
     [SerializeField] public enum TeamColor{blue, red, green, yellow}
 
     //VARIABLES THAT WILL COME FROM SCRIPTABLE OBJECT
-    [SerializeField] private Animal animal;
+    [SerializeField] public Animal animal;
     [SerializeField] private float maxHealth;
     [SerializeField] private float healthRegenRate;
     [SerializeField] private float movSpeed;
@@ -18,7 +18,7 @@ public class CharacterStats : MonoBehaviour{
     [SerializeField] private float maxStamina;
     [SerializeField] private float staminaRegenRate;
     [SerializeField] private float jumpStrength;
-    [SerializeField] private int extraJumps;
+    [SerializeField] private int totalJumps;
 
     public float MaxHealth => maxHealth;
     public float HealthRegenRate => healthRegenRate;
@@ -27,7 +27,7 @@ public class CharacterStats : MonoBehaviour{
     public float MaxStamina => maxStamina;
     public float StaminaRegenRate => staminaRegenRate;
     public float JumpStrength => jumpStrength;
-    public int ExtraJumps => extraJumps;
+    public int TotalJumps => totalJumps;
 
     //OTHER VARIABLES THAT WILL BE USEFUL INGAME
     [SerializeField] public TeamColor teamColor;
@@ -55,7 +55,7 @@ public class CharacterStats : MonoBehaviour{
         maxStamina = Character._maxStamina;
         staminaRegenRate = Character._staminaRegenRate;
         jumpStrength = Character._jumpStrength;
-        extraJumps = Character._extraJumps;
+        totalJumps = Character._totalJumps;
     }
 
     private void InitializeInternalVariables(){
