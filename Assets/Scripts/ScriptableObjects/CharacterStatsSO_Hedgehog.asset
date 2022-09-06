@@ -19,5 +19,5 @@ MonoBehaviour:
   _sprintSpeed: 7
   _maxStamina: 60
   _staminaRegenRate: 5
-  _jumpStrength: 2
-  _extraJumps: 1
+  _jumpStrength: 1
+  _totalJumps: 2

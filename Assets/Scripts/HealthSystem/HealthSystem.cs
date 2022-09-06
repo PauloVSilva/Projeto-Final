@@ -84,7 +84,6 @@ public class HealthSystem : MonoBehaviour{
     public void Die(GameObject damageSource){
         IsAlive = false;
         CurrentHealth = 0;
-        Instantiate(GameManager.instance.DeathSpot, this.transform.position, Quaternion.Euler(0, 0, 0));
         OnEntityDied?.Invoke(gameObject);
         if(damageSource.CompareTag("Player")){
             OnEntityScoredKill?.Invoke(damageSource);

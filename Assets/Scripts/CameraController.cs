@@ -8,23 +8,13 @@ public class CameraController : MonoBehaviour{
     public Vector3 fixedOffset, dynamicOffset;
     public float smoothSpeed;
 
-    //public List<PlayerInput> playersToKeepTrackOf = new List<PlayerInput>();
     public List<GameObject> objectsTracked = new List<GameObject>();
-
-    void Start(){
-        //StartCoroutine(CameraStartDelay());
-        //playersToKeepTrackOf = GameManager.instance.playerList;
-    }
     
     private void OnEnable(){
-        OldPlayerStatManager.OnPlayerReborn += AddPlayer;
-        OldPlayerStatManager.OnPlayerDied += RemovePlayer;
         GameManager.instance.OnPlayerLeftGame += RemovePlayer;
     }
 
     private void OnDisable(){
-        OldPlayerStatManager.OnPlayerReborn -= AddPlayer;
-        OldPlayerStatManager.OnPlayerDied -= RemovePlayer;
         GameManager.instance.OnPlayerLeftGame -= RemovePlayer;
     }
 

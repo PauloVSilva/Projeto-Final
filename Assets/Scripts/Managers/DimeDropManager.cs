@@ -13,7 +13,6 @@ public class DimeDropManager : MonoBehaviour{
     private enum gameGoal{time, amount}
 
     //VARIABLES
-    [SerializeField] private Camera mainCamera;
     [SerializeField] private GameObject[] spawnersList;
     [SerializeField] private GameObject[] coins;
     [SerializeField] private gameState thisGameState;
@@ -44,7 +43,6 @@ public class DimeDropManager : MonoBehaviour{
             playerInput.transform.GetChild(0).position = GameManager.instance.spawnPoints[0].transform.position;
             playerInput.GetComponent<PlayerInput>().actions.Disable();
             playerInput.GetComponent<PlayerInput>().actions["Jump"].Enable();
-            mainCamera.GetComponent<CameraController>().AddPlayer(playerInput);
         }
         thisGameState = gameState.preparation;
         //thisGameGoal = gameGoal.amount;
@@ -105,8 +103,8 @@ public class DimeDropManager : MonoBehaviour{
 
     private void GameIsRunning(){
         foreach(var player in GameManager.instance.playerList){
-            if (player.transform.GetComponent<OldPlayerStatManager>().score >= amountGoal){
-                Debug.Log("Player " + player.transform.GetComponent<OldPlayerStatManager>().thisPlayerColor.ToString() + " is the winner");
+            if (player.transform.GetComponent<CharacterStats>().score >= amountGoal){
+                Debug.Log("Player " + player.transform.GetComponent<CharacterStats>().animal.ToString() + " is the winner");
                 thisGameState++;
             }
         }

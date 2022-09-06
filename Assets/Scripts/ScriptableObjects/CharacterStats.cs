@@ -68,6 +68,11 @@ public class CharacterStats : MonoBehaviour{
         timeToRespawn = 3f;
     }
 
+    public void ResetScores(){
+        GetScriptableObjectVariables();
+        InitializeInternalVariables();
+    }
+
     public void SetTeam(TeamColor _teamColor){
         teamColor = _teamColor;
     }

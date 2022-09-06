@@ -91,7 +91,7 @@ public class SharpshooterManager : MonoBehaviour{
 
     private void GameIsRunning(){
         if (playersAlive.Count == 1){
-            Debug.Log("Player " + playersAlive[0].transform.GetComponent<OldPlayerStatManager>().thisPlayerColor.ToString() + " is the winner");
+            Debug.Log("Player " + playersAlive[0].transform.GetComponent<CharacterStats>().animal.ToString() + " is the winner");
             thisGameState++;
         }
     }

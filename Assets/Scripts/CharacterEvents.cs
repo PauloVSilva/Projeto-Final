@@ -4,12 +4,6 @@ using UnityEngine;
 
 public class CharacterEvents : MonoBehaviour{
     [SerializeField] private CharacterStats characterStats;
-    
-
-    //IMPORTANT
-    //RESPAWNING STILL HASN'T BEEN IMPLEMENTED IN THIS SCRIPT
-    //THIS RESPONSABILITY WILL PROBABLY BE SHIFTED TO GAMEMANAGER
-
 
     //EVENTS THAT WILL BE SENT TO OTHER CLASSES
     public event System.Action<int> OnPlayerScoreChanged;
@@ -22,12 +16,9 @@ public class CharacterEvents : MonoBehaviour{
     public event System.Action<float> OnPlayerStaminaUpdated; 
     //public event System.Action<int> OnWeaponFired;
 
-    private void Awake() {
-        characterStats = gameObject.transform.parent.GetComponent<CharacterStats>();
-    }
-
     private void Start() {
         SubscribeToOwnEvents();
+        characterStats = gameObject.GetComponent<CharacterStats>();
     }
 
     private void SubscribeToOwnEvents(){ //subscribe to child system events like health or movement
@@ -48,9 +39,15 @@ public class CharacterEvents : MonoBehaviour{
         OnPlayerBorn += GameManager.instance.GameManagerCharacterSpawned;
     }
 
-    public void UnsubscribeFromPlayerEvents(){ //allow managers to subscribe to this class' events
+    public void UnsubscribeFromPlayerEvents(){ //allow managers to unsubscribe from this class' events
+        OnPlayerScoredKill -= GameManager.instance.GameManagerCharacterKilled;
+        OnPlayerDied -= GameManager.instance.GameManagerCharacterDied;
+        OnPlayerBorn -= GameManager.instance.GameManagerCharacterSpawned;
     }
 
+    public void ResetScores(){
+        gameObject.GetComponent<CharacterStats>().ResetScores();
+    }
 
     public void FilterCollision(GameObject player, GameObject gameObject){
         if(gameObject.CompareTag("Coin")){
@@ -85,6 +82,7 @@ public class CharacterEvents : MonoBehaviour{
 
     private void PlayerDied(GameObject character){ //themselves
         character.transform.parent.GetComponent<CharacterStats>().IncreaseDeaths();
+        Instantiate(GameManager.instance.DeathSpot, character.transform.position, Quaternion.Euler(0, 0, 0));
         OnPlayerDied?.Invoke(character);
     }
 

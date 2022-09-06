@@ -9,7 +9,6 @@ using System;
 public class GameManager : MonoBehaviour{
     //INSTANCES
     public static GameManager instance = null;
-
     public Camera mainCamera;
     
     public List<PlayerInput> playerList = new List<PlayerInput>();
@@ -24,14 +23,13 @@ public class GameManager : MonoBehaviour{
     //EVENTS
     public event Action<PlayerInput> OnPlayerJoinedGame;
     public event Action<PlayerInput> OnPlayerLeftGame;
-    //public static event Action MiniGameStarted;
 
     private void Awake(){
-        if (instance == null){
+        if(instance == null){
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
-        else if (instance != null){
+        else if(instance != null){
             Destroy(gameObject);
         }
 

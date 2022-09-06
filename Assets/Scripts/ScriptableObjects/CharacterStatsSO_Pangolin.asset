@@ -20,4 +20,4 @@ MonoBehaviour:
   _maxStamina: 100
   _staminaRegenRate: 3
   _jumpStrength: 3
-  _extraJumps: 0
+  _totalJumps: 1
