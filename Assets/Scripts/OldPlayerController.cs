@@ -6,7 +6,7 @@ using System;
 
 [RequireComponent(typeof(CharacterController))]
 
-public class PlayerController : MonoBehaviour{
+public class OldPlayerController : MonoBehaviour{
     private CharacterController controller;
     private Interactor interactor;
     [SerializeField] private Weapon weapon = null;
@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviour{
 
     public void OnTriggerEnter(Collider other){
         //print("PlayerController detected collision");
-        this.transform.parent.GetComponent<PlayerStatManager>().FilterCollision(gameObject, other.gameObject);
+        this.transform.parent.GetComponent<OldPlayerStatManager>().FilterCollision(gameObject, other.gameObject);
     }
 
     void Update(){

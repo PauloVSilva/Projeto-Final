@@ -105,8 +105,8 @@ public class DimeDropManager : MonoBehaviour{
 
     private void GameIsRunning(){
         foreach(var player in GameManager.instance.playerList){
-            if (player.transform.GetComponent<PlayerStatManager>().score >= amountGoal){
-                Debug.Log("Player " + player.transform.GetComponent<PlayerStatManager>().thisPlayerColor.ToString() + " is the winner");
+            if (player.transform.GetComponent<OldPlayerStatManager>().score >= amountGoal){
+                Debug.Log("Player " + player.transform.GetComponent<OldPlayerStatManager>().thisPlayerColor.ToString() + " is the winner");
                 thisGameState++;
             }
         }

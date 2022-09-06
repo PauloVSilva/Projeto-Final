@@ -20,13 +20,22 @@ public class CharacterStats : MonoBehaviour{
     [SerializeField] private float jumpStrength;
     [SerializeField] private int extraJumps;
 
+    public float MaxHealth => maxHealth;
+    public float HealthRegenRate => healthRegenRate;
+    public float MovSpeed => movSpeed;
+    public float SprintSpeed => sprintSpeed;
+    public float MaxStamina => maxStamina;
+    public float StaminaRegenRate => staminaRegenRate;
+    public float JumpStrength => jumpStrength;
+    public int ExtraJumps => extraJumps;
+
     //OTHER VARIABLES THAT WILL BE USEFUL INGAME
     [SerializeField] public TeamColor teamColor;
     [SerializeField] public int score;
     [SerializeField] public int kills;
     [SerializeField] public int deaths;
     [SerializeField] public bool unlimitedLives;
-    [SerializeField] public int extraLives;
+    [SerializeField] public int totalLives;
     [SerializeField] public float timeToRespawn;
 
     private void Awake(){
@@ -35,7 +44,6 @@ public class CharacterStats : MonoBehaviour{
 
     private void Start(){
         InitializeInternalVariables();
-        SubscribeToEvents();
     }
 
     private void GetScriptableObjectVariables(){
@@ -56,12 +64,8 @@ public class CharacterStats : MonoBehaviour{
         kills = 0;
         deaths = 0;
         unlimitedLives = true;
-        extraLives = 0;
+        totalLives = 0;
         timeToRespawn = 3f;
-    }
-
-    private void SubscribeToEvents(){
-
     }
 
     public void SetTeam(TeamColor _teamColor){
@@ -78,5 +82,25 @@ public class CharacterStats : MonoBehaviour{
 
     public void IncreaseDeaths(){
         deaths++;
+    }
+
+    public void DecreaseLives(){
+        totalLives--;
+    }
+
+    public void DecreaseLives(int amount){
+        totalLives -= amount;
+        if(totalLives < 0){
+            totalLives = 0;
+        }
+    }
+
+    public bool CanRespawn(){
+        if(totalLives > 0 || unlimitedLives){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 }

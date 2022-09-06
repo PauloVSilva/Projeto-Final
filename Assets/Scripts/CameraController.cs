@@ -17,15 +17,15 @@ public class CameraController : MonoBehaviour{
     }
     
     private void OnEnable(){
-        PlayerStatManager.OnPlayerReborn += AddPlayer;
-        PlayerStatManager.OnPlayerDied += RemovePlayer;
-        GameManager.instance.PlayerLeftGame += RemovePlayer;
+        OldPlayerStatManager.OnPlayerReborn += AddPlayer;
+        OldPlayerStatManager.OnPlayerDied += RemovePlayer;
+        GameManager.instance.OnPlayerLeftGame += RemovePlayer;
     }
 
     private void OnDisable(){
-        PlayerStatManager.OnPlayerReborn -= AddPlayer;
-        PlayerStatManager.OnPlayerDied -= RemovePlayer;
-        GameManager.instance.PlayerLeftGame -= RemovePlayer;
+        OldPlayerStatManager.OnPlayerReborn -= AddPlayer;
+        OldPlayerStatManager.OnPlayerDied -= RemovePlayer;
+        GameManager.instance.OnPlayerLeftGame -= RemovePlayer;
     }
 
     public void RemovePlayer(GameObject player){

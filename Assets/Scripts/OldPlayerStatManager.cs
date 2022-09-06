@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 using UnityEngine.InputSystem;
 
-public class PlayerStatManager : MonoBehaviour{
+public class OldPlayerStatManager : MonoBehaviour{
     //VARIABLES
     public enum playerColor{blue, red, green, yellow}
     public playerColor thisPlayerColor;
@@ -42,10 +42,10 @@ public class PlayerStatManager : MonoBehaviour{
     }
 
     private void SubscribeToEvents(){
-        gameObject.transform.GetChild(0).GetComponent<HealthSystem>().OnEntityDied += PlayerDied;
-        gameObject.transform.GetChild(0).GetComponent<HealthSystem>().OnEntityScoredKill += PlayedScoredKill;
-        gameObject.transform.GetChild(0).GetComponent<HealthSystem>().OnEntityBorn += PlayerIsBorn;
-        gameObject.transform.GetChild(0).GetComponent<HealthSystem>().OnEntityHealthUpdated += PlayerHealthUpdated;
+        gameObject.transform.GetChild(0).GetComponent<OldHealthSystem>().OnEntityDied += PlayerDied;
+        gameObject.transform.GetChild(0).GetComponent<OldHealthSystem>().OnEntityScoredKill += PlayedScoredKill;
+        gameObject.transform.GetChild(0).GetComponent<OldHealthSystem>().OnEntityBorn += PlayerIsBorn;
+        gameObject.transform.GetChild(0).GetComponent<OldHealthSystem>().OnEntityHealthUpdated += PlayerHealthUpdated;
     }
 
     public void FilterCollision(GameObject player, GameObject gameObject){
@@ -56,7 +56,7 @@ public class PlayerStatManager : MonoBehaviour{
             }
         }
         if(gameObject.CompareTag("Instadeath")){
-            player.GetComponent<HealthSystem>().Kill();
+            player.GetComponent<OldHealthSystem>().Kill();
         }
     }
 
@@ -73,6 +73,7 @@ public class PlayerStatManager : MonoBehaviour{
         deaths++;
         OnDeathsChanged?.Invoke(deaths);
         OnPlayerDied?.Invoke(player);
+        
         if(extraLives > 0 || infinityLives){
             StartCoroutine(TimerToRespawn(timeToRespawn));
         }
@@ -88,7 +89,7 @@ public class PlayerStatManager : MonoBehaviour{
     }
 
     public void RespawnPlayer(){
-        gameObject.transform.GetChild(0).GetComponent<HealthSystem>().Spawn();
+        gameObject.transform.GetChild(0).GetComponent<OldHealthSystem>().Spawn();
         gameObject.GetComponent<PlayerInput>().actions.Enable();
         OnPlayerReborn?.Invoke(gameObject);
         if(!infinityLives){
@@ -97,13 +98,13 @@ public class PlayerStatManager : MonoBehaviour{
     }
 
     public void PlayerIsBorn(GameObject player){
-        OnHealthUpdated?.Invoke(player.GetComponent<HealthSystem>().currentHealth);
+        OnHealthUpdated?.Invoke(player.GetComponent<OldHealthSystem>().currentHealth);
     }
 
     public void PlayedScoredKill(GameObject player){
         OnPlayerKilled?.Invoke(player);
-        player.GetComponent<PlayerStatManager>().kills++;
-        player.GetComponent<PlayerStatManager>().UpdateKills();
+        player.GetComponent<OldPlayerStatManager>().kills++;
+        player.GetComponent<OldPlayerStatManager>().UpdateKills();
     }
 
     public void UpdateKills(){

@@ -13,19 +13,15 @@ public class GameManager : MonoBehaviour{
     public List<PlayerInput> playerList = new List<PlayerInput>();
     public GameObject spawnPointPrefab;
     public GameObject[] spawnPoints;
-
     public GameObject[] playerPrefabs;
-    public GameObject[] dimeDropPrefabs;
-    public GameObject[] sharpshooterPrefabs;
-
     public GameObject DeathSpot;
 
     public InputAction joinAction;
     public InputAction leaveAction;
 
     //EVENTS
-    public event Action<PlayerInput> PlayerJoinedGame;
-    public event Action<PlayerInput> PlayerLeftGame;
+    public event Action<PlayerInput> OnPlayerJoinedGame;
+    public event Action<PlayerInput> OnPlayerLeftGame;
     //public static event Action MiniGameStarted;
 
     private void Awake(){
@@ -46,8 +42,6 @@ public class GameManager : MonoBehaviour{
 
     private void Start(){
         SetSpawnPoint();
-        //PlayerInputManager.instance.JoinPlayer(0, -1, null);
-        //Debug.Log(PlayerJoinedGame);
     }
 
     public void ReturnToMainHub(){
@@ -70,14 +64,20 @@ public class GameManager : MonoBehaviour{
         Instantiate(spawnPointPrefab, GameManager.instance.transform.position, Quaternion.identity); 
     }
 
-    void OnPlayerJoined(PlayerInput playerInput){
+
+
+
+
+
+    void OnPlayerJoined(PlayerInput playerInput){ //THIS METHOD COMES FROM UNITY ITSELF
         playerList.Add(playerInput);
-        if (PlayerJoinedGame != null){
-            PlayerJoinedGame(playerInput);
-        }
+        OnPlayerJoinedGame?.Invoke(playerInput);
+
+        //hope this works
+        //playerInput.transform.GetComponent<CharacterEvents>().SubscribeToEvents(gameObject);
     }
 
-    void OnPlayerLeft(PlayerInput playerInput){
+    void OnPlayerLeft(PlayerInput playerInput){ //THIS METHOD COMES FROM UNITY ITSELF
         //Debug.Log("Player left - Goodbye!");
     }
 
@@ -100,9 +100,7 @@ public class GameManager : MonoBehaviour{
 
     void UnregisterPlayer(PlayerInput playerInput){
         playerList.Remove(playerInput);
-        if(PlayerLeftGame != null){
-            PlayerLeftGame(playerInput);
-        }
+        OnPlayerLeftGame?.Invoke(playerInput);
         Destroy(playerInput.transform.gameObject);
     }
 }

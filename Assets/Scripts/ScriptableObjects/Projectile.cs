@@ -32,7 +32,7 @@ public class Projectile : MonoBehaviour{
         if(other.gameObject.CompareTag("Player")){
             //HealthSystem enemyHealth = other.GetComponent<HealthSystem>();
             //enemyHealth.TakeDamage(ProjectileToCast.DamageAmount);
-            other.GetComponent<HealthSystem>().TakeDamage(caster, ProjectileToCast.DamageAmount);
+            other.GetComponent<OldHealthSystem>().TakeDamage(caster, ProjectileToCast.DamageAmount);
         }
 
         Destroy(this.gameObject);

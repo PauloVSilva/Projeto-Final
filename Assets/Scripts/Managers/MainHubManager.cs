@@ -22,7 +22,7 @@ public class MainHubManager : MonoBehaviour{
             foreach(var playerInput in GameManager.instance.playerList){
                 playerInput.transform.GetChild(0).position = GameManager.instance.spawnPoints[0].transform.position;
                 playerInput.GetComponent<PlayerInput>().actions.Enable();
-                playerInput.GetComponent<PlayerStatManager>().ResetScores();
+                playerInput.GetComponent<OldPlayerStatManager>().ResetScores();
                 mainCamera.GetComponent<CameraController>().AddPlayer(playerInput);
             }
         }

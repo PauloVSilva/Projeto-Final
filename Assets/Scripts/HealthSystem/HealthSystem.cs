@@ -1,56 +1,76 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
-using UnityEngine.InputSystem;
 
 public class HealthSystem : MonoBehaviour{
-    public float maxHealth;
-    public float currentHealth;
-    public float healthRegenRate;
-    public bool isAlive;
+    [SerializeField] private CharacterStats characterStats;
 
-    public event Action<GameObject> OnEntityDied;
-    public event Action<GameObject> OnEntityScoredKill;
-    public event Action<GameObject> OnEntityBorn;
-    public event Action<float> OnEntityTookDamage;
-    public event Action<float> OnEntityHealed;
-    public event Action<float> OnEntityHealthUpdated;
+    //VARIABLES THAT WILL COME FROM CHARACTERSTATS
+    public float MaxHealth {get; protected set;}
+    public float HealthRegenRate {get; protected set;}
+
+    //VARIABLES FOR INTERNAL USE
+    public float CurrentHealth {get; protected set;}
+    public bool IsAlive {get; protected set;}
+
+    //EVENTS
+    public event System.Action<GameObject> OnEntityScoredKill;
+    public event System.Action<GameObject> OnEntityDied;
+    public event System.Action<GameObject> OnEntityBorn;
+    public event System.Action<float> OnEntityTookDamage;
+    public event System.Action<float> OnEntityHealed;
+    public event System.Action<float> OnEntityHealthUpdated;
 
     private void Awake(){
-        Spawn();
+        characterStats = gameObject.transform.parent.GetComponent<CharacterStats>();
+        InitializeVariables();
     }
 
     private void Update(){
-        Regenerate();
+        RegenerateHealth();
     }
 
-    private void Regenerate(){
-        if(currentHealth < maxHealth){
-            currentHealth += healthRegenRate * Time.deltaTime;
-            OnEntityHealthUpdated?.Invoke(currentHealth);
+    private void InitializeVariables(){
+        MaxHealth = characterStats.MaxHealth;
+        HealthRegenRate = characterStats.HealthRegenRate;
+
+        CurrentHealth = MaxHealth;
+        IsAlive = true;
+
+        OnEntityBorn?.Invoke(gameObject);
+        OnEntityHealthUpdated?.Invoke(CurrentHealth);
+    }
+
+    public void ResetStats(){
+        InitializeVariables();
+    }
+
+    private void RegenerateHealth(){
+        if(CurrentHealth < MaxHealth){
+            CurrentHealth += HealthRegenRate * Time.deltaTime;
+            OnEntityHealthUpdated?.Invoke(CurrentHealth);
         }
-        if(currentHealth > maxHealth){
-            currentHealth = maxHealth;
+        if(CurrentHealth > MaxHealth){
+            CurrentHealth = MaxHealth;
         }
     }
 
     public void TakeDamage(GameObject damageSource, float damageTaken){
-        currentHealth -= damageTaken;
-        if(currentHealth <= 0){
+        CurrentHealth -= damageTaken;
+        if(CurrentHealth <= 0){
             Die(damageSource);
         }
         OnEntityTookDamage?.Invoke(damageTaken);
-        OnEntityHealthUpdated?.Invoke(currentHealth);
+        OnEntityHealthUpdated?.Invoke(CurrentHealth);
     }
 
     public void Heal(float heal){
-        currentHealth += heal;
-        if(currentHealth > maxHealth){
-            currentHealth = maxHealth;
+        CurrentHealth += heal;
+        if(CurrentHealth > MaxHealth){
+            CurrentHealth = MaxHealth;
         }
         OnEntityHealed?.Invoke(heal);
-        OnEntityHealthUpdated?.Invoke(currentHealth);
+        OnEntityHealthUpdated?.Invoke(CurrentHealth);
     }
 
     public void Kill(){
@@ -58,8 +78,8 @@ public class HealthSystem : MonoBehaviour{
     }
 
     public void Die(GameObject damageSource){
-        isAlive = false;
-        currentHealth = 0;
+        IsAlive = false;
+        CurrentHealth = 0;
         Instantiate(GameManager.instance.DeathSpot, this.transform.position, Quaternion.Euler(0, 0, 0));
         OnEntityDied?.Invoke(gameObject);
         if(damageSource.CompareTag("Player")){
@@ -67,12 +87,4 @@ public class HealthSystem : MonoBehaviour{
         }
     }
 
-    public void Spawn(){
-        isAlive = true;
-        currentHealth = maxHealth;
-        healthRegenRate = 2f;
-        maxHealth = 100f;
-        OnEntityBorn?.Invoke(gameObject);
-        OnEntityHealthUpdated?.Invoke(currentHealth);
-    }
 }

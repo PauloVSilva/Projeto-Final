@@ -20,13 +20,13 @@ public class PlayerUIManager : MonoBehaviour{
     }
 
     private void OnEnable(){
-        GameManager.instance.PlayerJoinedGame += PlayerJoinedGame;
-        GameManager.instance.PlayerLeftGame += PlayerLeftGame;
+        GameManager.instance.OnPlayerJoinedGame += PlayerJoinedGame;
+        GameManager.instance.OnPlayerLeftGame += PlayerLeftGame;
     }
 
     private void OnDisable(){
-        GameManager.instance.PlayerJoinedGame -= PlayerJoinedGame;
-        GameManager.instance.PlayerLeftGame -= PlayerLeftGame;
+        GameManager.instance.OnPlayerJoinedGame -= PlayerJoinedGame;
+        GameManager.instance.OnPlayerLeftGame -= PlayerLeftGame;
     }
 
     void PlayerJoinedGame(PlayerInput playerInput){

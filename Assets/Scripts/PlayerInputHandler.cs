@@ -6,7 +6,7 @@ using System;
 
 public class PlayerInputHandler : MonoBehaviour{
     //public GameObject[] playerPrefabs;
-    public PlayerController playerController;
+    public OldPlayerController playerController;
 
     private void Awake(){
         Spawn();
@@ -16,23 +16,10 @@ public class PlayerInputHandler : MonoBehaviour{
         int index = GameManager.instance.spawnPoints.Length;
         int randomIndex = UnityEngine.Random.Range(0, index);
 
-        playerController = GameObject.Instantiate(GameManager.instance.playerPrefabs[GetComponent<PlayerInput>().playerIndex], GameManager.instance.spawnPoints[randomIndex].transform.position, transform.rotation).GetComponent<PlayerController>();
-        //playerController = GameObject.Instantiate(GameManager.instance.playerPrefabs[0], GameManager.instance.spawnPoints[randomIndex].transform.position, transform.rotation).GetComponent<PlayerController>();
+        //playerController = GameObject.Instantiate(GameManager.instance.playerPrefabs[GetComponent<PlayerInput>().playerIndex], GameManager.instance.spawnPoints[randomIndex].transform.position, transform.rotation).GetComponent<PlayerController>();
+        playerController = GameObject.Instantiate(GameManager.instance.playerPrefabs[0], GameManager.instance.spawnPoints[randomIndex].transform.position, transform.rotation).GetComponent<OldPlayerController>();
         transform.parent = GameManager.instance.transform;
         playerController.transform.parent = this.transform;
-    }
-
-    public void Spawn(GameObject[] prefabsList, int characterIndex){
-        int index = GameManager.instance.spawnPoints.Length;
-        int randomIndex = UnityEngine.Random.Range(0, index);
-
-        playerController = GameObject.Instantiate(prefabsList[characterIndex], GameManager.instance.spawnPoints[randomIndex].transform.position, transform.rotation).GetComponent<PlayerController>();
-        transform.parent = GameManager.instance.transform;
-        playerController.transform.parent = this.transform;
-    }
-
-    public void Destroy(){
-        GameObject.Destroy(this.transform.GetChild(0).gameObject);
     }
 
     public void OnMove(InputAction.CallbackContext context){

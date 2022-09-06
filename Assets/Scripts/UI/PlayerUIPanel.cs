@@ -57,16 +57,16 @@ public class PlayerUIPanel : MonoBehaviour{
             playerDeathCount.gameObject.SetActive(true);
             pressToJoin.gameObject.SetActive(false);
 
-            player.transform.GetComponent<PlayerStatManager>().OnHealthUpdated += UpdateHealth;
-            player.transform.GetComponent<PlayerStatManager>().OnScoreChanged += UpdateScore;
-            player.transform.GetComponent<PlayerStatManager>().OnKillsChanged += UpdateKillCount;
-            player.transform.GetComponent<PlayerStatManager>().OnDeathsChanged += UpdateDeathCount;
+            player.transform.GetComponent<OldPlayerStatManager>().OnHealthUpdated += UpdateHealth;
+            player.transform.GetComponent<OldPlayerStatManager>().OnScoreChanged += UpdateScore;
+            player.transform.GetComponent<OldPlayerStatManager>().OnKillsChanged += UpdateKillCount;
+            player.transform.GetComponent<OldPlayerStatManager>().OnDeathsChanged += UpdateDeathCount;
 
-            playerName.text = player.transform.GetComponent<PlayerStatManager>().thisPlayerColor.ToString();
-            playerHealth.text = player.transform.GetChild(0).GetComponent<HealthSystem>().currentHealth.ToString();
-            playerScore.text = player.transform.GetComponent<PlayerStatManager>().score.ToString();
-            playerKillCount.text = player.transform.GetComponent<PlayerStatManager>().kills.ToString();
-            playerDeathCount.text = player.transform.GetComponent<PlayerStatManager>().deaths.ToString();
+            playerName.text = player.transform.GetComponent<OldPlayerStatManager>().thisPlayerColor.ToString();
+            playerHealth.text = player.transform.GetChild(0).GetComponent<OldHealthSystem>().currentHealth.ToString();
+            playerScore.text = player.transform.GetComponent<OldPlayerStatManager>().score.ToString();
+            playerKillCount.text = player.transform.GetComponent<OldPlayerStatManager>().kills.ToString();
+            playerDeathCount.text = player.transform.GetComponent<OldPlayerStatManager>().deaths.ToString();
         }
         else{
             playerName.gameObject.SetActive(false);
