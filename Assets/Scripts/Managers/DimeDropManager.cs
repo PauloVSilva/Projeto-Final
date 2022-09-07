@@ -9,14 +9,14 @@ public class DimeDropManager : MonoBehaviour{
     public static DimeDropManager instance = null;
 
     //ENUMS
-    private enum gameState{preparation, gameIsRunningSetUp, gameIsRunning, gameIsOverSetUp, gameIsOver}
-    private enum gameGoal{time, amount}
+    public enum GameState{preparation, gameSetUp, gameIsRunning, gameOverSetUp, gameIsOver}
+    public enum GameGoal{time, scoreAmount}
 
-    //VARIABLES
+    //MINIGAME VARIABLES
     [SerializeField] private GameObject[] spawnersList;
     [SerializeField] private GameObject[] coins;
-    [SerializeField] private gameState thisGameState;
-    //[SerializeField] private gameGoal thisGameGoal;
+    [SerializeField] private GameState gameState;
+    [SerializeField] private GameGoal gameGoal;
     [SerializeField] private float countDown;
     [SerializeField] private int amountGoal;
 
@@ -38,56 +38,43 @@ public class DimeDropManager : MonoBehaviour{
     }
 
     private void Start(){
+        gameState = GameState.preparation;
+        gameGoal = GameGoal.scoreAmount;
+        countDown = 10;
+        amountGoal = 20000;
         //move players to spawn
         foreach(var playerInput in GameManager.instance.playerList){
+            playerInput.transform.GetComponent<CharacterEvents>().ResetScores();
             playerInput.transform.GetChild(0).position = GameManager.instance.spawnPoints[0].transform.position;
             playerInput.GetComponent<PlayerInput>().actions.Disable();
             playerInput.GetComponent<PlayerInput>().actions["Jump"].Enable();
+
+            playerInput.GetComponent<CharacterEvents>().OnPlayerScoreChanged += VerifyWinCondition;
         }
-        thisGameState = gameState.preparation;
-        //thisGameGoal = gameGoal.amount;
-        countDown = 10;
-        amountGoal = 10000;
         StartCoroutine(Preparation());
     }
 
-    private void Update(){
-        //if((int)thisGameState == 0){
-        //    Preparation();
-        //}
-
-        if((int)thisGameState == 1){
-            GameIsRunningSetUp();
-        }
-
-        if((int)thisGameState == 2){
-            GameIsRunning();
-        }
-
-        if((int)thisGameState == 3){
-            GameIsOverSetUp();
-        }
-
-        if((int)thisGameState == 4){
-            GameIsOver();
+    private void OnDisable() {
+        foreach(var playerInput in GameManager.instance.playerList){
+            playerInput.GetComponent<CharacterEvents>().OnPlayerScoreChanged -= VerifyWinCondition;
         }
     }
 
     IEnumerator Preparation(){
         yield return new WaitForSeconds(1f);
         if(countDown > 0){
-            //countDown -= 1 * Time.deltaTime;
             countDown--;
             OnCountDownTicks?.Invoke(countDown);
             StartCoroutine(Preparation());
         }
         else {
             Debug.Log("Preparation time ended");
-            thisGameState++;
+            gameState++;
+            GameSetUp();
         }
     }
 
-    private void GameIsRunningSetUp(){
+    private void GameSetUp(){
         foreach(var spawner in spawnersList){
             spawner.GetComponent<Spawner>().spawnerEnabled = true;
         }
@@ -98,38 +85,42 @@ public class DimeDropManager : MonoBehaviour{
             playerInput.GetComponent<PlayerInput>().actions["Dash"].Enable();
             playerInput.GetComponent<PlayerInput>().actions["Interact"].Enable();
         }
-        thisGameState++;
+        gameState++;
     }
 
-    private void GameIsRunning(){
-        foreach(var player in GameManager.instance.playerList){
+    private void VerifyWinCondition(GameObject player){
+        if(gameGoal == GameGoal.scoreAmount){
             if (player.transform.GetComponent<CharacterStats>().score >= amountGoal){
                 Debug.Log("Player " + player.transform.GetComponent<CharacterStats>().animal.ToString() + " is the winner");
-                thisGameState++;
+                gameState++;
+                GameOverSetUp();
             }
         }
     }
 
-    private void GameIsOverSetUp(){
-        countDown = 10;
+    private void GameOverSetUp(){
         foreach(var spawner in spawnersList){
             spawner.GetComponent<Spawner>().spawnerEnabled = false;
         }
-
         coins = GameObject.FindGameObjectsWithTag("Coin");
         foreach(var coin in coins){
             coin.GetComponent<Coin>().canBePickedUp = false;
         }
-        thisGameState++;
+        countDown = 10;
+        gameState++;
+        StartCoroutine(GameOver());
     }
 
-    private void GameIsOver(){
+    IEnumerator GameOver(){
+        yield return new WaitForSeconds(1f);
         if(countDown > 0){
-            countDown -= 1 * Time.deltaTime;
+            countDown--;
+            OnCountDownTicks?.Invoke(countDown);
+            StartCoroutine(GameOver());
         }
         else {
-            GameManager.instance.ReturnToMainHub();
             Debug.Log("Returning to MainHub");
+            GameManager.instance.ReturnToMainHub();
         }
     }
 

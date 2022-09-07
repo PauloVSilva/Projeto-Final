@@ -45,7 +45,7 @@ public class MovementSystem : MonoBehaviour{
         InitializeVariables();
     }
 
-    void Update(){
+    private void Update(){
         groundedPlayer = controller.isGrounded;
         if (groundedPlayer && playerVelocity.y < 0){
             playerVelocity.y = 0f;

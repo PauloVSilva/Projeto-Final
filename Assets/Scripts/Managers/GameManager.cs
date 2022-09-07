@@ -45,6 +45,10 @@ public class GameManager : MonoBehaviour{
     }
 
     public void ReturnToMainHub(){
+        foreach(var playerInput in GameManager.instance.playerList){
+            playerInput.transform.GetComponent<CharacterEvents>().ResetScores();
+            playerInput.transform.GetChild(0).GetComponent<HealthSystem>().Kill();
+        }
         SceneManager.LoadScene("MainHub");
     }
 
@@ -67,11 +71,11 @@ public class GameManager : MonoBehaviour{
 
 
     public void GameManagerCharacterKilled(GameObject character){
-        print("GameManager detected kill" + character.transform.parent.GetComponent<CharacterStats>().teamColor);
+        //print("GameManager detected kill" + character.transform.parent.GetComponent<CharacterStats>().teamColor);
     }
 
     public void GameManagerCharacterDied(GameObject character){
-        print("GameManager detected death" + character.transform.parent.GetComponent<CharacterStats>().teamColor);
+        //print("GameManager detected death" + character.transform.parent.GetComponent<CharacterStats>().teamColor);
         mainCamera.GetComponent<CameraController>().RemovePlayer(character);
 
         if(character.transform.parent.GetComponent<CharacterStats>().CanRespawn()){
@@ -88,7 +92,7 @@ public class GameManager : MonoBehaviour{
     }
 
     public void GameManagerCharacterSpawned(GameObject character){
-        print("GameManager detected spawn" + character.transform.parent.GetComponent<CharacterStats>().teamColor);
+        //print("GameManager detected spawn" + character.transform.parent.GetComponent<CharacterStats>().teamColor);
         mainCamera.GetComponent<CameraController>().AddPlayer(character);
     }
 

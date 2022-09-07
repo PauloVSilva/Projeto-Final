@@ -6,16 +6,16 @@ using UnityEngine.InputSystem;
 using TMPro;
 
 public class PlayerUIPanel : MonoBehaviour{
+    public PlayerInput player;
     public TextMeshProUGUI playerName;
     public TextMeshProUGUI playerHealth;
+    public TextMeshProUGUI playerStamina;
     public TextMeshProUGUI playerScore;
     public TextMeshProUGUI playerKillCount;
     public TextMeshProUGUI playerDeathCount;
 
     public TextMeshProUGUI pressToJoin;
 
-    //public PlayerController player;
-    public PlayerInput player;
 
     private void Awake() {
         pressToJoin.text = "Press X to join";
@@ -25,6 +25,7 @@ public class PlayerUIPanel : MonoBehaviour{
         //UpdateScore(0);
         playerName.gameObject.SetActive(false);
         playerHealth.gameObject.SetActive(false);
+        playerStamina.gameObject.SetActive(false);
         playerScore.gameObject.SetActive(false);
         playerKillCount.gameObject.SetActive(false);
         playerDeathCount.gameObject.SetActive(false);
@@ -52,18 +53,21 @@ public class PlayerUIPanel : MonoBehaviour{
         if(player != null){
             playerName.gameObject.SetActive(true);
             playerHealth.gameObject.SetActive(true);
+            playerStamina.gameObject.SetActive(true);
             playerScore.gameObject.SetActive(true);
             playerKillCount.gameObject.SetActive(true);
             playerDeathCount.gameObject.SetActive(true);
             pressToJoin.gameObject.SetActive(false);
 
             player.transform.GetComponent<CharacterEvents>().OnPlayerHealthUpdated += UpdateHealth;
+            player.transform.GetComponent<CharacterEvents>().OnPlayerStaminaUpdated += UpdateStamina;
             player.transform.GetComponent<CharacterEvents>().OnPlayerScoreChanged += UpdateScore;
             player.transform.GetComponent<CharacterEvents>().OnPlayerScoredKill += UpdateKillCount;
             player.transform.GetComponent<CharacterEvents>().OnPlayerDied += UpdateDeathCount;
 
             playerName.text = player.transform.GetComponent<CharacterStats>().teamColor.ToString();
-            playerHealth.text = player.transform.GetChild(0).GetComponent<HealthSystem>().CurrentHealth.ToString();
+            playerHealth.text = player.transform.GetChild(0).GetComponent<HealthSystem>().CurrentHealth.ToString() + "/" + player.GetComponent<CharacterStats>().MaxHealth.ToString();
+            playerStamina.text = player.transform.GetChild(0).GetComponent<MovementSystem>().CurrentStamina.ToString() + "/" + player.GetComponent<CharacterStats>().MaxStamina.ToString();
             playerScore.text = player.transform.GetComponent<CharacterStats>().score.ToString();
             playerKillCount.text = player.transform.GetComponent<CharacterStats>().kills.ToString();
             playerDeathCount.text = player.transform.GetComponent<CharacterStats>().deaths.ToString();
@@ -71,6 +75,7 @@ public class PlayerUIPanel : MonoBehaviour{
         else{
             playerName.gameObject.SetActive(false);
             playerHealth.gameObject.SetActive(false);
+            playerStamina.gameObject.SetActive(false);
             playerScore.gameObject.SetActive(false);
             playerKillCount.gameObject.SetActive(false);
             playerDeathCount.gameObject.SetActive(false);
@@ -80,10 +85,16 @@ public class PlayerUIPanel : MonoBehaviour{
 
     private void UpdateHealth(float health){
         health = (int)health;
-        playerHealth.text = health.ToString();
+        playerHealth.text = health.ToString() + "/" + player.GetComponent<CharacterStats>().MaxHealth.ToString();
     }
 
-    private void UpdateScore(int score){
+    private void UpdateStamina(float stamina){
+        stamina = (int)stamina;
+        playerStamina.text = stamina.ToString() + "/" + player.GetComponent<CharacterStats>().MaxStamina.ToString();
+    }
+
+    private void UpdateScore(GameObject character){
+        int score = character.GetComponent<CharacterStats>().score;
         playerScore.text = score.ToString();
     }
 

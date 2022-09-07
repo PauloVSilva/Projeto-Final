@@ -6,7 +6,7 @@ public class CharacterEvents : MonoBehaviour{
     [SerializeField] private CharacterStats characterStats;
 
     //EVENTS THAT WILL BE SENT TO OTHER CLASSES
-    public event System.Action<int> OnPlayerScoreChanged;
+    public event System.Action<GameObject> OnPlayerScoreChanged;
     public event System.Action<GameObject> OnPlayerScoredKill;
     public event System.Action<GameObject> OnPlayerDied;
     public event System.Action<GameObject> OnPlayerBorn;
@@ -68,7 +68,7 @@ public class CharacterEvents : MonoBehaviour{
 
     private void IncreaseScore(int value){
         characterStats.IncreaseScore(value);
-        OnPlayerScoreChanged?.Invoke(characterStats.score);
+        OnPlayerScoreChanged?.Invoke(gameObject);
     }
 
     private void PlayerScoredKill(GameObject character){ //other player
@@ -82,12 +82,12 @@ public class CharacterEvents : MonoBehaviour{
 
     private void PlayerDied(GameObject character){ //themselves
         character.transform.parent.GetComponent<CharacterStats>().IncreaseDeaths();
+        character.transform.parent.GetComponent<CharacterStats>().DecreaseLives();
         Instantiate(GameManager.instance.DeathSpot, character.transform.position, Quaternion.Euler(0, 0, 0));
         OnPlayerDied?.Invoke(character);
     }
 
     private void PlayerBorn(GameObject character){ //themselves
-        character.transform.parent.GetComponent<CharacterStats>().DecreaseLives();
         OnPlayerBorn?.Invoke(character);
     }
 

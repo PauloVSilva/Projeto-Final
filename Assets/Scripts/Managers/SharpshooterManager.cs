@@ -2,19 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System.Linq;
+using System;
 
 public class SharpshooterManager : MonoBehaviour{
     //INSTANCES
     public static SharpshooterManager instance = null;
 
-    public Camera mainCamera;
-    public GameObject[] spawnersList;
-    public List<PlayerInput> playersAlive = new List<PlayerInput>();
-    public float countDown = 10;
-    public enum gameState{preparation, gameIsRunningSetUp, gameIsRunning, gameIsOverSetUp, gameIsOver}
+    //ENUMS
+    public enum GameState{preparation, gameSetUp, gameIsRunning, gameOverSetUp, gameOver}
+    public enum GameGoal{killCount, lastStanding}
 
-    [SerializeField] private gameState thisGameState = gameState.preparation;
+    //MINIGAME VARIABLES
+    [SerializeField] private GameObject[] spawnersList;
+    [SerializeField] private List<PlayerInput> playersAlive = new List<PlayerInput>();
+    [SerializeField] private GameState gameState;
+    [SerializeField] private GameGoal gameGoal;
+    [SerializeField] private float countDown;
+    [SerializeField] private int killCountGoal;
+
+    //EVENTS
+    public static event Action<float> OnCountDownTicks;
 
     private void Awake(){
         if (instance == null){
@@ -31,52 +38,54 @@ public class SharpshooterManager : MonoBehaviour{
     }
 
     private void Start(){
+        gameState = GameState.preparation;
+        gameGoal = GameGoal.lastStanding;
+        countDown = 10;
+        killCountGoal = 10;
         //move players to spawn
         foreach(var playerInput in GameManager.instance.playerList){
+            playerInput.transform.GetComponent<CharacterEvents>().ResetScores();
             playerInput.transform.GetChild(0).position = GameManager.instance.spawnPoints[0].transform.position;
             playerInput.GetComponent<PlayerInput>().actions.Disable();
             playerInput.GetComponent<PlayerInput>().actions["Jump"].Enable();
-            mainCamera.GetComponent<CameraController>().AddPlayer(playerInput);
+        
+            playerInput.GetComponent<CharacterEvents>().OnPlayerScoredKill += VerifyWinCondition;
+            playerInput.GetComponent<CharacterEvents>().OnPlayerDied += VerifyWinCondition;
+            playerInput.GetComponent<CharacterEvents>().OnPlayerBorn += VerifyWinCondition;
+
+            if(gameGoal == GameGoal.lastStanding){
+                playerInput.transform.GetComponent<CharacterStats>().totalLives = 3;
+                playerInput.transform.GetComponent<CharacterStats>().unlimitedLives = false;
+            }
+        }
+        StartCoroutine(Preparation());
+    }
+
+    private void OnDisable() {
+        foreach(var playerInput in GameManager.instance.playerList){
+            playerInput.GetComponent<CharacterEvents>().OnPlayerScoredKill -= VerifyWinCondition;
+            playerInput.GetComponent<CharacterEvents>().OnPlayerDied -= VerifyWinCondition;
+            playerInput.GetComponent<CharacterEvents>().OnPlayerBorn -= VerifyWinCondition;
         }
     }
 
-    private void Update(){
-        if((int)thisGameState == 0){
-            Preparation();
-        }
-
-        if((int)thisGameState == 1){
-            GameIsRunningSetUp();
-        }
-
-        if((int)thisGameState == 2){
-            GameIsRunning();
-        }
-
-        if((int)thisGameState == 3){
-            GameIsOverSetUp();
-        }
-
-        if((int)thisGameState == 4){
-            GameIsOver();
-        }
-    }
-
-    private void Preparation(){
+    IEnumerator Preparation(){
+        yield return new WaitForSeconds(1f);
         if(countDown > 0){
-            countDown -= 1 * Time.deltaTime;
+            countDown--;
+            OnCountDownTicks?.Invoke(countDown);
+            StartCoroutine(Preparation());
         }
         else {
             Debug.Log("Preparation time ended");
-            thisGameState++;
+            gameState++;
+            GameSetUp();
         }
     }
 
-    private void GameIsRunningSetUp(){
-        foreach(var player in GameManager.instance.playerList){
-            playersAlive.Add(player);
-        }
+    private void GameSetUp(){
         foreach(var playerInput in GameManager.instance.playerList){
+            playersAlive.Add(playerInput);
             playerInput.GetComponent<PlayerInput>().actions["Movement"].Enable();
             playerInput.GetComponent<PlayerInput>().actions["Sprint"].Enable();
             playerInput.GetComponent<PlayerInput>().actions["Jump"].Enable();
@@ -86,29 +95,45 @@ public class SharpshooterManager : MonoBehaviour{
             playerInput.GetComponent<PlayerInput>().actions["PressTrigger"].Enable();
             playerInput.GetComponent<PlayerInput>().actions["ReloadWeapon"].Enable();
         }
-        thisGameState++;
+        gameState++;
     }
 
-    private void GameIsRunning(){
-        if (playersAlive.Count == 1){
-            Debug.Log("Player " + playersAlive[0].transform.GetComponent<CharacterStats>().animal.ToString() + " is the winner");
-            thisGameState++;
+    private void VerifyWinCondition(GameObject player){
+        if(gameGoal == GameGoal.lastStanding){
+            if(!player.transform.parent.GetComponent<CharacterStats>().CanRespawn()){
+                playersAlive.Remove(player.transform.parent.GetComponent<PlayerInput>());
+            }
+            if (playersAlive.Count == 1){
+                Debug.Log("Player " + playersAlive[0].transform.GetComponent<CharacterStats>().animal.ToString() + " is the winner");
+                gameState++;
+                GameOverSetUp();
+            }
+        }
+        if(gameGoal == GameGoal.killCount){
+            if (player.transform.parent.GetComponent<CharacterStats>().kills >= killCountGoal){
+                Debug.Log("Player " + player.transform.parent.GetComponent<CharacterStats>().animal.ToString() + " is the winner");
+                gameState++;
+                GameOverSetUp();
+            }
         }
     }
 
-    private void GameIsOverSetUp(){
+    private void GameOverSetUp(){
         countDown = 10;
-        thisGameState++;
+        gameState++;
+        StartCoroutine(GameOver());
     }
 
-    private void GameIsOver(){
+    IEnumerator GameOver(){
+        yield return new WaitForSeconds(1f);
         if(countDown > 0){
-            countDown -= 1 * Time.deltaTime;
+            countDown--;
+            OnCountDownTicks?.Invoke(countDown);
+            StartCoroutine(GameOver());
         }
         else {
-            GameManager.instance.ReturnToMainHub();
             Debug.Log("Returning to MainHub");
+            GameManager.instance.ReturnToMainHub();
         }
     }
-
 }
