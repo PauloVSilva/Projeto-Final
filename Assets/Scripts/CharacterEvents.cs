@@ -82,7 +82,9 @@ public class CharacterEvents : MonoBehaviour{
 
     private void PlayerDied(GameObject character){ //themselves
         character.transform.parent.GetComponent<CharacterStats>().IncreaseDeaths();
-        character.transform.parent.GetComponent<CharacterStats>().DecreaseLives();
+        if(!character.transform.parent.GetComponent<CharacterStats>().unlimitedLives){
+            character.transform.parent.GetComponent<CharacterStats>().DecreaseLives();
+        }
         Instantiate(GameManager.instance.DeathSpot, character.transform.position, Quaternion.Euler(0, 0, 0));
         OnPlayerDied?.Invoke(character);
     }

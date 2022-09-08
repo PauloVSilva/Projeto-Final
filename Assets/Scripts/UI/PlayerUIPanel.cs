@@ -7,29 +7,32 @@ using TMPro;
 
 public class PlayerUIPanel : MonoBehaviour{
     public PlayerInput player;
-    public TextMeshProUGUI playerName;
-    public TextMeshProUGUI playerHealth;
-    public TextMeshProUGUI playerStamina;
-    public TextMeshProUGUI playerScore;
-    public TextMeshProUGUI playerKillCount;
-    public TextMeshProUGUI playerDeathCount;
 
-    public TextMeshProUGUI pressToJoin;
+    [SerializeField] private GameObject playerInfo;
+    [SerializeField] private GameObject joinMessage;
 
+    [SerializeField] private TextMeshProUGUI playerTeam;
+    [SerializeField] private TextMeshProUGUI _playerTotalLives;
+    [SerializeField] private TextMeshProUGUI playerHealth;
+    [SerializeField] private TextMeshProUGUI playerStamina;
+    [SerializeField] private TextMeshProUGUI playerScore;
+    [SerializeField] private TextMeshProUGUI playerKillCount;
+    [SerializeField] private TextMeshProUGUI playerDeathCount;
 
-    private void Awake() {
-        pressToJoin.text = "Press X to join";
-    }
+    [SerializeField] private Slider _playerHealthBar;
+    [SerializeField] private Slider _playerStaminaBar;
+
+    [SerializeField] private TextMeshProUGUI pressToJoin;
 
     private void Start(){
-        //UpdateScore(0);
-        playerName.gameObject.SetActive(false);
-        playerHealth.gameObject.SetActive(false);
-        playerStamina.gameObject.SetActive(false);
-        playerScore.gameObject.SetActive(false);
-        playerKillCount.gameObject.SetActive(false);
-        playerDeathCount.gameObject.SetActive(false);
-        pressToJoin.gameObject.SetActive(true);
+        SetStatsActive(false);
+    }
+
+    private void SetStatsActive(bool active){
+        playerInfo.gameObject.SetActive(active);
+        joinMessage.gameObject.SetActive(!active);
+        _playerHealthBar.minValue = 0;
+        _playerStaminaBar.minValue = 0;
     }
 
     public void AssignPlayer(int index){
@@ -38,8 +41,6 @@ public class PlayerUIPanel : MonoBehaviour{
 
     IEnumerator AssignPlayerDelay(int index){
         yield return new WaitForSeconds(0.1f);
-        //print("Player assigned");
-        //player = GameManager.instance.playerList[index].GetComponent<PlayerInputHandler>().playerController;
         player = GameManager.instance.playerList[index];
         SetUpInfoPanel();
     }
@@ -51,13 +52,7 @@ public class PlayerUIPanel : MonoBehaviour{
 
     void SetUpInfoPanel(){
         if(player != null){
-            playerName.gameObject.SetActive(true);
-            playerHealth.gameObject.SetActive(true);
-            playerStamina.gameObject.SetActive(true);
-            playerScore.gameObject.SetActive(true);
-            playerKillCount.gameObject.SetActive(true);
-            playerDeathCount.gameObject.SetActive(true);
-            pressToJoin.gameObject.SetActive(false);
+            SetStatsActive(true);
 
             player.transform.GetComponent<CharacterEvents>().OnPlayerHealthUpdated += UpdateHealth;
             player.transform.GetComponent<CharacterEvents>().OnPlayerStaminaUpdated += UpdateStamina;
@@ -65,7 +60,15 @@ public class PlayerUIPanel : MonoBehaviour{
             player.transform.GetComponent<CharacterEvents>().OnPlayerScoredKill += UpdateKillCount;
             player.transform.GetComponent<CharacterEvents>().OnPlayerDied += UpdateDeathCount;
 
-            playerName.text = player.transform.GetComponent<CharacterStats>().teamColor.ToString();
+            _playerHealthBar.maxValue = player.GetComponent<CharacterStats>().MaxHealth;
+            _playerHealthBar.value = player.GetComponent<CharacterStats>().MaxHealth;
+            
+            _playerStaminaBar.maxValue = player.GetComponent<CharacterStats>().MaxStamina;
+            _playerStaminaBar.value = player.GetComponent<CharacterStats>().MaxStamina;
+
+            _playerTotalLives.text = player.GetComponent<CharacterStats>().totalLives.ToString();
+
+            playerTeam.text = player.transform.GetComponent<CharacterStats>().teamColor.ToString();
             playerHealth.text = player.transform.GetChild(0).GetComponent<HealthSystem>().CurrentHealth.ToString() + "/" + player.GetComponent<CharacterStats>().MaxHealth.ToString();
             playerStamina.text = player.transform.GetChild(0).GetComponent<MovementSystem>().CurrentStamina.ToString() + "/" + player.GetComponent<CharacterStats>().MaxStamina.ToString();
             playerScore.text = player.transform.GetComponent<CharacterStats>().score.ToString();
@@ -73,24 +76,20 @@ public class PlayerUIPanel : MonoBehaviour{
             playerDeathCount.text = player.transform.GetComponent<CharacterStats>().deaths.ToString();
         }
         else{
-            playerName.gameObject.SetActive(false);
-            playerHealth.gameObject.SetActive(false);
-            playerStamina.gameObject.SetActive(false);
-            playerScore.gameObject.SetActive(false);
-            playerKillCount.gameObject.SetActive(false);
-            playerDeathCount.gameObject.SetActive(false);
-            pressToJoin.gameObject.SetActive(true);
+            SetStatsActive(false);
         }
     }
 
     private void UpdateHealth(float health){
         health = (int)health;
         playerHealth.text = health.ToString() + "/" + player.GetComponent<CharacterStats>().MaxHealth.ToString();
+        _playerHealthBar.value = health;
     }
 
     private void UpdateStamina(float stamina){
         stamina = (int)stamina;
         playerStamina.text = stamina.ToString() + "/" + player.GetComponent<CharacterStats>().MaxStamina.ToString();
+        _playerStaminaBar.value = stamina;
     }
 
     private void UpdateScore(GameObject character){
@@ -106,5 +105,6 @@ public class PlayerUIPanel : MonoBehaviour{
     private void UpdateDeathCount(GameObject character){
         int deathCount = character.transform.parent.GetComponent<CharacterStats>().deaths;
         playerDeathCount.text = deathCount.ToString();
+        _playerTotalLives.text = player.GetComponent<CharacterStats>().totalLives.ToString();
     }
 }
