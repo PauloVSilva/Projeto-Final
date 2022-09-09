@@ -9,6 +9,7 @@ TagManager:
   - Coin
   - Instadeath
   - Weapon
+  - MiniGameUI
   layers:
   - Default
   - TransparentFX

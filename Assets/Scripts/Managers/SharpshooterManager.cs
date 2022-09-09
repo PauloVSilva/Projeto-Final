@@ -48,6 +48,8 @@ public class SharpshooterManager : MonoBehaviour{
     }
 
     private void Start(){
+        miniGameUIManager = GameObject.FindWithTag("MiniGameUI").GetComponent<MiniGameUIManager>();
+        miniGameUIManager.InitializeVariables();
         //move players to spawn
         foreach(var playerInput in GameManager.instance.playerList){
             playerInput.transform.GetComponent<CharacterEvents>().ResetScores();
@@ -75,6 +77,7 @@ public class SharpshooterManager : MonoBehaviour{
             playerInput.GetComponent<CharacterEvents>().OnPlayerDied -= VerifyLastStandingWinCondition;
             //playerInput.GetComponent<CharacterEvents>().OnPlayerBorn -= VerifyWinCondition;
         }
+        miniGameUIManager.InitializeVariables();
     }
 
     private void DisplayGoal(){

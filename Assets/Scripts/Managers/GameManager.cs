@@ -9,6 +9,7 @@ using System;
 public class GameManager : MonoBehaviour{
     //INSTANCES
     public static GameManager instance = null;
+    [SerializeField] private LevelLoader levelLoader;
     public Camera mainCamera;
     
     public List<PlayerInput> playerList = new List<PlayerInput>();
@@ -49,7 +50,11 @@ public class GameManager : MonoBehaviour{
             playerInput.transform.GetComponent<CharacterEvents>().ResetScores();
             playerInput.transform.GetChild(0).GetComponent<HealthSystem>().Kill();
         }
-        SceneManager.LoadScene("MainHub");
+        levelLoader.LoadLevel("MainHub");
+    }
+
+    public void GoToLevel(string levelName){
+        levelLoader.LoadLevel(levelName);
     }
 
     public void SetSpawnPoint(){

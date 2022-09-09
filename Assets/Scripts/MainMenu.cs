@@ -9,14 +9,8 @@ public class MainMenu : MonoBehaviour{
         SceneManager.LoadScene("MainHub");
     }
 
-    public void GoToTestingDimension(){
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-        SceneManager.LoadScene("TestingDimension");
-    }
-
     public void QuitGame(){
         Debug.Log("QUIT!");
         Application.Quit();
     }
-
 }

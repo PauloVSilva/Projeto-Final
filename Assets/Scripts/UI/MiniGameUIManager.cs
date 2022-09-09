@@ -17,12 +17,20 @@ public class MiniGameUIManager : MonoBehaviour{
     private string GAME_GOAL_REMINDER;
 
     private void Awake(){
+        InitializeVariables();
+    }
+
+    public void InitializeVariables(){
         GO_SCREEN = "Go!";
         PLAYER = "Player ";
         WINNER_ANNOUNCEMENT = " wins!";
         countDownBoard.text = null;
         winnerBoard.text = null;
         gameGoalReminder.text = null;
+    }
+
+    private void OnDisable(){
+        InitializeVariables();
     }
 
     public void DisplayCountDown(int seconds){

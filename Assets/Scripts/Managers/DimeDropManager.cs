@@ -49,6 +49,8 @@ public class DimeDropManager : MonoBehaviour{
     }
 
     private void Start(){
+        miniGameUIManager = GameObject.FindWithTag("MiniGameUI").GetComponent<MiniGameUIManager>();
+        miniGameUIManager.InitializeVariables();
         //move players to spawn
         foreach(var playerInput in GameManager.instance.playerList){
             playerInput.transform.GetComponent<CharacterEvents>().ResetScores();
@@ -67,6 +69,7 @@ public class DimeDropManager : MonoBehaviour{
         foreach(var playerInput in GameManager.instance.playerList){
             playerInput.GetComponent<CharacterEvents>().OnPlayerScoreChanged -= VerifyScoreAmountWinCondition;
         }
+        miniGameUIManager.InitializeVariables();
     }
 
     private void DisplayGoal(){

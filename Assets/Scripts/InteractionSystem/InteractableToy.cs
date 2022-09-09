@@ -10,7 +10,8 @@ public class InteractableToy : MonoBehaviour, InteractorInterface{
 
     public bool Interact (Interactor interactor){
         //Debug.Log("Interacting with " + InteractionPromp);
-        SceneManager.LoadScene(_name);
+        //SceneManager.LoadScene(_name);
+        GameManager.instance.GoToLevel(_name);
         return true;
     }
 }
