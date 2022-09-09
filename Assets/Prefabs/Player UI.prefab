@@ -1240,6 +1240,7 @@ MonoBehaviour:
   player: {fileID: 0}
   playerInfo: {fileID: 5503031211647959813}
   joinMessage: {fileID: 6247026184501693263}
+  playerIndex: {fileID: 8674175401740320331}
   playerTeam: {fileID: 5814374981409577026}
   _playerTotalLives: {fileID: 791260879389708605}
   playerHealth: {fileID: 9216813095317055412}

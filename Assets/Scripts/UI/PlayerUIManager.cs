@@ -6,15 +6,18 @@ using System.Linq;
 
 public class PlayerUIManager : MonoBehaviour{
     public GameObject[] playerUIPanels;
-    //public GameObject[] joinMessages;
 
-    private void Awake(){
+    private void Start(){
         if(GameManager.instance.playerList.Count > 0){
-            for (int i = 0; i < playerUIPanels.Length; i++){
-                playerUIPanels[i].GetComponent<PlayerUIPanel>().UnassignPlayer();
+            for (int i = 0; i < GameManager.instance.playerList.Count; i++){
+                if(playerUIPanels[i].GetComponent<PlayerUIPanel>().player != null){
+                    playerUIPanels[i].GetComponent<PlayerUIPanel>().UnassignPlayer();
+                }
             }
             for (int i = 0; i < GameManager.instance.playerList.Count; i++){
-                playerUIPanels[i].GetComponent<PlayerUIPanel>().AssignPlayer(i);
+                if(playerUIPanels[i].GetComponent<PlayerUIPanel>().player == null){
+                    playerUIPanels[i].GetComponent<PlayerUIPanel>().AssignPlayer(GameManager.instance.playerList[i]);
+                }
             }
         }
     }
@@ -31,36 +34,29 @@ public class PlayerUIManager : MonoBehaviour{
 
     void PlayerJoinedGame(PlayerInput playerInput){
         //Debug.Log("PlayerJoinedGame");
-        playerUIPanels[playerInput.playerIndex].GetComponent<PlayerUIPanel>().AssignPlayer(playerInput.playerIndex);
+        for(int i = 0; i < playerUIPanels.Length; i++){
+            if(playerUIPanels[i].GetComponent<PlayerUIPanel>().player == null){
+                playerUIPanels[i].GetComponent<PlayerUIPanel>().AssignPlayer(playerInput);
+                return;
+            }
+        }
     }
 
     void PlayerLeftGame(PlayerInput playerInput){
         //Debug.Log("PlayerLeftGame");
         playerUIPanels[playerInput.playerIndex].GetComponent<PlayerUIPanel>().UnassignPlayer();
-        ReorderPanels();
+        //ReorderPanels();
     }
 
     void ReorderPanels(){
         //Debug.Log("ReorderingPanels");
         for (int i = 0; i < GameManager.instance.playerList.Count; i++){
-            playerUIPanels[i].GetComponent<PlayerUIPanel>().AssignPlayer(i);
+            playerUIPanels[i].GetComponent<PlayerUIPanel>().AssignPlayer(GameManager.instance.playerList[i]);
         }
         if(playerUIPanels.Length - GameManager.instance.playerList.Count > 0){
             for (int i = GameManager.instance.playerList.Count; i < playerUIPanels.Length; i++){
                 playerUIPanels[i].GetComponent<PlayerUIPanel>().UnassignPlayer();
             }
         }
-    }
-
-    void ShowUIPanel(PlayerInput playerInput){
-        //playerUIPanels[playerInput.playerIndex].SetActive(true);
-        playerUIPanels[playerInput.playerIndex].GetComponent<PlayerUIPanel>().AssignPlayer(playerInput.playerIndex);
-        //joinMessages[playerInput.playerIndex].SetActive(false);
-    }
-
-    void HideUIPanel(PlayerInput playerInput){
-        playerUIPanels[playerInput.playerIndex].GetComponent<PlayerUIPanel>().UnassignPlayer();
-        //playerUIPanels[playerInput.playerIndex].SetActive(false);
-        //joinMessages[playerInput.playerIndex].SetActive(true);
     }
 }

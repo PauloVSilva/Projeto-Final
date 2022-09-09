@@ -37,7 +37,7 @@ public class Interactor : MonoBehaviour{
 
     public void KeyIsPressed(float context){
         if(context == 1f && _interactable != null){
-            Debug.Log("Input detected");
+            //Debug.Log("Input detected");
             _interactable.Interact(this);
         }
     }

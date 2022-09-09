@@ -8,6 +8,8 @@ public class DimeDropManager : MonoBehaviour{
     //INSTANCES
     public static DimeDropManager instance = null;
 
+    [SerializeField] private MiniGameUIManager miniGameUIManager;
+
     //ENUMS
     public enum GameState{preparation, gameSetUp, gameIsRunning, gameOverSetUp, gameIsOver}
     public enum GameGoal{time, scoreAmount}
@@ -15,13 +17,17 @@ public class DimeDropManager : MonoBehaviour{
     //MINIGAME VARIABLES
     [SerializeField] private GameObject[] spawnersList;
     [SerializeField] private GameObject[] coins;
-    [SerializeField] private GameState gameState;
-    [SerializeField] private GameGoal gameGoal;
-    [SerializeField] private float countDown;
-    [SerializeField] private int amountGoal;
+    [SerializeField] public GameState gameState;
+    [SerializeField] public GameGoal gameGoal;
+    [SerializeField] private int countDown;
+    [SerializeField] public int amountGoal;
+    [SerializeField] public int timeLimitGoal;
 
     //EVENTS
-    public static event Action<float> OnCountDownTicks;
+    //public static event Action<int> OnCountDownTicks;
+    //public static event Action<PlayerInput> OnPlayerWins;
+    //public static event Action OnGameStateAdvances;
+    //public static event Action OnGameGoalIsSet;
 
     private void Awake(){
         if (instance == null){
@@ -35,13 +41,14 @@ public class DimeDropManager : MonoBehaviour{
         GameManager.instance.leaveAction.Disable();
         GameManager.instance.SetSpawnPoint();
         spawnersList = GameObject.FindGameObjectsWithTag("Spawner");
+        
+        countDown = 10;
+        amountGoal = 20000;
+        gameState = GameState.preparation;
+        gameGoal = GameGoal.scoreAmount;
     }
 
     private void Start(){
-        gameState = GameState.preparation;
-        gameGoal = GameGoal.scoreAmount;
-        countDown = 10;
-        amountGoal = 20000;
         //move players to spawn
         foreach(var playerInput in GameManager.instance.playerList){
             playerInput.transform.GetComponent<CharacterEvents>().ResetScores();
@@ -49,14 +56,25 @@ public class DimeDropManager : MonoBehaviour{
             playerInput.GetComponent<PlayerInput>().actions.Disable();
             playerInput.GetComponent<PlayerInput>().actions["Jump"].Enable();
 
-            playerInput.GetComponent<CharacterEvents>().OnPlayerScoreChanged += VerifyWinCondition;
+            playerInput.GetComponent<CharacterEvents>().OnPlayerScoreChanged += VerifyScoreAmountWinCondition;
         }
         StartCoroutine(Preparation());
+        //OnGameGoalIsSet?.Invoke();
+        DisplayGoal();
     }
 
     private void OnDisable() {
         foreach(var playerInput in GameManager.instance.playerList){
-            playerInput.GetComponent<CharacterEvents>().OnPlayerScoreChanged -= VerifyWinCondition;
+            playerInput.GetComponent<CharacterEvents>().OnPlayerScoreChanged -= VerifyScoreAmountWinCondition;
+        }
+    }
+
+    private void DisplayGoal(){
+        if(gameGoal == GameGoal.scoreAmount){
+            miniGameUIManager.SetGameGoalText("Whoever gets " + amountGoal + " first wins");
+        }
+        if(gameGoal == GameGoal.time){
+            miniGameUIManager.SetGameGoalText("Whoever gets the most coins before " + timeLimitGoal + " wins");
         }
     }
 
@@ -64,12 +82,16 @@ public class DimeDropManager : MonoBehaviour{
         yield return new WaitForSeconds(1f);
         if(countDown > 0){
             countDown--;
-            OnCountDownTicks?.Invoke(countDown);
-            StartCoroutine(Preparation());
+            //OnCountDownTicks?.Invoke(countDown);
+            miniGameUIManager.DisplayCountDown(countDown);
+            if(gameState == GameState.preparation){
+                StartCoroutine(Preparation());
+            }
         }
         else {
             Debug.Log("Preparation time ended");
             gameState++;
+            //OnGameStateAdvances?.Invoke();
             GameSetUp();
         }
     }
@@ -86,13 +108,17 @@ public class DimeDropManager : MonoBehaviour{
             playerInput.GetComponent<PlayerInput>().actions["Interact"].Enable();
         }
         gameState++;
+        //OnGameStateAdvances?.Invoke();
     }
 
-    private void VerifyWinCondition(GameObject player){
+    private void VerifyScoreAmountWinCondition(GameObject player){
         if(gameGoal == GameGoal.scoreAmount){
             if (player.transform.GetComponent<CharacterStats>().score >= amountGoal){
                 Debug.Log("Player " + player.transform.GetComponent<CharacterStats>().animal.ToString() + " is the winner");
                 gameState++;
+                //OnGameStateAdvances?.Invoke();
+                //OnPlayerWins?.Invoke(player.transform.parent.GetComponent<PlayerInput>());
+                miniGameUIManager.AnnounceWinner(player.GetComponent<PlayerInput>());
                 GameOverSetUp();
             }
         }
@@ -108,6 +134,7 @@ public class DimeDropManager : MonoBehaviour{
         }
         countDown = 10;
         gameState++;
+        //OnGameStateAdvances?.Invoke();
         StartCoroutine(GameOver());
     }
 
@@ -115,7 +142,8 @@ public class DimeDropManager : MonoBehaviour{
         yield return new WaitForSeconds(1f);
         if(countDown > 0){
             countDown--;
-            OnCountDownTicks?.Invoke(countDown);
+            //OnCountDownTicks?.Invoke(countDown);
+            miniGameUIManager.DisplayCountDown(countDown);
             StartCoroutine(GameOver());
         }
         else {

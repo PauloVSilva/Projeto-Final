@@ -81,7 +81,9 @@ public class GameManager : MonoBehaviour{
         if(character.transform.parent.GetComponent<CharacterStats>().CanRespawn()){
             StartCoroutine(RespawnCharacter(character));
         }
-        character.transform.position = GameManager.instance.spawnPoints[0].transform.position;
+        int index = GameManager.instance.spawnPoints.Length;
+        int randomIndex = UnityEngine.Random.Range(0, index);
+        character.transform.position = GameManager.instance.spawnPoints[randomIndex].transform.position;
         character.SetActive(false);
     }
 

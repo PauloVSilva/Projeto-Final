@@ -11,6 +11,7 @@ public class PlayerUIPanel : MonoBehaviour{
     [SerializeField] private GameObject playerInfo;
     [SerializeField] private GameObject joinMessage;
 
+    [SerializeField] private TextMeshProUGUI playerIndex;
     [SerializeField] private TextMeshProUGUI playerTeam;
     [SerializeField] private TextMeshProUGUI _playerTotalLives;
     [SerializeField] private TextMeshProUGUI playerHealth;
@@ -25,58 +26,82 @@ public class PlayerUIPanel : MonoBehaviour{
     [SerializeField] private TextMeshProUGUI pressToJoin;
 
     private void Start(){
-        SetStatsActive(false);
+        SetStatsInactive();
+        InitializeBars();
     }
 
-    private void SetStatsActive(bool active){
-        playerInfo.gameObject.SetActive(active);
-        joinMessage.gameObject.SetActive(!active);
+    private void OnDisable(){
+        UnassignPlayer();
+    }
+
+    private void SetStatsActive(){
+        playerInfo.gameObject.SetActive(true);
+        joinMessage.gameObject.SetActive(false);
+    }
+
+    private void SetStatsInactive(){
+        playerInfo.gameObject.SetActive(false);
+        joinMessage.gameObject.SetActive(true);
+    }
+
+    private void SubscribeToPlayerEvents(){
+        player.transform.GetComponent<CharacterEvents>().OnPlayerHealthUpdated += UpdateHealth;
+        player.transform.GetComponent<CharacterEvents>().OnPlayerStaminaUpdated += UpdateStamina;
+        player.transform.GetComponent<CharacterEvents>().OnPlayerScoreChanged += UpdateScore;
+        player.transform.GetComponent<CharacterEvents>().OnPlayerScoredKill += UpdateKillCount;
+        player.transform.GetComponent<CharacterEvents>().OnPlayerDied += UpdateDeathCount;
+    }
+
+    private void UnsubscribeToPlayerEvents(){
+        player.transform.GetComponent<CharacterEvents>().OnPlayerHealthUpdated -= UpdateHealth;
+        player.transform.GetComponent<CharacterEvents>().OnPlayerStaminaUpdated -= UpdateStamina;
+        player.transform.GetComponent<CharacterEvents>().OnPlayerScoreChanged -= UpdateScore;
+        player.transform.GetComponent<CharacterEvents>().OnPlayerScoredKill -= UpdateKillCount;
+        player.transform.GetComponent<CharacterEvents>().OnPlayerDied -= UpdateDeathCount;
+    }
+
+    private void InitializeStats(){
+        _playerHealthBar.maxValue = player.GetComponent<CharacterStats>().MaxHealth;
+        _playerHealthBar.value = player.GetComponent<CharacterStats>().MaxHealth;
+        
+        _playerStaminaBar.maxValue = player.GetComponent<CharacterStats>().MaxStamina;
+        _playerStaminaBar.value = player.GetComponent<CharacterStats>().MaxStamina;
+
+        _playerTotalLives.text = player.GetComponent<CharacterStats>().totalLives.ToString();
+
+        playerIndex.text = (player.playerIndex + 1).ToString();
+        if(player.transform.GetComponent<CharacterStats>().teamColor != null){
+            playerTeam.text = player.transform.GetComponent<CharacterStats>().teamColor.ToString();
+        }
+        playerHealth.text = player.transform.GetChild(0).GetComponent<HealthSystem>().CurrentHealth.ToString() + "/" + player.GetComponent<CharacterStats>().MaxHealth.ToString();
+        playerStamina.text = player.transform.GetChild(0).GetComponent<MovementSystem>().CurrentStamina.ToString() + "/" + player.GetComponent<CharacterStats>().MaxStamina.ToString();
+        playerScore.text = player.transform.GetComponent<CharacterStats>().score.ToString();
+        playerKillCount.text = player.transform.GetComponent<CharacterStats>().kills.ToString();
+        playerDeathCount.text = player.transform.GetComponent<CharacterStats>().deaths.ToString();
+    }
+
+    private void InitializeBars(){
         _playerHealthBar.minValue = 0;
         _playerStaminaBar.minValue = 0;
     }
 
-    public void AssignPlayer(int index){
-        StartCoroutine(AssignPlayerDelay(index));
+    public void AssignPlayer(PlayerInput playerInput){
+        StartCoroutine(AssignPlayerDelay(playerInput));
     }
 
-    IEnumerator AssignPlayerDelay(int index){
-        yield return new WaitForSeconds(0.1f);
-        player = GameManager.instance.playerList[index];
-        SetUpInfoPanel();
+    IEnumerator AssignPlayerDelay(PlayerInput playerInput){
+        yield return new WaitForSeconds(0.01f);
+        player = playerInput;
+        SetStatsActive();
+        SubscribeToPlayerEvents();
+        InitializeStats();
     }
 
     public void UnassignPlayer(){
-        player = null;
-        SetUpInfoPanel();
-    }
-
-    void SetUpInfoPanel(){
         if(player != null){
-            SetStatsActive(true);
-
-            player.transform.GetComponent<CharacterEvents>().OnPlayerHealthUpdated += UpdateHealth;
-            player.transform.GetComponent<CharacterEvents>().OnPlayerStaminaUpdated += UpdateStamina;
-            player.transform.GetComponent<CharacterEvents>().OnPlayerScoreChanged += UpdateScore;
-            player.transform.GetComponent<CharacterEvents>().OnPlayerScoredKill += UpdateKillCount;
-            player.transform.GetComponent<CharacterEvents>().OnPlayerDied += UpdateDeathCount;
-
-            _playerHealthBar.maxValue = player.GetComponent<CharacterStats>().MaxHealth;
-            _playerHealthBar.value = player.GetComponent<CharacterStats>().MaxHealth;
-            
-            _playerStaminaBar.maxValue = player.GetComponent<CharacterStats>().MaxStamina;
-            _playerStaminaBar.value = player.GetComponent<CharacterStats>().MaxStamina;
-
-            _playerTotalLives.text = player.GetComponent<CharacterStats>().totalLives.ToString();
-
-            playerTeam.text = player.transform.GetComponent<CharacterStats>().teamColor.ToString();
-            playerHealth.text = player.transform.GetChild(0).GetComponent<HealthSystem>().CurrentHealth.ToString() + "/" + player.GetComponent<CharacterStats>().MaxHealth.ToString();
-            playerStamina.text = player.transform.GetChild(0).GetComponent<MovementSystem>().CurrentStamina.ToString() + "/" + player.GetComponent<CharacterStats>().MaxStamina.ToString();
-            playerScore.text = player.transform.GetComponent<CharacterStats>().score.ToString();
-            playerKillCount.text = player.transform.GetComponent<CharacterStats>().kills.ToString();
-            playerDeathCount.text = player.transform.GetComponent<CharacterStats>().deaths.ToString();
-        }
-        else{
-            SetStatsActive(false);
+            SetStatsInactive();
+            UnsubscribeToPlayerEvents();
+            player = null;
         }
     }
 

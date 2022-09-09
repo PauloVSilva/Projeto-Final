@@ -51,8 +51,8 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5135200104069615236}
   m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f3aedb53a806c8d4a9c7148e467ea1d2, type: 2}
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4959,6 +4959,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ProjectileToCast: {fileID: 11400000, guid: a947b6543823d914da85bc036ea53372, type: 2}
+  playerOfOrigin: {fileID: 0}
+  characterOfOrigin: {fileID: 0}
+  weaponOfOrigin: {fileID: 0}
 --- !u!135 &7843969618463829849
 SphereCollider:
   m_ObjectHideFlags: 0
