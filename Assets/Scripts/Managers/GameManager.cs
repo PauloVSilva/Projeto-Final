@@ -93,7 +93,7 @@ public class GameManager : MonoBehaviour{
     }
 
     IEnumerator RespawnCharacter(GameObject character){
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(character.transform.parent.GetComponent<CharacterStats>().timeToRespawn);
         character.SetActive(true);
         character.transform.parent.GetComponent<CharacterEvents>().RefreshStatsUponRespawning();
     }

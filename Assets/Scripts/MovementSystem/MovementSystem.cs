@@ -117,12 +117,10 @@ public class MovementSystem : MonoBehaviour{
             if(CurrentStamina > 15f){
                 if(JumpsRemaining > 0){
                     playerVelocity.y = Mathf.Sqrt(JumpStrength * -3.0f * gravityValue);
-                    if(!groundedPlayer){
-                        JumpsRemaining--;
-                    }
+                    JumpsRemaining--;
+                    CurrentStamina -= 15f;
+                    OnEntityStaminaUpdated?.Invoke(CurrentStamina);
                 }
-                CurrentStamina -= 15f;
-                OnEntityStaminaUpdated?.Invoke(CurrentStamina);
             }
         }
     }
