@@ -7,6 +7,7 @@ using System;
 public class Weapon : MonoBehaviour{
     public WeaponScriptableObject FireWeapon;
     public Projectile projectileToCast;
+    public GameObject holder;
     
     [SerializeField] private enum ActionType{manual, semiAuto, fullAuto}
     [SerializeField] private enum ChamberReloadType{pump, revolver}
@@ -32,6 +33,9 @@ public class Weapon : MonoBehaviour{
     //[SerializeField] private bool pumpIsReady; //for shotguns
     [SerializeField] private bool canReload;
     [SerializeField] private Transform castPoint;
+    [SerializeField] private bool canBePickedUp;
+    [SerializeField] private SphereCollider myCollider;
+    //[SerializeField] private Rigidbody myRigidbody;
 
     private void Awake(){
         GetScriptableObjectVariables();
@@ -39,6 +43,7 @@ public class Weapon : MonoBehaviour{
 
     private void Start(){
         InitializeInternalVariables();
+        SubscribeToEvents();
     }
 
     private void Update(){
@@ -56,6 +61,22 @@ public class Weapon : MonoBehaviour{
     }
 
     private void InitializeInternalVariables(){
+        myCollider = GetComponent<SphereCollider>();
+        myCollider.isTrigger = true;
+        //myRigidbody = GetComponent<Rigidbody>();
+        if(transform.parent != null){
+            holder = gameObject.transform.parent.gameObject;
+            canBePickedUp = false;
+            myCollider.enabled = false;
+            //myRigidbody.isKinematic = true;
+        }
+        else{
+            holder = null;
+            canBePickedUp = true;
+            myCollider.enabled = true;
+            //myRigidbody.isKinematic = false;
+        }
+
         ammo = ammoCapacity;
         extraAmmo = 999;
         fullAutoClock = 0;
@@ -66,6 +87,31 @@ public class Weapon : MonoBehaviour{
         //pumpIsReady = false;
         canReload = true;
         castPoint = this.transform;
+    }
+
+    public void SubscribeToEvents(){
+        //INPUT EVENTS
+        if(transform.parent != null){
+            gameObject.transform.parent.parent.GetComponent<PlayerInputHandler>().OnCharacterCockHammer += OnCockHammer;
+            gameObject.transform.parent.parent.GetComponent<PlayerInputHandler>().OnCharacterPressTrigger += OnPressTrigger;
+            gameObject.transform.parent.parent.GetComponent<PlayerInputHandler>().OnCharacterReload += OnReload;
+            gameObject.transform.parent.parent.GetComponent<PlayerInputHandler>().OnCharacterDropWeapon += OnDropWeapon;
+        }
+    }
+    
+    public void UnsubscribeToEvents(){
+        //INPUT EVENTS
+        if(transform.parent != null){
+            gameObject.transform.parent.parent.GetComponent<PlayerInputHandler>().OnCharacterCockHammer -= OnCockHammer;
+            gameObject.transform.parent.parent.GetComponent<PlayerInputHandler>().OnCharacterPressTrigger -= OnPressTrigger;
+            gameObject.transform.parent.parent.GetComponent<PlayerInputHandler>().OnCharacterReload -= OnReload;
+            gameObject.transform.parent.parent.GetComponent<PlayerInputHandler>().OnCharacterDropWeapon -= OnDropWeapon;
+        }
+    }
+
+    private void OnDisable(){
+        UnsubscribeToEvents();
+        holder = null;
     }
 
     private void FullAutoBehavior(){
@@ -122,6 +168,35 @@ public class Weapon : MonoBehaviour{
         }
     }
 
+    public void OnDropWeapon(InputAction.CallbackContext context){
+        if(context.performed){
+            this.transform.parent.parent.GetComponent<CharacterStats>().isArmed = false;
+            UnsubscribeToEvents();
+            this.transform.parent = null;
+            holder = null;
+            StartCoroutine(PickUpDelay());
+            myCollider.enabled = true;
+            //myRigidbody.isKinematic = false;
+        }
+    }
+
+    IEnumerator PickUpDelay(){
+        yield return new WaitForSeconds(1f);
+        canBePickedUp = true;
+    }
+
+    public void PickUpWeapon(GameObject character){
+        this.transform.parent = character.transform;
+        this.transform.rotation = character.transform.rotation;
+        this.transform.position = (character.transform.forward * 1) + character.transform.position;
+        holder = character;
+        character.transform.parent.GetComponent<CharacterStats>().isArmed = true;
+        canBePickedUp = false;
+        myCollider.enabled = false;
+        //myRigidbody.isKinematic = true;
+        SubscribeToEvents();
+    }
+
     private void Fire(){
         if(ammo - (int)projectileToCast.ProjectileToCast.Cost >= 0){
             CastProjectile();
@@ -138,6 +213,10 @@ public class Weapon : MonoBehaviour{
             extraAmmo--;
             ammo++;
         }
+    }
+
+    public bool CanBePickedUp(){
+        return canBePickedUp;
     }
 
     private void CastProjectile(){

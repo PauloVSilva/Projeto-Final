@@ -37,6 +37,7 @@ public class CharacterStats : MonoBehaviour{
     [SerializeField] public bool unlimitedLives;
     [SerializeField] public int totalLives;
     [SerializeField] public float timeToRespawn;
+    [SerializeField] public bool isArmed;
 
     private void Awake(){
         GetScriptableObjectVariables();
@@ -66,6 +67,7 @@ public class CharacterStats : MonoBehaviour{
         unlimitedLives = true;
         totalLives = 0;
         timeToRespawn = 3f;
+        isArmed = false;
     }
 
     public void ResetScores(){

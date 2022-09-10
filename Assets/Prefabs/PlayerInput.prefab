@@ -188,6 +188,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: ed2a7086-5a45-4131-9f98-eefd8a9d34b5
     m_ActionName: Player/Sprint[/Keyboard/leftShift,/DualShock4GamepadHID/leftStickPress]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7408531066293585715}
+        m_TargetAssemblyTypeName: PlayerInputHandler, Assembly-CSharp
+        m_MethodName: OnDropWeapon
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 0ef5bed9-3406-4d36-af23-e3c188930167
+    m_ActionName: Player/DropWeapon[/Keyboard/q,/DualShock4GamepadHID/buttonNorth]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player

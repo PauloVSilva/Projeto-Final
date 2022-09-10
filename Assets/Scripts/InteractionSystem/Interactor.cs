@@ -18,6 +18,15 @@ public class Interactor : MonoBehaviour{
         _interactionPoint = gameObject.transform;
     }
 
+    private void Start(){
+        SubscribeToEvents();
+    }
+
+    private void SubscribeToEvents(){
+        //INPUT EVENTS
+        gameObject.transform.parent.GetComponent<PlayerInputHandler>().OnCharacterInteractWithObject += OnInteractWithObject;
+    }
+
     private void Update(){
         _numFound = Physics.OverlapSphereNonAlloc(_interactionPoint.position, _interactionPointRadius, _collider, _interactableMask);
         
@@ -35,9 +44,16 @@ public class Interactor : MonoBehaviour{
         }
     }
 
-    public void KeyIsPressed(float context){
-        if(context == 1f && _interactable != null){
-            //Debug.Log("Input detected");
+    //public void KeyIsPressed(float context){
+    //    if(context == 1f && _interactable != null){
+    //        //Debug.Log("Input detected");
+    //        _interactable.Interact(this);
+    //    }
+    //}
+
+    public void OnInteractWithObject(InputAction.CallbackContext context){
+        if(context.performed && _interactable != null){
+            //interactor.KeyIsPressed(context.ReadValue<float>());
             _interactable.Interact(this);
         }
     }

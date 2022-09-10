@@ -5,8 +5,8 @@ using UnityEngine;
 public class Projectile : MonoBehaviour{
     public ProjectileScriptableObject ProjectileToCast;
 
-    private SphereCollider myCollider;
-    private Rigidbody myRigidbody;
+    [SerializeField] private SphereCollider myCollider;
+    [SerializeField] private Rigidbody myRigidbody;
     [SerializeField] private GameObject playerOfOrigin;
     [SerializeField] private GameObject characterOfOrigin;
     [SerializeField] private GameObject weaponOfOrigin;
@@ -37,6 +37,7 @@ public class Projectile : MonoBehaviour{
             //HealthSystem enemyHealth = other.GetComponent<HealthSystem>();
             //enemyHealth.TakeDamage(ProjectileToCast.DamageAmount);
             other.GetComponent<HealthSystem>().TakeDamage(characterOfOrigin, ProjectileToCast.DamageAmount);
+            //Debug.Log("Damage: " + ProjectileToCast.DamageAmount);
         }
 
         Destroy(this.gameObject);

@@ -23,8 +23,6 @@ public class MovementSystem : MonoBehaviour{
 
     //OTHER VARIABLES
     [SerializeField] private CharacterController controller;
-    [SerializeField] private Interactor interactor;
-    [SerializeField] private Weapon weapon = null;
     [SerializeField] private Vector3 playerVelocity;
     [SerializeField] private bool groundedPlayer;
     [SerializeField] private float gravityValue = -9.81f;
@@ -36,13 +34,16 @@ public class MovementSystem : MonoBehaviour{
     private void Start(){
         characterStats = gameObject.transform.parent.GetComponent<CharacterStats>();
         controller = GetComponent<CharacterController>();
-        interactor = GetComponent<Interactor>();
-        foreach (Transform eachChild in transform) {
-            if (eachChild.CompareTag("Weapon")) {
-                weapon = eachChild.GetComponent<Weapon>();
-            }
-        }
         InitializeVariables();
+        SubscribeToEvents();
+    }
+
+    private void SubscribeToEvents(){
+        //INPUT EVENTS
+        gameObject.transform.parent.GetComponent<PlayerInputHandler>().OnCharacterMove += OnMove;
+        gameObject.transform.parent.GetComponent<PlayerInputHandler>().OnCharacterSprint += OnSprint;
+        gameObject.transform.parent.GetComponent<PlayerInputHandler>().OnCharacterJump += OnJump;
+        gameObject.transform.parent.GetComponent<PlayerInputHandler>().OnCharacterDash += OnDash;
     }
 
     private void Update(){
@@ -115,7 +116,7 @@ public class MovementSystem : MonoBehaviour{
     public void OnJump(InputAction.CallbackContext context){
         if(context.performed){
             if(CurrentStamina > 15f){
-                if(JumpsRemaining > 0){
+                if(JumpsRemaining > 1){
                     playerVelocity.y = Mathf.Sqrt(JumpStrength * -3.0f * gravityValue);
                     JumpsRemaining--;
                     CurrentStamina -= 15f;
@@ -135,30 +136,4 @@ public class MovementSystem : MonoBehaviour{
         }
     }
 
-
-    //MOVE THESE METHODS TO OTHER CLASSES IN THE FUTURE
-
-    public void OnCockHammer(InputAction.CallbackContext context){
-        if(weapon != null){
-            weapon.OnCockHammer(context);
-        }
-    }
-
-    public void OnPressTrigger(InputAction.CallbackContext context){
-        if(weapon != null){
-            weapon.OnPressTrigger(context);
-        }
-    }
-
-    public void OnReload(InputAction.CallbackContext context){
-        if(weapon != null){
-            weapon.OnReload(context);
-        }
-    }
-
-    public void OnInteractWithObject(InputAction.CallbackContext context){
-        if(context.performed){
-            interactor.KeyIsPressed(context.ReadValue<float>());
-        }
-    }
 }
