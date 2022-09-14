@@ -86,7 +86,7 @@ public class Weapon : MonoBehaviour{
         hammerIsCocked = false;
         //pumpIsReady = false;
         canReload = true;
-        castPoint = this.transform;
+        //castPoint = this.transform;
     }
 
     public void SubscribeToEvents(){

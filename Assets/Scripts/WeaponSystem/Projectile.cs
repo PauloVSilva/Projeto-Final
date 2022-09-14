@@ -14,7 +14,7 @@ public class Projectile : MonoBehaviour{
     void Awake(){
         myCollider = GetComponent<SphereCollider>();
         myCollider.isTrigger = true;
-        myCollider.radius = ProjectileToCast.ProjectileRadius;
+        //myCollider.radius = ProjectileToCast.ProjectileRadius;
 
         myRigidbody = GetComponent<Rigidbody>();
         //myRigidbody.isKinematic = true;
@@ -40,6 +40,16 @@ public class Projectile : MonoBehaviour{
             //Debug.Log("Damage: " + ProjectileToCast.DamageAmount);
         }
 
+        Destroy(this.gameObject);
+        //DestroyBullet();
+    }
+
+    public void DestroyBullet(){
+        StartCoroutine(DestroyBulletDelay());
+    }
+
+    IEnumerator DestroyBulletDelay(){
+        yield return new WaitForSeconds(2f);
         Destroy(this.gameObject);
     }
 }
