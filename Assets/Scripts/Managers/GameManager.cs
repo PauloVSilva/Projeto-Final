@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour{
     public void ReturnToMainHub(){
         foreach(var playerInput in GameManager.instance.playerList){
             playerInput.transform.GetComponent<CharacterEvents>().ResetScores();
-            playerInput.transform.GetChild(0).GetComponent<HealthSystem>().Kill();
+            playerInput.transform.GetComponent<CharacterSelection>().characterObject.GetComponent<HealthSystem>().Kill();
         }
         levelLoader.LoadLevel("MainHub");
     }
@@ -104,16 +104,10 @@ public class GameManager : MonoBehaviour{
     }
 
 
-    private void SpawnPlayer(){
-
-    }
-
     void OnPlayerJoined(PlayerInput playerInput){ //THIS METHOD COMES FROM UNITY ITSELF
         playerList.Add(playerInput);
         OnPlayerJoinedGame?.Invoke(playerInput);
 
-        //hope this works
-        playerInput.GetComponent<CharacterSelection>().SpawnCharacter();
         playerInput.transform.GetComponent<CharacterEvents>().SubscribeToPlayerEvents();
     }
 
@@ -140,7 +134,7 @@ public class GameManager : MonoBehaviour{
 
     void UnregisterPlayer(PlayerInput playerInput){
         playerList.Remove(playerInput);
-        mainCamera.GetComponent<CameraController>().RemovePlayer(playerInput.transform.GetChild(0).gameObject);
+        mainCamera.GetComponent<CameraController>().RemovePlayer(playerInput.transform.GetComponent<CharacterSelection>().characterObject.gameObject);
         OnPlayerLeftGame?.Invoke(playerInput);
         Destroy(playerInput.transform.gameObject);
     }

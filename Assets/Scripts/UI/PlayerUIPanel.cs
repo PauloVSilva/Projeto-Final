@@ -73,8 +73,8 @@ public class PlayerUIPanel : MonoBehaviour{
         if(player.transform.GetComponent<CharacterStats>().teamColor != null){
             playerTeam.text = player.transform.GetComponent<CharacterStats>().teamColor.ToString();
         }
-        playerHealth.text = player.transform.GetChild(0).GetComponent<HealthSystem>().CurrentHealth.ToString() + "/" + player.GetComponent<CharacterStats>().MaxHealth.ToString();
-        playerStamina.text = player.transform.GetChild(0).GetComponent<MovementSystem>().CurrentStamina.ToString() + "/" + player.GetComponent<CharacterStats>().MaxStamina.ToString();
+        playerHealth.text = player.transform.GetComponent<CharacterSelection>().characterObject.GetComponent<HealthSystem>().CurrentHealth.ToString() + "/" + player.GetComponent<CharacterStats>().MaxHealth.ToString();
+        playerStamina.text = player.transform.GetComponent<CharacterSelection>().characterObject.GetComponent<MovementSystem>().CurrentStamina.ToString() + "/" + player.GetComponent<CharacterStats>().MaxStamina.ToString();
         playerScore.text = player.transform.GetComponent<CharacterStats>().score.ToString();
         playerKillCount.text = player.transform.GetComponent<CharacterStats>().kills.ToString();
         playerDeathCount.text = player.transform.GetComponent<CharacterStats>().deaths.ToString();

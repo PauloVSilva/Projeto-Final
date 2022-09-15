@@ -205,6 +205,30 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 0ef5bed9-3406-4d36-af23-e3c188930167
     m_ActionName: Player/DropWeapon[/Keyboard/q,/DualShock4GamepadHID/buttonNorth]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7408531066293585715}
+        m_TargetAssemblyTypeName: PlayerInputHandler, Assembly-CSharp
+        m_MethodName: OnPressMenuButton
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: c0a56633-994c-4ab8-8dd2-9d32494c5647
+    m_ActionName: Player/PauseMenu[/Keyboard/escape,/DualShock4GamepadHID/start]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: b262d674-f922-424d-844c-74c60563882c
+    m_ActionName: Menu/Confirm[/Keyboard/enter,/DualShock4GamepadHID/buttonSouth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: fb3411ad-2cba-4c8b-8634-9e88a4e8ba85
+    m_ActionName: Menu/Back[/Keyboard/backspace,/DualShock4GamepadHID/buttonEast]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -234,7 +258,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f3a57943292ce044983ae630e994602, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Character: {fileID: 0}
+  Character: {fileID: 11400000, guid: c7e2521efd0808b42b9c18ec74ba4f18, type: 2}
+  characterObject: {fileID: 0}
 --- !u!114 &-7353346912697764937
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -248,6 +273,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterStats: {fileID: 0}
+  characterObject: {fileID: 0}
 --- !u!114 &-6532263821112973344
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -261,6 +287,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Character: {fileID: 11400000, guid: c7e2521efd0808b42b9c18ec74ba4f18, type: 2}
+  teamColor: 0
+  score: 0
+  kills: 0
+  deaths: 0
+  unlimitedLives: 0
+  totalLives: 0
+  timeToRespawn: 0
+  isArmed: 0
   animal: 0
   maxHealth: 0
   healthRegenRate: 0
@@ -270,11 +304,3 @@ MonoBehaviour:
   staminaRegenRate: 0
   jumpStrength: 0
   totalJumps: 0
-  teamColor: 0
-  score: 0
-  kills: 0
-  deaths: 0
-  unlimitedLives: 0
-  totalLives: 0
-  timeToRespawn: 0
-  isArmed: 0

@@ -9,7 +9,21 @@ public class CharacterStats : MonoBehaviour{
 
     [SerializeField] public enum TeamColor{blue, red, green, yellow}
 
-    //VARIABLES THAT WILL COME FROM SCRIPTABLE OBJECT
+    //PLAYER VARIABLES
+    [Space(5)]
+    [Header("Player Stats")]
+    [SerializeField] public TeamColor teamColor;
+    [SerializeField] public int score;
+    [SerializeField] public int kills;
+    [SerializeField] public int deaths;
+    [SerializeField] public bool unlimitedLives;
+    [SerializeField] public int totalLives;
+    [SerializeField] public float timeToRespawn;
+    [SerializeField] public bool isArmed;
+
+    [Space(5)]
+    [Header("Character Base Stats")]
+    //CHARACTER VARIABLES THAT WILL COME FROM SCRIPTABLE OBJECT
     [SerializeField] public Animal animal;
     [SerializeField] private float maxHealth;
     [SerializeField] private float healthRegenRate;
@@ -29,30 +43,31 @@ public class CharacterStats : MonoBehaviour{
     public float JumpStrength => jumpStrength;
     public int TotalJumps => totalJumps;
 
-    //OTHER VARIABLES THAT WILL BE USEFUL INGAME
-    [SerializeField] public TeamColor teamColor;
-    [SerializeField] public int score;
-    [SerializeField] public int kills;
-    [SerializeField] public int deaths;
-    [SerializeField] public bool unlimitedLives;
-    [SerializeField] public int totalLives;
-    [SerializeField] public float timeToRespawn;
-    [SerializeField] public bool isArmed;
-
     private void Awake(){
-        GetCharacter();
-        GetScriptableObjectVariables();
+        InitializePlayerVariables();
     }
 
-    private void Start(){
-        InitializeInternalVariables();
+    private void InitializePlayerVariables(){
+        teamColor = TeamColor.blue;
+        score = 0;
+        kills = 0;
+        deaths = 0;
+        unlimitedLives = true;
+        totalLives = 0;
+        timeToRespawn = 3f;
+        isArmed = false;
+    }
+
+    public void SetStats(){
+        GetCharacter();
+        InitializeCharacterVariables();
     }
 
     private void GetCharacter(){
-        //Character = GetComponent<CharacterSelection>().Character;
+        Character = GetComponent<CharacterSelection>().Character;
     }
 
-    private void GetScriptableObjectVariables(){
+    private void InitializeCharacterVariables(){
         animal = (Animal)Character._animal;
         maxHealth = Character._maxHealth;
         healthRegenRate = Character._healthRegenRate;
@@ -64,20 +79,9 @@ public class CharacterStats : MonoBehaviour{
         totalJumps = Character._totalJumps;
     }
 
-    private void InitializeInternalVariables(){
-        teamColor = TeamColor.blue;
-        score = 0;
-        kills = 0;
-        deaths = 0;
-        unlimitedLives = true;
-        totalLives = 0;
-        timeToRespawn = 3f;
-        isArmed = false;
-    }
-
     public void ResetScores(){
-        GetScriptableObjectVariables();
-        InitializeInternalVariables();
+        InitializePlayerVariables();
+        InitializeCharacterVariables();
     }
 
     public void SetTeam(TeamColor _teamColor){

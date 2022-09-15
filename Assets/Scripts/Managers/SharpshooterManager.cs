@@ -53,7 +53,7 @@ public class SharpshooterManager : MonoBehaviour{
         //move players to spawn
         foreach(var playerInput in GameManager.instance.playerList){
             playerInput.transform.GetComponent<CharacterEvents>().ResetScores();
-            playerInput.transform.GetChild(0).position = GameManager.instance.spawnPoints[0].transform.position;
+            playerInput.transform.GetComponent<CharacterSelection>().characterObject.transform.position = GameManager.instance.spawnPoints[0].transform.position;
             playerInput.GetComponent<PlayerInput>().actions.Disable();
             playerInput.GetComponent<PlayerInput>().actions["Jump"].Enable();
         

@@ -6,6 +6,7 @@ using System;
 
 public class PlayerInputHandler : MonoBehaviour{
 
+    public static event System.Action OnCharacterPressMenuButton;
     public event System.Action<InputAction.CallbackContext> OnCharacterMove;
     public event System.Action<InputAction.CallbackContext> OnCharacterJump;
     public event System.Action<InputAction.CallbackContext> OnCharacterDash;
@@ -15,6 +16,10 @@ public class PlayerInputHandler : MonoBehaviour{
     public event System.Action<InputAction.CallbackContext> OnCharacterPressTrigger;
     public event System.Action<InputAction.CallbackContext> OnCharacterReload;
     public event System.Action<InputAction.CallbackContext> OnCharacterDropWeapon;
+
+    public void OnPressMenuButton(InputAction.CallbackContext context){
+        OnCharacterPressMenuButton?.Invoke();
+    }
 
     public void OnMove(InputAction.CallbackContext context){
         OnCharacterMove?.Invoke(context);

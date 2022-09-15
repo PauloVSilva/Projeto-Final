@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CharacterEvents : MonoBehaviour{
     [SerializeField] private CharacterStats characterStats;
+    [SerializeField] public GameObject characterObject;
 
     //EVENTS THAT WILL BE SENT TO OTHER CLASSES
     public event System.Action<GameObject> OnPlayerScoreChanged;
@@ -16,21 +17,22 @@ public class CharacterEvents : MonoBehaviour{
     public event System.Action<float> OnPlayerStaminaUpdated; 
     //public event System.Action<int> OnWeaponFired;
 
-    private void Start() {
-        SubscribeToOwnEvents();
+    public void SetEvents(){
+        characterObject = GetComponent<CharacterSelection>().characterObject;
         characterStats = gameObject.GetComponent<CharacterStats>();
+        SubscribeToOwnEvents();
     }
 
     private void SubscribeToOwnEvents(){ //subscribe to child system events like health or movement
         //HEALTH EVENTS
-        gameObject.transform.GetChild(0).GetComponent<HealthSystem>().OnEntityDied += PlayerDied;
-        gameObject.transform.GetChild(0).GetComponent<HealthSystem>().OnEntityScoredKill += PlayerScoredKill;
-        gameObject.transform.GetChild(0).GetComponent<HealthSystem>().OnEntityBorn += PlayerBorn;
-        gameObject.transform.GetChild(0).GetComponent<HealthSystem>().OnEntityTookDamage += PlayerWasDamaged;
-        gameObject.transform.GetChild(0).GetComponent<HealthSystem>().OnEntityHealed += PlayerWasHealed;
-        gameObject.transform.GetChild(0).GetComponent<HealthSystem>().OnEntityHealthUpdated += PlayerHealthUpdated;
+        characterObject.GetComponent<HealthSystem>().OnEntityDied += PlayerDied;
+        characterObject.GetComponent<HealthSystem>().OnEntityScoredKill += PlayerScoredKill;
+        characterObject.GetComponent<HealthSystem>().OnEntityBorn += PlayerBorn;
+        characterObject.GetComponent<HealthSystem>().OnEntityTookDamage += PlayerWasDamaged;
+        characterObject.GetComponent<HealthSystem>().OnEntityHealed += PlayerWasHealed;
+        characterObject.GetComponent<HealthSystem>().OnEntityHealthUpdated += PlayerHealthUpdated;
         //MOVEMENT EVENTS
-        gameObject.transform.GetChild(0).GetComponent<MovementSystem>().OnEntityStaminaUpdated += PlayerStaminaUpdated;
+        characterObject.GetComponent<MovementSystem>().OnEntityStaminaUpdated += PlayerStaminaUpdated;
     }
 
     public void SubscribeToPlayerEvents(){ //allow managers to subscribe to this class' events
@@ -46,7 +48,7 @@ public class CharacterEvents : MonoBehaviour{
     }
 
     public void ResetScores(){
-        gameObject.GetComponent<CharacterStats>().ResetScores();
+        GetComponent<CharacterStats>().ResetScores();
     }
 
     public void FilterCollision(GameObject player, GameObject _gameObject){
@@ -61,14 +63,14 @@ public class CharacterEvents : MonoBehaviour{
         }
         if(_gameObject.CompareTag("Weapon")){
             if(!gameObject.GetComponent<CharacterStats>().isArmed && _gameObject.GetComponent<Weapon>().CanBePickedUp()){
-                _gameObject.GetComponent<Weapon>().PickUpWeapon(gameObject.transform.GetChild(0).gameObject);
+                _gameObject.GetComponent<Weapon>().PickUpWeapon(characterObject.gameObject);
             }
         }
     }
 
     public void RefreshStatsUponRespawning(){
-        gameObject.transform.GetChild(0).GetComponent<HealthSystem>().ResetStats();
-        gameObject.transform.GetChild(0).GetComponent<MovementSystem>().ResetStats();
+        characterObject.GetComponent<HealthSystem>().ResetStats();
+        characterObject.GetComponent<MovementSystem>().ResetStats();
     }
 
     private void IncreaseScore(int value){
@@ -82,7 +84,7 @@ public class CharacterEvents : MonoBehaviour{
     }
 
     private void UpdateKills(){ //calling this directly on the above method doesn't work 
-        OnPlayerScoredKill?.Invoke(gameObject.transform.GetChild(0).gameObject); //other player sends their character
+        OnPlayerScoredKill?.Invoke(characterObject.gameObject); //other player sends their character
     }
 
     private void PlayerDied(GameObject character){ //themselves

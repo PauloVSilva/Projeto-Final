@@ -28,6 +28,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
             ""id"": ""87e9006f-4857-4d3c-a172-7b24d40aa97d"",
             ""actions"": [
                 {
+                    ""name"": ""PauseMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""c0a56633-994c-4ab8-8dd2-9d32494c5647"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Movement"",
                     ""type"": ""PassThrough"",
                     ""id"": ""03d1dc4b-fd58-406f-b48e-54828b7ab022"",
@@ -351,6 +360,98 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""DropWeapon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7f568c2f-6ea7-4b50-80e4-560a36311244"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KB+M"",
+                    ""action"": ""PauseMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a192827e-1423-4b4d-ba26-4667591998f1"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""PauseMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Menu"",
+            ""id"": ""42e54cc8-3dde-4f56-9c6e-fe31e1127037"",
+            ""actions"": [
+                {
+                    ""name"": ""Confirm"",
+                    ""type"": ""Button"",
+                    ""id"": ""b262d674-f922-424d-844c-74c60563882c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Back"",
+                    ""type"": ""Button"",
+                    ""id"": ""fb3411ad-2cba-4c8b-8634-9e88a4e8ba85"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""491c118d-894d-40c5-94c1-2c6afa4a1d36"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KB+M"",
+                    ""action"": ""Confirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2188e732-4e7d-4f99-80d7-465a3f123893"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Confirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ebc27e83-e071-48a0-b22a-ce9684d7d809"",
+                    ""path"": ""<Keyboard>/backspace"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KB+M"",
+                    ""action"": ""Back"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""48a2bf1d-4bbe-43c4-bbc9-89cd5adb5e01"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Back"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -387,6 +488,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
 }");
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
+        m_Player_PauseMenu = m_Player.FindAction("PauseMenu", throwIfNotFound: true);
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
@@ -396,6 +498,10 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Player_PressTrigger = m_Player.FindAction("PressTrigger", throwIfNotFound: true);
         m_Player_ReloadWeapon = m_Player.FindAction("ReloadWeapon", throwIfNotFound: true);
         m_Player_DropWeapon = m_Player.FindAction("DropWeapon", throwIfNotFound: true);
+        // Menu
+        m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
+        m_Menu_Confirm = m_Menu.FindAction("Confirm", throwIfNotFound: true);
+        m_Menu_Back = m_Menu.FindAction("Back", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -455,6 +561,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     // Player
     private readonly InputActionMap m_Player;
     private IPlayerActions m_PlayerActionsCallbackInterface;
+    private readonly InputAction m_Player_PauseMenu;
     private readonly InputAction m_Player_Movement;
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_Interact;
@@ -468,6 +575,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     {
         private @PlayerControls m_Wrapper;
         public PlayerActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @PauseMenu => m_Wrapper.m_Player_PauseMenu;
         public InputAction @Movement => m_Wrapper.m_Player_Movement;
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
@@ -486,6 +594,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         {
             if (m_Wrapper.m_PlayerActionsCallbackInterface != null)
             {
+                @PauseMenu.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPauseMenu;
+                @PauseMenu.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPauseMenu;
+                @PauseMenu.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPauseMenu;
                 @Movement.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
                 @Movement.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
                 @Movement.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
@@ -517,6 +628,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
             {
+                @PauseMenu.started += instance.OnPauseMenu;
+                @PauseMenu.performed += instance.OnPauseMenu;
+                @PauseMenu.canceled += instance.OnPauseMenu;
                 @Movement.started += instance.OnMovement;
                 @Movement.performed += instance.OnMovement;
                 @Movement.canceled += instance.OnMovement;
@@ -548,6 +662,47 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         }
     }
     public PlayerActions @Player => new PlayerActions(this);
+
+    // Menu
+    private readonly InputActionMap m_Menu;
+    private IMenuActions m_MenuActionsCallbackInterface;
+    private readonly InputAction m_Menu_Confirm;
+    private readonly InputAction m_Menu_Back;
+    public struct MenuActions
+    {
+        private @PlayerControls m_Wrapper;
+        public MenuActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Confirm => m_Wrapper.m_Menu_Confirm;
+        public InputAction @Back => m_Wrapper.m_Menu_Back;
+        public InputActionMap Get() { return m_Wrapper.m_Menu; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(MenuActions set) { return set.Get(); }
+        public void SetCallbacks(IMenuActions instance)
+        {
+            if (m_Wrapper.m_MenuActionsCallbackInterface != null)
+            {
+                @Confirm.started -= m_Wrapper.m_MenuActionsCallbackInterface.OnConfirm;
+                @Confirm.performed -= m_Wrapper.m_MenuActionsCallbackInterface.OnConfirm;
+                @Confirm.canceled -= m_Wrapper.m_MenuActionsCallbackInterface.OnConfirm;
+                @Back.started -= m_Wrapper.m_MenuActionsCallbackInterface.OnBack;
+                @Back.performed -= m_Wrapper.m_MenuActionsCallbackInterface.OnBack;
+                @Back.canceled -= m_Wrapper.m_MenuActionsCallbackInterface.OnBack;
+            }
+            m_Wrapper.m_MenuActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Confirm.started += instance.OnConfirm;
+                @Confirm.performed += instance.OnConfirm;
+                @Confirm.canceled += instance.OnConfirm;
+                @Back.started += instance.OnBack;
+                @Back.performed += instance.OnBack;
+                @Back.canceled += instance.OnBack;
+            }
+        }
+    }
+    public MenuActions @Menu => new MenuActions(this);
     private int m_KBMSchemeIndex = -1;
     public InputControlScheme KBMScheme
     {
@@ -568,6 +723,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     }
     public interface IPlayerActions
     {
+        void OnPauseMenu(InputAction.CallbackContext context);
         void OnMovement(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
@@ -577,5 +733,10 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnPressTrigger(InputAction.CallbackContext context);
         void OnReloadWeapon(InputAction.CallbackContext context);
         void OnDropWeapon(InputAction.CallbackContext context);
+    }
+    public interface IMenuActions
+    {
+        void OnConfirm(InputAction.CallbackContext context);
+        void OnBack(InputAction.CallbackContext context);
     }
 }

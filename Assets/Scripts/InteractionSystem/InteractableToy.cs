@@ -11,7 +11,12 @@ public class InteractableToy : MonoBehaviour, InteractorInterface{
     public bool Interact (Interactor interactor){
         //Debug.Log("Interacting with " + InteractionPromp);
         //SceneManager.LoadScene(_name);
-        GameManager.instance.GoToLevel(_name);
+        if(GameManager.instance.playerList.Count > 1){
+            GameManager.instance.GoToLevel(_name);
+        }
+        else{
+            Debug.Log("Game requires at least 2 players");
+        }
         return true;
     }
 }
