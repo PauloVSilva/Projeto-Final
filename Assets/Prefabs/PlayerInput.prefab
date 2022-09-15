@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 7408531066293585713}
   - component: {fileID: 7408531066293585714}
   - component: {fileID: 7408531066293585715}
-  - component: {fileID: -6532263821112973344}
+  - component: {fileID: 1531958757892568611}
   - component: {fileID: -7353346912697764937}
+  - component: {fileID: -6532263821112973344}
   m_Layer: 0
   m_Name: PlayerInput
   m_TagString: Player
@@ -221,7 +222,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 760507c666cece24c9286a9874f79632, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSystem: {fileID: 0}
+--- !u!114 &1531958757892568611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7408531066293585716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f3a57943292ce044983ae630e994602, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Character: {fileID: 0}
+--- !u!114 &-7353346912697764937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7408531066293585716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7953278b864e5f64eaae0dbc1978718a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterStats: {fileID: 0}
 --- !u!114 &-6532263821112973344
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -251,16 +277,4 @@ MonoBehaviour:
   unlimitedLives: 0
   totalLives: 0
   timeToRespawn: 0
---- !u!114 &-7353346912697764937
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7408531066293585716}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7953278b864e5f64eaae0dbc1978718a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterStats: {fileID: 0}
+  isArmed: 0

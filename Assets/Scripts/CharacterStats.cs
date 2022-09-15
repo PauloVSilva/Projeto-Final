@@ -40,11 +40,16 @@ public class CharacterStats : MonoBehaviour{
     [SerializeField] public bool isArmed;
 
     private void Awake(){
+        GetCharacter();
         GetScriptableObjectVariables();
     }
 
     private void Start(){
         InitializeInternalVariables();
+    }
+
+    private void GetCharacter(){
+        //Character = GetComponent<CharacterSelection>().Character;
     }
 
     private void GetScriptableObjectVariables(){

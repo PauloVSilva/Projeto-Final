@@ -104,11 +104,16 @@ public class GameManager : MonoBehaviour{
     }
 
 
+    private void SpawnPlayer(){
+
+    }
+
     void OnPlayerJoined(PlayerInput playerInput){ //THIS METHOD COMES FROM UNITY ITSELF
         playerList.Add(playerInput);
         OnPlayerJoinedGame?.Invoke(playerInput);
 
         //hope this works
+        playerInput.GetComponent<CharacterSelection>().SpawnCharacter();
         playerInput.transform.GetComponent<CharacterEvents>().SubscribeToPlayerEvents();
     }
 

@@ -16,22 +16,6 @@ public class PlayerInputHandler : MonoBehaviour{
     public event System.Action<InputAction.CallbackContext> OnCharacterReload;
     public event System.Action<InputAction.CallbackContext> OnCharacterDropWeapon;
 
-
-    [SerializeField] private MovementSystem movementSystem;
-
-    private void Awake(){
-        Spawn();
-    }
-
-    public void Spawn(){
-        int index = GameManager.instance.spawnPoints.Length;
-        int randomIndex = UnityEngine.Random.Range(0, index);
-
-        movementSystem = GameObject.Instantiate(GameManager.instance.playerPrefabs[0], GameManager.instance.spawnPoints[randomIndex].transform.position, transform.rotation).GetComponent<MovementSystem>();
-        transform.parent = GameManager.instance.transform;
-        movementSystem.transform.parent = this.transform;
-    }
-
     public void OnMove(InputAction.CallbackContext context){
         OnCharacterMove?.Invoke(context);
     }
