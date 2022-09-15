@@ -188,7 +188,7 @@ public class Weapon : MonoBehaviour{
     public void PickUpWeapon(GameObject character){
         this.transform.parent = character.transform;
         this.transform.rotation = character.transform.rotation;
-        this.transform.position = (character.transform.forward * 1) + character.transform.position;
+        this.transform.position = character.GetComponent<CharacterItemsDisplay>().gunPosition.transform.position;
         holder = character;
         character.transform.parent.GetComponent<CharacterStats>().isArmed = true;
         canBePickedUp = false;

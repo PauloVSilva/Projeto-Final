@@ -18,6 +18,6 @@ MonoBehaviour:
   _movSpeed: 5
   _sprintSpeed: 7
   _maxStamina: 60
-  _staminaRegenRate: 5
+  _staminaRegenRate: 10
   _jumpStrength: 1
   _totalJumps: 2

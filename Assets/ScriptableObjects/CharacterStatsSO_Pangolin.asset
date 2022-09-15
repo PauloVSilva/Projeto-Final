@@ -17,7 +17,7 @@ MonoBehaviour:
   _healthRegenRate: 5
   _movSpeed: 3
   _sprintSpeed: 5
-  _maxStamina: 100
+  _maxStamina: 10
   _staminaRegenRate: 3
   _jumpStrength: 3
   _totalJumps: 1

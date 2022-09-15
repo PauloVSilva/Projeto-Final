@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &831611200221758550
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4572012110790795175}
+  m_Layer: 0
+  m_Name: HatPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4572012110790795175
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 831611200221758550}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.34, z: 0.51}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8463049207392376649}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1242727013304805861
 GameObject:
   m_ObjectHideFlags: 0
@@ -329,6 +360,37 @@ MonoBehaviour:
   _uiPanel: {fileID: 1242727013304805861}
   _promptText: {fileID: 289502123232289177}
   isDisplayed: 0
+--- !u!1 &7422709267290184447
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3817955582707530193}
+  m_Layer: 0
+  m_Name: GunPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3817955582707530193
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7422709267290184447}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.3, y: 0.25, z: 0.475}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8463049207392376649}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8463049206784566914
 GameObject:
   m_ObjectHideFlags: 0
@@ -444,6 +506,7 @@ GameObject:
   - component: {fileID: 8463049207392376654}
   - component: {fileID: -6704133474018530313}
   - component: {fileID: 8406650508918802984}
+  - component: {fileID: 1250474442572999399}
   - component: {fileID: -984412067493946286}
   m_Layer: 0
   m_Name: Hedgehog
@@ -467,6 +530,8 @@ Transform:
   - {fileID: 8463049206784566915}
   - {fileID: 5406847653483679901}
   - {fileID: 6899938742116791364}
+  - {fileID: 3817955582707530193}
+  - {fileID: 4572012110790795175}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -487,7 +552,7 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.4, z: 0}
 --- !u!114 &-6704133474018530313
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -519,6 +584,20 @@ MonoBehaviour:
   groundedPlayer: 0
   gravityValue: -9.81
   move: {x: 0, y: 0, z: 0}
+--- !u!114 &1250474442572999399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8463049207392376651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9967fc0b8e71c441a4d1880b0ac84b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gunPosition: {fileID: 3817955582707530193}
+  hatPosition: {fileID: 4572012110790795175}
 --- !u!114 &-984412067493946286
 MonoBehaviour:
   m_ObjectHideFlags: 0
