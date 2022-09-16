@@ -388,72 +388,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         {
             ""name"": ""Menu"",
             ""id"": ""42e54cc8-3dde-4f56-9c6e-fe31e1127037"",
-            ""actions"": [
-                {
-                    ""name"": ""Confirm"",
-                    ""type"": ""Button"",
-                    ""id"": ""b262d674-f922-424d-844c-74c60563882c"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Back"",
-                    ""type"": ""Button"",
-                    ""id"": ""fb3411ad-2cba-4c8b-8634-9e88a4e8ba85"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                }
-            ],
-            ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""491c118d-894d-40c5-94c1-2c6afa4a1d36"",
-                    ""path"": ""<Keyboard>/enter"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KB+M"",
-                    ""action"": ""Confirm"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""2188e732-4e7d-4f99-80d7-465a3f123893"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Confirm"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""ebc27e83-e071-48a0-b22a-ce9684d7d809"",
-                    ""path"": ""<Keyboard>/backspace"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KB+M"",
-                    ""action"": ""Back"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""48a2bf1d-4bbe-43c4-bbc9-89cd5adb5e01"",
-                    ""path"": ""<Gamepad>/buttonEast"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Back"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                }
-            ]
+            ""actions"": [],
+            ""bindings"": []
         }
     ],
     ""controlSchemes"": [
@@ -500,8 +436,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Player_DropWeapon = m_Player.FindAction("DropWeapon", throwIfNotFound: true);
         // Menu
         m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
-        m_Menu_Confirm = m_Menu.FindAction("Confirm", throwIfNotFound: true);
-        m_Menu_Back = m_Menu.FindAction("Back", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -666,14 +600,10 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     // Menu
     private readonly InputActionMap m_Menu;
     private IMenuActions m_MenuActionsCallbackInterface;
-    private readonly InputAction m_Menu_Confirm;
-    private readonly InputAction m_Menu_Back;
     public struct MenuActions
     {
         private @PlayerControls m_Wrapper;
         public MenuActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Confirm => m_Wrapper.m_Menu_Confirm;
-        public InputAction @Back => m_Wrapper.m_Menu_Back;
         public InputActionMap Get() { return m_Wrapper.m_Menu; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -683,22 +613,10 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         {
             if (m_Wrapper.m_MenuActionsCallbackInterface != null)
             {
-                @Confirm.started -= m_Wrapper.m_MenuActionsCallbackInterface.OnConfirm;
-                @Confirm.performed -= m_Wrapper.m_MenuActionsCallbackInterface.OnConfirm;
-                @Confirm.canceled -= m_Wrapper.m_MenuActionsCallbackInterface.OnConfirm;
-                @Back.started -= m_Wrapper.m_MenuActionsCallbackInterface.OnBack;
-                @Back.performed -= m_Wrapper.m_MenuActionsCallbackInterface.OnBack;
-                @Back.canceled -= m_Wrapper.m_MenuActionsCallbackInterface.OnBack;
             }
             m_Wrapper.m_MenuActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @Confirm.started += instance.OnConfirm;
-                @Confirm.performed += instance.OnConfirm;
-                @Confirm.canceled += instance.OnConfirm;
-                @Back.started += instance.OnBack;
-                @Back.performed += instance.OnBack;
-                @Back.canceled += instance.OnBack;
             }
         }
     }
@@ -736,7 +654,5 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     }
     public interface IMenuActions
     {
-        void OnConfirm(InputAction.CallbackContext context);
-        void OnBack(InputAction.CallbackContext context);
     }
 }

@@ -53,6 +53,10 @@ public class GameManager : MonoBehaviour{
         levelLoader.LoadLevel("MainHub");
     }
 
+    public void ReturnToMainMenu(){
+        levelLoader.LoadLevel("MainMenu");
+    }
+
     public void GoToLevel(string levelName){
         levelLoader.LoadLevel(levelName);
     }

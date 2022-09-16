@@ -54,8 +54,8 @@ public class SharpshooterManager : MonoBehaviour{
         foreach(var playerInput in GameManager.instance.playerList){
             playerInput.transform.GetComponent<CharacterEvents>().ResetScores();
             playerInput.transform.GetComponent<CharacterSelection>().characterObject.transform.position = GameManager.instance.spawnPoints[0].transform.position;
-            playerInput.GetComponent<PlayerInput>().actions.Disable();
-            playerInput.GetComponent<PlayerInput>().actions["Jump"].Enable();
+            playerInput.actions.Disable();
+            playerInput.actions["Jump"].Enable();
         
             playerInput.GetComponent<CharacterEvents>().OnPlayerScoredKill += VerifyKillCountWinCondition;
             playerInput.GetComponent<CharacterEvents>().OnPlayerDied += VerifyLastStandingWinCondition;
@@ -110,14 +110,14 @@ public class SharpshooterManager : MonoBehaviour{
     private void GameSetUp(){
         foreach(var playerInput in GameManager.instance.playerList){
             playersAlive.Add(playerInput);
-            playerInput.GetComponent<PlayerInput>().actions["Movement"].Enable();
-            playerInput.GetComponent<PlayerInput>().actions["Sprint"].Enable();
-            playerInput.GetComponent<PlayerInput>().actions["Jump"].Enable();
-            playerInput.GetComponent<PlayerInput>().actions["Dash"].Enable();
-            playerInput.GetComponent<PlayerInput>().actions["Interact"].Enable();
-            playerInput.GetComponent<PlayerInput>().actions["CockHammer"].Enable();
-            playerInput.GetComponent<PlayerInput>().actions["PressTrigger"].Enable();
-            playerInput.GetComponent<PlayerInput>().actions["ReloadWeapon"].Enable();
+            playerInput.actions["Movement"].Enable();
+            playerInput.actions["Sprint"].Enable();
+            playerInput.actions["Jump"].Enable();
+            playerInput.actions["Dash"].Enable();
+            playerInput.actions["Interact"].Enable();
+            playerInput.actions["CockHammer"].Enable();
+            playerInput.actions["PressTrigger"].Enable();
+            playerInput.actions["ReloadWeapon"].Enable();
         }
         gameState++;
         //OnGameStateAdvances?.Invoke();

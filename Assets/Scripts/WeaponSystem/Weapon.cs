@@ -110,8 +110,7 @@ public class Weapon : MonoBehaviour{
     }
 
     private void OnDisable(){
-        UnsubscribeToEvents();
-        holder = null;
+        StopCoroutine(Reload(reloadTime));
     }
 
     private void FullAutoBehavior(){

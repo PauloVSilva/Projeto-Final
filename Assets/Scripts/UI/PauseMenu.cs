@@ -15,6 +15,10 @@ public class PauseMenu : MonoBehaviour{
         PlayerInputHandler.OnCharacterPressMenuButton += ChangeGameStatus;
     }
 
+    private void OnDisable() {
+        PlayerInputHandler.OnCharacterPressMenuButton -= ChangeGameStatus;
+    }
+
     private void ChangeGameStatus(){
         if(GameIsPaused){
             Resume();
@@ -25,12 +29,22 @@ public class PauseMenu : MonoBehaviour{
     }
 
     public void Pause(){
+        GameManager.instance.joinAction.Disable();
+        GameManager.instance.leaveAction.Disable();
+        foreach(var playerInput in GameManager.instance.playerList){
+            playerInput.SwitchCurrentActionMap("Menu");
+        }
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
         GameIsPaused = true;
     }
 
     public void Resume(){
+        GameManager.instance.joinAction.Enable();
+        GameManager.instance.leaveAction.Enable();
+        foreach(var playerInput in GameManager.instance.playerList){
+            playerInput.SwitchCurrentActionMap("Player");
+        }
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
         GameIsPaused = false;
@@ -38,6 +52,6 @@ public class PauseMenu : MonoBehaviour{
 
     public void QuitToMainMenu(){
         Time.timeScale = 1f;
-        GameManager.instance.GoToLevel("MainMenu");
+        GameManager.instance.ReturnToMainMenu();
     }
 }

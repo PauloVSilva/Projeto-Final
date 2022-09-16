@@ -26,6 +26,9 @@ public class LevelLoader : MonoBehaviour{
         }
         if(operation.isDone){
             loadingScreen.SetActive(false);
+            if(sceneName == "MainMenu"){
+                Destroy(GameManager.instance.gameObject);
+            }
         }
     }
 }

@@ -55,8 +55,8 @@ public class DimeDropManager : MonoBehaviour{
         foreach(var playerInput in GameManager.instance.playerList){
             playerInput.transform.GetComponent<CharacterEvents>().ResetScores();
             playerInput.transform.GetComponent<CharacterSelection>().characterObject.transform.position = GameManager.instance.spawnPoints[0].transform.position;
-            playerInput.GetComponent<PlayerInput>().actions.Disable();
-            playerInput.GetComponent<PlayerInput>().actions["Jump"].Enable();
+            playerInput.actions.Disable();
+            playerInput.actions["Jump"].Enable();
 
             playerInput.GetComponent<CharacterEvents>().OnPlayerScoreChanged += VerifyScoreAmountWinCondition;
         }
@@ -104,11 +104,11 @@ public class DimeDropManager : MonoBehaviour{
             spawner.GetComponent<Spawner>().spawnerEnabled = true;
         }
         foreach(var playerInput in GameManager.instance.playerList){
-            playerInput.GetComponent<PlayerInput>().actions["Movement"].Enable();
-            playerInput.GetComponent<PlayerInput>().actions["Sprint"].Enable();
-            playerInput.GetComponent<PlayerInput>().actions["Jump"].Enable();
-            playerInput.GetComponent<PlayerInput>().actions["Dash"].Enable();
-            playerInput.GetComponent<PlayerInput>().actions["Interact"].Enable();
+            playerInput.actions["Movement"].Enable();
+            playerInput.actions["Sprint"].Enable();
+            playerInput.actions["Jump"].Enable();
+            playerInput.actions["Dash"].Enable();
+            playerInput.actions["Interact"].Enable();
         }
         gameState++;
         //OnGameStateAdvances?.Invoke();

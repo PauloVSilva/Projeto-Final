@@ -51,7 +51,7 @@ public class CharacterEvents : MonoBehaviour{
         GetComponent<CharacterStats>().ResetScores();
     }
 
-    public void FilterCollision(GameObject player, GameObject _gameObject){
+    public void FilterCollision(GameObject character, GameObject _gameObject){
         if(_gameObject.CompareTag("Coin")){
             if(_gameObject.GetComponent<Coin>().canBePickedUp){
                 IncreaseScore(_gameObject.GetComponent<Coin>().value);
@@ -59,10 +59,10 @@ public class CharacterEvents : MonoBehaviour{
             }
         }
         if(_gameObject.CompareTag("Instadeath")){
-            player.GetComponent<HealthSystem>().Kill();
+            character.GetComponent<HealthSystem>().Kill();
         }
         if(_gameObject.CompareTag("Weapon")){
-            if(!gameObject.GetComponent<CharacterStats>().isArmed && _gameObject.GetComponent<Weapon>().CanBePickedUp()){
+            if(!character.transform.parent.GetComponent<CharacterStats>().isArmed && _gameObject.GetComponent<Weapon>().CanBePickedUp()){
                 _gameObject.GetComponent<Weapon>().PickUpWeapon(characterObject.gameObject);
             }
         }
