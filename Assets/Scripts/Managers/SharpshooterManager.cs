@@ -110,6 +110,7 @@ public class SharpshooterManager : MonoBehaviour{
     private void GameSetUp(){
         foreach(var playerInput in GameManager.instance.playerList){
             playersAlive.Add(playerInput);
+            //playerInput.actions["PauseMenu"].Enable();
             playerInput.actions["Movement"].Enable();
             playerInput.actions["Sprint"].Enable();
             playerInput.actions["Jump"].Enable();

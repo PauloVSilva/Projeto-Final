@@ -104,6 +104,7 @@ public class DimeDropManager : MonoBehaviour{
             spawner.GetComponent<Spawner>().spawnerEnabled = true;
         }
         foreach(var playerInput in GameManager.instance.playerList){
+            //playerInput.actions["PauseMenu"].Enable();
             playerInput.actions["Movement"].Enable();
             playerInput.actions["Sprint"].Enable();
             playerInput.actions["Jump"].Enable();

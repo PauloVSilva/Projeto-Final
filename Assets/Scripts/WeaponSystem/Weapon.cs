@@ -220,5 +220,6 @@ public class Weapon : MonoBehaviour{
 
     private void CastProjectile(){
         Instantiate(projectileToCast, castPoint.position, castPoint.rotation, this.transform);
+        //ObjectPooler.Instance.SpawnFromPool("Projectile", castPoint.position, castPoint.rotation, this.gameObject);
     }
 }

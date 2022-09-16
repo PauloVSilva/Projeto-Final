@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//public class Projectile : MonoBehaviour, IPooledObjects{
 public class Projectile : MonoBehaviour{
     public ProjectileScriptableObject ProjectileToCast;
 
@@ -22,6 +23,7 @@ public class Projectile : MonoBehaviour{
         Destroy(this.gameObject, ProjectileToCast.LifeTime);
     }
 
+    //public void OnObjectSpawn(){
     void Start(){
         myRigidbody.AddForce(transform.forward * ProjectileToCast.Speed, ForceMode.Impulse);
 
@@ -34,22 +36,8 @@ public class Projectile : MonoBehaviour{
 
     private void OnTriggerEnter(Collider other){
         if(other.gameObject.CompareTag("Player")){
-            //HealthSystem enemyHealth = other.GetComponent<HealthSystem>();
-            //enemyHealth.TakeDamage(ProjectileToCast.DamageAmount);
             other.GetComponent<HealthSystem>().TakeDamage(characterOfOrigin, ProjectileToCast.DamageAmount);
-            //Debug.Log("Damage: " + ProjectileToCast.DamageAmount);
         }
-
-        Destroy(this.gameObject);
-        //DestroyBullet();
-    }
-
-    public void DestroyBullet(){
-        StartCoroutine(DestroyBulletDelay());
-    }
-
-    IEnumerator DestroyBulletDelay(){
-        yield return new WaitForSeconds(2f);
         Destroy(this.gameObject);
     }
 }
