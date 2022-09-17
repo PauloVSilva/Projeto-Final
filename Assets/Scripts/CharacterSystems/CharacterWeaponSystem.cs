@@ -55,6 +55,7 @@ public class CharacterWeaponSystem : MonoBehaviour{
                 weapon.Dropped();
                 weapon = null;
                 isArmed = false;
+                characterEvents.PlayerDroppedWeapon();
             }
         }
     }
@@ -69,6 +70,7 @@ public class CharacterWeaponSystem : MonoBehaviour{
 
             weapon.PickedUp(this.gameObject);
             isArmed = true;
+            characterEvents.PlayerPickedUpWeapon(weapon);
         }
     }
 
@@ -78,6 +80,15 @@ public class CharacterWeaponSystem : MonoBehaviour{
 
     public void WeaponReloaded(){
         characterEvents.PlayerReloadedWeapon(weapon);
+    }
+
+    public Weapon GetWeapon(){
+        if(weapon != null){
+            return weapon;
+        }
+        else{
+            return null;
+        }
     }
 
 }

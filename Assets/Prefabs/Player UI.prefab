@@ -1246,6 +1246,7 @@ MonoBehaviour:
   playerHealth: {fileID: 9216813095317055412}
   playerStamina: {fileID: 3079854843593331120}
   playerScore: {fileID: 5814374981318216248}
+  weaponSprite: {fileID: 8501908623557477874}
   playerAmmo: {fileID: 8960181493317134513}
   playerKillCount: {fileID: 5629831507165190851}
   playerDeathCount: {fileID: 3966650621513205367}
@@ -1340,7 +1341,7 @@ GameObject:
   - component: {fileID: 3468099673358711211}
   - component: {fileID: 8501908623557477874}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1353,17 +1354,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3581897559810759161}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7938683836004379774}
-  m_RootOrder: 0
+  m_Children:
+  - {fileID: 7938683836004379774}
+  m_Father: {fileID: 3304998265192371524}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 5.3, y: 20.6}
+  m_AnchoredPosition: {x: -77.29997, y: -38.300026}
   m_SizeDelta: {x: 70, y: 70}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!222 &3468099673358711211
@@ -1492,7 +1494,7 @@ GameObject:
   - component: {fileID: 8872752711489353275}
   - component: {fileID: 8960181493317134513}
   m_Layer: 5
-  m_Name: Weapon
+  m_Name: Ammo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1509,14 +1511,13 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 6995237145793828972}
-  m_Father: {fileID: 3304998265192371524}
-  m_RootOrder: 3
+  m_Children: []
+  m_Father: {fileID: 6995237145793828972}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -82.6, y: -46.399994}
+  m_AnchoredPosition: {x: 64.69999, y: -43.100067}
   m_SizeDelta: {x: 100, y: 25}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &8872752711489353275
@@ -1801,7 +1802,7 @@ RectTransform:
   - {fileID: 3692028680705558766}
   - {fileID: 5814374981409577027}
   - {fileID: 6040560600590798943}
-  - {fileID: 7938683836004379774}
+  - {fileID: 6995237145793828972}
   - {fileID: 6869792003238906932}
   - {fileID: 3110757996419582392}
   - {fileID: 2601364168482902387}

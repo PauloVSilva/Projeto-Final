@@ -14,6 +14,8 @@ public class Weapon : MonoBehaviour{
     [SerializeField] private enum Size{handGun, longGun}
      
     //VARIABLES THAT WILL COME FROM SCRIPTABLE OBJECT
+    [SerializeField] public Sprite sprite;
+    [SerializeField] private string weaponName;
     [SerializeField] private ActionType actionType;
     [SerializeField] private ChamberReloadType chamberReloadType;
     [SerializeField] private Size size;
@@ -51,6 +53,8 @@ public class Weapon : MonoBehaviour{
     }
 
     private void GetScriptableObjectVariables(){
+        sprite = FireWeapon.sprite;
+        weaponName = FireWeapon.weaponName;
         actionType = (ActionType)FireWeapon.actionType;
         chamberReloadType = (ChamberReloadType)FireWeapon.chamberReloadType;
         size = (Size)FireWeapon.size;

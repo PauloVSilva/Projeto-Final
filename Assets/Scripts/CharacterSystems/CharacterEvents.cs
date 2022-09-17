@@ -17,6 +17,8 @@ public class CharacterEvents : MonoBehaviour{
     public event System.Action<float, float> OnPlayerStaminaUpdated; 
     public event System.Action<Weapon> OnPlayerShotWeapon; 
     public event System.Action<Weapon> OnPlayerReloadedWeapon;
+    public event System.Action<Weapon> OnPlayerPickedUpWeapon;
+    public event System.Action OnPlayerDroppedWeapon;
 
     public void SetEvents(){
         characterObject = GetComponent<CharacterSelection>().characterObject;
@@ -106,6 +108,14 @@ public class CharacterEvents : MonoBehaviour{
 
     public void PlayerReloadedWeapon(Weapon _weapon){
         OnPlayerReloadedWeapon?.Invoke(_weapon);
+    }
+
+    public void PlayerPickedUpWeapon(Weapon _weapon){
+        OnPlayerPickedUpWeapon?.Invoke(_weapon);
+    }
+
+    public void PlayerDroppedWeapon(){
+        OnPlayerDroppedWeapon?.Invoke();
     }
 
 }

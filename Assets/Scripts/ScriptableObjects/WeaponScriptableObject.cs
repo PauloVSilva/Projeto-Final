@@ -9,6 +9,8 @@ public class WeaponScriptableObject : ScriptableObject{
     public enum ChamberReloadType{pump, revolver}
     public enum Size{handGun, longGun}
 
+    public Sprite sprite;
+    public string weaponName;
     public ActionType actionType;
     public ChamberReloadType chamberReloadType;
     public Size size;
