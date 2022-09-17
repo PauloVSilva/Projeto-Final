@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class HealthSystem : MonoBehaviour{
     [SerializeField] private CharacterStats characterStats;
+    [SerializeField] private CharacterEvents characterEvents;
 
     //VARIABLES THAT WILL COME FROM CHARACTERSTATS
     public float MaxHealth {get; protected set;}
@@ -13,16 +14,7 @@ public class HealthSystem : MonoBehaviour{
     public float CurrentHealth {get; protected set;}
     public bool IsAlive {get; protected set;}
 
-    //EVENTS
-    public event System.Action<GameObject> OnEntityScoredKill;
-    public event System.Action<GameObject> OnEntityDied;
-    public event System.Action<GameObject> OnEntityBorn;
-    public event System.Action<float> OnEntityTookDamage;
-    public event System.Action<float> OnEntityHealed;
-    public event System.Action<float> OnEntityHealthUpdated;
-
     private void Start(){
-        characterStats = gameObject.transform.parent.GetComponent<CharacterStats>();
         InitializeVariables();
     }
 
@@ -31,18 +23,21 @@ public class HealthSystem : MonoBehaviour{
     }
 
     private void InitializeVariables(){
+        characterStats = gameObject.transform.parent.GetComponent<CharacterStats>();
+        characterEvents = gameObject.transform.parent.GetComponent<CharacterEvents>();
+        
         MaxHealth = characterStats.MaxHealth;
         HealthRegenRate = characterStats.HealthRegenRate;
 
         CurrentHealth = MaxHealth;
         IsAlive = true;
         StartCoroutine(OnEntityBornDelay());
-        OnEntityHealthUpdated?.Invoke(CurrentHealth);
+        SendHealthUpdateEvent();
     }
 
     IEnumerator OnEntityBornDelay(){
         yield return new WaitForSeconds(0.05f);
-        OnEntityBorn?.Invoke(gameObject);
+        characterEvents.PlayerBorn(gameObject);
     }
 
     public void ResetStats(){
@@ -52,7 +47,7 @@ public class HealthSystem : MonoBehaviour{
     private void RegenerateHealth(){
         if(CurrentHealth < MaxHealth){
             CurrentHealth += HealthRegenRate * Time.deltaTime;
-            OnEntityHealthUpdated?.Invoke(CurrentHealth);
+            SendHealthUpdateEvent();
         }
         if(CurrentHealth > MaxHealth){
             CurrentHealth = MaxHealth;
@@ -64,8 +59,8 @@ public class HealthSystem : MonoBehaviour{
         if(CurrentHealth <= 0){
             Die(damageSource);
         }
-        OnEntityTookDamage?.Invoke(damageTaken);
-        OnEntityHealthUpdated?.Invoke(CurrentHealth);
+        characterEvents.PlayerWasDamaged(damageTaken);
+        SendHealthUpdateEvent();
     }
 
     public void Heal(float heal){
@@ -73,8 +68,8 @@ public class HealthSystem : MonoBehaviour{
         if(CurrentHealth > MaxHealth){
             CurrentHealth = MaxHealth;
         }
-        OnEntityHealed?.Invoke(heal);
-        OnEntityHealthUpdated?.Invoke(CurrentHealth);
+        characterEvents.PlayerWasHealed(heal);
+        SendHealthUpdateEvent();
     }
 
     public void Kill(){
@@ -84,10 +79,14 @@ public class HealthSystem : MonoBehaviour{
     public void Die(GameObject damageSource){
         IsAlive = false;
         CurrentHealth = 0;
-        OnEntityDied?.Invoke(gameObject);
-        if(damageSource.CompareTag("Player")){
-            OnEntityScoredKill?.Invoke(damageSource);
+        characterEvents.PlayerDied(gameObject);
+        if(damageSource.CompareTag("Character")){
+            damageSource.transform.parent.GetComponent<CharacterEvents>().PlayerScoredKill(damageSource);
         }
+    }
+
+    private void SendHealthUpdateEvent(){
+        characterEvents.PlayerHealthUpdated(CurrentHealth, MaxHealth);
     }
 
 }

@@ -1246,6 +1246,7 @@ MonoBehaviour:
   playerHealth: {fileID: 9216813095317055412}
   playerStamina: {fileID: 3079854843593331120}
   playerScore: {fileID: 5814374981318216248}
+  playerAmmo: {fileID: 8960181493317134513}
   playerKillCount: {fileID: 5629831507165190851}
   playerDeathCount: {fileID: 3966650621513205367}
   _playerHealthBar: {fileID: 3875527964605655890}

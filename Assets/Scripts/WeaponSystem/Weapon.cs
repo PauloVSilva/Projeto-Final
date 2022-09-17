@@ -17,13 +17,13 @@ public class Weapon : MonoBehaviour{
     [SerializeField] private ActionType actionType;
     [SerializeField] private ChamberReloadType chamberReloadType;
     [SerializeField] private Size size;
-    [SerializeField] private int ammoCapacity;
+    [SerializeField] public int ammoCapacity;
     [SerializeField] private float fireRate; //how many times it can shoot per second
     [SerializeField] private float weight;
     [SerializeField] private float reloadTime;
 
     //VARIABLES FOR INTERNAL USE
-    [SerializeField] private int ammo = 0;
+    [SerializeField] public int ammo = 0;
     [SerializeField] private int extraAmmo = 0;
     [SerializeField] private float fullAutoClock;
     [SerializeField] private float fullAutoReady; //firerate clock
@@ -43,11 +43,11 @@ public class Weapon : MonoBehaviour{
 
     private void Start(){
         InitializeInternalVariables();
-        SubscribeToEvents();
     }
 
     private void Update(){
         FullAutoBehavior();
+        CollectableBehavior();
     }
 
     private void GetScriptableObjectVariables(){
@@ -86,27 +86,6 @@ public class Weapon : MonoBehaviour{
         hammerIsCocked = false;
         //pumpIsReady = false;
         canReload = true;
-        //castPoint = this.transform;
-    }
-
-    public void SubscribeToEvents(){
-        //INPUT EVENTS
-        if(transform.parent != null){
-            gameObject.transform.parent.parent.GetComponent<PlayerInputHandler>().OnCharacterCockHammer += OnCockHammer;
-            gameObject.transform.parent.parent.GetComponent<PlayerInputHandler>().OnCharacterPressTrigger += OnPressTrigger;
-            gameObject.transform.parent.parent.GetComponent<PlayerInputHandler>().OnCharacterReload += OnReload;
-            gameObject.transform.parent.parent.GetComponent<PlayerInputHandler>().OnCharacterDropWeapon += OnDropWeapon;
-        }
-    }
-    
-    public void UnsubscribeToEvents(){
-        //INPUT EVENTS
-        if(transform.parent != null){
-            gameObject.transform.parent.parent.GetComponent<PlayerInputHandler>().OnCharacterCockHammer -= OnCockHammer;
-            gameObject.transform.parent.parent.GetComponent<PlayerInputHandler>().OnCharacterPressTrigger -= OnPressTrigger;
-            gameObject.transform.parent.parent.GetComponent<PlayerInputHandler>().OnCharacterReload -= OnReload;
-            gameObject.transform.parent.parent.GetComponent<PlayerInputHandler>().OnCharacterDropWeapon -= OnDropWeapon;
-        }
     }
 
     private void OnDisable(){
@@ -124,6 +103,12 @@ public class Weapon : MonoBehaviour{
             if(fullAutoClock < 1 / fireRate){
                 fullAutoClock += Time.deltaTime;
             }
+        }
+    }
+
+    private void CollectableBehavior(){
+        if(canBePickedUp){
+            transform.Rotate(Vector3.up * (90 * Time.deltaTime));
         }
     }
 
@@ -167,33 +152,21 @@ public class Weapon : MonoBehaviour{
         }
     }
 
-    public void OnDropWeapon(InputAction.CallbackContext context){
-        if(context.performed){
-            this.transform.parent.parent.GetComponent<CharacterStats>().isArmed = false;
-            UnsubscribeToEvents();
-            this.transform.parent = null;
-            holder = null;
-            StartCoroutine(PickUpDelay());
-            myCollider.enabled = true;
-            //myRigidbody.isKinematic = false;
-        }
+    public void PickedUp(GameObject character){
+        holder = character;
+        canBePickedUp = false;
+        myCollider.enabled = false;
+    }
+
+    public void Dropped(){
+        holder = null;
+        StartCoroutine(PickUpDelay());
+        myCollider.enabled = true;
     }
 
     IEnumerator PickUpDelay(){
         yield return new WaitForSeconds(1f);
         canBePickedUp = true;
-    }
-
-    public void PickUpWeapon(GameObject character){
-        this.transform.parent = character.transform;
-        this.transform.rotation = character.transform.rotation;
-        this.transform.position = character.GetComponent<CharacterItemsDisplay>().gunPosition.transform.position;
-        holder = character;
-        character.transform.parent.GetComponent<CharacterStats>().isArmed = true;
-        canBePickedUp = false;
-        myCollider.enabled = false;
-        //myRigidbody.isKinematic = true;
-        SubscribeToEvents();
     }
 
     private void Fire(){
@@ -203,6 +176,8 @@ public class Weapon : MonoBehaviour{
             hammerIsCocked = false;
             canShoot = false;
             fullAutoClock = 0;
+
+            holder.transform.GetComponent<CharacterWeaponSystem>().WeaponFired();
         }
     }
 
@@ -212,6 +187,7 @@ public class Weapon : MonoBehaviour{
             extraAmmo--;
             ammo++;
         }
+        holder.transform.GetComponent<CharacterWeaponSystem>().WeaponReloaded();
     }
 
     public bool CanBePickedUp(){

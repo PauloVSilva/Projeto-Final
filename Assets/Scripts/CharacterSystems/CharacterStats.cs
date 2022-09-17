@@ -92,6 +92,10 @@ public class CharacterStats : MonoBehaviour{
         score += _score;
     }
 
+    public int GetScore(){
+        return score;
+    }
+
     public void IncreaseKills(){
         kills++;
     }

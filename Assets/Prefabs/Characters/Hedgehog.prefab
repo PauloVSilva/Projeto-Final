@@ -487,11 +487,12 @@ GameObject:
   - component: {fileID: 8463049207392376654}
   - component: {fileID: -6704133474018530313}
   - component: {fileID: 8406650508918802984}
+  - component: {fileID: 6873177095804372120}
   - component: {fileID: 1250474442572999399}
   - component: {fileID: -984412067493946286}
   m_Layer: 0
   m_Name: Hedgehog
-  m_TagString: Player
+  m_TagString: Character
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -547,6 +548,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterStats: {fileID: 0}
+  characterEvents: {fileID: 0}
 --- !u!114 &8406650508918802984
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -560,11 +562,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterStats: {fileID: 0}
+  characterEvents: {fileID: 0}
   controller: {fileID: 0}
   playerVelocity: {x: 0, y: 0, z: 0}
   groundedPlayer: 0
   gravityValue: -9.81
   move: {x: 0, y: 0, z: 0}
+--- !u!114 &6873177095804372120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8463049207392376651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7023e031ca6d6d54fa161c55d79f0b87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterStats: {fileID: 0}
+  characterEvents: {fileID: 0}
+  weapon: {fileID: 0}
+  gunPosition: {fileID: 0}
+  isArmed: 0
 --- !u!114 &1250474442572999399
 MonoBehaviour:
   m_ObjectHideFlags: 0

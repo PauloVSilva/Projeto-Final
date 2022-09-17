@@ -115,10 +115,10 @@ public class DimeDropManager : MonoBehaviour{
         //OnGameStateAdvances?.Invoke();
     }
 
-    private void VerifyScoreAmountWinCondition(GameObject player){
+    private void VerifyScoreAmountWinCondition(GameObject player, int _score){
         if(gameGoal == GameGoal.scoreAmount){
-            if (player.transform.GetComponent<CharacterStats>().score >= amountGoal){
-                Debug.Log("Player " + player.transform.GetComponent<CharacterStats>().animal.ToString() + " is the winner");
+            if (_score >= amountGoal){
+                Debug.Log("Player " + (player.GetComponent<PlayerInput>().playerIndex + 1).ToString() + " is the winner");
                 gameState++;
                 //OnGameStateAdvances?.Invoke();
                 //OnPlayerWins?.Invoke(player.transform.parent.GetComponent<PlayerInput>());

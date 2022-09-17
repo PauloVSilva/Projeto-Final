@@ -17,6 +17,7 @@ public class PlayerUIPanel : MonoBehaviour{
     [SerializeField] private TextMeshProUGUI playerHealth;
     [SerializeField] private TextMeshProUGUI playerStamina;
     [SerializeField] private TextMeshProUGUI playerScore;
+    [SerializeField] private TextMeshProUGUI playerAmmo;
     [SerializeField] private TextMeshProUGUI playerKillCount;
     [SerializeField] private TextMeshProUGUI playerDeathCount;
 
@@ -48,6 +49,8 @@ public class PlayerUIPanel : MonoBehaviour{
         player.transform.GetComponent<CharacterEvents>().OnPlayerHealthUpdated += UpdateHealth;
         player.transform.GetComponent<CharacterEvents>().OnPlayerStaminaUpdated += UpdateStamina;
         player.transform.GetComponent<CharacterEvents>().OnPlayerScoreChanged += UpdateScore;
+        player.transform.GetComponent<CharacterEvents>().OnPlayerShotWeapon += UpdateAmmo;
+        player.transform.GetComponent<CharacterEvents>().OnPlayerReloadedWeapon += UpdateAmmo;
         player.transform.GetComponent<CharacterEvents>().OnPlayerScoredKill += UpdateKillCount;
         player.transform.GetComponent<CharacterEvents>().OnPlayerDied += UpdateDeathCount;
     }
@@ -56,6 +59,8 @@ public class PlayerUIPanel : MonoBehaviour{
         player.transform.GetComponent<CharacterEvents>().OnPlayerHealthUpdated -= UpdateHealth;
         player.transform.GetComponent<CharacterEvents>().OnPlayerStaminaUpdated -= UpdateStamina;
         player.transform.GetComponent<CharacterEvents>().OnPlayerScoreChanged -= UpdateScore;
+        player.transform.GetComponent<CharacterEvents>().OnPlayerShotWeapon -= UpdateAmmo;
+        player.transform.GetComponent<CharacterEvents>().OnPlayerReloadedWeapon -= UpdateAmmo;
         player.transform.GetComponent<CharacterEvents>().OnPlayerScoredKill -= UpdateKillCount;
         player.transform.GetComponent<CharacterEvents>().OnPlayerDied -= UpdateDeathCount;
     }
@@ -76,6 +81,9 @@ public class PlayerUIPanel : MonoBehaviour{
         playerHealth.text = player.transform.GetComponent<CharacterSelection>().characterObject.GetComponent<HealthSystem>().CurrentHealth.ToString() + "/" + player.GetComponent<CharacterStats>().MaxHealth.ToString();
         playerStamina.text = player.transform.GetComponent<CharacterSelection>().characterObject.GetComponent<MovementSystem>().CurrentStamina.ToString() + "/" + player.GetComponent<CharacterStats>().MaxStamina.ToString();
         playerScore.text = player.transform.GetComponent<CharacterStats>().score.ToString();
+
+        playerAmmo.text = "0";
+
         playerKillCount.text = player.transform.GetComponent<CharacterStats>().kills.ToString();
         playerDeathCount.text = player.transform.GetComponent<CharacterStats>().deaths.ToString();
     }
@@ -105,21 +113,24 @@ public class PlayerUIPanel : MonoBehaviour{
         }
     }
 
-    private void UpdateHealth(float health){
-        health = (int)health;
-        playerHealth.text = health.ToString() + "/" + player.GetComponent<CharacterStats>().MaxHealth.ToString();
-        _playerHealthBar.value = health;
+    private void UpdateHealth(float _health, float _maxHealth){
+        _health = (int)_health;
+        playerHealth.text = _health.ToString() + "/" + _maxHealth.ToString();
+        _playerHealthBar.value = _health;
     }
 
-    private void UpdateStamina(float stamina){
-        stamina = (int)stamina;
-        playerStamina.text = stamina.ToString() + "/" + player.GetComponent<CharacterStats>().MaxStamina.ToString();
-        _playerStaminaBar.value = stamina;
+    private void UpdateStamina(float _stamina, float _maxStamina){
+        _stamina = (int)_stamina;
+        playerStamina.text = _stamina.ToString() + "/" + _maxStamina.ToString();
+        _playerStaminaBar.value = _stamina;
     }
 
-    private void UpdateScore(GameObject character){
-        int score = character.GetComponent<CharacterStats>().score;
-        playerScore.text = score.ToString();
+    private void UpdateScore(GameObject _character, int _score){
+        playerScore.text = _score.ToString();
+    }
+
+    private void UpdateAmmo(Weapon _weapon){
+        playerAmmo.text = _weapon.ammo.ToString() + "/" + _weapon.ammoCapacity.ToString();
     }
 
     private void UpdateKillCount(GameObject character){

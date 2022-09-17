@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 
 public class MovementSystem : MonoBehaviour{
     [SerializeField] private CharacterStats characterStats;
+    [SerializeField] private CharacterEvents characterEvents;
 
     //VARIABLES THAT WILL COME FROM CHARACTERSTATS
     public float MovSpeed {get; protected set;}
@@ -28,14 +29,27 @@ public class MovementSystem : MonoBehaviour{
     [SerializeField] private float gravityValue = -9.81f;
     [SerializeField] private Vector3 move;
 
-    //EVENTS
-    public event System.Action<float> OnEntityStaminaUpdated;
-
     private void Start(){
-        characterStats = gameObject.transform.parent.GetComponent<CharacterStats>();
-        controller = GetComponent<CharacterController>();
         InitializeVariables();
         SubscribeToEvents();
+    }
+
+    private void InitializeVariables(){
+        characterStats = gameObject.transform.parent.GetComponent<CharacterStats>();
+        characterEvents = gameObject.transform.parent.GetComponent<CharacterEvents>();
+        controller = GetComponent<CharacterController>();
+        
+        MovSpeed = characterStats.MovSpeed;
+        SprintSpeed = characterStats.SprintSpeed;
+        MaxStamina = characterStats.MaxStamina;
+        StaminaRegenRate = characterStats.StaminaRegenRate;
+        JumpStrength = characterStats.JumpStrength;
+        TotalJumps = characterStats.TotalJumps;
+
+        IsSprinting = false;
+        CurrentStamina = MaxStamina;
+        JumpsRemaining = TotalJumps;
+        SendStaminaUpdateEvent();
     }
 
     private void SubscribeToEvents(){
@@ -69,31 +83,18 @@ public class MovementSystem : MonoBehaviour{
 
     }
 
-    private void InitializeVariables(){
-        MovSpeed = characterStats.MovSpeed;
-        SprintSpeed = characterStats.SprintSpeed;
-        MaxStamina = characterStats.MaxStamina;
-        StaminaRegenRate = characterStats.StaminaRegenRate;
-        JumpStrength = characterStats.JumpStrength;
-        TotalJumps = characterStats.TotalJumps;
-
-        IsSprinting = false;
-        CurrentStamina = MaxStamina;
-        JumpsRemaining = TotalJumps;
-    }
-
     public void ResetStats(){
         InitializeVariables();
     }
 
     public void OnTriggerEnter(Collider other){
-        this.transform.parent.GetComponent<CharacterEvents>().FilterCollision(gameObject, other.gameObject);
+        characterEvents.FilterCollision(gameObject, other.gameObject);
     }
 
     public void StaminaRegen(){
         if(CurrentStamina < MaxStamina){
             CurrentStamina += StaminaRegenRate * Time.deltaTime;
-            OnEntityStaminaUpdated?.Invoke(CurrentStamina);
+            SendStaminaUpdateEvent();
         }
         if (CurrentStamina > MaxStamina){
             CurrentStamina = MaxStamina;
@@ -120,7 +121,7 @@ public class MovementSystem : MonoBehaviour{
                     playerVelocity.y = Mathf.Sqrt(JumpStrength * -3.0f * gravityValue);
                     JumpsRemaining--;
                     CurrentStamina -= 15f;
-                    OnEntityStaminaUpdated?.Invoke(CurrentStamina);
+                    SendStaminaUpdateEvent();
                 }
             }
         }
@@ -131,9 +132,13 @@ public class MovementSystem : MonoBehaviour{
             if(CurrentStamina > 10f){
                 controller.Move(transform.forward * MovSpeed);
                 CurrentStamina -= 10f;
-                OnEntityStaminaUpdated?.Invoke(CurrentStamina);
+                SendStaminaUpdateEvent();
             }
         }
+    }
+
+    private void SendStaminaUpdateEvent(){
+        characterEvents.PlayerStaminaUpdated(CurrentStamina, MaxStamina);
     }
 
 }

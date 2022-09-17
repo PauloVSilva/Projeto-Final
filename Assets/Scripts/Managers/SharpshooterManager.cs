@@ -144,7 +144,7 @@ public class SharpshooterManager : MonoBehaviour{
     private void VerifyKillCountWinCondition(GameObject player){
         if(gameGoal == GameGoal.killCount){
             if (player.transform.parent.GetComponent<CharacterStats>().kills >= killCountGoal){
-                Debug.Log("Player " + player.transform.parent.GetComponent<CharacterStats>().animal.ToString() + " is the winner");
+                Debug.Log("Player " + (player.transform.parent.GetComponent<PlayerInput>().playerIndex + 1).ToString() + " is the winner");
                 gameState++;
                 //OnGameStateAdvances?.Invoke();
                 //OnPlayerWins?.Invoke(player.transform.parent.GetComponent<PlayerInput>());

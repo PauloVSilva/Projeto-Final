@@ -5,48 +5,58 @@ using UnityEngine;
 [RequireComponent(typeof(SphereCollider))]
 
 public class Coin : MonoBehaviour{
-    public float age = 0;
-    public bool canBePickedUp = true;
-
-    public float pickUpRadius = 1.5f;
-    public float rotationSpeed = 10f;
-    public int value = 1;
-    private bool isBlinking = false;
-    SphereCollider myCollider;
-
-    public Renderer renderer;
+    [SerializeField] private float age;
+    [SerializeField] public bool canBePickedUp;
+    [SerializeField] private float pickUpRadius;
+    [SerializeField] private float rotationSpeed;
+    [SerializeField] public int value;
+    [SerializeField] private bool isBlinking;
+    [SerializeField] private SphereCollider myCollider;
+    [SerializeField] private Renderer objectRenderer;
 
     private void Awake(){
-        myCollider = GetComponent<SphereCollider>();
-        myCollider.isTrigger = true;
-        myCollider.radius = pickUpRadius;
+        InitializeVariables();
     }
 
     private void Start(){
-        renderer = this.transform.GetChild(0).GetComponent<Renderer>();
-        renderer.enabled = true;
+        objectRenderer = this.transform.GetChild(0).GetComponent<Renderer>();
+        objectRenderer.enabled = true;
     }
 
     private void Update(){
-        transform.Rotate(Vector3.up * (rotationSpeed * Time.deltaTime));
-        age += Time.deltaTime;
-        AgeBehaviour();
+        CollectableBehavior();
     }
 
-    private void AgeBehaviour(){
-        if (age > 20 && !isBlinking){
-            isBlinking = true;
-            StartCoroutine(Flash(0.25f));
-        }
+    private void InitializeVariables(){
+        myCollider = GetComponent<SphereCollider>();
+        myCollider.isTrigger = true;
+        myCollider.radius = pickUpRadius;
 
-        if(age > 30){
-            Destroy(this.gameObject);
+        age = 0;
+        canBePickedUp = true;
+        pickUpRadius = 1.5f;
+        //rotationSpeed = 10f;
+        //value = 1;
+        isBlinking = false;
+    }
+
+    private void CollectableBehavior(){
+        if(canBePickedUp){
+            transform.Rotate(Vector3.up * (rotationSpeed * Time.deltaTime));
+            age += Time.deltaTime;
+            if (age > 20 && !isBlinking){
+                isBlinking = true;
+                StartCoroutine(Flash(0.25f));
+            }
+            if(age > 30){
+                Destroy(this.gameObject);
+            }
         }
     }
 
     IEnumerator Flash(float time){
         yield return new WaitForSeconds(time);
-        renderer.enabled = !renderer.enabled;
+        objectRenderer.enabled = !objectRenderer.enabled;
         if (age < 27){
             StartCoroutine(Flash(0.25f));
         }

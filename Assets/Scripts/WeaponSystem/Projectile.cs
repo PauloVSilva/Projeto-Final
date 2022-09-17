@@ -35,7 +35,7 @@ public class Projectile : MonoBehaviour{
     }
 
     private void OnTriggerEnter(Collider other){
-        if(other.gameObject.CompareTag("Player")){
+        if(other.gameObject.CompareTag("Character")){
             other.GetComponent<HealthSystem>().TakeDamage(characterOfOrigin, ProjectileToCast.DamageAmount);
         }
         Destroy(this.gameObject);
