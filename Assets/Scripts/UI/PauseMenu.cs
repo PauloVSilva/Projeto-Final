@@ -32,7 +32,7 @@ public class PauseMenu : MonoBehaviour{
         GameManager.instance.joinAction.Disable();
         GameManager.instance.leaveAction.Disable();
         foreach(var playerInput in GameManager.instance.playerList){
-            playerInput.SwitchCurrentActionMap("Menu");
+            playerInput.SwitchCurrentActionMap("UI");
         }
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
