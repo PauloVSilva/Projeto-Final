@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf820d9f4a8ef754f9837c2c80bddd38, type: 3}
   m_Name: WeaponSO_DoubleActionRevolver
   m_EditorClassIdentifier: 
+  sprite: {fileID: 21300000, guid: 96552f21458d5a346832e36455eebe47, type: 3}
+  weaponName: Double Action Revolver
   actionType: 1
   chamberReloadType: 1
   size: 0

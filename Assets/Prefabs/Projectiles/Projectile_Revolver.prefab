@@ -211,7 +211,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6665805497083237370
 Transform:
   m_ObjectHideFlags: 0
@@ -5062,6 +5062,7 @@ MonoBehaviour:
   playerOfOrigin: {fileID: 0}
   characterOfOrigin: {fileID: 0}
   weaponOfOrigin: {fileID: 0}
+  canDamage: 0
 --- !u!135 &7843969618463829849
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -5107,7 +5108,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7688452223389468321
 Transform:
   m_ObjectHideFlags: 0

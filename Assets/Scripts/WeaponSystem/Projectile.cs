@@ -11,6 +11,7 @@ public class Projectile : MonoBehaviour{
     [SerializeField] private GameObject playerOfOrigin;
     [SerializeField] private GameObject characterOfOrigin;
     [SerializeField] private GameObject weaponOfOrigin;
+    [SerializeField] private bool canDamage;
 
     void Awake(){
         myCollider = GetComponent<SphereCollider>();
@@ -19,6 +20,8 @@ public class Projectile : MonoBehaviour{
 
         myRigidbody = GetComponent<Rigidbody>();
         //myRigidbody.isKinematic = true;
+
+        canDamage = true;
 
         Destroy(this.gameObject, ProjectileToCast.LifeTime);
     }
@@ -35,9 +38,10 @@ public class Projectile : MonoBehaviour{
     }
 
     private void OnTriggerEnter(Collider other){
-        if(other.gameObject.CompareTag("Character")){
+        if(other.gameObject.CompareTag("Character") && canDamage){
             other.GetComponent<HealthSystem>().TakeDamage(characterOfOrigin, ProjectileToCast.DamageAmount);
+            Destroy(this.gameObject);
         }
-        Destroy(this.gameObject);
+        canDamage = false;
     }
 }

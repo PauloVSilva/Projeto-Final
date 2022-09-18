@@ -85,7 +85,7 @@ public class GameManager : MonoBehaviour{
 
     public void GameManagerCharacterDied(GameObject character){
         //print("GameManager detected death" + character.transform.parent.GetComponent<CharacterStats>().teamColor);
-        mainCamera.GetComponent<CameraController>().RemovePlayer(character);
+        mainCamera.GetComponent<CameraController>().RemoveCharacter(character);
 
         if(character.transform.parent.GetComponent<CharacterStats>().CanRespawn()){
             StartCoroutine(RespawnCharacter(character));
@@ -104,7 +104,7 @@ public class GameManager : MonoBehaviour{
 
     public void GameManagerCharacterSpawned(GameObject character){
         //print("GameManager detected spawn" + character.transform.parent.GetComponent<CharacterStats>().teamColor);
-        mainCamera.GetComponent<CameraController>().AddPlayer(character);
+        mainCamera.GetComponent<CameraController>().AddCharacter(character);
     }
 
 
@@ -138,7 +138,7 @@ public class GameManager : MonoBehaviour{
 
     void UnregisterPlayer(PlayerInput playerInput){
         playerList.Remove(playerInput);
-        mainCamera.GetComponent<CameraController>().RemovePlayer(playerInput.transform.GetComponent<CharacterSelection>().characterObject.gameObject);
+        mainCamera.GetComponent<CameraController>().RemovePlayer(playerInput);
         OnPlayerLeftGame?.Invoke(playerInput);
         Destroy(playerInput.transform.gameObject);
     }

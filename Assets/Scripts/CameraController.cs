@@ -7,31 +7,22 @@ public class CameraController : MonoBehaviour{
     Vector3 gizmoPos, gizmoPosMin, gizmoPosMax;
     public Vector3 fixedOffset, dynamicOffset;
     public float smoothSpeed;
-
     public List<GameObject> objectsTracked = new List<GameObject>();
-    
-    private void OnEnable(){
-        GameManager.instance.OnPlayerLeftGame += RemovePlayer;
-    }
 
-    private void OnDisable(){
-        GameManager.instance.OnPlayerLeftGame -= RemovePlayer;
-    }
-
-    public void RemovePlayer(GameObject player){
-        objectsTracked.Remove(player.transform.GetChild(0).gameObject);
-    }
-
-    public void RemovePlayer(PlayerInput playerInput){
-        objectsTracked.Remove(playerInput.transform.GetChild(0).gameObject);
-    }
-
-    public void AddPlayer(GameObject player){
-        objectsTracked.Add(player.transform.GetChild(0).gameObject);
+    public void AddCharacter(GameObject character){
+        objectsTracked.Add(character);
     }
 
     public void AddPlayer(PlayerInput playerInput){
-        objectsTracked.Add(playerInput.transform.GetChild(0).gameObject);
+        objectsTracked.Add(playerInput.transform.GetComponent<CharacterSelection>().characterObject.gameObject);
+    }
+
+    public void RemoveCharacter(GameObject character){
+        objectsTracked.Remove(character);
+    }
+
+    public void RemovePlayer(PlayerInput playerInput){
+        objectsTracked.Remove(playerInput.transform.GetComponent<CharacterSelection>().characterObject.gameObject);
     }
 
     void FixedUpdate(){
@@ -44,9 +35,9 @@ public class CameraController : MonoBehaviour{
             Vector3 desiredPosition = FindCentroid() + fixedOffset;
             Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition + FindDynamicOffset(), smoothSpeed * Time.deltaTime);
             transform.position = smoothedPosition;
-            gizmoPos = FindCentroid();
-            gizmoPosMin = FindMinPos();
-            gizmoPosMax = FindMaxPos();
+            //gizmoPos = FindCentroid();
+            //gizmoPosMin = FindMinPos();
+            //gizmoPosMax = FindMaxPos();
         }
         else{
             Vector3 desiredPosition = new Vector3(0, 0, 0) + fixedOffset;
