@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour{
-    public static bool GameIsPaused;
-
-    public GameObject pauseMenuUI;
+    [SerializeField] public static bool GameIsPaused;
+    [SerializeField] public GameObject pauseMenuUI;
+    [SerializeField] public Button firstSelected;
 
     private void Awake() {
         GameIsPaused = false;
@@ -35,6 +36,7 @@ public class PauseMenu : MonoBehaviour{
             playerInput.SwitchCurrentActionMap("UI");
         }
         pauseMenuUI.SetActive(true);
+        firstSelected.Select();
         Time.timeScale = 0f;
         GameIsPaused = true;
     }

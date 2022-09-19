@@ -112,13 +112,23 @@ public class PlayerUIPanel : MonoBehaviour{
     IEnumerator AssignPlayerDelay(PlayerInput playerInput){
         yield return new WaitForSeconds(0.01f);
         player = playerInput;
-        characterEvents = playerInput.transform.GetComponent<CharacterEvents>();
-        characterStats = playerInput.transform.GetComponent<CharacterStats>();
+        player.transform.GetComponent<CharacterSelection>().OnCharacterChosen += AssignCharacter;
+    }
+
+    public void AssignCharacter(){
+        StartCoroutine(AssignCharacterDelay());
+    }
+
+    IEnumerator AssignCharacterDelay(){
+        yield return new WaitForSeconds(0.01f);
+        characterEvents = player.transform.GetComponent<CharacterEvents>();
+        characterStats = player.transform.GetComponent<CharacterStats>();
         SetStatsActive();
         SubscribeToPlayerEvents();
         InitializeStats();
         CheckForWeapon();
     }
+
 
     private void CheckForWeapon(){
         if(characterEvents.characterObject.GetComponent<CharacterWeaponSystem>().GetWeapon() != null){
@@ -134,6 +144,7 @@ public class PlayerUIPanel : MonoBehaviour{
         if(player != null){
             SetStatsInactive();
             UnsubscribeToPlayerEvents();
+            player.transform.GetComponent<CharacterSelection>().OnCharacterChosen -= AssignCharacter;
             player = null;
             characterEvents = null;
             characterStats = null;

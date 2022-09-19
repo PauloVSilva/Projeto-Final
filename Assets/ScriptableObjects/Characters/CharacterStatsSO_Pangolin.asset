@@ -12,6 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e24147a9db9bab4faf85e6a3a675b7d, type: 3}
   m_Name: CharacterStatsSO_Pangolin
   m_EditorClassIdentifier: 
+  characterModel:
+  - {fileID: 8463049207392376651, guid: 9b9091537252df64c8ed4d61d881299a, type: 3}
+  sprite:
+  - {fileID: 21300000, guid: 20e03943591c50448ba014f74761af6d, type: 3}
+  characterName: Casquinha
   _animal: 1
   _maxHealth: 150
   _healthRegenRate: 5

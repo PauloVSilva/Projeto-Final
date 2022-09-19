@@ -15,12 +15,12 @@ public class MovementSystem : MonoBehaviour{
     public float MaxStamina {get; protected set;}
     public float StaminaRegenRate {get; protected set;}
     public float JumpStrength {get; protected set;}
-    public int TotalJumps {get; protected set;}
+    public int TotalJumps ;//{get; protected set;}
     
     //VARIABLES FOR INTERNAL USE
     public bool IsSprinting {get; protected set;}
     public float CurrentStamina {get; protected set;}
-    public int JumpsRemaining {get; protected set;}
+    public int JumpsRemaining ;//{get; protected set;}
 
     //OTHER VARIABLES
     [SerializeField] private CharacterController controller;
@@ -64,9 +64,6 @@ public class MovementSystem : MonoBehaviour{
         groundedPlayer = controller.isGrounded;
         if (groundedPlayer && playerVelocity.y < 0){
             playerVelocity.y = 0f;
-        }
-
-        if (groundedPlayer){
             JumpsRemaining = TotalJumps;
         }
 
@@ -117,7 +114,7 @@ public class MovementSystem : MonoBehaviour{
     public void OnJump(InputAction.CallbackContext context){
         if(context.performed){
             if(CurrentStamina > 15f){
-                if(JumpsRemaining > 1){
+                if(JumpsRemaining > 0){
                     playerVelocity.y = Mathf.Sqrt(JumpStrength * -3.0f * gravityValue);
                     JumpsRemaining--;
                     CurrentStamina -= 15f;
