@@ -15,7 +15,7 @@ public class Weapon : MonoBehaviour{
      
     //VARIABLES THAT WILL COME FROM SCRIPTABLE OBJECT
     [SerializeField] public Sprite sprite;
-    [SerializeField] private string weaponName;
+    [SerializeField] public string weaponName;
     [SerializeField] private ActionType actionType;
     [SerializeField] private ChamberReloadType chamberReloadType;
     [SerializeField] private Size size;

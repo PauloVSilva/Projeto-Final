@@ -9,19 +9,23 @@ public class PlayerUIPanel : MonoBehaviour{
     public PlayerInput player;
     [SerializeField] CharacterStats characterStats;
     [SerializeField] CharacterEvents characterEvents;
+    [SerializeField] CharacterSelection characterSelection;
 
     [SerializeField] private GameObject playerInfo;
     [SerializeField] private GameObject joinMessage;
 
     [SerializeField] private TextMeshProUGUI playerIndex;
     [SerializeField] private TextMeshProUGUI playerTeam;
+    [SerializeField] private Image characterSprite;
+    [SerializeField] private TextMeshProUGUI characterName;
     [SerializeField] private TextMeshProUGUI _playerTotalLives;
     [SerializeField] private TextMeshProUGUI playerHealth;
     [SerializeField] private TextMeshProUGUI playerStamina;
     [SerializeField] private TextMeshProUGUI playerScore;
 
     [SerializeField] private Image weaponSprite;
-    [SerializeField] private TextMeshProUGUI playerAmmo;
+    [SerializeField] private TextMeshProUGUI weaponName;
+    [SerializeField] private TextMeshProUGUI weaponAmmo;
 
     [SerializeField] private TextMeshProUGUI playerKillCount;
     [SerializeField] private TextMeshProUGUI playerDeathCount;
@@ -92,6 +96,9 @@ public class PlayerUIPanel : MonoBehaviour{
             playerTeam.text = characterStats.teamColor.ToString();
         }
 
+        characterSprite.sprite = characterSelection.Character.sprite[0];
+        characterName.text = characterSelection.Character.characterName.ToString();
+
         playerHealth.text = characterStats.MaxHealth.ToString() + "/" + characterStats.MaxHealth.ToString();
         playerStamina.text = characterStats.MaxStamina.ToString() + "/" + characterStats.MaxStamina.ToString();
         playerScore.text = characterStats.score.ToString();
@@ -123,6 +130,7 @@ public class PlayerUIPanel : MonoBehaviour{
         yield return new WaitForSeconds(0.01f);
         characterEvents = player.transform.GetComponent<CharacterEvents>();
         characterStats = player.transform.GetComponent<CharacterStats>();
+        characterSelection = player.transform.GetComponent<CharacterSelection>();
         SetStatsActive();
         SubscribeToPlayerEvents();
         InitializeStats();
@@ -170,6 +178,7 @@ public class PlayerUIPanel : MonoBehaviour{
     private void DisplayWeapon(Weapon _weapon){
         weaponSprite.gameObject.SetActive(true);
         weaponSprite.sprite = _weapon.sprite;
+        weaponName.text = _weapon.weaponName;
         UpdateAmmo(_weapon);
     }
 
@@ -179,7 +188,7 @@ public class PlayerUIPanel : MonoBehaviour{
     }
 
     private void UpdateAmmo(Weapon _weapon){
-        playerAmmo.text = _weapon.ammo.ToString() + "/" + _weapon.ammoCapacity.ToString();
+        weaponAmmo.text = _weapon.ammo.ToString() + "/" + _weapon.ammoCapacity.ToString();
     }
 
     private void UpdateKillCount(GameObject character){
