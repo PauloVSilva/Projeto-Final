@@ -113,7 +113,7 @@ public class GameManager : MonoBehaviour{
     void OnPlayerJoined(PlayerInput playerInput){ //THIS METHOD COMES FROM UNITY ITSELF
         playerList.Add(playerInput);
         OnPlayerJoinedGame?.Invoke(playerInput);
-        playerInput.SwitchCurrentActionMap("UI");
+        
         playerInput.transform.GetComponent<CharacterEvents>().SubscribeToPlayerEvents();
     }
 
@@ -139,23 +139,9 @@ public class GameManager : MonoBehaviour{
     }
 
     public void UnregisterPlayer(PlayerInput playerInput){
-        DisableNewPlayers();
         playerList.Remove(playerInput);
         mainCamera.GetComponent<CameraController>().RemovePlayer(playerInput);
         OnPlayerLeftGame?.Invoke(playerInput);
         Destroy(playerInput.transform.gameObject);
-    }
-
-    private void DisableNewPlayers(){
-        Debug.Log("Disabling new players");
-        joinAction.Disable();
-        leaveAction.Disable();
-        StartCoroutine(ReenableNewPlayers());
-        IEnumerator ReenableNewPlayers(){
-            yield return new WaitForSeconds(1f);
-            Debug.Log("Reenabling new players");
-            joinAction.Enable();
-            leaveAction.Enable();
-        }
     }
 }

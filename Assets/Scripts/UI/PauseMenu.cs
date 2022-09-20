@@ -5,15 +5,15 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 
 public class PauseMenu : MonoBehaviour{
-    [SerializeField] public GameObject pauseMenuUI;
-    [SerializeField] public Button firstSelected;
+    [SerializeField] private GameObject pauseMenuUI;
+    [SerializeField] private Button firstSelected;
     [SerializeField] private PlayerInputHandler playerInputHandler;
 
     private void Start() {
         playerInputHandler.OnCharacterPressMenuButton += ChangeGameStatus;
     }
 
-    private void OnDisable() {
+    private void OnDestroy() {
         playerInputHandler.OnCharacterPressMenuButton -= ChangeGameStatus;
     }
 
@@ -27,8 +27,7 @@ public class PauseMenu : MonoBehaviour{
     }
 
     public void Pause(){
-        GameManager.instance.joinAction.Disable();
-        GameManager.instance.leaveAction.Disable();
+        Debug.Log("Entrou no Pause");
         foreach(var playerInput in GameManager.instance.playerList){
             playerInput.SwitchCurrentActionMap("UI");
             Debug.Log("Trocou pra UI");
@@ -50,8 +49,6 @@ public class PauseMenu : MonoBehaviour{
     }
 
     private void ResumeGameFlow(){
-        GameManager.instance.joinAction.Enable();
-        GameManager.instance.leaveAction.Enable();
         foreach(var playerInput in GameManager.instance.playerList){
             playerInput.SwitchCurrentActionMap("Player");
         }

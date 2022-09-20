@@ -761,6 +761,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ffa7d5962dfe094fb2c6beae87fc869, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GameIsPaused: 0
   levelLoader: {fileID: 1934367544}
   mainCamera: {fileID: 1737681283}
   playerList: []
@@ -2627,6 +2628,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pauseMenuUI: {fileID: 58093432}
   firstSelected: {fileID: 626174646}
+  playerInputHandler: {fileID: 0}
 --- !u!1 &1503770744 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2462525341381545370, guid: 133b6edd5535a244a93446911bf83954, type: 3}

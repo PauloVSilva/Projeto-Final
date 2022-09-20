@@ -4,9 +4,12 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class CharacterSelection : MonoBehaviour{
-    public CharacterStatsScriptableObject Character;
-    public GameObject characterObject;
-    public event System.Action OnCharacterChosen;
+
+    [SerializeField] private CharacterEvents characterEvents;
+    [SerializeField] private CharacterStats characterStats;
+    [SerializeField] public CharacterStatsScriptableObject Character;
+    [SerializeField] public GameObject characterObject;
+    [SerializeField] public event System.Action OnCharacterChosen;
 
     private void Awake() {
         characterObject = null;
@@ -18,9 +21,9 @@ public class CharacterSelection : MonoBehaviour{
 
         Character = _character;
 
-        GetComponent<CharacterStats>().SetStats();
+        characterStats.SetStats();
         characterObject = GameObject.Instantiate(Character.characterModel[0], GameManager.instance.spawnPoints[randomIndex].transform.position, transform.rotation, this.transform);
-        GetComponent<CharacterEvents>().SetEvents();
+        characterEvents.SetEvents();
         transform.parent = GameManager.instance.transform;
         GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
         OnCharacterChosen?.Invoke();

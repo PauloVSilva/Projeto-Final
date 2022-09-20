@@ -6,30 +6,24 @@ using UnityEngine.InputSystem;
 using TMPro;
 
 public class CharacterSelectionMenu : MonoBehaviour{
-    [SerializeField] public GameObject characterSelectionMenuUI;
+    [SerializeField] private GameObject characterSelectionMenuUI;
+    [SerializeField] private CharacterSelection characterSelection;
     [SerializeField] private List<CharacterStatsScriptableObject> characterList = new List<CharacterStatsScriptableObject>();
-    [SerializeField] public CharacterStatsScriptableObject displayedCharacter;
-    [SerializeField] public int index;
+    [SerializeField] private CharacterStatsScriptableObject displayedCharacter;
+    [SerializeField] private int index;
     [SerializeField] private Image characterSprite;
     [SerializeField] private TextMeshProUGUI characterName;
-    [SerializeField] public Button firstSelected;
+    [SerializeField] private Button firstSelected;
+
+    private void Awake(){
+        index = 0;
+    }
 
     private void Start() {
-        index = 0;
         displayedCharacter = characterList[index];
         UpdateCharacter();
-        characterSelectionMenuUI.SetActive(true);
         firstSelected.Select();
-    }
-
-    private void OnEnable() {
-        GameManager.instance.joinAction.Disable();
-        GameManager.instance.leaveAction.Disable();
-    }
-
-    private void OnDisable() {
-        GameManager.instance.joinAction.Enable();
-        GameManager.instance.leaveAction.Enable();
+        characterSelectionMenuUI.SetActive(true);
     }
 
     public void NextCharacter(){
@@ -60,7 +54,8 @@ public class CharacterSelectionMenu : MonoBehaviour{
     }
 
     public void ConfirmCharacter(){
-        this.transform.parent.parent.GetComponent<CharacterSelection>().SpawnCharacter(displayedCharacter);
+        CharacterStatsScriptableObject selectedCharacter = displayedCharacter;
+        characterSelection.SpawnCharacter(selectedCharacter);
         characterSelectionMenuUI.SetActive(false);
     }
 }
