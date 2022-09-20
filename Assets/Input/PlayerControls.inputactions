@@ -7,12 +7,12 @@
             "actions": [
                 {
                     "name": "PauseMenu",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "c0a56633-994c-4ab8-8dd2-9d32494c5647",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Movement",

@@ -18,7 +18,9 @@ public class PlayerInputHandler : MonoBehaviour{
     public event System.Action<InputAction.CallbackContext> OnCharacterDropWeapon;
 
     public void OnPressMenuButton(InputAction.CallbackContext context){
-        OnCharacterPressMenuButton?.Invoke();
+        if(context.performed){
+            OnCharacterPressMenuButton?.Invoke();
+        }
     }
 
     public void OnMove(InputAction.CallbackContext context){
