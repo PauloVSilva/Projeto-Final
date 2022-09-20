@@ -66,6 +66,8 @@ public class PlayerUIPanel : MonoBehaviour{
 
         characterEvents.OnPlayerScoredKill += UpdateKillCount;
         characterEvents.OnPlayerDied += UpdateDeathCount;
+
+        characterEvents.OnPlayerStatsReset += UpdatePanel;
     }
 
     private void UnsubscribeToPlayerEvents(){
@@ -80,6 +82,13 @@ public class PlayerUIPanel : MonoBehaviour{
 
         characterEvents.OnPlayerScoredKill -= UpdateKillCount;
         characterEvents.OnPlayerDied -= UpdateDeathCount;
+
+        characterEvents.OnPlayerStatsReset -= UpdatePanel;
+    }
+
+    private void UpdatePanel(){
+        InitializeStats();
+        CheckForWeapon();
     }
 
     private void InitializeStats(){
@@ -156,6 +165,7 @@ public class PlayerUIPanel : MonoBehaviour{
             player = null;
             characterEvents = null;
             characterStats = null;
+            characterSelection = null;
         }
     }
 

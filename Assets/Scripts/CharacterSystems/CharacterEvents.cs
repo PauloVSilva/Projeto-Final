@@ -19,6 +19,7 @@ public class CharacterEvents : MonoBehaviour{
     public event System.Action<Weapon> OnPlayerReloadedWeapon;
     public event System.Action<Weapon> OnPlayerPickedUpWeapon;
     public event System.Action OnPlayerDroppedWeapon;
+    public event System.Action OnPlayerStatsReset;
 
     public void SetEvents(){
         characterObject = GetComponent<CharacterSelection>().characterObject;
@@ -37,8 +38,9 @@ public class CharacterEvents : MonoBehaviour{
         OnPlayerBorn -= GameManager.instance.GameManagerCharacterSpawned;
     }
 
-    public void ResetScores(){
-        GetComponent<CharacterStats>().ResetScores();
+    public void ResetStats(){
+        OnPlayerStatsReset?.Invoke();
+        characterStats.ResetStats();
     }
 
     public void FilterCollision(GameObject character, GameObject _gameObject){

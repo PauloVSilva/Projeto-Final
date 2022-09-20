@@ -9,13 +9,13 @@ using System;
 public class GameManager : MonoBehaviour{
     //INSTANCES
     public static GameManager instance = null;
+    public bool GameIsPaused;
     [SerializeField] private LevelLoader levelLoader;
     public Camera mainCamera;
     
     public List<PlayerInput> playerList = new List<PlayerInput>();
     public GameObject spawnPointPrefab;
     public GameObject[] spawnPoints;
-    public GameObject[] playerPrefabs;
     public GameObject DeathSpot;
 
     public InputAction joinAction;
@@ -34,8 +34,10 @@ public class GameManager : MonoBehaviour{
             Destroy(gameObject);
         }
 
+        GameIsPaused = false;
+
         joinAction.Enable();
-        joinAction.performed += context => JoinAction(context);
+        joinAction.performed += context => {JoinAction(context); Debug.Log("Player Joined");};
 
         leaveAction.Enable();
         leaveAction.performed += context => LeaveAction(context);
@@ -47,8 +49,8 @@ public class GameManager : MonoBehaviour{
 
     public void ReturnToMainHub(){
         foreach(var playerInput in GameManager.instance.playerList){
-            playerInput.transform.GetComponent<CharacterEvents>().ResetScores();
-            playerInput.transform.GetComponent<CharacterSelection>().characterObject.GetComponent<HealthSystem>().Kill();
+            playerInput.transform.GetComponent<CharacterStats>().ResetStats();
+            //playerInput.transform.GetComponent<CharacterSelection>().characterObject.GetComponent<HealthSystem>().Kill();
         }
         levelLoader.LoadLevel("MainHub");
     }
@@ -111,7 +113,7 @@ public class GameManager : MonoBehaviour{
     void OnPlayerJoined(PlayerInput playerInput){ //THIS METHOD COMES FROM UNITY ITSELF
         playerList.Add(playerInput);
         OnPlayerJoinedGame?.Invoke(playerInput);
-
+        playerInput.SwitchCurrentActionMap("UI");
         playerInput.transform.GetComponent<CharacterEvents>().SubscribeToPlayerEvents();
     }
 
@@ -119,11 +121,11 @@ public class GameManager : MonoBehaviour{
         //Debug.Log("Player left - Goodbye!");
     }
 
-    void JoinAction(InputAction.CallbackContext context){
+    public void JoinAction(InputAction.CallbackContext context){
         PlayerInputManager.instance.JoinPlayerFromActionIfNotAlreadyJoined(context);
     }
 
-    void LeaveAction(InputAction.CallbackContext context){
+    public void LeaveAction(InputAction.CallbackContext context){
         if (playerList.Count > 0){
             foreach(var player in playerList){
                 foreach (var device in player.devices){
@@ -136,10 +138,24 @@ public class GameManager : MonoBehaviour{
         }
     }
 
-    void UnregisterPlayer(PlayerInput playerInput){
+    public void UnregisterPlayer(PlayerInput playerInput){
+        DisableNewPlayers();
         playerList.Remove(playerInput);
         mainCamera.GetComponent<CameraController>().RemovePlayer(playerInput);
         OnPlayerLeftGame?.Invoke(playerInput);
         Destroy(playerInput.transform.gameObject);
+    }
+
+    private void DisableNewPlayers(){
+        Debug.Log("Disabling new players");
+        joinAction.Disable();
+        leaveAction.Disable();
+        StartCoroutine(ReenableNewPlayers());
+        IEnumerator ReenableNewPlayers(){
+            yield return new WaitForSeconds(1f);
+            Debug.Log("Reenabling new players");
+            joinAction.Enable();
+            leaveAction.Enable();
+        }
     }
 }

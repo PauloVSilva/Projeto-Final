@@ -53,7 +53,7 @@ public class DimeDropManager : MonoBehaviour{
         miniGameUIManager.InitializeVariables();
         //move players to spawn
         foreach(var playerInput in GameManager.instance.playerList){
-            playerInput.transform.GetComponent<CharacterEvents>().ResetScores();
+            playerInput.transform.GetComponent<CharacterEvents>().ResetStats();
             playerInput.transform.GetComponent<CharacterSelection>().characterObject.transform.position = GameManager.instance.spawnPoints[0].transform.position;
             playerInput.actions.Disable();
             playerInput.actions["Jump"].Enable();

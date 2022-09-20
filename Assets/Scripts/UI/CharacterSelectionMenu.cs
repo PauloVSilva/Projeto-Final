@@ -7,15 +7,16 @@ using TMPro;
 
 public class CharacterSelectionMenu : MonoBehaviour{
     [SerializeField] public GameObject characterSelectionMenuUI;
-    [SerializeField] public CharacterStatsScriptableObject[] characterList;
+    [SerializeField] private List<CharacterStatsScriptableObject> characterList = new List<CharacterStatsScriptableObject>();
     [SerializeField] public CharacterStatsScriptableObject displayedCharacter;
-    [SerializeField] public CharacterStatsScriptableObject selectedCharacter;
+    [SerializeField] public int index;
     [SerializeField] private Image characterSprite;
     [SerializeField] private TextMeshProUGUI characterName;
     [SerializeField] public Button firstSelected;
 
     private void Start() {
-        displayedCharacter = characterList[0];
+        index = 0;
+        displayedCharacter = characterList[index];
         UpdateCharacter();
         characterSelectionMenuUI.SetActive(true);
         firstSelected.Select();
@@ -32,12 +33,24 @@ public class CharacterSelectionMenu : MonoBehaviour{
     }
 
     public void NextCharacter(){
-        displayedCharacter = characterList[1];
+        if(index < characterList.Count - 1){
+            index++;
+        }
+        else{
+            index = 0;
+        }
+        displayedCharacter = characterList[index];
         UpdateCharacter();
     }
 
     public void PreviousCharacter(){
-        displayedCharacter = characterList[0];
+        if(index > 0){
+            index--;
+        }
+        else{
+            index = characterList.Count - 1;
+        }
+        displayedCharacter = characterList[index];
         UpdateCharacter();
     }
 
@@ -47,8 +60,7 @@ public class CharacterSelectionMenu : MonoBehaviour{
     }
 
     public void ConfirmCharacter(){
-        selectedCharacter = displayedCharacter;
+        this.transform.parent.parent.GetComponent<CharacterSelection>().SpawnCharacter(displayedCharacter);
         characterSelectionMenuUI.SetActive(false);
-        this.transform.parent.parent.GetComponent<CharacterSelection>().SpawnCharacter(selectedCharacter);
     }
 }

@@ -79,9 +79,10 @@ public class CharacterStats : MonoBehaviour{
         totalJumps = Character._totalJumps;
     }
 
-    public void ResetScores(){
+    public void ResetStats(){
         InitializePlayerVariables();
         InitializeCharacterVariables();
+        Debug.Log("CharacterStats - ResetStats()");
     }
 
     public void SetTeam(TeamColor _teamColor){

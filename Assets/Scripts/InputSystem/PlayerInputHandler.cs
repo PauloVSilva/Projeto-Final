@@ -6,7 +6,7 @@ using System;
 
 public class PlayerInputHandler : MonoBehaviour{
 
-    public static event System.Action OnCharacterPressMenuButton;
+    public event System.Action OnCharacterPressMenuButton;
     public event System.Action<InputAction.CallbackContext> OnCharacterMove;
     public event System.Action<InputAction.CallbackContext> OnCharacterJump;
     public event System.Action<InputAction.CallbackContext> OnCharacterDash;

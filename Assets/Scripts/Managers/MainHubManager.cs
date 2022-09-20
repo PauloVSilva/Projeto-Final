@@ -20,7 +20,7 @@ public class MainHubManager : MonoBehaviour{
             foreach(var playerInput in GameManager.instance.playerList){
                 playerInput.transform.GetComponent<CharacterSelection>().characterObject.transform.position = GameManager.instance.spawnPoints[0].transform.position;
                 playerInput.actions.Enable();
-                playerInput.GetComponent<CharacterEvents>().ResetScores();
+                playerInput.GetComponent<CharacterEvents>().ResetStats();
             }
         }
         GameManager.instance.joinAction.Enable();
