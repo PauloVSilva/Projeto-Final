@@ -5,17 +5,18 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Weapon", menuName = "Weapons")]
 
 public class WeaponScriptableObject : ScriptableObject{
-    public enum ActionType{manual, semiAuto, fullAuto}
-    public enum ChamberReloadType{pump, revolver}
-    public enum Size{handGun, longGun}
+    [SerializeField] public enum ActionType{manual, semiAuto, fullAuto}
+    [SerializeField] public enum ChamberReloadType{pump, revolver}
+    [SerializeField] public enum Size{handGun, longGun}
 
-    public Sprite sprite;
-    public string weaponName;
-    public ActionType actionType;
-    public ChamberReloadType chamberReloadType;
-    public Size size;
-    public int ammoCapacity;
-    public float fireRate;
-    public float weight;
-    public float reloadTime;
+    [SerializeField] public GameObject characterModel;
+    [SerializeField] public Sprite sprite;
+    [SerializeField] public string weaponName;
+    [SerializeField] public ActionType actionType;
+    [SerializeField] public ChamberReloadType chamberReloadType;
+    [SerializeField] public Size size;
+    [SerializeField] public int ammoCapacity;
+    [SerializeField] public float fireRate;
+    [SerializeField] public float weight;
+    [SerializeField] public float reloadTime;
 }

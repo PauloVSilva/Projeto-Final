@@ -44,13 +44,6 @@ public class Interactor : MonoBehaviour{
         }
     }
 
-    //public void KeyIsPressed(float context){
-    //    if(context == 1f && _interactable != null){
-    //        //Debug.Log("Input detected");
-    //        _interactable.Interact(this);
-    //    }
-    //}
-
     public void OnInteractWithObject(InputAction.CallbackContext context){
         if(context.performed && _interactable != null){
             //interactor.KeyIsPressed(context.ReadValue<float>());

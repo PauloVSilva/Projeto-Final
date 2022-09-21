@@ -5,14 +5,14 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Projectile", menuName = "Projectiles")]
 
 public class ProjectileScriptableObject : ScriptableObject{
-    public float DamageAmount = 10f;
-    public float Cost = 1f;
-    public float LifeTime = 2f;
-    public float Speed = 15f;
-    public float ProjectileRadius = 0.5f;
+    [SerializeField] public enum CollisionType{contact, explosive, passThrough}
 
-    //Status effects
-    //Thumbnail
-    //Time between casts
-    //Modifiers
+    [SerializeField] public GameObject characterModel;
+    [SerializeField] public Sprite sprite;
+    [SerializeField] public string projectileName;
+    [SerializeField] public CollisionType collisionType;
+    [SerializeField] public float damageAmount;
+    [SerializeField] public float cost;
+    [SerializeField] public float lifeTime;
+    [SerializeField] public float speed;
 }

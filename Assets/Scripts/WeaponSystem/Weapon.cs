@@ -7,13 +7,12 @@ using System;
 public class Weapon : MonoBehaviour{
     public WeaponScriptableObject FireWeapon;
     public Projectile projectileToCast;
-    public GameObject holder;
     
     [SerializeField] private enum ActionType{manual, semiAuto, fullAuto}
     [SerializeField] private enum ChamberReloadType{pump, revolver}
     [SerializeField] private enum Size{handGun, longGun}
-     
-    //VARIABLES THAT WILL COME FROM SCRIPTABLE OBJECT
+
+    //ATTRIBUTES FROM SCRIPTABLE OBJECT
     [SerializeField] public Sprite sprite;
     [SerializeField] public string weaponName;
     [SerializeField] private ActionType actionType;
@@ -34,8 +33,11 @@ public class Weapon : MonoBehaviour{
     [SerializeField] private bool hammerIsCocked; //for revolvers
     //[SerializeField] private bool pumpIsReady; //for shotguns
     [SerializeField] private bool canReload;
-    [SerializeField] private Transform castPoint;
     [SerializeField] private bool canBePickedUp;
+
+    //OTHER ATTRIBUTES
+    [SerializeField] private Transform castPoint;
+    [SerializeField] public GameObject holder;
     [SerializeField] private SphereCollider myCollider;
     //[SerializeField] private Rigidbody myRigidbody;
 
@@ -125,7 +127,7 @@ public class Weapon : MonoBehaviour{
 
     public void OnPressTrigger(InputAction.CallbackContext context){
         if(context.performed){
-            if(ammo - (int)projectileToCast.ProjectileToCast.Cost >= 0){
+            if(ammo - (int)projectileToCast.ProjectileToCast.cost >= 0){
                 if(actionType.ToString() == "manual" && hammerIsCocked && canShoot){
                     Fire();
                 }
@@ -174,9 +176,9 @@ public class Weapon : MonoBehaviour{
     }
 
     private void Fire(){
-        if(ammo - (int)projectileToCast.ProjectileToCast.Cost >= 0){
+        if(ammo - (int)projectileToCast.ProjectileToCast.cost >= 0){
             CastProjectile();
-            ammo -= (int)projectileToCast.ProjectileToCast.Cost;
+            ammo -= (int)projectileToCast.ProjectileToCast.cost;
             hammerIsCocked = false;
             canShoot = false;
             fullAutoClock = 0;
@@ -199,7 +201,7 @@ public class Weapon : MonoBehaviour{
     }
 
     private void CastProjectile(){
-        Instantiate(projectileToCast, castPoint.position, castPoint.rotation, this.transform);
-        //ObjectPooler.Instance.SpawnFromPool("Projectile", castPoint.position, castPoint.rotation, this.gameObject);
+        //Instantiate(projectileToCast, castPoint.position, castPoint.rotation, this.transform);
+        ObjectPooler.Instance.SpawnFromPool(projectileToCast.ProjectileToCast.projectileName, castPoint.position, castPoint.rotation, this.gameObject);
     }
 }
