@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d79c6840759bfe44db0c88b5c211004d, type: 3}
   m_Name: ProjectileSO_RevolverAmmo
   m_EditorClassIdentifier: 
-  DamageAmount: 25
-  Cost: 1
-  LifeTime: 10
-  Speed: 50
-  ProjectileRadius: 0.25
+  characterModel: {fileID: 8110532847871218066, guid: 61ec75cf4b7a1ed4ab2f67fc7dd2eeff, type: 3}
+  sprite: {fileID: 0}
+  projectileName: Revolver Ammo
+  collisionType: 0
+  damageAmount: 30
+  cost: 1
+  lifeTime: 3
+  speed: 50

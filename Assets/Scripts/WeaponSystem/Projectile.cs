@@ -6,7 +6,7 @@ public class Projectile : MonoBehaviour, IPooledObjects{
 //public class Projectile : MonoBehaviour{
     public ProjectileScriptableObject ProjectileToCast;
 
-    [SerializeField] public enum CollisionType{contact, explosive}
+    [SerializeField] public enum CollisionType{contact, explosive, passThrough}
 
     //ATTRIBUTES FROM SCRIPTABLE OBJECT
     [SerializeField] public GameObject characterModel;
@@ -20,9 +20,10 @@ public class Projectile : MonoBehaviour, IPooledObjects{
 
     //VARIABLES FOR INTERNAL USE
     [SerializeField] private bool canDamage;
+    [SerializeField] private bool disableCoroutineIsRunning;
 
     //OTHER ATTRIBUTES
-    [SerializeField] private SphereCollider myCollider;
+    [SerializeField] private BoxCollider myCollider;
     [SerializeField] private Rigidbody myRigidbody;
     [SerializeField] private GameObject playerOfOrigin;
     [SerializeField] private GameObject characterOfOrigin;
@@ -31,9 +32,10 @@ public class Projectile : MonoBehaviour, IPooledObjects{
     private void Awake(){
         GetScriptableObjectVariables();
 
-        myCollider = GetComponent<SphereCollider>();
+        myCollider = GetComponent<BoxCollider>();
         myCollider.isTrigger = true;
         myRigidbody = GetComponent<Rigidbody>();
+        disableCoroutineIsRunning = false;
     }
 
     private void GetScriptableObjectVariables(){
@@ -47,7 +49,10 @@ public class Projectile : MonoBehaviour, IPooledObjects{
     }
 
     public void OnObjectSpawn(){ //replaces Start()
-    //void Start(){
+        if(disableCoroutineIsRunning){
+            DisableCoroutine();
+        }
+
         myRigidbody.velocity = Vector3.zero;
         myRigidbody.angularVelocity = Vector3.zero;
         myRigidbody.AddForce(transform.forward * ProjectileToCast.speed, ForceMode.Impulse);
@@ -60,19 +65,28 @@ public class Projectile : MonoBehaviour, IPooledObjects{
 
         canDamage = true;
 
-        //Destroy(this.gameObject, ProjectileToCast.lifeTime);
         StartCoroutine(DisableObject());
-        IEnumerator DisableObject(){
-            yield return new WaitForSeconds(ProjectileToCast.lifeTime);
-            this.gameObject.SetActive(false);
-        }
+    }
+    IEnumerator DisableObject(){
+        disableCoroutineIsRunning = true;
+        yield return new WaitForSeconds(ProjectileToCast.lifeTime);
+        this.gameObject.SetActive(false);
+    }
+
+    private void DisableCoroutine(){
+        StopCoroutine(DisableObject());
+        disableCoroutineIsRunning = false;
+    }
+    private void OnDisable(){
+        DisableCoroutine();
     }
 
     private void OnTriggerEnter(Collider other){
         if(other.gameObject.CompareTag("Character") && canDamage){
             other.GetComponent<HealthSystem>().TakeDamage(characterOfOrigin, ProjectileToCast.damageAmount);
-            //Destroy(this.gameObject);
             this.gameObject.SetActive(false);
+            //myRigidbody.velocity = Vector3.zero;
+            //myRigidbody.angularVelocity = Vector3.zero;
         }
         canDamage = false;
     }

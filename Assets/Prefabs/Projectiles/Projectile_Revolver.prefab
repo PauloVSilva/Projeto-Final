@@ -5016,7 +5016,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2581856329848812697}
   - component: {fileID: 1874502773355404356}
-  - component: {fileID: 7843969618463829849}
+  - component: {fileID: 5888012009511954047}
   - component: {fileID: 881815892272264937}
   m_Layer: 0
   m_Name: Projectile_Revolver
@@ -5057,14 +5057,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ProjectileToCast: {fileID: 11400000, guid: a947b6543823d914da85bc036ea53372, type: 2}
+  characterModel: {fileID: 0}
+  sprite: {fileID: 0}
+  projectileName: 
+  collisionType: 0
+  damageAmount: 0
+  cost: 0
+  lifeTime: 0
+  speed: 0
+  canDamage: 0
   myCollider: {fileID: 0}
   myRigidbody: {fileID: 0}
   playerOfOrigin: {fileID: 0}
   characterOfOrigin: {fileID: 0}
   weaponOfOrigin: {fileID: 0}
-  canDamage: 0
---- !u!135 &7843969618463829849
-SphereCollider:
+--- !u!65 &5888012009511954047
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -5074,8 +5082,8 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.25
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.5, y: 0.5, z: 0.5}
+  m_Center: {x: 0, y: 0, z: 0.25}
 --- !u!54 &881815892272264937
 Rigidbody:
   m_ObjectHideFlags: 0

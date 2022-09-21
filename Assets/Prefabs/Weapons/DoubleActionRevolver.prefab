@@ -49,8 +49,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FireWeapon: {fileID: 11400000, guid: 8a794cf3a90b5f246be5e3e1bd35faa5, type: 2}
-  projectileToCast: {fileID: 1874502773355404356, guid: 61ec75cf4b7a1ed4ab2f67fc7dd2eeff, type: 3}
-  holder: {fileID: 0}
+  projectileToCast: {fileID: 11400000, guid: a947b6543823d914da85bc036ea53372, type: 2}
+  sprite: {fileID: 0}
+  weaponName: 
   actionType: 1
   chamberReloadType: 1
   size: 0
@@ -66,8 +67,9 @@ MonoBehaviour:
   canShoot: 1
   hammerIsCocked: 0
   canReload: 0
-  castPoint: {fileID: 8289385338044280012}
   canBePickedUp: 0
+  castPoint: {fileID: 8289385338044280012}
+  holder: {fileID: 0}
   myCollider: {fileID: 0}
 --- !u!135 &535941993235239520
 SphereCollider:

@@ -5,8 +5,8 @@ using UnityEngine.InputSystem;
 using System;
 
 public class Weapon : MonoBehaviour{
-    public WeaponScriptableObject FireWeapon;
-    public Projectile projectileToCast;
+    [SerializeField] public WeaponScriptableObject FireWeapon;
+    [SerializeField] public ProjectileScriptableObject projectileToCast;
     
     [SerializeField] private enum ActionType{manual, semiAuto, fullAuto}
     [SerializeField] private enum ChamberReloadType{pump, revolver}
@@ -127,7 +127,7 @@ public class Weapon : MonoBehaviour{
 
     public void OnPressTrigger(InputAction.CallbackContext context){
         if(context.performed){
-            if(ammo - (int)projectileToCast.ProjectileToCast.cost >= 0){
+            if(ammo - (int)projectileToCast.cost >= 0){
                 if(actionType.ToString() == "manual" && hammerIsCocked && canShoot){
                     Fire();
                 }
@@ -157,36 +157,7 @@ public class Weapon : MonoBehaviour{
             }
         }
     }
-
-    public void PickedUp(GameObject character){
-        holder = character;
-        canBePickedUp = false;
-        myCollider.enabled = false;
-    }
-
-    public void Dropped(){
-        holder = null;
-        StartCoroutine(PickUpDelay());
-        myCollider.enabled = true;
-    }
-
-    IEnumerator PickUpDelay(){
-        yield return new WaitForSeconds(1f);
-        canBePickedUp = true;
-    }
-
-    private void Fire(){
-        if(ammo - (int)projectileToCast.ProjectileToCast.cost >= 0){
-            CastProjectile();
-            ammo -= (int)projectileToCast.ProjectileToCast.cost;
-            hammerIsCocked = false;
-            canShoot = false;
-            fullAutoClock = 0;
-
-            holder.transform.GetComponent<CharacterWeaponSystem>().WeaponFired();
-        }
-    }
-
+    
     IEnumerator Reload(float reloadTime){
         yield return new WaitForSeconds(reloadTime);
         while (ammo < ammoCapacity && extraAmmo > 0){
@@ -196,12 +167,39 @@ public class Weapon : MonoBehaviour{
         holder.transform.GetComponent<CharacterWeaponSystem>().WeaponReloaded();
     }
 
+    public void PickedUp(GameObject character){
+        holder = character;
+        canBePickedUp = false;
+        myCollider.enabled = false;
+    }
+
+    public void Dropped(){
+        holder = null;
+        myCollider.enabled = true;
+        StartCoroutine(PickUpDelay());
+        IEnumerator PickUpDelay(){
+            yield return new WaitForSeconds(1f);
+            canBePickedUp = true;
+        }
+    }
+
+    private void Fire(){
+        if(ammo - (int)projectileToCast.cost >= 0){
+            CastProjectile();
+            ammo -= (int)projectileToCast.cost;
+            hammerIsCocked = false;
+            canShoot = false;
+            fullAutoClock = 0;
+
+            holder.transform.GetComponent<CharacterWeaponSystem>().WeaponFired();
+        }
+    }
+
     public bool CanBePickedUp(){
         return canBePickedUp;
     }
 
     private void CastProjectile(){
-        //Instantiate(projectileToCast, castPoint.position, castPoint.rotation, this.transform);
-        ObjectPooler.Instance.SpawnFromPool(projectileToCast.ProjectileToCast.projectileName, castPoint.position, castPoint.rotation, this.gameObject);
+        ObjectPooler.Instance.SpawnFromPool(projectileToCast.projectileName, castPoint.position, castPoint.rotation, this.gameObject);
     }
 }
