@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: MiniGameSO_ScoreAmount
   m_EditorClassIdentifier: 
   miniGameGoal: 3
-  goalSprite: {fileID: 0}
-  goalName: 
-  goalDescription: 
-  goalKeyword: 
-  goalMultiplier: 0
+  goalSprite: {fileID: 21300000, guid: 855a357a1b5e0ca4f8aefa0b3f8ec1d1, type: 3}
+  goalName: Score Amount
+  goalDescription: First player to get $ score wins
+  goalKeyword: Score
+  goalMultiplier: 100

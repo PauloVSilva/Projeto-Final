@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d099c08e36b91b74eb5e57384c555a98, type: 3}
   m_Name: MiniGameSO_LastStanding
   m_EditorClassIdentifier: 
-  goalSprite: {fileID: 21300000, guid: a42756104641dbd4e8456c5b8ef5787e, type: 3}
-  goalName: Kill Count
-  goalDescription: First player to get $ kills wins
-  goalKeyword: Kills
-  goalMultiplier: 0
+  miniGameGoal: 1
+  goalSprite: {fileID: 21300000, guid: 38314bea06c5b97489956b5ae121cfe5, type: 3}
+  goalName: Last Standing
+  goalDescription: Last player to lose all lives wins
+  goalKeyword: Lives
+  goalMultiplier: 1
