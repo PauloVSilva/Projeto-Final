@@ -3218,7 +3218,7 @@ MonoBehaviour:
   pools:
   - tag: Revolver Ammo
     prefab: {fileID: 8110532847871218066, guid: 61ec75cf4b7a1ed4ab2f67fc7dd2eeff, type: 3}
-    size: 1000
+    size: 50
 --- !u!4 &1827330120
 Transform:
   m_ObjectHideFlags: 0

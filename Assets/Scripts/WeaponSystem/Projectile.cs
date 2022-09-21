@@ -57,9 +57,9 @@ public class Projectile : MonoBehaviour, IPooledObjects{
         myRigidbody.angularVelocity = Vector3.zero;
         myRigidbody.AddForce(transform.forward * ProjectileToCast.speed, ForceMode.Impulse);
 
-        playerOfOrigin = this.transform.parent.parent.parent.gameObject;
-        characterOfOrigin = this.transform.parent.parent.gameObject;
         weaponOfOrigin = this.transform.parent.gameObject;
+        characterOfOrigin = weaponOfOrigin.transform.parent.gameObject;
+        playerOfOrigin = characterOfOrigin.transform.parent.gameObject;
 
         this.transform.parent = null;
 

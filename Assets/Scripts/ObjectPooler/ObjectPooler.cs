@@ -25,6 +25,9 @@ public class ObjectPooler : MonoBehaviour{
 
         foreach(Pool pool in pools){
             Queue<GameObject> objectPool = new Queue<GameObject>();
+
+            if(pool.size < 1) pool.size = 1;
+            
             for (int i = 0; i < pool.size; i++){
                 GameObject obj = Instantiate(pool.prefab);
                 obj.SetActive(false);
