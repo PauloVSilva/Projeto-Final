@@ -39,8 +39,17 @@ public class CharacterEvents : MonoBehaviour{
     }
 
     public void ResetStats(){
-        OnPlayerStatsReset?.Invoke();
         characterStats.ResetStats();
+        OnPlayerStatsReset?.Invoke();
+    }
+
+    public void RefreshStats(){
+        OnPlayerStatsReset?.Invoke();
+    }
+
+    public void SetLimitedLives(int _lives){
+        characterStats.SetLimitedLives(_lives);
+        OnPlayerStatsReset?.Invoke();
     }
 
     public void FilterCollision(GameObject character, GameObject _gameObject){

@@ -11,22 +11,17 @@ public class SharpshooterManager : MonoBehaviour{
     [SerializeField] private MiniGameUIManager miniGameUIManager;
 
     //ENUMS
-    public enum GameState{preparation, gameSetUp, gameIsRunning, gameOverSetUp, gameOver}
-    public enum GameGoal{killCount, lastStanding}
 
     //MINIGAME VARIABLES
     [SerializeField] private GameObject[] spawnersList;
     [SerializeField] private List<PlayerInput> playersAlive = new List<PlayerInput>();
-    [SerializeField] public GameState gameState;
-    [SerializeField] public GameGoal gameGoal;
+    [SerializeField] public MiniGameGoalScriptableObject miniGameSetup;
+    [SerializeField] public MiniGame miniGame;
+    [SerializeField] public MiniGameGoal gameGoal;
+    [SerializeField] public MiniGameState gameState;
     [SerializeField] private int countDown;
     [SerializeField] public int killCountGoal;
-
-    //EVENTS
-    //public static event Action<int> OnCountDownTicks;
-    //public static event Action<PlayerInput> OnPlayerWins;
-    //public static event Action OnGameStateAdvances;
-    //public static event Action OnGameGoalIsSet;
+    [SerializeField] public int lastStandingLives;
 
     private void Awake(){
         if (instance == null){
@@ -39,33 +34,23 @@ public class SharpshooterManager : MonoBehaviour{
         GameManager.instance.joinAction.Disable();
         GameManager.instance.leaveAction.Disable();
         GameManager.instance.SetSpawnPoint();
-        spawnersList = GameObject.FindGameObjectsWithTag("Spawner");
 
         countDown = 10;
-        killCountGoal = 1;
-        gameState = GameState.preparation;
-        gameGoal = GameGoal.killCount;
+        gameState = MiniGameState.preparation;
     }
 
     private void Start(){
         miniGameUIManager = GameObject.FindWithTag("MiniGameUI").GetComponent<MiniGameUIManager>();
         miniGameUIManager.InitializeVariables();
-        //move players to spawn
+
+        SetupGame();
+
         foreach(var playerInput in GameManager.instance.playerList){
-            playerInput.transform.GetComponent<CharacterEvents>().ResetStats();
-            playerInput.transform.GetComponent<CharacterSelection>().characterObject.transform.position = GameManager.instance.spawnPoints[0].transform.position;
+            playerInput.GetComponent<CharacterSelection>().characterObject.transform.position = GameManager.instance.spawnPoints[0].transform.position;
             playerInput.actions.Disable();
             playerInput.actions["Jump"].Enable();
-        
-            playerInput.GetComponent<CharacterEvents>().OnPlayerScoredKill += VerifyKillCountWinCondition;
-            playerInput.GetComponent<CharacterEvents>().OnPlayerDied += VerifyLastStandingWinCondition;
-            //playerInput.GetComponent<CharacterEvents>().OnPlayerBorn += VerifyWinCondition;
-
-            if(gameGoal == GameGoal.lastStanding){
-                playerInput.transform.GetComponent<CharacterStats>().totalLives = 1;
-                playerInput.transform.GetComponent<CharacterStats>().unlimitedLives = false;
-            }
         }
+
         StartCoroutine(Preparation());
         //OnGameGoalIsSet?.Invoke();
         DisplayGoal();
@@ -75,18 +60,35 @@ public class SharpshooterManager : MonoBehaviour{
         foreach(var playerInput in GameManager.instance.playerList){
             playerInput.GetComponent<CharacterEvents>().OnPlayerScoredKill -= VerifyKillCountWinCondition;
             playerInput.GetComponent<CharacterEvents>().OnPlayerDied -= VerifyLastStandingWinCondition;
-            //playerInput.GetComponent<CharacterEvents>().OnPlayerBorn -= VerifyWinCondition;
         }
         miniGameUIManager.InitializeVariables();
     }
 
+    private void SetupGame(){
+        miniGameSetup = MiniGameOptionsMenu.instance.GetMiniGameGoal();
+        miniGame = miniGameSetup.parentMiniGame.minigame;
+        gameGoal = miniGameSetup.miniGameGoal;
+
+        if(miniGame == MiniGame.sharpShooter){
+            if(gameGoal == MiniGameGoal.killCount){
+                killCountGoal = MiniGameOptionsMenu.instance.GetMiniGameGoalAmount();
+                foreach (var playerInput in GameManager.instance.playerList){
+                    playerInput.GetComponent<CharacterEvents>().OnPlayerScoredKill += VerifyKillCountWinCondition;
+                }
+            }
+            if(gameGoal == MiniGameGoal.lastStanding){
+                lastStandingLives = MiniGameOptionsMenu.instance.GetMiniGameGoalAmount();
+                foreach (var playerInput in GameManager.instance.playerList){
+                    playerInput.GetComponent<CharacterEvents>().OnPlayerDied += VerifyLastStandingWinCondition;
+                    playerInput.GetComponent<CharacterEvents>().SetLimitedLives(lastStandingLives);
+                    playersAlive.Add(playerInput);
+                }
+            }
+        }
+    }
+
     private void DisplayGoal(){
-        if(gameGoal == GameGoal.killCount){
-            miniGameUIManager.SetGameGoalText("Whoever gets " + SharpshooterManager.instance.killCountGoal + " kills wins");
-        }
-        if(gameGoal == GameGoal.lastStanding){
-            miniGameUIManager.SetGameGoalText("Last player standing wins");
-        }
+        miniGameUIManager.SetGameGoalText(miniGameSetup.goalDescription);
     }
 
     IEnumerator Preparation(){
@@ -95,7 +97,7 @@ public class SharpshooterManager : MonoBehaviour{
             countDown--;
             //OnCountDownTicks?.Invoke(countDown);
             miniGameUIManager.DisplayCountDown(countDown);
-            if(gameState == GameState.preparation){
+            if(gameState == MiniGameState.preparation){
                 StartCoroutine(Preparation());
             }
         }
@@ -103,13 +105,12 @@ public class SharpshooterManager : MonoBehaviour{
             Debug.Log("Preparation time ended");
             gameState++;
             //OnGameStateAdvances?.Invoke();
-            GameSetUp();
+            StartGame();
         }
     }
 
-    private void GameSetUp(){
+    private void StartGame(){
         foreach(var playerInput in GameManager.instance.playerList){
-            playersAlive.Add(playerInput);
             //playerInput.actions["PauseMenu"].Enable();
             playerInput.actions["Movement"].Enable();
             playerInput.actions["Sprint"].Enable();
@@ -125,7 +126,7 @@ public class SharpshooterManager : MonoBehaviour{
     }
 
     private void VerifyLastStandingWinCondition(GameObject player){
-        if(gameGoal == GameGoal.lastStanding){
+        if(gameGoal == MiniGameGoal.lastStanding){
             if(!player.transform.parent.GetComponent<CharacterStats>().CanRespawn()){
                 playersAlive.Remove(player.transform.parent.GetComponent<PlayerInput>());
             }
@@ -142,7 +143,7 @@ public class SharpshooterManager : MonoBehaviour{
     }
 
     private void VerifyKillCountWinCondition(GameObject player){
-        if(gameGoal == GameGoal.killCount){
+        if(gameGoal == MiniGameGoal.killCount){
             if (player.transform.parent.GetComponent<CharacterStats>().kills >= killCountGoal){
                 Debug.Log("Player " + (player.transform.parent.GetComponent<PlayerInput>().playerIndex + 1).ToString() + " is the winner");
                 gameState++;

@@ -48,4 +48,15 @@ public class CanvasManager : MonoBehaviour{
             lastActiveMenu.gameObject.SetActive(false);
         }
     }
+
+    public void OpenMenu(Menu _menu){
+        MenuController desiredMenu = menuControllersList.Find(x => x.menu == _menu);
+        if(desiredMenu != null){
+            desiredMenu.gameObject.SetActive(true);
+            lastActiveMenu = desiredMenu;
+        }
+        else{
+            Debug.LogWarning("Desired menu was not found D:");
+        }
+    }
 }

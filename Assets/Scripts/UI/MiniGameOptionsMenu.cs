@@ -9,6 +9,7 @@ using TMPro;
 public class MiniGameOptionsMenu : MonoBehaviour{
     public static MiniGameOptionsMenu instance;
     [SerializeField] private GameObject miniGameOptionsMenuUI;
+    [SerializeField] private MiniGameScriptableObject miniGame;
     [SerializeField] private List<MiniGameGoalScriptableObject> miniGameGoalsList;
     [SerializeField] private MiniGameGoalScriptableObject displayedMiniGameGoal;
 
@@ -20,7 +21,7 @@ public class MiniGameOptionsMenu : MonoBehaviour{
     [SerializeField] private TextMeshProUGUI goalKeyword;
     [SerializeField] private TextMeshProUGUI goalAmount;
 
-    [SerializeField] private int miniGamegoalAmount;
+    [SerializeField] private int miniGameGoalAmount;
     [SerializeField] private int miniGameIndex;
 
     [SerializeField] private Image mapSprite;
@@ -37,15 +38,15 @@ public class MiniGameOptionsMenu : MonoBehaviour{
         }
     }
 
-    public void SetMiniGameName(string _name){
-        miniGameName.text = _name;
-    }
-
-    public void SetMiniGameGoalsList(List<MiniGameGoalScriptableObject> _miniGameGoalsList){
+    public void SetMiniGame(MiniGameScriptableObject _miniGame){
         miniGameIndex = 0;
-        miniGamegoalAmount = 0;
-        miniGameGoalsList = _miniGameGoalsList.ToList();
+
+        miniGameName.text = _miniGame.miniGameName;
+        miniGameGoalsList = _miniGame.miniGamesGoalsAvaliable.ToList();
+
         displayedMiniGameGoal = miniGameGoalsList[miniGameIndex];
+        miniGameGoalAmount = 1 * displayedMiniGameGoal.goalMultiplier;
+
         firstSelected.Select();
         UpdateMenu();
     }
@@ -58,7 +59,7 @@ public class MiniGameOptionsMenu : MonoBehaviour{
             miniGameIndex = 0;
         }
         displayedMiniGameGoal = miniGameGoalsList[miniGameIndex];
-        miniGamegoalAmount = 0;
+        miniGameGoalAmount = displayedMiniGameGoal.goalMultiplier;
         UpdateMenu();
     }
 
@@ -70,19 +71,19 @@ public class MiniGameOptionsMenu : MonoBehaviour{
             miniGameIndex = miniGameGoalsList.Count - 1;
         }
         displayedMiniGameGoal = miniGameGoalsList[miniGameIndex];
-        miniGamegoalAmount = 0;
+        miniGameGoalAmount = displayedMiniGameGoal.goalMultiplier;
         UpdateMenu();
     }
 
     public void IncreaseGoalAmount(){
-        miniGamegoalAmount = miniGamegoalAmount + 1 * displayedMiniGameGoal.goalMultiplier;
+        miniGameGoalAmount += displayedMiniGameGoal.goalMultiplier;
         UpdateMenu();
     }
 
     public void DecreaseGoalAmount(){
-        miniGamegoalAmount = miniGamegoalAmount - 1 * displayedMiniGameGoal.goalMultiplier;
-        if(miniGamegoalAmount < 0){
-            miniGamegoalAmount = 0;
+        miniGameGoalAmount -= displayedMiniGameGoal.goalMultiplier;
+        if(miniGameGoalAmount < displayedMiniGameGoal.goalMultiplier){
+            miniGameGoalAmount = displayedMiniGameGoal.goalMultiplier;
         }
         UpdateMenu();
     }
@@ -92,11 +93,20 @@ public class MiniGameOptionsMenu : MonoBehaviour{
         goalName.text = displayedMiniGameGoal.goalName.ToString();
         goalDescription.text = displayedMiniGameGoal.goalDescription.ToString();
         goalKeyword.text = displayedMiniGameGoal.goalKeyword.ToString();
-        goalAmount.text = miniGamegoalAmount.ToString();
+        goalAmount.text = miniGameGoalAmount.ToString();
     }
 
     public void ConfirmSettings(){
-        Debug.Log("Going to minigame");
+        Debug.Log("Going to " + miniGameName.text);
+        GameManager.instance.LoadMiniGame(miniGameName.text);
+    }
+
+    public MiniGameGoalScriptableObject GetMiniGameGoal(){
+        return displayedMiniGameGoal;
+    }
+
+    public int GetMiniGameGoalAmount(){
+        return miniGameGoalAmount;
     }
 
 }

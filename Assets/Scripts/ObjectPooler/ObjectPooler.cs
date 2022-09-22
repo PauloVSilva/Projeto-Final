@@ -11,10 +11,16 @@ public class ObjectPooler : MonoBehaviour{
         public int size;
     }
 
-    public static ObjectPooler Instance;
+    public static ObjectPooler instance;
 
-    private void Awake() {
-        Instance = this;
+    private void Awake(){
+        if(instance == null){
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else if(instance != null){
+            Destroy(gameObject);
+        }
     }
 
     public List<Pool> pools;
@@ -30,6 +36,7 @@ public class ObjectPooler : MonoBehaviour{
             
             for (int i = 0; i < pool.size; i++){
                 GameObject obj = Instantiate(pool.prefab);
+                obj.transform.parent = this.transform;
                 obj.SetActive(false);
                 objectPool.Enqueue(obj);
             }

@@ -82,7 +82,6 @@ public class CharacterStats : MonoBehaviour{
     public void ResetStats(){
         InitializePlayerVariables();
         InitializeCharacterVariables();
-        Debug.Log("CharacterStats - ResetStats()");
     }
 
     public void SetTeam(TeamColor _teamColor){
@@ -109,11 +108,18 @@ public class CharacterStats : MonoBehaviour{
         totalLives--;
     }
 
-    public void DecreaseLives(int amount){
-        totalLives -= amount;
-        if(totalLives < 0){
-            totalLives = 0;
-        }
+    public void SetLimitedLives(int _amount){
+        totalLives = _amount;
+        unlimitedLives = false;
+    }
+
+    public void IncreaseLives(int _amount){
+        totalLives += _amount;
+    }
+
+    public void SetUnlimitedLives(){
+        totalLives = -1;
+        unlimitedLives = true;
     }
 
     public bool CanRespawn(){

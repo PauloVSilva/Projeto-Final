@@ -6,6 +6,10 @@ using UnityEngine.SceneManagement;
 using System.Linq;
 using System;
 
+public enum MiniGame{sharpShooter, dimeDrop}
+public enum MiniGameGoal{killCount, lastStanding, time, scoreAmount}
+public enum MiniGameState{preparation, gameSetUp, gameIsRunning, gameOverSetUp, gameOver}
+
 public class GameManager : MonoBehaviour{
     //INSTANCES
     public static GameManager instance = null;
@@ -47,26 +51,26 @@ public class GameManager : MonoBehaviour{
         SetSpawnPoint();
     }
 
-    public void ReturnToMainHub(){
-        foreach(var playerInput in GameManager.instance.playerList){
-            playerInput.transform.GetComponent<CharacterStats>().ResetStats();
-            //playerInput.transform.GetComponent<CharacterSelection>().characterObject.GetComponent<HealthSystem>().Kill();
-        }
-        levelLoader.LoadLevel("MainHub");
-    }
-
     public void ReturnToMainMenu(){
         levelLoader.LoadLevel("MainMenu");
     }
 
-    public void GoToLevel(string levelName){
-        levelLoader.LoadLevel(levelName);
+    public void ReturnToMainHub(){
+        LoadMiniGame("MainHub");
+    }
+
+    public void LoadMiniGame(string _levelName){
+        foreach(var playerInput in GameManager.instance.playerList){
+            playerInput.transform.GetComponent<CharacterStats>().ResetStats();
+        }
+        levelLoader.LoadLevel(_levelName);
     }
 
     public void SetSpawnPoint(){
         FindSpawnPoints();
         if (spawnPoints.Count() < 1 || spawnPoints[0] == null){
             CreateSpawnPoint();
+            Debug.Log("Player spawnpoints array was empty");
         }
         FindSpawnPoints();
     }
