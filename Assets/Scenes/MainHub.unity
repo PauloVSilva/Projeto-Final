@@ -645,11 +645,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e86a8d1b86ccb4c488988b30b261edd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _prompt: Play Sharpshooter!
-  _name: Sharpshooter
-  miniGameGoalsList:
-  - {fileID: 11400000, guid: c2dcb18e0c5979e419982c4c6b28325a, type: 2}
-  - {fileID: 11400000, guid: 0118f5c5c6a25e1489080670f563e50e, type: 2}
+  miniGame: {fileID: 11400000, guid: 433f180c580afef4e8526dc2262e8694, type: 2}
+  miniGameGoalsList: []
+  _name: 
+  _prompt: 
 --- !u!136 &295753835
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4212,6 +4211,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   miniGameOptionsMenuUI: {fileID: 1994517122}
+  miniGame: {fileID: 0}
   miniGameGoalsList: []
   displayedMiniGameGoal: {fileID: 0}
   miniGameName: {fileID: 1969652267}
@@ -5205,10 +5205,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e86a8d1b86ccb4c488988b30b261edd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _prompt: Play DimeDrop!
-  _name: DimeDrop
-  miniGameGoalsList:
-  - {fileID: 11400000, guid: 3f69935aa5292a449aa95648077d0e88, type: 2}
+  miniGame: {fileID: 11400000, guid: e823e793afb450d4bbf4158f9bcb07fd, type: 2}
+  miniGameGoalsList: []
+  _name: 
+  _prompt: 
 --- !u!136 &1863662785
 CapsuleCollider:
   m_ObjectHideFlags: 0

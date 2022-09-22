@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d099c08e36b91b74eb5e57384c555a98, type: 3}
   m_Name: MiniGameGoalSO_LastStanding
   m_EditorClassIdentifier: 
+  parentMiniGame: {fileID: 11400000, guid: 433f180c580afef4e8526dc2262e8694, type: 2}
   miniGameGoal: 1
   goalSprite: {fileID: 21300000, guid: 38314bea06c5b97489956b5ae121cfe5, type: 3}
   goalName: Last Standing

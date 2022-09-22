@@ -4,24 +4,28 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
 
-public class SharpshooterManager : MonoBehaviour{
+public class MiniGameManager : MonoBehaviour{
     //INSTANCES
-    public static SharpshooterManager instance = null;
+    public static MiniGameManager instance = null;
 
     [SerializeField] private MiniGameUIManager miniGameUIManager;
 
     //ENUMS
 
     //MINIGAME VARIABLES
-    [SerializeField] private GameObject[] spawnersList;
     [SerializeField] private List<PlayerInput> playersAlive = new List<PlayerInput>();
     [SerializeField] public MiniGameGoalScriptableObject miniGameSetup;
     [SerializeField] public MiniGame miniGame;
     [SerializeField] public MiniGameGoal gameGoal;
     [SerializeField] public MiniGameState gameState;
+
     [SerializeField] private int countDown;
     [SerializeField] public int killCountGoal;
     [SerializeField] public int lastStandingLives;
+    [SerializeField] public int scoreAmountGoal;
+    [SerializeField] public int timeLimitGoal;
+    [SerializeField] private GameObject[] itemSpawnersList;
+    [SerializeField] private GameObject[] coins;
 
     private void Awake(){
         if (instance == null){
@@ -42,6 +46,7 @@ public class SharpshooterManager : MonoBehaviour{
     private void Start(){
         miniGameUIManager = GameObject.FindWithTag("MiniGameUI").GetComponent<MiniGameUIManager>();
         miniGameUIManager.InitializeVariables();
+        itemSpawnersList = GameObject.FindGameObjectsWithTag("Spawner");
 
         SetupGame();
 
@@ -60,6 +65,7 @@ public class SharpshooterManager : MonoBehaviour{
         foreach(var playerInput in GameManager.instance.playerList){
             playerInput.GetComponent<CharacterEvents>().OnPlayerScoredKill -= VerifyKillCountWinCondition;
             playerInput.GetComponent<CharacterEvents>().OnPlayerDied -= VerifyLastStandingWinCondition;
+            playerInput.GetComponent<CharacterEvents>().OnPlayerScoreChanged -= VerifyScoreAmountWinCondition;
         }
         miniGameUIManager.InitializeVariables();
     }
@@ -82,6 +88,14 @@ public class SharpshooterManager : MonoBehaviour{
                     playerInput.GetComponent<CharacterEvents>().OnPlayerDied += VerifyLastStandingWinCondition;
                     playerInput.GetComponent<CharacterEvents>().SetLimitedLives(lastStandingLives);
                     playersAlive.Add(playerInput);
+                }
+            }
+        }
+        if(miniGame == MiniGame.dimeDrop){
+            if(gameGoal == MiniGameGoal.scoreAmount){
+                scoreAmountGoal = MiniGameOptionsMenu.instance.GetMiniGameGoalAmount();
+                foreach(var playerInput in GameManager.instance.playerList){
+                    playerInput.GetComponent<CharacterEvents>().OnPlayerScoreChanged += VerifyScoreAmountWinCondition;
                 }
             }
         }
@@ -110,6 +124,11 @@ public class SharpshooterManager : MonoBehaviour{
     }
 
     private void StartGame(){
+        if(miniGame == MiniGame.dimeDrop){
+            foreach(var spawner in itemSpawnersList){
+                spawner.GetComponent<Spawner>().spawnerEnabled = true;
+            }
+        }
         foreach(var playerInput in GameManager.instance.playerList){
             //playerInput.actions["PauseMenu"].Enable();
             playerInput.actions["Movement"].Enable();
@@ -155,7 +174,29 @@ public class SharpshooterManager : MonoBehaviour{
         }
     }
 
+    private void VerifyScoreAmountWinCondition(GameObject player, int _score){
+        if(gameGoal == MiniGameGoal.scoreAmount){
+            if (_score >= scoreAmountGoal){
+                Debug.Log("Player " + (player.GetComponent<PlayerInput>().playerIndex + 1).ToString() + " is the winner");
+                gameState++;
+                //OnGameStateAdvances?.Invoke();
+                //OnPlayerWins?.Invoke(player.transform.parent.GetComponent<PlayerInput>());
+                miniGameUIManager.AnnounceWinner(player.GetComponent<PlayerInput>());
+                GameOverSetUp();
+            }
+        }
+    }
+
     private void GameOverSetUp(){
+        if(miniGame == MiniGame.dimeDrop){
+            foreach(var spawner in itemSpawnersList){
+                spawner.GetComponent<Spawner>().spawnerEnabled = false;
+            }
+            coins = GameObject.FindGameObjectsWithTag("Coin");
+            foreach(var coin in coins){
+                coin.GetComponent<Coin>().canBePickedUp = false;
+            }
+        }
         countDown = 10;
         gameState++;
         //OnGameStateAdvances?.Invoke();

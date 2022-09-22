@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb420ed351bdafc4a9f3472d812657bc, type: 3}
   m_Name: MiniGameSO_Sharpshooter
   m_EditorClassIdentifier: 
-  miniGameSprite: {fileID: 0}
-  miniGameName: 
-  miniGamesGoalsAvaliable: []
+  minigame: 0
+  miniGameSprite: {fileID: 21300000, guid: c1745405f3f3e424e879eedb796749b3, type: 3}
+  miniGameName: Sharpshooter
+  miniGamesGoalsAvaliable:
+  - {fileID: 11400000, guid: c2dcb18e0c5979e419982c4c6b28325a, type: 2}
+  - {fileID: 11400000, guid: 0118f5c5c6a25e1489080670f563e50e, type: 2}

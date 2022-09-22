@@ -441,7 +441,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 826944107}
-  - component: {fileID: 826944106}
+  - component: {fileID: 826944108}
   m_Layer: 0
   m_Name: MiniGameManager
   m_TagString: Untagged
@@ -449,26 +449,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &826944106
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 826944105}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e5f746321b8de2f4f84f8c9b9f708d99, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  miniGameUIManager: {fileID: 0}
-  spawnersList: []
-  coins: []
-  gameState: 0
-  gameGoal: 0
-  countDown: 10
-  amountGoal: 0
-  timeLimitGoal: 0
 --- !u!4 &826944107
 Transform:
   m_ObjectHideFlags: 0
@@ -484,6 +464,31 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &826944108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 826944105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fa5da7a8feeefc4f8fef187e16afc67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  miniGameUIManager: {fileID: 0}
+  playersAlive: []
+  miniGameSetup: {fileID: 0}
+  miniGame: 0
+  gameGoal: 0
+  gameState: 0
+  countDown: 0
+  killCountGoal: 0
+  lastStandingLives: 0
+  scoreAmountGoal: 0
+  timeLimitGoal: 0
+  itemSpawnersList: []
+  coins: []
 --- !u!1001 &897928362
 PrefabInstance:
   m_ObjectHideFlags: 0
