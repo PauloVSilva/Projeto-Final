@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 public class PauseMenu : MonoBehaviour{
     [SerializeField] private GameObject pauseMenuUI;
     [SerializeField] private Button firstSelected;
+    [SerializeField] private Button DropOutButton;
     [SerializeField] private PlayerInputHandler playerInputHandler;
 
     private void Start() {
@@ -18,7 +19,15 @@ public class PauseMenu : MonoBehaviour{
     }
 
     private void ChangeGameStatus(){
-        if(GameManager.instance.GameIsPaused){
+        if(GameManager.instance.miniGameIsRunning){
+            DropOutButton.interactable = false;
+        }
+        else{
+            DropOutButton.interactable = true;
+        }
+
+
+        if(GameManager.instance.gameIsPaused){
             Resume();
         }
         else{
@@ -27,15 +36,13 @@ public class PauseMenu : MonoBehaviour{
     }
 
     public void Pause(){
-        Debug.Log("Entrou no Pause");
         foreach(var playerInput in GameManager.instance.playerList){
             playerInput.SwitchCurrentActionMap("UI");
-            Debug.Log("Trocou pra UI");
         }
         pauseMenuUI.SetActive(true);
         firstSelected.Select();
         Time.timeScale = 0f;
-        GameManager.instance.GameIsPaused = true;
+        GameManager.instance.gameIsPaused = true;
     }
 
     public void Resume(){
@@ -53,7 +60,7 @@ public class PauseMenu : MonoBehaviour{
             playerInput.SwitchCurrentActionMap("Player");
         }
         Time.timeScale = 1f;
-        GameManager.instance.GameIsPaused = false;
+        GameManager.instance.gameIsPaused = false;
     }
 
     public void QuitToMainMenu(){

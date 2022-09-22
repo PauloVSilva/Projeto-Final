@@ -4,6 +4,10 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
 
+public enum MiniGame{sharpShooter, dimeDrop}
+public enum MiniGameGoal{killCount, lastStanding, time, scoreAmount}
+public enum MiniGameState{preparation, gameSetUp, gameIsRunning, gameOverSetUp, gameOver}
+
 public class MiniGameManager : MonoBehaviour{
     //INSTANCES
     public static MiniGameManager instance = null;
@@ -44,6 +48,8 @@ public class MiniGameManager : MonoBehaviour{
     }
 
     private void Start(){
+        GameManager.instance.miniGameIsRunning = true;
+
         miniGameUIManager = GameObject.FindWithTag("MiniGameUI").GetComponent<MiniGameUIManager>();
         miniGameUIManager.InitializeVariables();
         itemSpawnersList = GameObject.FindGameObjectsWithTag("Spawner");
@@ -52,8 +58,7 @@ public class MiniGameManager : MonoBehaviour{
 
         foreach(var playerInput in GameManager.instance.playerList){
             playerInput.GetComponent<CharacterSelection>().characterObject.transform.position = GameManager.instance.spawnPoints[0].transform.position;
-            playerInput.actions.Disable();
-            playerInput.actions["Jump"].Enable();
+            playerInput.GetComponent<PlayerInputHandler>().DisableMovementActions();
         }
 
         StartCoroutine(Preparation());
@@ -62,11 +67,6 @@ public class MiniGameManager : MonoBehaviour{
     }
 
     private void OnDisable() {
-        foreach(var playerInput in GameManager.instance.playerList){
-            playerInput.GetComponent<CharacterEvents>().OnPlayerScoredKill -= VerifyKillCountWinCondition;
-            playerInput.GetComponent<CharacterEvents>().OnPlayerDied -= VerifyLastStandingWinCondition;
-            playerInput.GetComponent<CharacterEvents>().OnPlayerScoreChanged -= VerifyScoreAmountWinCondition;
-        }
         miniGameUIManager.InitializeVariables();
     }
 
@@ -116,7 +116,6 @@ public class MiniGameManager : MonoBehaviour{
             }
         }
         else {
-            Debug.Log("Preparation time ended");
             gameState++;
             //OnGameStateAdvances?.Invoke();
             StartGame();
@@ -130,15 +129,7 @@ public class MiniGameManager : MonoBehaviour{
             }
         }
         foreach(var playerInput in GameManager.instance.playerList){
-            //playerInput.actions["PauseMenu"].Enable();
-            playerInput.actions["Movement"].Enable();
-            playerInput.actions["Sprint"].Enable();
-            playerInput.actions["Jump"].Enable();
-            playerInput.actions["Dash"].Enable();
-            playerInput.actions["Interact"].Enable();
-            playerInput.actions["CockHammer"].Enable();
-            playerInput.actions["PressTrigger"].Enable();
-            playerInput.actions["ReloadWeapon"].Enable();
+            playerInput.GetComponent<PlayerInputHandler>().EnableMovementActions();
         }
         gameState++;
         //OnGameStateAdvances?.Invoke();
@@ -188,6 +179,12 @@ public class MiniGameManager : MonoBehaviour{
     }
 
     private void GameOverSetUp(){
+        foreach(var playerInput in GameManager.instance.playerList){
+            playerInput.GetComponent<CharacterEvents>().OnPlayerScoredKill -= VerifyKillCountWinCondition;
+            playerInput.GetComponent<CharacterEvents>().OnPlayerDied -= VerifyLastStandingWinCondition;
+            playerInput.GetComponent<CharacterEvents>().OnPlayerScoreChanged -= VerifyScoreAmountWinCondition;
+        }
+
         if(miniGame == MiniGame.dimeDrop){
             foreach(var spawner in itemSpawnersList){
                 spawner.GetComponent<Spawner>().spawnerEnabled = false;
@@ -212,7 +209,6 @@ public class MiniGameManager : MonoBehaviour{
             StartCoroutine(GameOver());
         }
         else {
-            Debug.Log("Returning to MainHub");
             GameManager.instance.ReturnToMainHub();
         }
     }

@@ -5,8 +5,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Projectile", menuName = "Projectiles")]
 
 public class ProjectileScriptableObject : ScriptableObject{
-    [SerializeField] public enum CollisionType{contact, explosive, passThrough}
-
     [SerializeField] public GameObject characterModel;
     [SerializeField] public Sprite sprite;
     [SerializeField] public string projectileName;

@@ -18,4 +18,4 @@ MonoBehaviour:
   goalName: Score Amount
   goalDescription: First player to get $ score wins
   goalKeyword: Score
-  goalMultiplier: 100
+  goalMultiplier: 1000

@@ -6,14 +6,11 @@ using UnityEngine.SceneManagement;
 using System.Linq;
 using System;
 
-public enum MiniGame{sharpShooter, dimeDrop}
-public enum MiniGameGoal{killCount, lastStanding, time, scoreAmount}
-public enum MiniGameState{preparation, gameSetUp, gameIsRunning, gameOverSetUp, gameOver}
-
 public class GameManager : MonoBehaviour{
     //INSTANCES
     public static GameManager instance = null;
-    public bool GameIsPaused;
+    public bool gameIsPaused;
+    public bool miniGameIsRunning;
     [SerializeField] private LevelLoader levelLoader;
     public Camera mainCamera;
     
@@ -38,7 +35,8 @@ public class GameManager : MonoBehaviour{
             Destroy(gameObject);
         }
 
-        GameIsPaused = false;
+        gameIsPaused = false;
+        miniGameIsRunning = false;
 
         joinAction.Enable();
         joinAction.performed += context => {JoinAction(context); Debug.Log("Player Joined");};
@@ -52,7 +50,7 @@ public class GameManager : MonoBehaviour{
     }
 
     public void ReturnToMainMenu(){
-        levelLoader.LoadLevel("MainMenu");
+        LoadMiniGame("MainMenu");
     }
 
     public void ReturnToMainHub(){
@@ -65,6 +63,8 @@ public class GameManager : MonoBehaviour{
         }
         levelLoader.LoadLevel(_levelName);
     }
+
+
 
     public void SetSpawnPoint(){
         FindSpawnPoints();
@@ -92,26 +92,13 @@ public class GameManager : MonoBehaviour{
     public void GameManagerCharacterDied(GameObject character){
         //print("GameManager detected death" + character.transform.parent.GetComponent<CharacterStats>().teamColor);
         mainCamera.GetComponent<CameraController>().RemoveCharacter(character);
-
-        if(character.transform.parent.GetComponent<CharacterStats>().CanRespawn()){
-            StartCoroutine(RespawnCharacter(character));
-        }
-        int index = GameManager.instance.spawnPoints.Length;
-        int randomIndex = UnityEngine.Random.Range(0, index);
-        character.transform.position = GameManager.instance.spawnPoints[randomIndex].transform.position;
-        character.SetActive(false);
-    }
-
-    IEnumerator RespawnCharacter(GameObject character){
-        yield return new WaitForSeconds(character.transform.parent.GetComponent<CharacterStats>().timeToRespawn);
-        character.SetActive(true);
-        character.transform.parent.GetComponent<CharacterEvents>().RefreshStatsUponRespawning();
     }
 
     public void GameManagerCharacterSpawned(GameObject character){
         //print("GameManager detected spawn" + character.transform.parent.GetComponent<CharacterStats>().teamColor);
         mainCamera.GetComponent<CameraController>().AddCharacter(character);
     }
+
 
 
     void OnPlayerJoined(PlayerInput playerInput){ //THIS METHOD COMES FROM UNITY ITSELF

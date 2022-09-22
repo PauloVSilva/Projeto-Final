@@ -7,20 +7,23 @@ public class MainHubManager : MonoBehaviour{
     //INSTANCES
     public static MainHubManager instance = null;
 
-    public void Start(){
+    public void Awake(){
         if (instance == null){
             instance = this;
         }
         else if (instance != null){
             Destroy(gameObject);
         }
+    }
+
+    public void Start(){
+        GameManager.instance.miniGameIsRunning = false;
 
         GameManager.instance.SetSpawnPoint();
         if(GameManager.instance.playerList.Count > 0){
             foreach(var playerInput in GameManager.instance.playerList){
-                playerInput.transform.GetComponent<CharacterSelection>().characterObject.transform.position = GameManager.instance.spawnPoints[0].transform.position;
+                playerInput.transform.GetComponent<CharacterEvents>().RespawnCharacter();
                 playerInput.actions.Enable();
-                playerInput.GetComponent<CharacterEvents>().ResetStats();
             }
         }
         GameManager.instance.joinAction.Enable();

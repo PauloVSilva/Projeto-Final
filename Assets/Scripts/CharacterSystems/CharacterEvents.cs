@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CharacterEvents : MonoBehaviour{
     [SerializeField] private CharacterStats characterStats;
@@ -38,19 +39,6 @@ public class CharacterEvents : MonoBehaviour{
         OnPlayerBorn -= GameManager.instance.GameManagerCharacterSpawned;
     }
 
-    public void ResetStats(){
-        characterStats.ResetStats();
-        OnPlayerStatsReset?.Invoke();
-    }
-
-    public void RefreshStats(){
-        OnPlayerStatsReset?.Invoke();
-    }
-
-    public void SetLimitedLives(int _lives){
-        characterStats.SetLimitedLives(_lives);
-        OnPlayerStatsReset?.Invoke();
-    }
 
     public void FilterCollision(GameObject character, GameObject _gameObject){
         if(_gameObject.CompareTag("Coin")){
@@ -74,7 +62,47 @@ public class CharacterEvents : MonoBehaviour{
         characterObject.GetComponent<MovementSystem>().ResetStats();
     }
 
-    private void IncreaseScore(int value){
+
+    public void BeginRespawnProcess(){
+        if(characterStats.CanRespawn()){
+            StartCoroutine(RespawnCharacterDelay());
+        }
+        characterObject.SetActive(false);
+    }
+
+    IEnumerator RespawnCharacterDelay(){
+        yield return new WaitForSeconds(characterStats.timeToRespawn);
+        RespawnCharacter();
+    }
+
+    public void RespawnCharacter(){
+        int randomIndex = UnityEngine.Random.Range(0, GameManager.instance.spawnPoints.Length);
+        characterObject.transform.position = GameManager.instance.spawnPoints[randomIndex].transform.position;
+        characterObject.SetActive(true);
+        RefreshStatsUponRespawning();
+    }
+
+
+
+
+
+
+    //METHODS THAT INVOKE EVENTS
+    public void ResetStats(){
+        characterStats.ResetStats();
+        OnPlayerStatsReset?.Invoke();
+    }
+
+    public void RefreshStats(){
+        OnPlayerStatsReset?.Invoke();
+    }
+
+    public void SetLimitedLives(int _lives){
+        characterStats.SetLimitedLives(_lives);
+        OnPlayerStatsReset?.Invoke();
+    }
+
+    public void IncreaseScore(int value){
         characterStats.IncreaseScore(value);
         OnPlayerScoreChanged?.Invoke(gameObject, characterStats.GetScore());
     }
@@ -89,6 +117,8 @@ public class CharacterEvents : MonoBehaviour{
         if(!characterStats.unlimitedLives){
             characterStats.DecreaseLives();
         }
+        BeginRespawnProcess();
+
         Instantiate(GameManager.instance.DeathSpot, character.transform.position, Quaternion.Euler(0, 0, 0), this.transform);
         OnPlayerDied?.Invoke(character);
     }

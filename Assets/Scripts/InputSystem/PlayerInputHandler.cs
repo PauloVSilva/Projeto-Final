@@ -6,6 +6,7 @@ using System;
 
 public class PlayerInputHandler : MonoBehaviour{
 
+    [SerializeField] private CharacterEvents characterEvents;
     public event System.Action OnCharacterPressMenuButton;
     public event System.Action<InputAction.CallbackContext> OnCharacterMove;
     public event System.Action<InputAction.CallbackContext> OnCharacterJump;
@@ -16,6 +17,47 @@ public class PlayerInputHandler : MonoBehaviour{
     public event System.Action<InputAction.CallbackContext> OnCharacterPressTrigger;
     public event System.Action<InputAction.CallbackContext> OnCharacterReload;
     public event System.Action<InputAction.CallbackContext> OnCharacterDropWeapon;
+
+    private void Start(){
+        characterEvents = GetComponent<CharacterEvents>();
+        characterEvents.OnPlayerPickedUpWeapon += SetGunActionsActive;
+        characterEvents.OnPlayerDroppedWeapon += SetGunActionsInactive;
+    }
+
+    private void OnDestroy(){
+        characterEvents.OnPlayerPickedUpWeapon -= SetGunActionsActive;
+        characterEvents.OnPlayerDroppedWeapon -= SetGunActionsInactive;
+    }
+
+    public void EnableMovementActions(){
+        GetComponent<PlayerInput>().actions["Movement"].Enable();
+        GetComponent<PlayerInput>().actions["Sprint"].Enable();
+        GetComponent<PlayerInput>().actions["Jump"].Enable();
+        GetComponent<PlayerInput>().actions["Dash"].Enable();
+    }
+
+    public void DisableMovementActions(){
+        GetComponent<PlayerInput>().actions["Movement"].Disable();
+        GetComponent<PlayerInput>().actions["Sprint"].Disable();
+        GetComponent<PlayerInput>().actions["Jump"].Disable();
+        GetComponent<PlayerInput>().actions["Dash"].Disable();
+    }
+
+    public void SetGunActionsActive(Weapon _weapon){
+        GetComponent<PlayerInput>().actions["CockHammer"].Enable();
+        GetComponent<PlayerInput>().actions["PressTrigger"].Enable();
+        GetComponent<PlayerInput>().actions["ReloadWeapon"].Enable();
+        GetComponent<PlayerInput>().actions["DropWeapon"].Enable();
+    }
+
+    public void SetGunActionsInactive(){
+        GetComponent<PlayerInput>().actions["CockHammer"].Disable();
+        GetComponent<PlayerInput>().actions["PressTrigger"].Disable();
+        GetComponent<PlayerInput>().actions["ReloadWeapon"].Disable();
+        GetComponent<PlayerInput>().actions["DropWeapon"].Disable();
+    }
+
+
 
     public void OnPressMenuButton(InputAction.CallbackContext context){
         if(context.performed){

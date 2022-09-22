@@ -28,6 +28,7 @@ public class LevelLoader : MonoBehaviour{
             loadingScreen.SetActive(false);
             if(sceneName == "MainMenu"){
                 Destroy(GameManager.instance.gameObject);
+                //SceneManager.UnloadSceneAsync("MainHub");
             }
         }
     }

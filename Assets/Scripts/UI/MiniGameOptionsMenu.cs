@@ -97,7 +97,6 @@ public class MiniGameOptionsMenu : MonoBehaviour{
     }
 
     public void ConfirmSettings(){
-        Debug.Log("Going to " + miniGameName.text);
         GameManager.instance.LoadMiniGame(miniGameName.text);
     }
 

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
+    
+public enum ActionType{manual, semiAuto, fullAuto}
+public enum ChamberReloadType{pump, revolver}
+public enum Size{handGun, longGun}
 
 public class Weapon : MonoBehaviour{
     [SerializeField] public WeaponScriptableObject FireWeapon;
     [SerializeField] public ProjectileScriptableObject projectileToCast;
-    
-    [SerializeField] private enum ActionType{manual, semiAuto, fullAuto}
-    [SerializeField] private enum ChamberReloadType{pump, revolver}
-    [SerializeField] private enum Size{handGun, longGun}
 
     //ATTRIBUTES FROM SCRIPTABLE OBJECT
     [SerializeField] public Sprite sprite;

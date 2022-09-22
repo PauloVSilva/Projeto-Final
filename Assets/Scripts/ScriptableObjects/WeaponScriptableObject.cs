@@ -5,10 +5,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Weapon", menuName = "Weapons")]
 
 public class WeaponScriptableObject : ScriptableObject{
-    [SerializeField] public enum ActionType{manual, semiAuto, fullAuto}
-    [SerializeField] public enum ChamberReloadType{pump, revolver}
-    [SerializeField] public enum Size{handGun, longGun}
-
     [SerializeField] public GameObject characterModel;
     [SerializeField] public Sprite sprite;
     [SerializeField] public string weaponName;

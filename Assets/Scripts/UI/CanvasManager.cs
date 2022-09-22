@@ -10,8 +10,9 @@ public enum Menu{
 public class CanvasManager : MonoBehaviour{
     //INSTANCES
     public static CanvasManager instance = null;
-    List<MenuController> menuControllersList;
-    MenuController lastActiveMenu;
+    [SerializeField] private List<MenuController> menuControllersList;
+    [SerializeField] private List<MenuController> allActiveMenus = new List<MenuController>();
+    [SerializeField] private MenuController lastActiveMenu;
 
     private void Awake(){
         if(instance == null){
@@ -45,7 +46,11 @@ public class CanvasManager : MonoBehaviour{
 
     public void CloseMenu(){
         if(lastActiveMenu != null){
+            allActiveMenus.Remove(lastActiveMenu);
             lastActiveMenu.gameObject.SetActive(false);
+        }
+        if(allActiveMenus.Count() > 0){
+            lastActiveMenu = allActiveMenus[allActiveMenus.Count() - 1];
         }
     }
 
@@ -53,6 +58,7 @@ public class CanvasManager : MonoBehaviour{
         MenuController desiredMenu = menuControllersList.Find(x => x.menu == _menu);
         if(desiredMenu != null){
             desiredMenu.gameObject.SetActive(true);
+            allActiveMenus.Add(desiredMenu);
             lastActiveMenu = desiredMenu;
         }
         else{

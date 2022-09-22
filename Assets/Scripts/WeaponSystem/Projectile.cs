@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum CollisionType{contact, explosive, passThrough}
+
 public class Projectile : MonoBehaviour, IPooledObjects{
 //public class Projectile : MonoBehaviour{
     public ProjectileScriptableObject ProjectileToCast;
-
-    [SerializeField] public enum CollisionType{contact, explosive, passThrough}
 
     //ATTRIBUTES FROM SCRIPTABLE OBJECT
     [SerializeField] public GameObject characterModel;
