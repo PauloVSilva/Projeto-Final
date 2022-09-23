@@ -35,6 +35,8 @@ public class CanvasManager : MonoBehaviour{
         if(desiredMenu != null){
             desiredMenu.gameObject.SetActive(true);
             lastActiveMenu = desiredMenu;
+
+            PauseMenu.instance.Pause();
         }
         else{
             Debug.LogWarning("Desired menu was not found D:");
@@ -50,6 +52,9 @@ public class CanvasManager : MonoBehaviour{
         if(allActiveMenus.Count() > 0){
             lastActiveMenu = allActiveMenus[allActiveMenus.Count() - 1];
         }
+        if(allActiveMenus.Count() == 0){
+            PauseMenu.instance.Resume();
+        }
     }
 
     public void OpenMenu(Menu _menu){
@@ -58,6 +63,9 @@ public class CanvasManager : MonoBehaviour{
             desiredMenu.gameObject.SetActive(true);
             allActiveMenus.Add(desiredMenu);
             lastActiveMenu = desiredMenu;
+
+            PauseMenu.instance.Pause();
+            Debug.Log("CanvasManager OpenMenu() desiredMenu != null");
         }
         else{
             Debug.LogWarning("Desired menu was not found D:");

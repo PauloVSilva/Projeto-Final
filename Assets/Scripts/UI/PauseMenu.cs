@@ -8,6 +8,7 @@ using UnityEngine.InputSystem.UI;
 using TMPro;
 
 public class PauseMenu : MonoBehaviour{
+    public static PauseMenu instance = null;
     //COMMON TO ALL MENUS
     [SerializeField] private Button firstSelected;
     [SerializeField] private TextMeshProUGUI menuName;
@@ -19,6 +20,16 @@ public class PauseMenu : MonoBehaviour{
 
     //SPECIFIC TO THIS MENU
     [SerializeField] private Button DropOutButton;
+    [SerializeField] private string pauseMessage;
+
+    private void Awake(){
+        if(instance == null){
+            instance = this;
+        }
+        else if(instance != null){
+            Destroy(gameObject);
+        }
+    }
 
     private void Start(){
         ListenToPlayerJoined();
@@ -37,18 +48,30 @@ public class PauseMenu : MonoBehaviour{
         playerInput = _playerInput;
         inputSystemUIInputModule.actionsAsset = playerInput.actions;
         //_playerInput.InputSystemUIInputModule = inputSystemUIInputModule;
-        playerControllingMenu.text = "Paused by player " + (_playerInput.playerIndex + 1);
-        Pause();
+        pauseMessage = MessageManager.instance.GetPauseMessage((_playerInput.playerIndex + 1).ToString());
+        playerControllingMenu.text = pauseMessage;
+        //Pause();
         CanvasManager.instance.SwitchMenu(Menu.PauseMenu);
     }
 
     public void Pause(){
         Time.timeScale = 0f;
+        foreach(var playerInput in GameManager.instance.playerList){
+            playerInput.SwitchCurrentActionMap("UI");
+        }
+        GameManager.instance.joinAction.Disable();
+        GameManager.instance.leaveAction.Disable();
         GameManager.instance.gameIsPaused = true;
+        DropOutButton.interactable = !GameManager.instance.miniGameIsRunning;
     }
 
     public void Resume(){
         Time.timeScale = 1f;
+        foreach(var playerInput in GameManager.instance.playerList){
+            playerInput.SwitchCurrentActionMap("Player");
+        }
+        GameManager.instance.joinAction.Enable();
+        GameManager.instance.leaveAction.Enable();
         GameManager.instance.gameIsPaused = false;
     }
 
