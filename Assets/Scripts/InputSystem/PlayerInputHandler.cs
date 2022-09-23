@@ -7,7 +7,7 @@ using System;
 public class PlayerInputHandler : MonoBehaviour{
 
     [SerializeField] private CharacterEvents characterEvents;
-    public event System.Action OnCharacterPressMenuButton;
+    public event System.Action<PlayerInput> OnCharacterPressMenuButton;
     public event System.Action<InputAction.CallbackContext> OnCharacterMove;
     public event System.Action<InputAction.CallbackContext> OnCharacterJump;
     public event System.Action<InputAction.CallbackContext> OnCharacterDash;
@@ -61,7 +61,7 @@ public class PlayerInputHandler : MonoBehaviour{
 
     public void OnPressMenuButton(InputAction.CallbackContext context){
         if(context.performed){
-            OnCharacterPressMenuButton?.Invoke();
+            OnCharacterPressMenuButton?.Invoke(GetComponent<PlayerInput>());
         }
     }
 

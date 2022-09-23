@@ -1,66 +1,60 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
+using TMPro;
 
 public class PauseMenu : MonoBehaviour{
-    [SerializeField] private GameObject pauseMenuUI;
+    //COMMON TO ALL MENUS
     [SerializeField] private Button firstSelected;
+    [SerializeField] private TextMeshProUGUI menuName;
+
+    //COMMON TO PLAYER-SPECIFIC MENU
+    [SerializeField] private PlayerInput playerInput;
+    [SerializeField] private InputSystemUIInputModule inputSystemUIInputModule;
+    [SerializeField] private TextMeshProUGUI playerControllingMenu;
+
+    //SPECIFIC TO THIS MENU
     [SerializeField] private Button DropOutButton;
-    [SerializeField] private PlayerInputHandler playerInputHandler;
 
-    private void Start() {
-        playerInputHandler.OnCharacterPressMenuButton += ChangeGameStatus;
+    private void Start(){
+        ListenToPlayerJoined();
     }
 
-    private void OnDestroy() {
-        playerInputHandler.OnCharacterPressMenuButton -= ChangeGameStatus;
+    private void ListenToPlayerJoined(){
+        GameManager.instance.OnPlayerJoinedGame += SubscribeToPlayerEvent;
     }
 
-    private void ChangeGameStatus(){
-        if(GameManager.instance.miniGameIsRunning){
-            DropOutButton.interactable = false;
-        }
-        else{
-            DropOutButton.interactable = true;
-        }
+    private void SubscribeToPlayerEvent(PlayerInput _playerInput){
+        _playerInput.GetComponent<PlayerInputHandler>().OnCharacterPressMenuButton += PlayerPressedPause;
+    }
 
-
-        if(GameManager.instance.gameIsPaused){
-            Resume();
-        }
-        else{
-            Pause();
-        }
+    private void PlayerPressedPause(PlayerInput _playerInput){
+        firstSelected.Select();
+        playerInput = _playerInput;
+        inputSystemUIInputModule.actionsAsset = playerInput.actions;
+        //_playerInput.InputSystemUIInputModule = inputSystemUIInputModule;
+        playerControllingMenu.text = "Paused by player " + (_playerInput.playerIndex + 1);
+        Pause();
+        CanvasManager.instance.SwitchMenu(Menu.PauseMenu);
     }
 
     public void Pause(){
-        foreach(var playerInput in GameManager.instance.playerList){
-            playerInput.SwitchCurrentActionMap("UI");
-        }
-        pauseMenuUI.SetActive(true);
-        firstSelected.Select();
         Time.timeScale = 0f;
         GameManager.instance.gameIsPaused = true;
     }
 
     public void Resume(){
-        pauseMenuUI.SetActive(false);
-        ResumeGameFlow();
+        Time.timeScale = 1f;
+        GameManager.instance.gameIsPaused = false;
     }
 
     public void DropOut(){
-        GameManager.instance.UnregisterPlayer(this.transform.parent.GetComponent<PlayerInput>());
-        ResumeGameFlow();
-    }
-
-    private void ResumeGameFlow(){
-        foreach(var playerInput in GameManager.instance.playerList){
-            playerInput.SwitchCurrentActionMap("Player");
-        }
-        Time.timeScale = 1f;
-        GameManager.instance.gameIsPaused = false;
+        GameManager.instance.UnregisterPlayer(playerInput);
+        Resume();
     }
 
     public void QuitToMainMenu(){

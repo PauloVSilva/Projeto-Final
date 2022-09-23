@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public enum Menu{
-    MiniGameSetupMenu
-}
+public enum Menu{MiniGameSetupMenu, PauseMenu, CharacterSelectionMenu}
 
 public class CanvasManager : MonoBehaviour{
     //INSTANCES
@@ -23,7 +21,7 @@ public class CanvasManager : MonoBehaviour{
             Destroy(gameObject);
         }
 
-        menuControllersList = GetComponentsInChildren<MenuController>().ToList();
+        //menuControllersList = GetComponentsInChildren<MenuController>().ToList();
         menuControllersList.ForEach(x => x.gameObject.SetActive(false)); //x is menuController
         //SwitchMenu(Menu.MiniGameSetupMenu); this line is only used if I want a specific menu to pop up as soon as the scene opens
     }

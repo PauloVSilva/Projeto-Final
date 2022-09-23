@@ -22,7 +22,9 @@ public class CameraController : MonoBehaviour{
     }
 
     public void RemovePlayer(PlayerInput playerInput){
-        objectsTracked.Remove(playerInput.transform.GetComponent<CharacterSelection>().characterObject.gameObject);
+        if(playerInput.GetComponent<CharacterSelection>().characterObject != null){
+            objectsTracked.Remove(playerInput.transform.GetComponent<CharacterSelection>().characterObject.gameObject);
+        }
     }
 
     void FixedUpdate(){

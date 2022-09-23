@@ -1,29 +1,67 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 using TMPro;
 
 public class CharacterSelectionMenu : MonoBehaviour{
-    [SerializeField] private GameObject characterSelectionMenuUI;
+    //COMMON TO ALL MENUS
+    [SerializeField] private Button firstSelected;
+    [SerializeField] private TextMeshProUGUI menuName;
+
+    //COMMON TO PLAYER-SPECIFIC MENU
+    [SerializeField] private PlayerInput playerInput;
+    [SerializeField] private InputSystemUIInputModule inputSystemUIInputModule;
+    [SerializeField] private TextMeshProUGUI playerControllingMenu;
+
+    //SPECIFIC TO THIS MENU
     [SerializeField] private CharacterSelection characterSelection;
     [SerializeField] private List<CharacterStatsScriptableObject> characterList = new List<CharacterStatsScriptableObject>();
     [SerializeField] private CharacterStatsScriptableObject displayedCharacter;
     [SerializeField] private int index;
     [SerializeField] private Image characterSprite;
     [SerializeField] private TextMeshProUGUI characterName;
-    [SerializeField] private Button firstSelected;
+    [SerializeField] private string greetMessage;
 
-    private void Awake(){
-        index = 0;
+    private void Start(){
+        greetMessage = "Welcome player $index!";
+        ListenToPlayerJoined();
     }
 
-    private void Start() {
+    public string StringEditor(string originalMessage, string oldPart, string newPart){
+        string newMessage = originalMessage;
+        if(newMessage.Contains(oldPart)){
+            Debug.Log("old part found");
+            newMessage = newMessage.Replace(oldPart, newPart);
+            return newMessage;
+        }
+        Debug.Log("old part not found");
+        return originalMessage;
+    }
+
+    private void ListenToPlayerJoined(){
+        GameManager.instance.OnPlayerJoinedGame += PlayerJoined;
+    }
+
+    private void PlayerJoined(PlayerInput _playerInput){
+        firstSelected.Select();
+        playerInput = _playerInput;
+        inputSystemUIInputModule.actionsAsset = playerInput.actions;
+        //_playerInput.InputSystemUIInputModule = inputSystemUIInputModule;
+        playerControllingMenu.text = StringEditor(greetMessage, "$index", (_playerInput.playerIndex + 1).ToString());
+        MenuOpened();
+        CanvasManager.instance.SwitchMenu(Menu.CharacterSelectionMenu);
+    }
+
+    private void MenuOpened(){
+        index = 0;
+        characterSelection = playerInput.GetComponent<CharacterSelection>();
         displayedCharacter = characterList[index];
         UpdateCharacter();
         firstSelected.Select();
-        characterSelectionMenuUI.SetActive(true);
     }
 
     public void NextCharacter(){
@@ -56,6 +94,10 @@ public class CharacterSelectionMenu : MonoBehaviour{
     public void ConfirmCharacter(){
         CharacterStatsScriptableObject selectedCharacter = displayedCharacter;
         characterSelection.SpawnCharacter(selectedCharacter);
-        characterSelectionMenuUI.SetActive(false);
     }
+
+    public void CancelSelection(){
+        GameManager.instance.UnregisterPlayer(playerInput);
+    }
+
 }
