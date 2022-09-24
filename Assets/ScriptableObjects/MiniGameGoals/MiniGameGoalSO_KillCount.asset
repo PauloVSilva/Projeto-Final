@@ -16,6 +16,6 @@ MonoBehaviour:
   miniGameGoal: 0
   goalSprite: {fileID: 21300000, guid: a42756104641dbd4e8456c5b8ef5787e, type: 3}
   goalName: Kill Count
-  goalDescription: First player to get $ kills wins
+  goalDescription: First player to get $VALUE kills wins
   goalKeyword: Kills
   goalMultiplier: 1

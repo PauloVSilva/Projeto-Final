@@ -45,12 +45,9 @@ public class HealthSystem : MonoBehaviour{
     }
 
     private void RegenerateHealth(){
-        if(CurrentHealth < MaxHealth){
-            CurrentHealth += HealthRegenRate * Time.deltaTime;
+        if(IsAlive){
+            CurrentHealth = Math.Min(CurrentHealth += HealthRegenRate * Time.deltaTime, MaxHealth);
             SendHealthUpdateEvent();
-        }
-        if(CurrentHealth > MaxHealth){
-            CurrentHealth = MaxHealth;
         }
     }
 

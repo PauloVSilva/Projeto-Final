@@ -91,7 +91,8 @@ public class MiniGameOptionsMenu : MonoBehaviour{
     public void UpdateMenu(){
         goalSprite.sprite = displayedMiniGameGoal.goalSprite;
         goalName.text = displayedMiniGameGoal.goalName.ToString();
-        goalDescription.text = displayedMiniGameGoal.goalDescription.ToString();
+        //goalDescription.text = displayedMiniGameGoal.goalDescription.ToString();
+        goalDescription.text = MessageManager.instance.StringEditor(displayedMiniGameGoal.goalDescription.ToString(), "$VALUE", miniGameGoalAmount.ToString());
         goalKeyword.text = displayedMiniGameGoal.goalKeyword.ToString();
         goalAmount.text = miniGameGoalAmount.ToString();
     }
@@ -102,6 +103,10 @@ public class MiniGameOptionsMenu : MonoBehaviour{
 
     public MiniGameGoalScriptableObject GetMiniGameGoal(){
         return displayedMiniGameGoal;
+    }
+
+    public string GetMiniGameGoalDescription(){
+        return goalDescription.text;
     }
 
     public int GetMiniGameGoalAmount(){

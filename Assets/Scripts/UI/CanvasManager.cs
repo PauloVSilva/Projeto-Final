@@ -36,7 +36,7 @@ public class CanvasManager : MonoBehaviour{
             desiredMenu.gameObject.SetActive(true);
             lastActiveMenu = desiredMenu;
 
-            PauseMenu.instance.Pause();
+            StartCoroutine(PauseMenu.instance.PauseDelay());
         }
         else{
             Debug.LogWarning("Desired menu was not found D:");

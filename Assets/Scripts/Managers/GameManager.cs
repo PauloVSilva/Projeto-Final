@@ -41,8 +41,8 @@ public class GameManager : MonoBehaviour{
         joinAction.Enable();
         joinAction.performed += context => {JoinAction(context); Debug.Log("Player Joined");};
 
-        leaveAction.Enable();
-        leaveAction.performed += context => LeaveAction(context);
+        //leaveAction.Enable();
+        //leaveAction.performed += context => LeaveAction(context);
     }
 
     private void Start(){

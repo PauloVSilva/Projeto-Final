@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,17 +11,23 @@ public class MovementSystem : MonoBehaviour{
     [SerializeField] private CharacterEvents characterEvents;
 
     //VARIABLES THAT WILL COME FROM CHARACTERSTATS
-    public float MovSpeed {get; protected set;}
+    public float WalkSpeed {get; protected set;}
     public float SprintSpeed {get; protected set;}
     public float MaxStamina {get; protected set;}
     public float StaminaRegenRate {get; protected set;}
     public float JumpStrength {get; protected set;}
-    public int TotalJumps ;//{get; protected set;}
+    public int TotalJumps {get; protected set;}
+    public int JumpStaminaCost {get; protected set;}
+    public int DashStaminaCost {get; protected set;}
+    public int SprintStaminaCost {get; protected set;}
     
     //VARIABLES FOR INTERNAL USE
-    public bool IsSprinting {get; protected set;}
+    public float moveSpeed {get; protected set;}
+    public bool isSprinting {get; protected set;}
     public float CurrentStamina {get; protected set;}
-    public int JumpsRemaining ;//{get; protected set;}
+    public float StaminaRegenCooldown {get; protected set;}
+    public bool CanRegenStamina {get; protected set;}
+    public int JumpsRemaining {get; protected set;}
 
     //OTHER VARIABLES
     [SerializeField] private CharacterController controller;
@@ -39,14 +46,18 @@ public class MovementSystem : MonoBehaviour{
         characterEvents = gameObject.transform.parent.GetComponent<CharacterEvents>();
         controller = GetComponent<CharacterController>();
         
-        MovSpeed = characterStats.MovSpeed;
+        WalkSpeed = characterStats.WalkSpeed;
         SprintSpeed = characterStats.SprintSpeed;
         MaxStamina = characterStats.MaxStamina;
         StaminaRegenRate = characterStats.StaminaRegenRate;
         JumpStrength = characterStats.JumpStrength;
         TotalJumps = characterStats.TotalJumps;
+        JumpStaminaCost = characterStats.JumpStaminaCost;
+        DashStaminaCost = characterStats.DashStaminaCost;
+        SprintStaminaCost = characterStats.SprintStaminaCost;
 
-        IsSprinting = false;
+        moveSpeed = WalkSpeed;
+        isSprinting = false;
         CurrentStamina = MaxStamina;
         JumpsRemaining = TotalJumps;
         SendStaminaUpdateEvent();
@@ -67,7 +78,7 @@ public class MovementSystem : MonoBehaviour{
             JumpsRemaining = TotalJumps;
         }
 
-        controller.Move(move * Time.deltaTime * MovSpeed);
+        controller.Move(move * Time.deltaTime * moveSpeed);
 
         if (move != Vector3.zero){
             gameObject.transform.forward = move;
@@ -76,6 +87,7 @@ public class MovementSystem : MonoBehaviour{
         playerVelocity.y += gravityValue * Time.deltaTime;
         controller.Move(playerVelocity * Time.deltaTime);
 
+        SprintBehavior();
         StaminaRegen();
 
     }
@@ -89,13 +101,38 @@ public class MovementSystem : MonoBehaviour{
     }
 
     public void StaminaRegen(){
-        if(CurrentStamina < MaxStamina){
-            CurrentStamina += StaminaRegenRate * Time.deltaTime;
+        if(CanRegenStamina){
+            CurrentStamina = Math.Min(CurrentStamina += StaminaRegenRate * Time.deltaTime, MaxStamina);
             SendStaminaUpdateEvent();
         }
-        if (CurrentStamina > MaxStamina){
-            CurrentStamina = MaxStamina;
+        if(StaminaRegenCooldown > 0){
+            StaminaRegenCooldown -= Time.deltaTime;
         }
+        if(StaminaRegenCooldown <= 0){
+            StaminaRegenCooldown = 0;
+            CanRegenStamina = true;
+        }
+    }
+
+    private void SprintBehavior(){
+        if(isSprinting && CurrentStamina > 0f){
+            SpendStamina(SprintStaminaCost * Time.deltaTime);
+        }
+        if(CurrentStamina <= 1f){
+            isSprinting = false;
+            moveSpeed = WalkSpeed;
+        }
+    }
+
+    private void SpendStamina(float _value){
+        CurrentStamina = Math.Max(CurrentStamina -= _value, 0);
+        SendStaminaUpdateEvent();
+        StaminaRegenCooldown = 1f;
+        CanRegenStamina = false;
+    }
+
+    private void SendStaminaUpdateEvent(){
+        characterEvents.PlayerStaminaUpdated(CurrentStamina, MaxStamina);
     }
 
     public void OnMove(InputAction.CallbackContext context){
@@ -104,21 +141,26 @@ public class MovementSystem : MonoBehaviour{
     }
 
     public void OnSprint(InputAction.CallbackContext context){
-        //if(context.started){
-        //    if(CurrentStamina > 0){
-        //        IsSprinting = true;
-        //    }
-        //}
+        if(context.performed){
+            if(CurrentStamina > 1f){
+                isSprinting = true;
+                moveSpeed = SprintSpeed;
+                SendStaminaUpdateEvent();
+            }
+        }
+        if(context.canceled){
+            isSprinting = false;
+            moveSpeed = WalkSpeed;
+        }
     }
 
     public void OnJump(InputAction.CallbackContext context){
         if(context.performed){
-            if(CurrentStamina > 15f){
+            if(CurrentStamina > 1f){
                 if(JumpsRemaining > 0){
                     playerVelocity.y = Mathf.Sqrt(JumpStrength * -3.0f * gravityValue);
                     JumpsRemaining--;
-                    CurrentStamina -= 15f;
-                    SendStaminaUpdateEvent();
+                    SpendStamina(JumpStaminaCost);
                 }
             }
         }
@@ -126,16 +168,11 @@ public class MovementSystem : MonoBehaviour{
 
     public void OnDash(InputAction.CallbackContext context){
         if(context.performed){
-            if(CurrentStamina > 10f){
-                controller.Move(transform.forward * MovSpeed);
-                CurrentStamina -= 10f;
-                SendStaminaUpdateEvent();
+            if(CurrentStamina > 1f){
+                controller.Move(transform.forward * moveSpeed);
+                SpendStamina(DashStaminaCost);
             }
         }
-    }
-
-    private void SendStaminaUpdateEvent(){
-        characterEvents.PlayerStaminaUpdated(CurrentStamina, MaxStamina);
     }
 
 }

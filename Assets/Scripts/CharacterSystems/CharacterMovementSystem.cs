@@ -2,5 +2,5 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterMovementSystem : MonoBehaviour{
+public class CharacterMovementSystem : MovementSystem{
 }

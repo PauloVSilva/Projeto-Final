@@ -2,12 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum Animal{hedgehog, pangolin, threeBandedArmadillo}
+public enum TeamColor{none, blue, red, green, yellow}
+
 public class CharacterStats : MonoBehaviour{
     public CharacterStatsScriptableObject Character;
-
-    [SerializeField] public enum Animal{hedgehog, pangolin, threeBandedArmadillo}
-
-    [SerializeField] public enum TeamColor{blue, red, green, yellow}
 
     //PLAYER VARIABLES
     [Space(5)]
@@ -19,7 +18,12 @@ public class CharacterStats : MonoBehaviour{
     [SerializeField] public bool unlimitedLives;
     [SerializeField] public int totalLives;
     [SerializeField] public float timeToRespawn;
+
+    //stats useful to determine what actions the player can or can not perform
+    [SerializeField] public bool isStunned;
     [SerializeField] public bool isArmed;
+    [SerializeField] public bool isMountedOnTurret;
+
 
     [Space(5)]
     [Header("Character Base Stats")]
@@ -27,56 +31,68 @@ public class CharacterStats : MonoBehaviour{
     [SerializeField] public Animal animal;
     [SerializeField] private float maxHealth;
     [SerializeField] private float healthRegenRate;
-    [SerializeField] private float movSpeed;
+    [SerializeField] private float walkSpeed;
     [SerializeField] private float sprintSpeed;
     [SerializeField] private float maxStamina;
     [SerializeField] private float staminaRegenRate;
     [SerializeField] private float jumpStrength;
     [SerializeField] private int totalJumps;
+    [SerializeField] private int jumpStaminaCost;
+    [SerializeField] private int dashStaminaCost;
+    [SerializeField] private int sprintStaminaCost;
 
     public float MaxHealth => maxHealth;
     public float HealthRegenRate => healthRegenRate;
-    public float MovSpeed => movSpeed;
+    public float WalkSpeed => walkSpeed;
     public float SprintSpeed => sprintSpeed;
     public float MaxStamina => maxStamina;
     public float StaminaRegenRate => staminaRegenRate;
     public float JumpStrength => jumpStrength;
     public int TotalJumps => totalJumps;
+    public int JumpStaminaCost => jumpStaminaCost;
+    public int DashStaminaCost => dashStaminaCost;
+    public int SprintStaminaCost => sprintStaminaCost;
 
     private void Awake(){
         InitializePlayerVariables();
     }
 
     private void InitializePlayerVariables(){
-        teamColor = TeamColor.blue;
+        teamColor = TeamColor.none;
         score = 0;
         kills = 0;
         deaths = 0;
         unlimitedLives = true;
         totalLives = 0;
         timeToRespawn = 3f;
+
+        isStunned = false;
         isArmed = false;
+        isMountedOnTurret = false;
     }
 
     public void SetStats(){
-        GetCharacter();
+        SetCharacter();
         InitializeCharacterVariables();
     }
 
-    private void GetCharacter(){
+    private void SetCharacter(){
         Character = GetComponent<CharacterSelection>().Character;
     }
 
     private void InitializeCharacterVariables(){
-        animal = (Animal)Character._animal;
+        animal = Character._animal;
         maxHealth = Character._maxHealth;
         healthRegenRate = Character._healthRegenRate;
-        movSpeed = Character._movSpeed;
+        walkSpeed = Character._walkSpeed;
         sprintSpeed = Character._sprintSpeed;
         maxStamina = Character._maxStamina;
         staminaRegenRate = Character._staminaRegenRate;
         jumpStrength = Character._jumpStrength;
         totalJumps = Character._totalJumps;
+        jumpStaminaCost = Character._jumpStaminaCost;
+        dashStaminaCost = Character._dashStaminaCost;
+        sprintStaminaCost = Character._sprintStaminaCost;
     }
 
     public void ResetStats(){

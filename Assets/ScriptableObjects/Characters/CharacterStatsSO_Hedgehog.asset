@@ -20,9 +20,12 @@ MonoBehaviour:
   _animal: 0
   _maxHealth: 100
   _healthRegenRate: 5
-  _movSpeed: 6
-  _sprintSpeed: 7
+  _walkSpeed: 5
+  _sprintSpeed: 9
   _maxStamina: 60
   _staminaRegenRate: 10
   _jumpStrength: 1
   _totalJumps: 2
+  _jumpStaminaCost: 15
+  _dashStaminaCost: 15
+  _sprintStaminaCost: 15

@@ -40,7 +40,7 @@ public class MiniGameManager : MonoBehaviour{
         }
 
         GameManager.instance.joinAction.Disable();
-        GameManager.instance.leaveAction.Disable();
+        //GameManager.instance.leaveAction.Disable();
         GameManager.instance.SetSpawnPoint();
 
         countDown = 10;
@@ -102,7 +102,7 @@ public class MiniGameManager : MonoBehaviour{
     }
 
     private void DisplayGoal(){
-        miniGameUIManager.SetGameGoalText(miniGameSetup.goalDescription);
+        miniGameUIManager.SetGameGoalText(MiniGameOptionsMenu.instance.GetMiniGameGoalDescription());
     }
 
     IEnumerator Preparation(){

@@ -6,7 +6,9 @@ using System;
 
 public class PlayerInputHandler : MonoBehaviour{
 
+    [SerializeField] private PlayerInput playerInput;
     [SerializeField] private CharacterEvents characterEvents;
+    [SerializeField] private CharacterStats characterStats;
     public event System.Action<PlayerInput> OnCharacterPressMenuButton;
     public event System.Action<InputAction.CallbackContext> OnCharacterMove;
     public event System.Action<InputAction.CallbackContext> OnCharacterJump;
@@ -19,9 +21,25 @@ public class PlayerInputHandler : MonoBehaviour{
     public event System.Action<InputAction.CallbackContext> OnCharacterDropWeapon;
 
     private void Start(){
+        playerInput = GetComponent<PlayerInput>();
         characterEvents = GetComponent<CharacterEvents>();
+        characterStats = GetComponent<CharacterStats>();
         characterEvents.OnPlayerPickedUpWeapon += SetGunActionsActive;
         characterEvents.OnPlayerDroppedWeapon += SetGunActionsInactive;
+    }
+
+    public void PlayerOpenedMenu(){
+        playerInput.SwitchCurrentActionMap("UI");
+    }
+
+    public void PlayerClosedMenu(){
+        RestoreActions();
+    }
+
+    public void RestoreActions(){
+        if(!characterStats.isMountedOnTurret){
+            playerInput.SwitchCurrentActionMap("Player");
+        }
     }
 
     private void OnDestroy(){
@@ -56,6 +74,7 @@ public class PlayerInputHandler : MonoBehaviour{
         GetComponent<PlayerInput>().actions["ReloadWeapon"].Disable();
         GetComponent<PlayerInput>().actions["DropWeapon"].Disable();
     }
+
 
 
 
