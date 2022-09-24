@@ -1498,31 +1498,6 @@ MonoBehaviour:
       m_Action: Join
       m_Flags: 0
     m_Flags: 1
-  leaveAction:
-    m_Name: Leave
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 204f2eb9-fc26-41f0-94de-364b99c6c138
-    m_Processors: 
-    m_Interactions: Hold
-    m_SingletonActionBindings:
-    - m_Name: 
-      m_Id: 5f4ee54f-da14-4abc-8587-3fb5270d8d3c
-      m_Path: <Keyboard>/escape
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Leave
-      m_Flags: 0
-    - m_Name: 
-      m_Id: df999848-fff0-478f-8b57-c2cc7dbb192e
-      m_Path: <Gamepad>/select
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Leave
-      m_Flags: 0
-    m_Flags: 0
 --- !u!4 &342426764
 Transform:
   m_ObjectHideFlags: 0
@@ -4820,7 +4795,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.392}
+  m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -6897,9 +6872,49 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1495696621}
     m_Modifications:
+    - target: {fileID: 4125100379607388496, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
+      propertyPath: m_Pivot.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4125100379607388496, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4125100379607388496, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4125100379607388496, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4125100379607388496, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4125100379607388496, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4125100379607388496, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -50
+      objectReference: {fileID: 0}
+    - target: {fileID: 4125100379607388496, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 4125100380530153164, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
       propertyPath: m_Name
       value: LoadingScreen
+      objectReference: {fileID: 0}
+    - target: {fileID: 4125100380530153164, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4125100380530153166, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
+      propertyPath: m_Color.a
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4125100380530153167, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
       propertyPath: m_Pivot.x
@@ -6983,6 +6998,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4125100380530153167, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4125100380563489443, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 4125100381021657472, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
+      propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -8949,7 +8972,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1994517123
 RectTransform:
   m_ObjectHideFlags: 0

@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour{
     public GameObject DeathSpot;
 
     public InputAction joinAction;
-    public InputAction leaveAction;
+    //public InputAction leaveAction;
 
     //EVENTS
     public event Action<PlayerInput> OnPlayerJoinedGame;
@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour{
             DontDestroyOnLoad(gameObject);
         }
         else if(instance != null){
-            Destroy(gameObject);
+            Destroy(this);
         }
 
         gameIsPaused = false;
@@ -67,16 +67,20 @@ public class GameManager : MonoBehaviour{
 
 
     public void SetSpawnPoint(){
-        FindSpawnPoints();
-        if (spawnPoints.Count() < 1 || spawnPoints[0] == null){
+        if(!FindSpawnPoints()){
             CreateSpawnPoint();
-            Debug.Log("Player spawnpoints array was empty");
         }
-        FindSpawnPoints();
     }
 
-    private void FindSpawnPoints(){
+    private bool FindSpawnPoints(){
         spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
+        if(spawnPoints.Count() == 0){
+            Debug.Log("Player spawnpoints array was empty. Player spawn point was created at GameManager location");
+            return false;
+        }
+        else{
+            return true;
+        }
     }
 
     private void CreateSpawnPoint(){

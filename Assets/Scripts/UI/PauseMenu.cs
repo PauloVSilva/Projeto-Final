@@ -65,7 +65,6 @@ public class PauseMenu : MonoBehaviour{
             playerInput.GetComponent<PlayerInputHandler>().PlayerOpenedMenu();
         }
         GameManager.instance.joinAction.Disable();
-        //GameManager.instance.leaveAction.Disable();
         GameManager.instance.gameIsPaused = true;
         DropOutButton.interactable = !GameManager.instance.miniGameIsRunning;
     }
@@ -73,10 +72,9 @@ public class PauseMenu : MonoBehaviour{
     public void Resume(){
         Time.timeScale = 1f;
         foreach(var playerInput in GameManager.instance.playerList){
-            playerInput.GetComponent<PlayerInputHandler>().RestoreActions();
+            playerInput.GetComponent<PlayerInputHandler>().PlayerClosedMenu();
         }
         GameManager.instance.joinAction.Enable();
-        //GameManager.instance.leaveAction.Enable();
         GameManager.instance.gameIsPaused = false;
     }
 

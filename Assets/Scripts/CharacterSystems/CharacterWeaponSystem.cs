@@ -8,7 +8,6 @@ public class CharacterWeaponSystem : MonoBehaviour{
     [SerializeField] private CharacterEvents characterEvents;
     [SerializeField] private Weapon weapon;
     [SerializeField] private Transform gunPosition;
-    [SerializeField] private bool isArmed;
 
     private void Start() {
         InitializeVariables();
@@ -19,7 +18,6 @@ public class CharacterWeaponSystem : MonoBehaviour{
         characterStats = gameObject.transform.parent.GetComponent<CharacterStats>();
         characterEvents = gameObject.transform.parent.GetComponent<CharacterEvents>();
         gunPosition = GetComponent<CharacterItemsDisplay>().gunPosition.transform;
-        isArmed = false;
     }
 
     private void SubscribeToEvents(){
@@ -54,14 +52,14 @@ public class CharacterWeaponSystem : MonoBehaviour{
                 weapon.transform.parent = null;
                 weapon.Dropped();
                 weapon = null;
-                isArmed = false;
+                characterStats.isArmed = false;
                 characterEvents.PlayerDroppedWeapon();
             }
         }
     }
 
     public void PickUpWeapon(GameObject _weapon){
-        if(!isArmed){
+        if(!characterStats.isArmed){
             weapon = _weapon.GetComponent<Weapon>();
             
             weapon.transform.parent = this.transform;
@@ -69,7 +67,7 @@ public class CharacterWeaponSystem : MonoBehaviour{
             weapon.transform.position = gunPosition.transform.position;
 
             weapon.PickedUp(this.gameObject);
-            isArmed = true;
+            characterStats.isArmed = true;
             characterEvents.PlayerPickedUpWeapon(weapon);
         }
     }

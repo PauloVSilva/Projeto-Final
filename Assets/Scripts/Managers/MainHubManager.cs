@@ -7,26 +7,31 @@ public class MainHubManager : MonoBehaviour{
     //INSTANCES
     public static MainHubManager instance = null;
 
-    public void Awake(){
+    private void Awake(){
+        InitializeSingletonInstance();
+    }
+
+    private void Start(){
+        InitializeMainHub();
+    }
+
+    private void InitializeSingletonInstance(){
         if (instance == null){
             instance = this;
         }
         else if (instance != null){
-            Destroy(gameObject);
+            Destroy(this);
         }
     }
 
-    public void Start(){
-        GameManager.instance.miniGameIsRunning = false;
-
+    private void InitializeMainHub(){
         GameManager.instance.SetSpawnPoint();
+        GameManager.instance.joinAction.Enable();
         if(GameManager.instance.playerList.Count > 0){
             foreach(var playerInput in GameManager.instance.playerList){
-                playerInput.transform.GetComponent<CharacterEvents>().RespawnCharacter();
-                playerInput.actions.Enable();
+                playerInput.GetComponent<CharacterEvents>().RespawnCharacter();
+                playerInput.GetComponent<PlayerInputHandler>().RestoreActions();
             }
         }
-        GameManager.instance.joinAction.Enable();
-        GameManager.instance.leaveAction.Enable();
     }
 }

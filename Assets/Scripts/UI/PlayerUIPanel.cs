@@ -101,7 +101,10 @@ public class PlayerUIPanel : MonoBehaviour{
         _playerTotalLives.text = characterStats.totalLives.ToString();
         playerIndex.text = (player.playerIndex + 1).ToString();
 
-        if(characterStats.teamColor != TeamColor.none){
+        if(characterStats.teamColor == TeamColor.none){
+            playerTeam.text = null;
+        }
+        else{
             playerTeam.text = characterStats.teamColor.ToString();
         }
 

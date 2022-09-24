@@ -6,7 +6,7 @@ using System;
 
 public enum MiniGame{sharpShooter, dimeDrop}
 public enum MiniGameGoal{killCount, lastStanding, time, scoreAmount}
-public enum MiniGameState{preparation, gameSetUp, gameIsRunning, gameOverSetUp, gameOver}
+public enum MiniGameState{none, preparation, gameSetUp, gameIsRunning, gameOverSetUp, gameOver}
 
 public class MiniGameManager : MonoBehaviour{
     //INSTANCES
@@ -32,23 +32,16 @@ public class MiniGameManager : MonoBehaviour{
     [SerializeField] private GameObject[] coins;
 
     private void Awake(){
-        if (instance == null){
-            instance = this;
-        }
-        else if (instance != null){
-            Destroy(gameObject);
-        }
-
-        GameManager.instance.joinAction.Disable();
-        //GameManager.instance.leaveAction.Disable();
-        GameManager.instance.SetSpawnPoint();
-
-        countDown = 10;
-        gameState = MiniGameState.preparation;
+        InitializeSingletonInstance();
     }
 
     private void Start(){
+        GameManager.instance.joinAction.Disable();
+        GameManager.instance.SetSpawnPoint();
         GameManager.instance.miniGameIsRunning = true;
+
+        countDown = 10;
+        gameState = MiniGameState.preparation;
 
         miniGameUIManager = GameObject.FindWithTag("MiniGameUI").GetComponent<MiniGameUIManager>();
         miniGameUIManager.InitializeVariables();
@@ -57,8 +50,9 @@ public class MiniGameManager : MonoBehaviour{
         SetupGame();
 
         foreach(var playerInput in GameManager.instance.playerList){
-            playerInput.GetComponent<CharacterSelection>().characterObject.transform.position = GameManager.instance.spawnPoints[0].transform.position;
-            playerInput.GetComponent<PlayerInputHandler>().DisableMovementActions();
+            int index = playerInput.playerIndex % GameManager.instance.spawnPoints.Length;
+            playerInput.GetComponent<CharacterSelection>().characterObject.transform.position = GameManager.instance.spawnPoints[index].transform.position;
+            playerInput.GetComponent<CharacterEvents>().BlockActions();
         }
 
         StartCoroutine(Preparation());
@@ -66,9 +60,16 @@ public class MiniGameManager : MonoBehaviour{
         DisplayGoal();
     }
 
-    private void OnDisable() {
-        miniGameUIManager.InitializeVariables();
+    private void InitializeSingletonInstance(){
+        if (instance == null){
+            instance = this;
+        }
+        else if (instance != null){
+            Destroy(this);
+        }
     }
+
+
 
     private void SetupGame(){
         miniGameSetup = MiniGameOptionsMenu.instance.GetMiniGameGoal();
@@ -129,7 +130,7 @@ public class MiniGameManager : MonoBehaviour{
             }
         }
         foreach(var playerInput in GameManager.instance.playerList){
-            playerInput.GetComponent<PlayerInputHandler>().EnableMovementActions();
+            playerInput.GetComponent<CharacterEvents>().UnblockActions();
         }
         gameState++;
         //OnGameStateAdvances?.Invoke();
@@ -142,7 +143,7 @@ public class MiniGameManager : MonoBehaviour{
             }
             if (playersAlive.Count == 1){
                 //Debug.Log("Player " + playersAlive[0].transform.GetComponent<CharacterStats>().animal.ToString() + " is the winner");
-                Debug.Log("Player " + (playersAlive[0].playerIndex + 1).ToString() + " is the winner");
+                //Debug.Log("Player " + (playersAlive[0].playerIndex + 1).ToString() + " is the winner");
                 gameState++;
                 //OnGameStateAdvances?.Invoke();
                 //OnPlayerWins?.Invoke(playersAlive[0]);
@@ -155,7 +156,7 @@ public class MiniGameManager : MonoBehaviour{
     private void VerifyKillCountWinCondition(GameObject player){
         if(gameGoal == MiniGameGoal.killCount){
             if (player.transform.parent.GetComponent<CharacterStats>().kills >= killCountGoal){
-                Debug.Log("Player " + (player.transform.parent.GetComponent<PlayerInput>().playerIndex + 1).ToString() + " is the winner");
+                //Debug.Log("Player " + (player.transform.parent.GetComponent<PlayerInput>().playerIndex + 1).ToString() + " is the winner");
                 gameState++;
                 //OnGameStateAdvances?.Invoke();
                 //OnPlayerWins?.Invoke(player.transform.parent.GetComponent<PlayerInput>());
@@ -168,7 +169,7 @@ public class MiniGameManager : MonoBehaviour{
     private void VerifyScoreAmountWinCondition(GameObject player, int _score){
         if(gameGoal == MiniGameGoal.scoreAmount){
             if (_score >= scoreAmountGoal){
-                Debug.Log("Player " + (player.GetComponent<PlayerInput>().playerIndex + 1).ToString() + " is the winner");
+                //Debug.Log("Player " + (player.GetComponent<PlayerInput>().playerIndex + 1).ToString() + " is the winner");
                 gameState++;
                 //OnGameStateAdvances?.Invoke();
                 //OnPlayerWins?.Invoke(player.transform.parent.GetComponent<PlayerInput>());
@@ -209,6 +210,9 @@ public class MiniGameManager : MonoBehaviour{
             StartCoroutine(GameOver());
         }
         else {
+            miniGameUIManager.InitializeVariables();
+            gameState = MiniGameState.none;
+            GameManager.instance.miniGameIsRunning = false;
             GameManager.instance.ReturnToMainHub();
         }
     }

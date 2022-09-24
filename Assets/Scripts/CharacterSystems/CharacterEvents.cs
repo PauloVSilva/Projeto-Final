@@ -82,12 +82,18 @@ public class CharacterEvents : MonoBehaviour{
         RefreshStatsUponRespawning();
     }
 
+    public void BlockActions(){
+        characterStats.actionsAreBlocked = true;
+    }
+
+    public void UnblockActions(){
+        characterStats.actionsAreBlocked = false;
+    }
 
 
 
 
-
-    //METHODS THAT INVOKE EVENTS
+    #region "Methods that invoke events"
     public void ResetStats(){
         characterStats.ResetStats();
         OnPlayerStatsReset?.Invoke();
@@ -158,5 +164,5 @@ public class CharacterEvents : MonoBehaviour{
     public void PlayerDroppedWeapon(){
         OnPlayerDroppedWeapon?.Invoke();
     }
-
+    #endregion "Methods that invoke events"
 }

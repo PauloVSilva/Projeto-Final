@@ -20,14 +20,14 @@ public class CharacterStats : MonoBehaviour{
     [SerializeField] public float timeToRespawn;
 
     //stats useful to determine what actions the player can or can not perform
-    [SerializeField] public bool isStunned;
+    [SerializeField] public bool actionsAreBlocked;
     [SerializeField] public bool isArmed;
     [SerializeField] public bool isMountedOnTurret;
 
-
+    #region "Character attributes that will come from scriptable object"
     [Space(5)]
     [Header("Character Base Stats")]
-    //CHARACTER VARIABLES THAT WILL COME FROM SCRIPTABLE OBJECT
+    //CHARACTER ATTRIBUTES THAT WILL COME FROM SCRIPTABLE OBJECT
     [SerializeField] public Animal animal;
     [SerializeField] private float maxHealth;
     [SerializeField] private float healthRegenRate;
@@ -52,6 +52,7 @@ public class CharacterStats : MonoBehaviour{
     public int JumpStaminaCost => jumpStaminaCost;
     public int DashStaminaCost => dashStaminaCost;
     public int SprintStaminaCost => sprintStaminaCost;
+    #endregion "Character attributes that will come from scriptable object"
 
     private void Awake(){
         InitializePlayerVariables();
@@ -66,7 +67,7 @@ public class CharacterStats : MonoBehaviour{
         totalLives = 0;
         timeToRespawn = 3f;
 
-        isStunned = false;
+        actionsAreBlocked = false;
         isArmed = false;
         isMountedOnTurret = false;
     }
@@ -146,4 +147,23 @@ public class CharacterStats : MonoBehaviour{
             return false;
         }
     }
+
+
+
+    public bool CanMove(){
+        if(actionsAreBlocked) return false;
+        
+        return true;
+    }
+
+    public bool CanUseFireGun(){
+        if(actionsAreBlocked) return false;
+        if(!isArmed) return false;
+
+        return true;
+    }
+
+
+
+
 }
