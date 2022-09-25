@@ -39,7 +39,7 @@ public class CharacterSelectionMenu : MonoBehaviour{
         playerInput = _playerInput;
         inputSystemUIInputModule.actionsAsset = playerInput.actions;
         //_playerInput.InputSystemUIInputModule = inputSystemUIInputModule;
-        greetMessage = MessageManager.instance.GetGreetMessage((_playerInput.playerIndex + 1).ToString());
+        greetMessage = MessageManager.instance.GetGreetMessage(_playerInput.playerIndex + 1);
         playerControllingMenu.text = greetMessage;
         MenuOpened();
         CanvasManager.instance.SwitchMenu(Menu.CharacterSelectionMenu);

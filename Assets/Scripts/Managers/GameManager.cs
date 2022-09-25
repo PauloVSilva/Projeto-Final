@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour{
             DontDestroyOnLoad(gameObject);
         }
         else if(instance != null){
-            Destroy(this);
+            Destroy(gameObject);
         }
 
         gameIsPaused = false;

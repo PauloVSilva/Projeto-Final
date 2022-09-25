@@ -48,7 +48,7 @@ public class PauseMenu : MonoBehaviour{
         playerInput = _playerInput;
         inputSystemUIInputModule.actionsAsset = playerInput.actions;
         //_playerInput.InputSystemUIInputModule = inputSystemUIInputModule;
-        pauseMessage = MessageManager.instance.GetPauseMessage((_playerInput.playerIndex + 1).ToString());
+        pauseMessage = MessageManager.instance.GetPauseMessage(_playerInput.playerIndex + 1);
         playerControllingMenu.text = pauseMessage;
         //Pause();
         CanvasManager.instance.SwitchMenu(Menu.PauseMenu);

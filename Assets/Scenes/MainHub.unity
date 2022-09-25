@@ -392,6 +392,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LevelLoader
       objectReference: {fileID: 0}
+    - target: {fileID: 5727162172024774458, guid: fcd7f07e86325284db7b66257bc116e9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5727162172024774460, guid: fcd7f07e86325284db7b66257bc116e9, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -5400,6 +5404,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1495696622}
+        m_TargetAssemblyTypeName: CanvasManager, Assembly-CSharp
+        m_MethodName: CloseMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1276869386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6872,49 +6888,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1495696621}
     m_Modifications:
-    - target: {fileID: 4125100379607388496, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
-      propertyPath: m_Pivot.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4125100379607388496, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
-      propertyPath: m_Pivot.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4125100379607388496, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4125100379607388496, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4125100379607388496, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4125100379607388496, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4125100379607388496, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -50
-      objectReference: {fileID: 0}
-    - target: {fileID: 4125100379607388496, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 50
-      objectReference: {fileID: 0}
     - target: {fileID: 4125100380530153164, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
       propertyPath: m_Name
       value: LoadingScreen
       objectReference: {fileID: 0}
     - target: {fileID: 4125100380530153164, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4125100380530153166, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
       propertyPath: m_Color.a
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4125100380530153167, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
       propertyPath: m_Pivot.x
@@ -6999,10 +6983,6 @@ PrefabInstance:
     - target: {fileID: 4125100380530153167, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4125100380563489443, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 4125100381021657472, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
       propertyPath: m_AnchorMax.y

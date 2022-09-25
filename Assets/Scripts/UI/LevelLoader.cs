@@ -9,6 +9,15 @@ public class LevelLoader : MonoBehaviour{
     public GameObject loadingScreen;
     public Slider slider;
     public TextMeshProUGUI percentage;
+    private float progress;
+
+    private void Awake(){
+        InitializeVariables();
+    }
+
+    private void InitializeVariables(){
+        progress = 0f;
+    }
 
     public void LoadLevel(string sceneName){
         StartCoroutine(LoadAsynchronously(sceneName));
@@ -19,7 +28,7 @@ public class LevelLoader : MonoBehaviour{
         yield return new WaitForSeconds(1f);
         AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
         while(!operation.isDone){
-            float progress = Mathf.Clamp01(operation.progress / .9f);
+            progress = Mathf.Clamp01(operation.progress / .9f);
             //Debug.Log(progress);
             slider.value = progress;
             percentage.text = progress * 100f + "%";
@@ -27,6 +36,11 @@ public class LevelLoader : MonoBehaviour{
         }
         if(operation.isDone){
             loadingScreen.SetActive(false);
+
+            progress = 0f;
+            slider.value = progress;
+            percentage.text = progress + "%";
+
             if(sceneName == "MainMenu"){
                 Destroy(GameManager.instance.gameObject);
                 //SceneManager.UnloadSceneAsync("MainHub");
