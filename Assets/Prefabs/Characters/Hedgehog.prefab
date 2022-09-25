@@ -485,7 +485,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8463049207392376649}
   - component: {fileID: 8463049207392376654}
-  - component: {fileID: -6704133474018530313}
+  - component: {fileID: 1730149289301904323}
   - component: {fileID: 8406650508918802984}
   - component: {fileID: 6873177095804372120}
   - component: {fileID: 1250474442572999399}
@@ -535,7 +535,7 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.4, z: 0}
---- !u!114 &-6704133474018530313
+--- !u!114 &1730149289301904323
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -544,7 +544,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8463049207392376651}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 270e726cf25094445a4cb63b085f50f5, type: 3}
+  m_Script: {fileID: 11500000, guid: 3a548bd93fb0c5b4fac6c6e7d05dba0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   characterStats: {fileID: 0}
@@ -584,7 +584,6 @@ MonoBehaviour:
   characterEvents: {fileID: 0}
   weapon: {fileID: 0}
   gunPosition: {fileID: 0}
-  isArmed: 0
 --- !u!114 &1250474442572999399
 MonoBehaviour:
   m_ObjectHideFlags: 0

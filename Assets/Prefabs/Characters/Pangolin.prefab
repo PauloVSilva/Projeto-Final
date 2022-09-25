@@ -544,7 +544,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8463049207392376651}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 270e726cf25094445a4cb63b085f50f5, type: 3}
+  m_Script: {fileID: 11500000, guid: 3a548bd93fb0c5b4fac6c6e7d05dba0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   characterStats: {fileID: 0}
@@ -563,8 +563,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterStats: {fileID: 0}
   characterEvents: {fileID: 0}
-  TotalJumps: 0
-  JumpsRemaining: 0
   controller: {fileID: 0}
   playerVelocity: {x: 0, y: 0, z: 0}
   groundedPlayer: 0
@@ -586,7 +584,6 @@ MonoBehaviour:
   characterEvents: {fileID: 0}
   weapon: {fileID: 0}
   gunPosition: {fileID: 0}
-  isArmed: 0
 --- !u!114 &1250474442572999399
 MonoBehaviour:
   m_ObjectHideFlags: 0

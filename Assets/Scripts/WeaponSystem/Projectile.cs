@@ -67,6 +67,7 @@ public class Projectile : MonoBehaviour, IPooledObjects{
 
         StartCoroutine(DisableObject());
     }
+
     IEnumerator DisableObject(){
         disableCoroutineIsRunning = true;
         yield return new WaitForSeconds(ProjectileToCast.lifeTime);
@@ -77,16 +78,15 @@ public class Projectile : MonoBehaviour, IPooledObjects{
         StopCoroutine(DisableObject());
         disableCoroutineIsRunning = false;
     }
+
     private void OnDisable(){
         DisableCoroutine();
     }
 
     private void OnTriggerEnter(Collider other){
-        if(other.gameObject.CompareTag("Character") && canDamage){
+        if(other.gameObject.GetComponent<HealthSystem>() != null && canDamage){
             other.GetComponent<HealthSystem>().TakeDamage(characterOfOrigin, ProjectileToCast.damageAmount);
             this.gameObject.SetActive(false);
-            //myRigidbody.velocity = Vector3.zero;
-            //myRigidbody.angularVelocity = Vector3.zero;
         }
         canDamage = false;
     }
