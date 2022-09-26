@@ -26,4 +26,13 @@ public class Inventory : MonoBehaviour{
             inventorySlots[i] = new ItemSlot();
         }
     }
+
+    public void DropAllInventory(){
+        for(int i = 0; i < inventorySlots.Count; i++){
+            while(inventorySlots[i].stackSize > 0){
+                Instantiate(inventorySlots[i].item.itemModel, this.gameObject.transform.position, this.gameObject.transform.rotation);
+                inventorySlots[i].DropItem();
+            }
+        }
+    }
 }

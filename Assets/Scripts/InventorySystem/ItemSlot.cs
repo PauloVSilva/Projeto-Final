@@ -23,4 +23,13 @@ public class ItemSlot{
     public void AddToStack(){
         stackSize++;
     }
+
+    public void DropItem(){
+        if(stackSize > 0){
+            stackSize--;
+        }
+        else{
+            new ItemSlot();
+        }
+    }
 }

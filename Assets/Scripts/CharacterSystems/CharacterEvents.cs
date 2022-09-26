@@ -127,6 +127,7 @@ public class CharacterEvents : MonoBehaviour{
         if(!characterStats.unlimitedLives){
             characterStats.DecreaseLives();
         }
+        inventory.DropAllInventory();
         BeginRespawnProcess();
 
         Instantiate(GameManager.instance.DeathSpot, character.transform.position, Quaternion.Euler(0, 0, 0), this.transform);
