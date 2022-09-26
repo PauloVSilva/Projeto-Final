@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1531958757892568611}
   - component: {fileID: -7353346912697764937}
   - component: {fileID: -6532263821112973344}
+  - component: {fileID: -520056228643791518}
   m_Layer: 0
   m_Name: PlayerInput
   m_TagString: Player
@@ -310,6 +311,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterStats: {fileID: -6532263821112973344}
+  inventory: {fileID: 0}
   characterObject: {fileID: 0}
 --- !u!114 &-6532263821112973344
 MonoBehaviour:
@@ -331,14 +333,43 @@ MonoBehaviour:
   unlimitedLives: 0
   totalLives: 0
   timeToRespawn: 0
+  actionsAreBlocked: 0
   isArmed: 0
   isMountedOnTurret: 0
   animal: 0
   maxHealth: 0
   healthRegenRate: 0
-  movSpeed: 0
+  walkSpeed: 0
   sprintSpeed: 0
   maxStamina: 0
   staminaRegenRate: 0
   jumpStrength: 0
   totalJumps: 0
+  jumpStaminaCost: 0
+  dashStaminaCost: 0
+  sprintStaminaCost: 0
+--- !u!114 &-520056228643791518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7408531066293585716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9207b1549e590b548bc7d27dace972b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventorySlots:
+  - item: {fileID: 0}
+    itemSprite: {fileID: 0}
+    stackSize: 0
+  - item: {fileID: 0}
+    itemSprite: {fileID: 0}
+    stackSize: 0
+  - item: {fileID: 0}
+    itemSprite: {fileID: 0}
+    stackSize: 0
+  - item: {fileID: 0}
+    itemSprite: {fileID: 0}
+    stackSize: 0

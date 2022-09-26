@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class HealthSystem : MonoBehaviour{
+    public event System.Action<float> OnDamaged;
 
     //VARIABLES THAT WILL COME FROM SOMEWHERE ELSE
     public abstract float MaxHealth {get; protected set;}
@@ -34,6 +35,11 @@ public abstract class HealthSystem : MonoBehaviour{
     }
 
     public virtual void Die(GameObject damageSource){
+    }
+
+
+    protected void InvokeOnDamaged(float _damage){
+        OnDamaged?.Invoke(_damage);
     }
 
 }

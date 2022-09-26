@@ -29,6 +29,7 @@ public class MainHubManager : MonoBehaviour{
         GameManager.instance.joinAction.Enable();
         if(GameManager.instance.playerList.Count > 0){
             foreach(var playerInput in GameManager.instance.playerList){
+                playerInput.GetComponent<Inventory>().ClearInventory();
                 playerInput.GetComponent<CharacterEvents>().RespawnCharacter();
                 playerInput.GetComponent<PlayerInputHandler>().RestoreActions();
             }

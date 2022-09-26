@@ -13,6 +13,8 @@ public class CharacterHealthSystem : HealthSystem{
 
     //VARIABLES FOR INTERNAL USE
     public override float CurrentHealth {get; protected set;}
+    public float HealthRegenCooldown {get; protected set;}
+    public bool CanRegenHealth {get; protected set;}
     public override bool IsAlive {get; protected set;}
 
     private void Update(){
@@ -20,9 +22,16 @@ public class CharacterHealthSystem : HealthSystem{
     }
 
     private void RegenerateHealth(){
-        if(IsAlive){
+        if(IsAlive && CanRegenHealth){
             CurrentHealth = Math.Min(CurrentHealth += HealthRegenRate * Time.deltaTime, MaxHealth);
             SendHealthUpdateEvent();
+        }
+        if(HealthRegenCooldown > 0){
+            HealthRegenCooldown -= Time.deltaTime;
+        }
+        if(HealthRegenCooldown <= 0){
+            HealthRegenCooldown = 0;
+            CanRegenHealth = true;
         }
     }
 
@@ -48,19 +57,18 @@ public class CharacterHealthSystem : HealthSystem{
     }
 
     public override void TakeDamage(GameObject damageSource, float damageTaken){
-        CurrentHealth -= damageTaken;
+        CurrentHealth = Math.Max(CurrentHealth -= damageTaken, 0);
         if(CurrentHealth <= 0){
             Die(damageSource);
         }
         characterEvents.PlayerWasDamaged(damageTaken);
+        HealthRegenCooldown = 1f;
+        CanRegenHealth = false;
         SendHealthUpdateEvent();
     }
 
     public override void Heal(float heal){
-        CurrentHealth += heal;
-        if(CurrentHealth > MaxHealth){
-            CurrentHealth = MaxHealth;
-        }
+        CurrentHealth = Math.Min(CurrentHealth += heal, MaxHealth);
         characterEvents.PlayerWasHealed(heal);
         SendHealthUpdateEvent();
     }

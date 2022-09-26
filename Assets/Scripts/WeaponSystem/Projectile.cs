@@ -9,7 +9,7 @@ public class Projectile : MonoBehaviour, IPooledObjects{
     public ProjectileScriptableObject ProjectileToCast;
 
     //ATTRIBUTES FROM SCRIPTABLE OBJECT
-    [SerializeField] public GameObject characterModel;
+    [SerializeField] public GameObject projectileModel;
     [SerializeField] public Sprite sprite;
     [SerializeField] public string projectileName;
     [SerializeField] public CollisionType collisionType;

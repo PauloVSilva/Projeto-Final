@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class DestructibleObjectHealthSystem : HealthSystem{
+
     //VARIABLES THAT WILL COME FROM SOMEWHERE
     public override float MaxHealth {get; protected set;}
 
@@ -11,7 +12,7 @@ public class DestructibleObjectHealthSystem : HealthSystem{
     public override bool IsAlive {get; protected set;}
 
     protected override void InitializeVariables(){
-        MaxHealth = 200f;
+        MaxHealth = 20000f;
         CurrentHealth = MaxHealth;
         IsAlive = true;
     }
@@ -21,6 +22,7 @@ public class DestructibleObjectHealthSystem : HealthSystem{
         if(CurrentHealth <= 0){
             Die(damageSource);
         }
+        InvokeOnDamaged(damageTaken);
     }
 
     public override void Heal(float heal){

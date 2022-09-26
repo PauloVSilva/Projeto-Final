@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Weapon", menuName = "Weapons")]
 
 public class WeaponScriptableObject : ScriptableObject{
-    [SerializeField] public GameObject characterModel;
+    [SerializeField] public GameObject weaponModel;
     [SerializeField] public Sprite sprite;
     [SerializeField] public string weaponName;
     [SerializeField] public ActionType actionType;

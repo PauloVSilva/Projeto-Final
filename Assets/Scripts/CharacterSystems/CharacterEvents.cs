@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 
 public class CharacterEvents : MonoBehaviour{
     [SerializeField] private CharacterStats characterStats;
+    [SerializeField] public Inventory inventory;
     [SerializeField] public GameObject characterObject;
 
     //EVENTS THAT WILL BE SENT TO OTHER CLASSES
@@ -24,6 +25,7 @@ public class CharacterEvents : MonoBehaviour{
 
     public void SetEvents(){
         characterObject = GetComponent<CharacterSelection>().characterObject;
+        inventory = gameObject.GetComponent<Inventory>();
         characterStats = gameObject.GetComponent<CharacterStats>();
     }
 
@@ -41,10 +43,12 @@ public class CharacterEvents : MonoBehaviour{
 
 
     public void FilterCollision(GameObject character, GameObject _gameObject){
-        if(_gameObject.CompareTag("Coin")){
+        if(_gameObject.GetComponent<Coin>() != null){
             if(_gameObject.GetComponent<Coin>().canBePickedUp){
-                IncreaseScore(_gameObject.GetComponent<Coin>().value);
-                Destroy(_gameObject);
+                if(inventory.AddToInventory(_gameObject.GetComponent<Item>().item)){
+                    IncreaseScore(_gameObject.GetComponent<Coin>().value);
+                    Destroy(_gameObject);
+                }
             }
         }
         if(_gameObject.CompareTag("Instadeath")){

@@ -158,12 +158,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c54ec4c507502dd41b3ad10edadec179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  item: {fileID: 11400000, guid: 1c1dd6c1da0b190418d30d14b021f7ca, type: 2}
   age: 0
   canBePickedUp: 1
   pickUpRadius: 0.5
   rotationSpeed: 400
   value: 1000
-  renderer: {fileID: 0}
+  isBlinking: 0
+  myCollider: {fileID: 0}
+  objectRenderer: {fileID: 0}
 --- !u!54 &7690747701783756440
 Rigidbody:
   m_ObjectHideFlags: 0

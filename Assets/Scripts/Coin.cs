@@ -2,9 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(SphereCollider))]
-
-public class Coin : MonoBehaviour{
+public class Coin : Item{
     [SerializeField] private float age;
     [SerializeField] public bool canBePickedUp;
     [SerializeField] private float pickUpRadius;
