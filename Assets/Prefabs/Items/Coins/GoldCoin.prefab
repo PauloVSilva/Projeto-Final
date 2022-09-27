@@ -107,12 +107,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2784413684905434361}
+  - component: {fileID: 2784413684905434360}
   - component: {fileID: 2784413684905434363}
   - component: {fileID: 7690747701783756440}
-  - component: {fileID: 2784413684905434360}
   m_Layer: 0
   m_Name: GoldCoin
-  m_TagString: Coin
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -133,6 +133,29 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2784413684905434360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2784413684905434342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c54ec4c507502dd41b3ad10edadec179, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item: {fileID: 11400000, guid: 99dea2ff5af232b48abe6c4fdb888732, type: 2}
+  persistenceRequired: 0
+  age: 0
+  maxAge: 30
+  canBePickedUp: 1
+  pickUpRadius: 0.5
+  rotationSpeed: 200
+  isBlinking: 0
+  myCollider: {fileID: 2784413684905434363}
+  objectRenderer: {fileID: 2784413683903831768}
+  value: 100
 --- !u!135 &2784413684905434363
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -162,24 +185,3 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 90
   m_CollisionDetection: 0
---- !u!114 &2784413684905434360
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2784413684905434342}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c54ec4c507502dd41b3ad10edadec179, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  item: {fileID: 11400000, guid: 99dea2ff5af232b48abe6c4fdb888732, type: 2}
-  age: 0
-  canBePickedUp: 1
-  pickUpRadius: 0.5
-  rotationSpeed: 200
-  value: 100
-  isBlinking: 0
-  myCollider: {fileID: 0}
-  objectRenderer: {fileID: 0}

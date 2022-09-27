@@ -7,9 +7,9 @@ TagManager:
   - SpawnPoint
   - Spawner
   - Coin
-  - Instadeath
   - Weapon
   - MiniGameUI
+  - Character
   layers:
   - Default
   - TransparentFX

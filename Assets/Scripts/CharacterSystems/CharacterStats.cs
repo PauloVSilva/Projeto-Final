@@ -141,7 +141,9 @@ public class CharacterStats : MonoBehaviour{
     }
 
 
-
+    public bool IsBlocked(){
+        return actionsAreBlocked;
+    }
 
     public bool CanRespawn(){
         if(totalLives > 0 || unlimitedLives){

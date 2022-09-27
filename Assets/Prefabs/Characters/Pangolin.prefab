@@ -492,7 +492,7 @@ GameObject:
   - component: {fileID: -984412067493946286}
   m_Layer: 0
   m_Name: Pangolin
-  m_TagString: Character
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -563,6 +563,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterStats: {fileID: 0}
   characterEvents: {fileID: 0}
+  playerInputHandler: {fileID: 0}
   controller: {fileID: 0}
   playerVelocity: {x: 0, y: 0, z: 0}
   groundedPlayer: 0
@@ -582,6 +583,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterStats: {fileID: 0}
   characterEvents: {fileID: 0}
+  playerInputHandler: {fileID: 0}
   weapon: {fileID: 0}
   gunPosition: {fileID: 0}
 --- !u!114 &1250474442572999399

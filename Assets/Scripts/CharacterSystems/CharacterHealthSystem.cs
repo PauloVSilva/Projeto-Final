@@ -16,7 +16,7 @@ public class CharacterHealthSystem : HealthSystem{
     public float HealthRegenCooldown {get; protected set;}
     public bool CanRegenHealth {get; protected set;}
     public override bool IsAlive {get; protected set;}
-    public bool IsInvulnerable {get; protected set;}
+    public override bool IsInvulnerable {get; protected set;}
 
     private void Update(){
         RegenerateHealth();

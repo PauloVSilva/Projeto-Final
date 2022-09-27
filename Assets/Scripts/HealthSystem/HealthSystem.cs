@@ -12,6 +12,7 @@ public abstract class HealthSystem : MonoBehaviour{
     //VARIABLES FOR INTERNAL USE
     public abstract float CurrentHealth {get; protected set;}
     public abstract bool IsAlive {get; protected set;}
+    public abstract bool IsInvulnerable {get; protected set;}
 
     public void Initialize(){
         InitializeVariables();

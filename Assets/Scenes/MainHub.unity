@@ -135,9 +135,10 @@ GameObject:
   - component: {fileID: 29753417}
   - component: {fileID: 29753416}
   - component: {fileID: 29753420}
+  - component: {fileID: 29753421}
   m_Layer: 0
-  m_Name: Pitfall
-  m_TagString: Instadeath
+  m_Name: TheVoid
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -220,6 +221,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 10, y: 2.220446e-16, z: 10}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &29753421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 29753414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e57c4fa01c8b3e643945ac86cddc1b8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &42810559
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3399,18 +3412,6 @@ PrefabInstance:
     - target: {fileID: 2168052989789840686, guid: 9d80790846246f644a0d8d4f77e6a0a8, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2489176867682319389, guid: 9d80790846246f644a0d8d4f77e6a0a8, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8212072158344372498, guid: 9d80790846246f644a0d8d4f77e6a0a8, type: 3}
-      propertyPath: inventorySlots.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 8212072158344372498, guid: 9d80790846246f644a0d8d4f77e6a0a8, type: 3}
-      propertyPath: inventorySlots.Array.data[0].item
-      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 9080664918875891946, guid: 9d80790846246f644a0d8d4f77e6a0a8, type: 3}
       propertyPath: m_RootOrder

@@ -43,20 +43,19 @@ public class CharacterEvents : MonoBehaviour{
 
 
     public void OnTriggerEnter(Collider other){
-        if(other.gameObject.GetComponent<Coin>() != null){
-            if(other.gameObject.GetComponent<Coin>().canBePickedUp){
-                if(inventory.AddToInventory(other.gameObject.GetComponent<Item>().item)){
-                    IncreaseScore(other.gameObject.GetComponent<Coin>().value);
-                    Destroy(other.gameObject);
+        if(!characterStats.IsBlocked()){
+            if(other.gameObject.GetComponent<Coin>() != null){
+                if(other.gameObject.GetComponent<Coin>().canBePickedUp){
+                    if(inventory.AddToInventory(other.gameObject.GetComponent<Item>().item)){
+                        IncreaseScore(other.gameObject.GetComponent<Coin>().value);
+                        Destroy(other.gameObject);
+                    }
                 }
             }
-        }
-        if(other.gameObject.CompareTag("Instadeath")){
-            gameObject.GetComponent<HealthSystem>().Kill();
-        }
-        if(other.gameObject.CompareTag("Weapon")){
-            if(other.gameObject.GetComponent<Weapon>().CanBePickedUp()){
-                gameObject.GetComponent<CharacterWeaponSystem>().PickUpWeapon(other.gameObject);
+            if(other.gameObject.CompareTag("Weapon")){
+                if(other.gameObject.GetComponent<Weapon>().CanBePickedUp()){
+                    gameObject.GetComponent<CharacterWeaponSystem>().PickUpWeapon(other.gameObject);
+                }
             }
         }
     }
@@ -72,7 +71,7 @@ public class CharacterEvents : MonoBehaviour{
             StartCoroutine(RespawnCharacterDelay());
         }
         characterObject.SetActive(false);
-        playerInputHandler.DisableActions();
+        BlockActions();
     }
 
     IEnumerator RespawnCharacterDelay(){
@@ -84,16 +83,18 @@ public class CharacterEvents : MonoBehaviour{
         int randomIndex = UnityEngine.Random.Range(0, GameManager.instance.spawnPoints.Length);
         this.transform.position = GameManager.instance.spawnPoints[randomIndex].transform.position;
         characterObject.SetActive(true);
-        playerInputHandler.RestoreActions();
+        UnblockActions();
         RefreshStatsUponRespawning();
     }
 
     public void BlockActions(){
         characterStats.actionsAreBlocked = true;
+        playerInputHandler.DisableActions();
     }
 
     public void UnblockActions(){
         characterStats.actionsAreBlocked = false;
+        playerInputHandler.RestoreActions();
     }
 
 
@@ -129,8 +130,8 @@ public class CharacterEvents : MonoBehaviour{
         if(!characterStats.unlimitedLives){
             characterStats.DecreaseLives();
         }
-        inventory.DropAllInventory();
         BeginRespawnProcess();
+        inventory.DropAllInventory();
 
         Instantiate(GameManager.instance.DeathSpot, character.transform.position, Quaternion.Euler(0, 0, 0), this.transform);
         OnPlayerDied?.Invoke(character);
