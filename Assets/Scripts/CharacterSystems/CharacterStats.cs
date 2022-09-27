@@ -28,6 +28,9 @@ public class CharacterStats : MonoBehaviour{
     [Space(5)]
     [Header("Character Base Stats")]
     //CHARACTER ATTRIBUTES THAT WILL COME FROM SCRIPTABLE OBJECT
+    [SerializeField] public Vector3 characterControllerCenter;
+    [SerializeField] public float characterControllerRadius;
+    [SerializeField] public float characterControllerHeight;
     [SerializeField] public Animal animal;
     [SerializeField] private float maxHealth;
     [SerializeField] private float healthRegenRate;
@@ -41,6 +44,9 @@ public class CharacterStats : MonoBehaviour{
     [SerializeField] private int dashStaminaCost;
     [SerializeField] private int sprintStaminaCost;
 
+    public Vector3 CharacterControllerCenter => characterControllerCenter;
+    public float CharacterControllerRadius => characterControllerRadius;
+    public float CharacterControllerHeight => characterControllerHeight;
     public float MaxHealth => maxHealth;
     public float HealthRegenRate => healthRegenRate;
     public float WalkSpeed => walkSpeed;
@@ -81,6 +87,9 @@ public class CharacterStats : MonoBehaviour{
     }
 
     private void InitializeCharacterVariables(){
+        characterControllerCenter = Character._characterControllerCenter;
+        characterControllerRadius = Character._characterControllerRadius;
+        characterControllerHeight = Character._characterControllerHeight;
         animal = Character._animal;
         maxHealth = Character._maxHealth;
         healthRegenRate = Character._healthRegenRate;

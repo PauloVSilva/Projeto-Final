@@ -41,10 +41,9 @@ public class MovementSystem : MonoBehaviour{
     }
 
     private void InitializeVariables(){
-        //controller = characterEvents.characterObject.GetComponent<CharacterController>();
-        controller.radius = characterEvents.characterObject.GetComponent<CharacterController>().radius;
-        controller.height = characterEvents.characterObject.GetComponent<CharacterController>().height;
-        controller.center = characterEvents.characterObject.GetComponent<CharacterController>().center;
+        controller.radius = characterStats.characterControllerRadius;
+        controller.height = characterStats.characterControllerHeight;
+        controller.center = characterStats.characterControllerCenter;
         
         WalkSpeed = characterStats.WalkSpeed;
         SprintSpeed = characterStats.SprintSpeed;

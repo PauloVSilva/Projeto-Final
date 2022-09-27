@@ -401,7 +401,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8463049207392376649}
   - component: {fileID: 1250474442572999399}
-  - component: {fileID: 5769889059887649395}
   - component: {fileID: 398747360153689963}
   m_Layer: 0
   m_Name: Hedgehog
@@ -443,24 +442,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gunPosition: {fileID: 3817955582707530193}
   hatPosition: {fileID: 4572012110790795175}
---- !u!143 &5769889059887649395
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8463049207392376651}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Height: 1
-  m_Radius: 0.5
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.4, z: 0}
 --- !u!114 &398747360153689963
 MonoBehaviour:
   m_ObjectHideFlags: 0
