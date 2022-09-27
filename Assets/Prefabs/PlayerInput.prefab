@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 1531958757892568611}
   - component: {fileID: -7353346912697764937}
   - component: {fileID: -6532263821112973344}
-  - component: {fileID: -520056228643791518}
   - component: {fileID: -3360404993604576978}
+  - component: {fileID: 5021916059996529337}
   - component: {fileID: 2604168369563993407}
   - component: {fileID: 87397543814161862}
   - component: {fileID: -123166407121015900}
@@ -198,7 +198,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 7408531066293585715}
         m_TargetAssemblyTypeName: PlayerInputHandler, Assembly-CSharp
-        m_MethodName: OnDropWeapon
+        m_MethodName: OnDropItem
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -320,7 +320,7 @@ MonoBehaviour:
   playerInputHandler: {fileID: 7408531066293585715}
   characterStats: {fileID: -6532263821112973344}
   controller: {fileID: 87397543814161862}
-  inventory: {fileID: -520056228643791518}
+  characterInventory: {fileID: 5021916059996529337}
   characterObject: {fileID: 0}
 --- !u!114 &-6532263821112973344
 MonoBehaviour:
@@ -334,7 +334,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51de381b12768864181f6a37b345a307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterWeaponSystem: {fileID: -123166407121015900}
+  characterInventory: {fileID: 5021916059996529337}
   Character: {fileID: 0}
   teamColor: 0
   score: 0
@@ -344,7 +344,6 @@ MonoBehaviour:
   totalLives: 0
   timeToRespawn: 0
   actionsAreBlocked: 0
-  isArmed: 0
   isMountedOnTurret: 0
   animal: 0
   maxHealth: 0
@@ -358,35 +357,6 @@ MonoBehaviour:
   jumpStaminaCost: 0
   dashStaminaCost: 0
   sprintStaminaCost: 0
---- !u!114 &-520056228643791518
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7408531066293585716}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9207b1549e590b548bc7d27dace972b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weaponSlot:
-  - item: {fileID: 0}
-    itemSprite: {fileID: 0}
-    stackSize: 0
-  inventorySlots:
-  - item: {fileID: 0}
-    itemSprite: {fileID: 0}
-    stackSize: 0
-  - item: {fileID: 0}
-    itemSprite: {fileID: 0}
-    stackSize: 0
-  - item: {fileID: 0}
-    itemSprite: {fileID: 0}
-    stackSize: 0
-  - item: {fileID: 0}
-    itemSprite: {fileID: 0}
-    stackSize: 0
 --- !u!114 &-3360404993604576978
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -401,6 +371,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterStats: {fileID: -6532263821112973344}
   characterEvents: {fileID: -7353346912697764937}
+--- !u!114 &5021916059996529337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7408531066293585716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4ac61ef88108e04faa6e577bed47617, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventorySlots:
+  - item: {fileID: 0}
+    itemSprite: {fileID: 0}
+    stackSize: 0
+  - item: {fileID: 0}
+    itemSprite: {fileID: 0}
+    stackSize: 0
+  - item: {fileID: 0}
+    itemSprite: {fileID: 0}
+    stackSize: 0
+  - item: {fileID: 0}
+    itemSprite: {fileID: 0}
+    stackSize: 0
+  characterWeaponSystem: {fileID: -123166407121015900}
+  playerInputHandler: {fileID: 7408531066293585715}
+  weaponSlot:
+    item: {fileID: 0}
+    itemSprite: {fileID: 0}
+    stackSize: 0
 --- !u!114 &2604168369563993407
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -451,7 +452,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7023e031ca6d6d54fa161c55d79f0b87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterStats: {fileID: -6532263821112973344}
   characterEvents: {fileID: -7353346912697764937}
   playerInputHandler: {fileID: 7408531066293585715}
   weapon: {fileID: 0}

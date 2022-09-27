@@ -7,7 +7,7 @@ public class CharacterEvents : MonoBehaviour{
     [SerializeField] private PlayerInputHandler playerInputHandler;
     [SerializeField] private CharacterStats characterStats;
     [SerializeField] private CharacterController controller;
-    [SerializeField] public Inventory inventory;
+    [SerializeField] public CharacterInventory characterInventory;
     [SerializeField] public GameObject characterObject;
 
     //EVENTS THAT WILL BE SENT TO OTHER CLASSES
@@ -44,17 +44,17 @@ public class CharacterEvents : MonoBehaviour{
 
     public void OnTriggerEnter(Collider other){
         if(!characterStats.IsBlocked()){
-            if(other.gameObject.GetComponent<Coin>() != null){
-                if(other.gameObject.GetComponent<Coin>().canBePickedUp){
-                    if(inventory.AddToInventory(other.gameObject.GetComponent<Item>().item)){
+            if(other.gameObject.GetComponent<Item>() != null && other.gameObject.GetComponent<Item>().CanBePickedUp()){
+                if(other.gameObject.GetComponent<Coin>()){
+                    if(characterInventory.AddToInventory(other.gameObject.GetComponent<Item>().item)){
                         IncreaseScore(other.gameObject.GetComponent<Coin>().value);
                         Destroy(other.gameObject);
                     }
                 }
-            }
-            if(other.gameObject.CompareTag("Weapon")){
-                if(other.gameObject.GetComponent<Weapon>().CanBePickedUp()){
-                    gameObject.GetComponent<CharacterWeaponSystem>().PickUpWeapon(other.gameObject);
+                if(other.gameObject.GetComponent<Weapon>()){
+                    if(!characterStats.IsArmed()){
+                        characterInventory.PickWeapon(other.gameObject);
+                    }
                 }
             }
         }
@@ -101,8 +101,17 @@ public class CharacterEvents : MonoBehaviour{
 
 
     #region "Methods that invoke events"
-    public void ResetStats(){
+    public void FullReset(){
+        //reset all base stats
+        //clear inventory
+        //move player to default spawnpoint
+        //set character active
+        //unblock actions
+        //reset health and movement systems
+        //send that to the UI
+        characterInventory.ClearInventory();
         characterStats.ResetStats();
+        RespawnCharacter();
         OnPlayerStatsReset?.Invoke();
     }
 
@@ -131,7 +140,7 @@ public class CharacterEvents : MonoBehaviour{
             characterStats.DecreaseLives();
         }
         BeginRespawnProcess();
-        inventory.DropAllInventory();
+        characterInventory.DropAllInventory();
 
         Instantiate(GameManager.instance.DeathSpot, character.transform.position, Quaternion.Euler(0, 0, 0), this.transform);
         OnPlayerDied?.Invoke(character);

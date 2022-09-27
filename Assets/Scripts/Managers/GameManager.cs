@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour{
 
     public void LoadMiniGame(string _levelName){
         foreach(var playerInput in GameManager.instance.playerList){
-            playerInput.transform.GetComponent<CharacterStats>().ResetStats();
+            playerInput.GetComponent<CharacterEvents>().FullReset();
         }
         levelLoader.LoadLevel(_levelName);
     }

@@ -1,14 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Inventory : MonoBehaviour{
-    [SerializeField] private List<ItemSlot> weaponSlot = new List<ItemSlot>();
-    [SerializeField] private List<ItemSlot> inventorySlots = new List<ItemSlot>();
+    [SerializeField] protected List<ItemSlot> inventorySlots = new List<ItemSlot>();
 
-    public bool AddToInventory(ItemScriptableObject _item){
-        
-
+    public virtual bool AddToInventory(ItemScriptableObject _item){
         for(int i = 0; i < inventorySlots.Count; i++){
             if(inventorySlots[i].item == _item && inventorySlots[i].stackSize < _item.maxStackSize){
                 inventorySlots[i].AddToStack();
@@ -24,13 +22,13 @@ public class Inventory : MonoBehaviour{
         return false;
     }
 
-    public void ClearInventory(){
+    public virtual void ClearInventory(){
         for(int i = 0; i < inventorySlots.Count; i++){
             inventorySlots[i] = new ItemSlot();
         }
     }
 
-    public void DropAllInventory(){
+    public virtual void DropAllInventory(){
         for(int i = 0; i < inventorySlots.Count; i++){
             while(inventorySlots[i].stackSize > 0){
                 Instantiate(inventorySlots[i].item.itemModel, this.gameObject.transform.position, this.gameObject.transform.rotation);

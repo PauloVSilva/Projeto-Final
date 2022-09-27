@@ -29,7 +29,8 @@ public class ItemSlot{
             stackSize--;
         }
         if(stackSize == 0){
-            new ItemSlot();
+            item = null;
+            itemSprite = null;
         }
     }
 }

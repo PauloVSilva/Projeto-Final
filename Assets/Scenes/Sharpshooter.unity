@@ -313,7 +313,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &611568232
 GameObject:
@@ -429,7 +429,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8740977291168480538, guid: dfdc10ed3a0f2ce4b9f9d0a2cd3a72ad, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8740977291168480538, guid: dfdc10ed3a0f2ce4b9f9d0a2cd3a72ad, type: 3}
       propertyPath: m_LocalPosition.x
@@ -542,7 +542,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3866286568957964135, guid: c725afe3b701bdc4ebbe27c35634a89f, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 3866286568957964135, guid: c725afe3b701bdc4ebbe27c35634a89f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -593,6 +593,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -6847266752148747554, guid: e60fb6bf6e0df5d428313c4982144859, type: 3}
+      propertyPath: persistenceRequired
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2526096355226271964, guid: e60fb6bf6e0df5d428313c4982144859, type: 3}
       propertyPath: m_Name
       value: DoubleActionRevolver (3)
@@ -650,13 +654,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -6847266752148747554, guid: e60fb6bf6e0df5d428313c4982144859, type: 3}
+      propertyPath: persistenceRequired
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2526096355226271964, guid: e60fb6bf6e0df5d428313c4982144859, type: 3}
       propertyPath: m_Name
       value: DoubleActionRevolver (1)
       objectReference: {fileID: 0}
     - target: {fileID: 3190837847479944288, guid: e60fb6bf6e0df5d428313c4982144859, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3190837847479944288, guid: e60fb6bf6e0df5d428313c4982144859, type: 3}
       propertyPath: m_LocalPosition.x
@@ -713,7 +721,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3866286568957964135, guid: c725afe3b701bdc4ebbe27c35634a89f, type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3866286568957964135, guid: c725afe3b701bdc4ebbe27c35634a89f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -787,7 +795,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &968312100
 MonoBehaviour:
@@ -802,12 +810,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   miniGameUIManager: {fileID: 0}
-  spawnersList: []
   playersAlive: []
-  gameState: 0
+  miniGameSetup: {fileID: 0}
+  miniGame: 0
   gameGoal: 0
+  gameState: 0
   countDown: 10
   killCountGoal: 0
+  lastStandingLives: 0
+  scoreAmountGoal: 0
+  timeLimitGoal: 0
+  itemSpawnersList: []
+  coins: []
 --- !u!1001 &1213945695
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -815,13 +829,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -6847266752148747554, guid: e60fb6bf6e0df5d428313c4982144859, type: 3}
+      propertyPath: persistenceRequired
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2526096355226271964, guid: e60fb6bf6e0df5d428313c4982144859, type: 3}
       propertyPath: m_Name
       value: DoubleActionRevolver
       objectReference: {fileID: 0}
     - target: {fileID: 3190837847479944288, guid: e60fb6bf6e0df5d428313c4982144859, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3190837847479944288, guid: e60fb6bf6e0df5d428313c4982144859, type: 3}
       propertyPath: m_LocalPosition.x
@@ -878,7 +896,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3866286568957964135, guid: c725afe3b701bdc4ebbe27c35634a89f, type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 3866286568957964135, guid: c725afe3b701bdc4ebbe27c35634a89f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -935,7 +953,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3866286568957964135, guid: c725afe3b701bdc4ebbe27c35634a89f, type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 3866286568957964135, guid: c725afe3b701bdc4ebbe27c35634a89f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -986,13 +1004,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -6847266752148747554, guid: e60fb6bf6e0df5d428313c4982144859, type: 3}
+      propertyPath: persistenceRequired
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2526096355226271964, guid: e60fb6bf6e0df5d428313c4982144859, type: 3}
       propertyPath: m_Name
       value: DoubleActionRevolver (2)
       objectReference: {fileID: 0}
     - target: {fileID: 3190837847479944288, guid: e60fb6bf6e0df5d428313c4982144859, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3190837847479944288, guid: e60fb6bf6e0df5d428313c4982144859, type: 3}
       propertyPath: m_LocalPosition.x

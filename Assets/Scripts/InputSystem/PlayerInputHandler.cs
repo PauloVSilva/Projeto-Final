@@ -18,14 +18,12 @@ public class PlayerInputHandler : MonoBehaviour{
     public event System.Action<InputAction.CallbackContext> OnCharacterCockHammer;
     public event System.Action<InputAction.CallbackContext> OnCharacterPressTrigger;
     public event System.Action<InputAction.CallbackContext> OnCharacterReload;
-    public event System.Action<InputAction.CallbackContext> OnCharacterDropWeapon;
+    public event System.Action<InputAction.CallbackContext> OnCharacterDropItem;
 
     private void Start(){
         playerInput = GetComponent<PlayerInput>();
         characterEvents = GetComponent<CharacterEvents>();
         characterStats = GetComponent<CharacterStats>();
-        //characterEvents.OnPlayerPickedUpWeapon += SetGunActionsActive;
-        //characterEvents.OnPlayerDroppedWeapon += SetGunActionsInactive;
     }
 
     public void PlayerOpenedMenu(){
@@ -104,9 +102,9 @@ public class PlayerInputHandler : MonoBehaviour{
         }
     }
 
-    public void OnDropWeapon(InputAction.CallbackContext context){
-        if(characterStats.CanUseFireGun()){
-            OnCharacterDropWeapon?.Invoke(context);
+    public void OnDropItem(InputAction.CallbackContext context){
+        if(!characterStats.IsBlocked()){
+            OnCharacterDropItem?.Invoke(context);
         }
     }
 }

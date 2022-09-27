@@ -48,11 +48,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73d82c18a5e21e643aa2ff353a3f80cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FireWeapon: {fileID: 11400000, guid: 8a794cf3a90b5f246be5e3e1bd35faa5, type: 2}
+  item: {fileID: 11400000, guid: 60715083ea7fe0c46968bbdbcf874719, type: 2}
+  persistenceRequired: 0
+  age: 0
+  maxAge: 60
+  canBePickedUp: 1
+  pickUpRadius: 1.5
+  rotationSpeed: 150
+  isBlinking: 0
+  myCollider: {fileID: 535941993235239520}
+  objectRenderer: {fileID: 4115066245624394644}
+  weapon: {fileID: 11400000, guid: 8a794cf3a90b5f246be5e3e1bd35faa5, type: 2}
   projectileToCast: {fileID: 11400000, guid: a947b6543823d914da85bc036ea53372, type: 2}
   sprite: {fileID: 0}
   weaponName: 
-  actionType: 1
+  actionType: 0
   chamberReloadType: 1
   size: 0
   ammoCapacity: 0
@@ -67,10 +77,8 @@ MonoBehaviour:
   canShoot: 1
   hammerIsCocked: 0
   canReload: 0
-  canBePickedUp: 0
   castPoint: {fileID: 8289385338044280012}
   holder: {fileID: 0}
-  myCollider: {fileID: 0}
 --- !u!135 &535941993235239520
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -283,5 +291,10 @@ PrefabInstance:
 --- !u!4 &112972740525834928 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 23324ae6d50751b4c8967959144d5088, type: 3}
+  m_PrefabInstance: {fileID: 440197617446888795}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &4115066245624394644 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -4683669308469848369, guid: 23324ae6d50751b4c8967959144d5088, type: 3}
   m_PrefabInstance: {fileID: 440197617446888795}
   m_PrefabAsset: {fileID: 0}

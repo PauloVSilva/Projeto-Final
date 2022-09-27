@@ -4,14 +4,14 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class InteractableToy : MonoBehaviour, InteractorInterface{
+public class InteractableToy : Item, InteractorInterface{
     [SerializeField] private MiniGameScriptableObject miniGame;
-    [SerializeField] private List<MiniGameGoalScriptableObject> miniGameGoalsList = new List<MiniGameGoalScriptableObject>();
-    [SerializeField] private string _name;
-    [SerializeField] private string _prompt;
-    [SerializeField] public string InteractionPromp => _prompt;
+    private List<MiniGameGoalScriptableObject> miniGameGoalsList = new List<MiniGameGoalScriptableObject>();
+    private string _name;
+    private string _prompt;
+    public string InteractionPromp => _prompt;
 
-    public void Awake(){
+    protected override void Awake(){
         _name = miniGame.miniGameName;
         _prompt = "Play " + _name + "!";
         miniGameGoalsList = miniGame.miniGamesGoalsAvaliable.ToList();

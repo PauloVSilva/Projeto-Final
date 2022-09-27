@@ -109,7 +109,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""DropWeapon"",
+                    ""name"": ""DropItem"",
                     ""type"": ""PassThrough"",
                     ""id"": ""0ef5bed9-3406-4d36-af23-e3c188930167"",
                     ""expectedControlType"": ""Button"",
@@ -346,7 +346,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KB+M"",
-                    ""action"": ""DropWeapon"",
+                    ""action"": ""DropItem"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -357,7 +357,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""DropWeapon"",
+                    ""action"": ""DropItem"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -943,7 +943,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Player_CockHammer = m_Player.FindAction("CockHammer", throwIfNotFound: true);
         m_Player_PressTrigger = m_Player.FindAction("PressTrigger", throwIfNotFound: true);
         m_Player_ReloadWeapon = m_Player.FindAction("ReloadWeapon", throwIfNotFound: true);
-        m_Player_DropWeapon = m_Player.FindAction("DropWeapon", throwIfNotFound: true);
+        m_Player_DropItem = m_Player.FindAction("DropItem", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1024,7 +1024,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_CockHammer;
     private readonly InputAction m_Player_PressTrigger;
     private readonly InputAction m_Player_ReloadWeapon;
-    private readonly InputAction m_Player_DropWeapon;
+    private readonly InputAction m_Player_DropItem;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -1038,7 +1038,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @CockHammer => m_Wrapper.m_Player_CockHammer;
         public InputAction @PressTrigger => m_Wrapper.m_Player_PressTrigger;
         public InputAction @ReloadWeapon => m_Wrapper.m_Player_ReloadWeapon;
-        public InputAction @DropWeapon => m_Wrapper.m_Player_DropWeapon;
+        public InputAction @DropItem => m_Wrapper.m_Player_DropItem;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1075,9 +1075,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @ReloadWeapon.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReloadWeapon;
                 @ReloadWeapon.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReloadWeapon;
                 @ReloadWeapon.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReloadWeapon;
-                @DropWeapon.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDropWeapon;
-                @DropWeapon.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDropWeapon;
-                @DropWeapon.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDropWeapon;
+                @DropItem.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDropItem;
+                @DropItem.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDropItem;
+                @DropItem.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDropItem;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1109,9 +1109,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @ReloadWeapon.started += instance.OnReloadWeapon;
                 @ReloadWeapon.performed += instance.OnReloadWeapon;
                 @ReloadWeapon.canceled += instance.OnReloadWeapon;
-                @DropWeapon.started += instance.OnDropWeapon;
-                @DropWeapon.performed += instance.OnDropWeapon;
-                @DropWeapon.canceled += instance.OnDropWeapon;
+                @DropItem.started += instance.OnDropItem;
+                @DropItem.performed += instance.OnDropItem;
+                @DropItem.canceled += instance.OnDropItem;
             }
         }
     }
@@ -1250,7 +1250,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnCockHammer(InputAction.CallbackContext context);
         void OnPressTrigger(InputAction.CallbackContext context);
         void OnReloadWeapon(InputAction.CallbackContext context);
-        void OnDropWeapon(InputAction.CallbackContext context);
+        void OnDropItem(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

@@ -47,13 +47,13 @@ public class MiniGameManager : MonoBehaviour{
         miniGameUIManager.InitializeVariables();
         itemSpawnersList = GameObject.FindGameObjectsWithTag("Spawner");
 
-        SetupGame();
-
         foreach(var playerInput in GameManager.instance.playerList){
             int index = playerInput.playerIndex % GameManager.instance.spawnPoints.Length;
             playerInput.transform.position = GameManager.instance.spawnPoints[index].transform.position;
             playerInput.GetComponent<CharacterEvents>().BlockActions();
         }
+
+        SetupGame();
 
         StartCoroutine(Preparation());
         //OnGameGoalIsSet?.Invoke();
@@ -138,12 +138,10 @@ public class MiniGameManager : MonoBehaviour{
 
     private void VerifyLastStandingWinCondition(GameObject player){
         if(gameGoal == MiniGameGoal.lastStanding){
-            if(!player.transform.parent.GetComponent<CharacterStats>().CanRespawn()){
-                playersAlive.Remove(player.transform.parent.GetComponent<PlayerInput>());
+            if(!player.GetComponent<CharacterStats>().CanRespawn()){
+                playersAlive.Remove(player.GetComponent<PlayerInput>());
             }
             if (playersAlive.Count == 1){
-                //Debug.Log("Player " + playersAlive[0].transform.GetComponent<CharacterStats>().animal.ToString() + " is the winner");
-                //Debug.Log("Player " + (playersAlive[0].playerIndex + 1).ToString() + " is the winner");
                 gameState++;
                 //OnGameStateAdvances?.Invoke();
                 //OnPlayerWins?.Invoke(playersAlive[0]);
@@ -155,12 +153,11 @@ public class MiniGameManager : MonoBehaviour{
 
     private void VerifyKillCountWinCondition(GameObject player){
         if(gameGoal == MiniGameGoal.killCount){
-            if (player.transform.parent.GetComponent<CharacterStats>().kills >= killCountGoal){
-                //Debug.Log("Player " + (player.transform.parent.GetComponent<PlayerInput>().playerIndex + 1).ToString() + " is the winner");
+            if (player.GetComponent<CharacterStats>().kills >= killCountGoal){
                 gameState++;
                 //OnGameStateAdvances?.Invoke();
                 //OnPlayerWins?.Invoke(player.transform.parent.GetComponent<PlayerInput>());
-                miniGameUIManager.AnnounceWinner(player.transform.parent.GetComponent<PlayerInput>());
+                miniGameUIManager.AnnounceWinner(player.GetComponent<PlayerInput>());
                 GameOverSetUp();
             }
         }

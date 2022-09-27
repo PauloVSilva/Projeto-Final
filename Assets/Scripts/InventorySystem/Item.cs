@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class Item : MonoBehaviour{
     [SerializeField] public ItemScriptableObject item;
-    [SerializeField] bool persistenceRequired;
+    [SerializeField] public bool persistenceRequired;
     [SerializeField] protected float age;
     [SerializeField] protected int maxAge;
     [SerializeField] public bool canBePickedUp;
@@ -16,43 +16,42 @@ public class Item : MonoBehaviour{
     [SerializeField] protected SphereCollider myCollider;
     [SerializeField] protected Renderer objectRenderer;
 
-    protected void Awake(){
+    protected virtual void Awake(){
         InitializeVariables();
     }
 
-    protected void Start(){
+    protected virtual void InitializeVariables(){
         objectRenderer.enabled = true;
-    }
-
-    protected void InitializeVariables(){
         myCollider.isTrigger = true;
         myCollider.radius = pickUpRadius;
 
         age = 0;
         canBePickedUp = false;
         StartCoroutine(CanBePickedUpDelay());
-        IEnumerator CanBePickedUpDelay(){
-            yield return new WaitForSeconds(2f);
-            canBePickedUp = true;
-        }
         pickUpRadius = 1.5f;
         isBlinking = false;
     }
+    protected IEnumerator CanBePickedUpDelay(){
+        yield return new WaitForSeconds(1f);
+        canBePickedUp = true;
+    }
 
-    protected void Update(){
-        CollectableBehaviuor();
+    protected virtual void Update(){
+        CollectableBehaviour();
         AgeBehaviour();
     }
 
-    protected void CollectableBehaviuor(){
+    protected virtual void CollectableBehaviour(){
         if(canBePickedUp){
             transform.Rotate(Vector3.up * (rotationSpeed * Time.deltaTime));
         }
     }
 
-    protected void AgeBehaviour(){
+    protected virtual void AgeBehaviour(){
         if(!persistenceRequired && canBePickedUp){
-            age += Time.deltaTime;
+            if(age >= 0){
+                age += Time.deltaTime;
+            }
             if (age > maxAge - 10 && !isBlinking){
                 isBlinking = true;
                 StartCoroutine(Flash(0.25f));
@@ -65,17 +64,27 @@ public class Item : MonoBehaviour{
 
     IEnumerator Flash(float time){
         yield return new WaitForSeconds(time);
-        objectRenderer.enabled = !objectRenderer.enabled;
-        if (age < maxAge - 3){
-            StartCoroutine(Flash(0.25f));
+        if(isBlinking){
+            objectRenderer.enabled = !objectRenderer.enabled;
+            if (age < maxAge - 3){
+                StartCoroutine(Flash(0.25f));
+            }
+            else {
+                StartCoroutine(Flash(0.1f));
+            }
         }
-        else {
-            StartCoroutine(Flash(0.1f));
+        else{
+            objectRenderer.enabled = true;
         }
     }
 
-    protected void OnDrawGizmos(){
+    protected virtual void OnDrawGizmos(){
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, pickUpRadius);
+    }
+
+    
+    public bool CanBePickedUp(){
+        return canBePickedUp;
     }
 }

@@ -8,8 +8,8 @@ public enum ActionType{manual, semiAuto, fullAuto}
 public enum ChamberReloadType{pump, revolver}
 public enum Size{handGun, longGun}
 
-public class Weapon : MonoBehaviour{
-    [SerializeField] public WeaponScriptableObject FireWeapon;
+public class Weapon : Item{
+    [SerializeField] public WeaponScriptableObject weapon;
     [SerializeField] public ProjectileScriptableObject projectileToCast;
 
     //ATTRIBUTES FROM SCRIPTABLE OBJECT
@@ -33,54 +33,48 @@ public class Weapon : MonoBehaviour{
     [SerializeField] private bool hammerIsCocked; //for revolvers
     //[SerializeField] private bool pumpIsReady; //for shotguns
     [SerializeField] private bool canReload;
-    [SerializeField] private bool canBePickedUp;
 
     //OTHER ATTRIBUTES
     [SerializeField] private Transform castPoint;
     [SerializeField] public GameObject holder;
-    [SerializeField] private SphereCollider myCollider;
-    //[SerializeField] private Rigidbody myRigidbody;
 
-    private void Awake(){
+    protected override void Awake(){
         GetScriptableObjectVariables();
     }
 
-    private void Start(){
+    protected void Start(){
         InitializeInternalVariables();
     }
 
-    private void Update(){
+    protected override void Update(){
         FullAutoBehavior();
-        CollectableBehavior();
+        CollectableBehaviour();
+        AgeBehaviour();
     }
 
     private void GetScriptableObjectVariables(){
-        sprite = FireWeapon.sprite;
-        weaponName = FireWeapon.weaponName;
-        actionType = (ActionType)FireWeapon.actionType;
-        chamberReloadType = (ChamberReloadType)FireWeapon.chamberReloadType;
-        size = (Size)FireWeapon.size;
-        ammoCapacity = FireWeapon.ammoCapacity;
-        fireRate = FireWeapon.fireRate;
-        weight = FireWeapon.weight;
-        reloadTime = FireWeapon.reloadTime;
+        sprite = weapon.sprite;
+        weaponName = weapon.weaponName;
+        actionType = (ActionType)weapon.actionType;
+        chamberReloadType = (ChamberReloadType)weapon.chamberReloadType;
+        size = (Size)weapon.size;
+        ammoCapacity = weapon.ammoCapacity;
+        fireRate = weapon.fireRate;
+        weight = weapon.weight;
+        reloadTime = weapon.reloadTime;
     }
 
     private void InitializeInternalVariables(){
-        myCollider = GetComponent<SphereCollider>();
         myCollider.isTrigger = true;
-        //myRigidbody = GetComponent<Rigidbody>();
         if(transform.parent != null){
             holder = gameObject.transform.parent.gameObject;
             canBePickedUp = false;
             myCollider.enabled = false;
-            //myRigidbody.isKinematic = true;
         }
         else{
             holder = null;
             canBePickedUp = true;
             myCollider.enabled = true;
-            //myRigidbody.isKinematic = false;
         }
 
         ammo = ammoCapacity;
@@ -109,12 +103,6 @@ public class Weapon : MonoBehaviour{
             if(fullAutoClock < 1 / fireRate){
                 fullAutoClock += Time.deltaTime;
             }
-        }
-    }
-
-    private void CollectableBehavior(){
-        if(canBePickedUp){
-            transform.Rotate(Vector3.up * (90 * Time.deltaTime));
         }
     }
 
@@ -170,17 +158,16 @@ public class Weapon : MonoBehaviour{
     public void PickedUp(GameObject character){
         holder = character;
         canBePickedUp = false;
+        age = 0;
+        isBlinking = false;
         myCollider.enabled = false;
     }
 
     public void Dropped(){
         holder = null;
         myCollider.enabled = true;
-        StartCoroutine(PickUpDelay());
-        IEnumerator PickUpDelay(){
-            yield return new WaitForSeconds(1f);
-            canBePickedUp = true;
-        }
+        persistenceRequired = false;
+        StartCoroutine(CanBePickedUpDelay());
     }
 
     private void Fire(){
@@ -193,10 +180,6 @@ public class Weapon : MonoBehaviour{
 
             holder.transform.GetComponent<CharacterWeaponSystem>().WeaponFired();
         }
-    }
-
-    public bool CanBePickedUp(){
-        return canBePickedUp;
     }
 
     private void CastProjectile(){

@@ -87,7 +87,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "DropWeapon",
+                    "name": "DropItem",
                     "type": "PassThrough",
                     "id": "0ef5bed9-3406-4d36-af23-e3c188930167",
                     "expectedControlType": "Button",
@@ -324,7 +324,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "KB+M",
-                    "action": "DropWeapon",
+                    "action": "DropItem",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -335,7 +335,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "DropWeapon",
+                    "action": "DropItem",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

@@ -6,7 +6,7 @@ public enum Animal{hedgehog, pangolin, threeBandedArmadillo}
 public enum TeamColor{none, blue, red, green, yellow}
 
 public class CharacterStats : MonoBehaviour{
-    [SerializeField] private CharacterWeaponSystem characterWeaponSystem;
+    [SerializeField] private CharacterInventory characterInventory;
     public CharacterStatsScriptableObject Character;
 
     //PLAYER VARIABLES
@@ -22,7 +22,6 @@ public class CharacterStats : MonoBehaviour{
 
     //stats useful to determine what actions the player can or can not perform
     [SerializeField] public bool actionsAreBlocked;
-    [SerializeField] public bool isArmed;
     [SerializeField] public bool isMountedOnTurret;
 
     #region "Character attributes that will come from scriptable object"
@@ -69,7 +68,6 @@ public class CharacterStats : MonoBehaviour{
         timeToRespawn = 3f;
 
         actionsAreBlocked = false;
-        isArmed = IsArmed();
         isMountedOnTurret = false;
     }
 
@@ -162,18 +160,13 @@ public class CharacterStats : MonoBehaviour{
 
     public bool CanUseFireGun(){
         if(actionsAreBlocked) return false;
-        if(!isArmed) return false;
+        if(!IsArmed()) return false;
 
         return true;
     }
 
     public bool IsArmed(){
-        if(characterWeaponSystem.GetWeapon() != null){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return characterInventory.IsArmed();
     }
 
 }

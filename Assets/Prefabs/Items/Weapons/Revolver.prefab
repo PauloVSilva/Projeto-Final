@@ -48,7 +48,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73d82c18a5e21e643aa2ff353a3f80cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FireWeapon: {fileID: 11400000, guid: d1e7c59ab49e75d4d8b77d4c0059aba8, type: 2}
+  item: {fileID: 11400000, guid: 8ead17b252377504197d627f5b60c4f6, type: 2}
+  persistenceRequired: 0
+  age: 0
+  maxAge: 60
+  canBePickedUp: 1
+  pickUpRadius: 1.5
+  rotationSpeed: 150
+  isBlinking: 0
+  myCollider: {fileID: -1689494843375315578}
+  objectRenderer: {fileID: 5322911584721819576}
+  weapon: {fileID: 11400000, guid: d1e7c59ab49e75d4d8b77d4c0059aba8, type: 2}
   projectileToCast: {fileID: 11400000, guid: a947b6543823d914da85bc036ea53372, type: 2}
   sprite: {fileID: 0}
   weaponName: 
@@ -67,10 +77,8 @@ MonoBehaviour:
   canShoot: 1
   hammerIsCocked: 0
   canReload: 0
-  canBePickedUp: 0
   castPoint: {fileID: 465294764092532978}
   holder: {fileID: 0}
-  myCollider: {fileID: 0}
 --- !u!135 &-1689494843375315578
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -266,12 +274,25 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -4683669308469848369, guid: 23324ae6d50751b4c8967959144d5088, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 23324ae6d50751b4c8967959144d5088, type: 3}
       propertyPath: m_Name
       value: revolver
       objectReference: {fileID: 0}
+    - target: {fileID: 7202271454713460447, guid: 23324ae6d50751b4c8967959144d5088, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 23324ae6d50751b4c8967959144d5088, type: 3}
+--- !u!23 &5322911584721819576 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -4683669308469848369, guid: 23324ae6d50751b4c8967959144d5088, type: 3}
+  m_PrefabInstance: {fileID: 8565429185213268343}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8166219142385100444 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 23324ae6d50751b4c8967959144d5088, type: 3}
