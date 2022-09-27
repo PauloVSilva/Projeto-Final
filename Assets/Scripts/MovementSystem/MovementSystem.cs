@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(CharacterController))]
-
 public class MovementSystem : MonoBehaviour{
     [SerializeField] private CharacterStats characterStats;
     [SerializeField] private CharacterEvents characterEvents;
+    [SerializeField] private PlayerInputHandler playerInputHandler;
+    [SerializeField] private CharacterController controller;
 
     //VARIABLES THAT WILL COME FROM CHARACTERSTATS
     public float WalkSpeed {get; protected set;}
@@ -30,21 +30,21 @@ public class MovementSystem : MonoBehaviour{
     public int JumpsRemaining {get; protected set;}
 
     //OTHER VARIABLES
-    [SerializeField] private CharacterController controller;
     [SerializeField] private Vector3 playerVelocity;
     [SerializeField] private bool groundedPlayer;
     [SerializeField] private float gravityValue = -9.81f;
     [SerializeField] private Vector3 move;
 
-    private void Start(){
+    public void Initialize(){
         InitializeVariables();
         SubscribeToEvents();
     }
 
     private void InitializeVariables(){
-        characterStats = gameObject.transform.parent.GetComponent<CharacterStats>();
-        characterEvents = gameObject.transform.parent.GetComponent<CharacterEvents>();
-        controller = GetComponent<CharacterController>();
+        //controller = characterEvents.characterObject.GetComponent<CharacterController>();
+        controller.radius = characterEvents.characterObject.GetComponent<CharacterController>().radius;
+        controller.height = characterEvents.characterObject.GetComponent<CharacterController>().height;
+        controller.center = characterEvents.characterObject.GetComponent<CharacterController>().center;
         
         WalkSpeed = characterStats.WalkSpeed;
         SprintSpeed = characterStats.SprintSpeed;
@@ -65,39 +65,36 @@ public class MovementSystem : MonoBehaviour{
 
     private void SubscribeToEvents(){
         //INPUT EVENTS
-        gameObject.transform.parent.GetComponent<PlayerInputHandler>().OnCharacterMove += OnMove;
-        gameObject.transform.parent.GetComponent<PlayerInputHandler>().OnCharacterSprint += OnSprint;
-        gameObject.transform.parent.GetComponent<PlayerInputHandler>().OnCharacterJump += OnJump;
-        gameObject.transform.parent.GetComponent<PlayerInputHandler>().OnCharacterDash += OnDash;
+        playerInputHandler.OnCharacterMove += OnMove;
+        playerInputHandler.OnCharacterSprint += OnSprint;
+        playerInputHandler.OnCharacterJump += OnJump;
+        playerInputHandler.OnCharacterDash += OnDash;
     }
 
     private void Update(){
-        groundedPlayer = controller.isGrounded;
-        if (groundedPlayer && playerVelocity.y < 0){
-            playerVelocity.y = 0f;
-            JumpsRemaining = TotalJumps;
+        if(controller != null){
+            groundedPlayer = controller.isGrounded;
+            if (groundedPlayer && playerVelocity.y < 0){
+                playerVelocity.y = 0f;
+                JumpsRemaining = TotalJumps;
+            }
+
+            controller.Move(move * Time.deltaTime * moveSpeed);
+
+            if (move != Vector3.zero){
+                gameObject.transform.forward = move;
+            }
+
+            playerVelocity.y += gravityValue * Time.deltaTime;
+            controller.Move(playerVelocity * Time.deltaTime);
+
+            SprintBehavior();
+            StaminaRegen();
         }
-
-        controller.Move(move * Time.deltaTime * moveSpeed);
-
-        if (move != Vector3.zero){
-            gameObject.transform.forward = move;
-        }
-
-        playerVelocity.y += gravityValue * Time.deltaTime;
-        controller.Move(playerVelocity * Time.deltaTime);
-
-        SprintBehavior();
-        StaminaRegen();
-
     }
 
     public void ResetStats(){
         InitializeVariables();
-    }
-
-    public void OnTriggerEnter(Collider other){
-        characterEvents.FilterCollision(gameObject, other.gameObject);
     }
 
     public void StaminaRegen(){

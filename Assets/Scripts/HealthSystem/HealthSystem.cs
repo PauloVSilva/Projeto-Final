@@ -13,7 +13,7 @@ public abstract class HealthSystem : MonoBehaviour{
     public abstract float CurrentHealth {get; protected set;}
     public abstract bool IsAlive {get; protected set;}
 
-    protected void Start(){
+    public void Initialize(){
         InitializeVariables();
     }
 

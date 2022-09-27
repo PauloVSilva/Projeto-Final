@@ -200,6 +200,7 @@ public class Weapon : MonoBehaviour{
     }
 
     private void CastProjectile(){
-        ObjectPooler.instance.SpawnFromPool(projectileToCast.projectileName, castPoint.position, castPoint.rotation, this.gameObject);
+        //ObjectPooler.instance.SpawnFromPool(projectileToCast.projectileName, castPoint.position, castPoint.rotation, this.gameObject);
+        ObjectPooler.instance.SpawnFromPool(projectileToCast.projectileModel, castPoint.position, castPoint.rotation, this.gameObject);
     }
 }

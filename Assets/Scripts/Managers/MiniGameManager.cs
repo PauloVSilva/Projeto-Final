@@ -51,7 +51,7 @@ public class MiniGameManager : MonoBehaviour{
 
         foreach(var playerInput in GameManager.instance.playerList){
             int index = playerInput.playerIndex % GameManager.instance.spawnPoints.Length;
-            playerInput.GetComponent<CharacterSelection>().characterObject.transform.position = GameManager.instance.spawnPoints[index].transform.position;
+            playerInput.transform.position = GameManager.instance.spawnPoints[index].transform.position;
             playerInput.GetComponent<CharacterEvents>().BlockActions();
         }
 

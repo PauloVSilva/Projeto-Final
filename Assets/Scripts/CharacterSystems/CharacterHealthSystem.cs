@@ -16,6 +16,7 @@ public class CharacterHealthSystem : HealthSystem{
     public float HealthRegenCooldown {get; protected set;}
     public bool CanRegenHealth {get; protected set;}
     public override bool IsAlive {get; protected set;}
+    public bool IsInvulnerable {get; protected set;}
 
     private void Update(){
         RegenerateHealth();
@@ -39,15 +40,13 @@ public class CharacterHealthSystem : HealthSystem{
         characterEvents.PlayerHealthUpdated(CurrentHealth, MaxHealth);
     }
 
-    protected override void InitializeVariables(){
-        characterStats = gameObject.transform.parent.GetComponent<CharacterStats>();
-        characterEvents = gameObject.transform.parent.GetComponent<CharacterEvents>();
-        
+    protected override void InitializeVariables(){        
         MaxHealth = characterStats.MaxHealth;
         HealthRegenRate = characterStats.HealthRegenRate;
 
         CurrentHealth = MaxHealth;
         IsAlive = true;
+        IsInvulnerable = false;
         StartCoroutine(OnEntityBornDelay());
         IEnumerator OnEntityBornDelay(){
             yield return new WaitForSeconds(0.05f);
@@ -57,14 +56,16 @@ public class CharacterHealthSystem : HealthSystem{
     }
 
     public override void TakeDamage(GameObject damageSource, float damageTaken){
-        CurrentHealth = Math.Max(CurrentHealth -= damageTaken, 0);
-        if(CurrentHealth <= 0){
-            Die(damageSource);
+        if(!IsInvulnerable){
+            CurrentHealth = Math.Max(CurrentHealth -= damageTaken, 0);
+            if(CurrentHealth <= 0){
+                Die(damageSource);
+            }
+            characterEvents.PlayerWasDamaged(damageTaken);
+            HealthRegenCooldown = 1f;
+            CanRegenHealth = false;
+            SendHealthUpdateEvent();
         }
-        characterEvents.PlayerWasDamaged(damageTaken);
-        HealthRegenCooldown = 1f;
-        CanRegenHealth = false;
-        SendHealthUpdateEvent();
     }
 
     public override void Heal(float heal){
@@ -75,10 +76,11 @@ public class CharacterHealthSystem : HealthSystem{
 
     public override void Die(GameObject damageSource){
         IsAlive = false;
+        IsInvulnerable = true;
         CurrentHealth = 0;
         characterEvents.PlayerDied(gameObject);
-        if(damageSource.CompareTag("Character")){
-            damageSource.transform.parent.GetComponent<CharacterEvents>().PlayerScoredKill(damageSource);
+        if(damageSource.CompareTag("Player")){
+            damageSource.transform.GetComponent<CharacterEvents>().PlayerScoredKill(damageSource);
         }
     }
 }

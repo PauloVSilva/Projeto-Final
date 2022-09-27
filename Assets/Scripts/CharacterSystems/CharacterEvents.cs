@@ -4,7 +4,9 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class CharacterEvents : MonoBehaviour{
+    [SerializeField] private PlayerInputHandler playerInputHandler;
     [SerializeField] private CharacterStats characterStats;
+    [SerializeField] private CharacterController controller;
     [SerializeField] public Inventory inventory;
     [SerializeField] public GameObject characterObject;
 
@@ -25,8 +27,6 @@ public class CharacterEvents : MonoBehaviour{
 
     public void SetEvents(){
         characterObject = GetComponent<CharacterSelection>().characterObject;
-        inventory = gameObject.GetComponent<Inventory>();
-        characterStats = gameObject.GetComponent<CharacterStats>();
     }
 
     public void SubscribeToPlayerEvents(){ //allow managers to subscribe to this class' events
@@ -42,28 +42,28 @@ public class CharacterEvents : MonoBehaviour{
     }
 
 
-    public void FilterCollision(GameObject character, GameObject _gameObject){
-        if(_gameObject.GetComponent<Coin>() != null){
-            if(_gameObject.GetComponent<Coin>().canBePickedUp){
-                if(inventory.AddToInventory(_gameObject.GetComponent<Item>().item)){
-                    IncreaseScore(_gameObject.GetComponent<Coin>().value);
-                    Destroy(_gameObject);
+    public void OnTriggerEnter(Collider other){
+        if(other.gameObject.GetComponent<Coin>() != null){
+            if(other.gameObject.GetComponent<Coin>().canBePickedUp){
+                if(inventory.AddToInventory(other.gameObject.GetComponent<Item>().item)){
+                    IncreaseScore(other.gameObject.GetComponent<Coin>().value);
+                    Destroy(other.gameObject);
                 }
             }
         }
-        if(_gameObject.CompareTag("Instadeath")){
-            character.GetComponent<HealthSystem>().Kill();
+        if(other.gameObject.CompareTag("Instadeath")){
+            gameObject.GetComponent<HealthSystem>().Kill();
         }
-        if(_gameObject.CompareTag("Weapon")){
-            if(_gameObject.GetComponent<Weapon>().CanBePickedUp()){
-                character.GetComponent<CharacterWeaponSystem>().PickUpWeapon(_gameObject);
+        if(other.gameObject.CompareTag("Weapon")){
+            if(other.gameObject.GetComponent<Weapon>().CanBePickedUp()){
+                gameObject.GetComponent<CharacterWeaponSystem>().PickUpWeapon(other.gameObject);
             }
         }
     }
 
     public void RefreshStatsUponRespawning(){
-        characterObject.GetComponent<HealthSystem>().ResetStats();
-        characterObject.GetComponent<MovementSystem>().ResetStats();
+        GetComponent<HealthSystem>().ResetStats();
+        GetComponent<MovementSystem>().ResetStats();
     }
 
 
@@ -72,6 +72,7 @@ public class CharacterEvents : MonoBehaviour{
             StartCoroutine(RespawnCharacterDelay());
         }
         characterObject.SetActive(false);
+        playerInputHandler.DisableActions();
     }
 
     IEnumerator RespawnCharacterDelay(){
@@ -81,8 +82,9 @@ public class CharacterEvents : MonoBehaviour{
 
     public void RespawnCharacter(){
         int randomIndex = UnityEngine.Random.Range(0, GameManager.instance.spawnPoints.Length);
-        characterObject.transform.position = GameManager.instance.spawnPoints[randomIndex].transform.position;
+        this.transform.position = GameManager.instance.spawnPoints[randomIndex].transform.position;
         characterObject.SetActive(true);
+        playerInputHandler.RestoreActions();
         RefreshStatsUponRespawning();
     }
 

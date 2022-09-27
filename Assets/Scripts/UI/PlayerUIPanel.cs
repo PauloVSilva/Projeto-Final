@@ -10,6 +10,7 @@ public class PlayerUIPanel : MonoBehaviour{
     [SerializeField] CharacterStats characterStats;
     [SerializeField] CharacterEvents characterEvents;
     [SerializeField] CharacterSelection characterSelection;
+    [SerializeField] CharacterWeaponSystem characterWeaponSystem;
 
     [SerializeField] private GameObject playerInfo;
     [SerializeField] private GameObject joinMessage;
@@ -143,6 +144,7 @@ public class PlayerUIPanel : MonoBehaviour{
         characterEvents = player.transform.GetComponent<CharacterEvents>();
         characterStats = player.transform.GetComponent<CharacterStats>();
         characterSelection = player.transform.GetComponent<CharacterSelection>();
+        characterWeaponSystem = player.transform.GetComponent<CharacterWeaponSystem>();
         SetStatsActive();
         SubscribeToPlayerEvents();
         InitializeStats();
@@ -151,8 +153,8 @@ public class PlayerUIPanel : MonoBehaviour{
 
 
     private void CheckForWeapon(){
-        if(characterEvents.characterObject.GetComponent<CharacterWeaponSystem>().GetWeapon() != null){
-            Weapon _weapon = characterEvents.characterObject.GetComponent<CharacterWeaponSystem>().GetWeapon();
+        if(characterWeaponSystem.GetWeapon() != null){
+            Weapon _weapon = characterWeaponSystem.GetWeapon();
             DisplayWeapon(_weapon);
         }
         else{

@@ -15,6 +15,10 @@ GameObject:
   - component: {fileID: -7353346912697764937}
   - component: {fileID: -6532263821112973344}
   - component: {fileID: -520056228643791518}
+  - component: {fileID: -3360404993604576978}
+  - component: {fileID: 2604168369563993407}
+  - component: {fileID: 87397543814161862}
+  - component: {fileID: -123166407121015900}
   m_Layer: 0
   m_Name: PlayerInput
   m_TagString: Player
@@ -296,6 +300,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterEvents: {fileID: -7353346912697764937}
   characterStats: {fileID: -6532263821112973344}
+  characterHealthSystem: {fileID: -3360404993604576978}
+  characterMovementSystem: {fileID: 2604168369563993407}
+  characterWeaponSystem: {fileID: -123166407121015900}
   Character: {fileID: 0}
   characterObject: {fileID: 0}
 --- !u!114 &-7353346912697764937
@@ -310,8 +317,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7953278b864e5f64eaae0dbc1978718a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInputHandler: {fileID: 7408531066293585715}
   characterStats: {fileID: -6532263821112973344}
-  inventory: {fileID: 0}
+  controller: {fileID: 87397543814161862}
+  inventory: {fileID: -520056228643791518}
   characterObject: {fileID: 0}
 --- !u!114 &-6532263821112973344
 MonoBehaviour:
@@ -325,6 +334,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51de381b12768864181f6a37b345a307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterWeaponSystem: {fileID: -123166407121015900}
   Character: {fileID: 0}
   teamColor: 0
   score: 0
@@ -360,6 +370,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9207b1549e590b548bc7d27dace972b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponSlot:
+  - item: {fileID: 0}
+    itemSprite: {fileID: 0}
+    stackSize: 0
   inventorySlots:
   - item: {fileID: 0}
     itemSprite: {fileID: 0}
@@ -373,3 +387,72 @@ MonoBehaviour:
   - item: {fileID: 0}
     itemSprite: {fileID: 0}
     stackSize: 0
+--- !u!114 &-3360404993604576978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7408531066293585716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a548bd93fb0c5b4fac6c6e7d05dba0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterStats: {fileID: -6532263821112973344}
+  characterEvents: {fileID: -7353346912697764937}
+--- !u!114 &2604168369563993407
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7408531066293585716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16bb2bab1f2fa204cace804b197aa24e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterStats: {fileID: -6532263821112973344}
+  characterEvents: {fileID: -7353346912697764937}
+  playerInputHandler: {fileID: 7408531066293585715}
+  controller: {fileID: 87397543814161862}
+  playerVelocity: {x: 0, y: 0, z: 0}
+  groundedPlayer: 0
+  gravityValue: -9.81
+  move: {x: 0, y: 0, z: 0}
+--- !u!143 &87397543814161862
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7408531066293585716}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Height: 2
+  m_Radius: 1
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-123166407121015900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7408531066293585716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7023e031ca6d6d54fa161c55d79f0b87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterStats: {fileID: -6532263821112973344}
+  characterEvents: {fileID: -7353346912697764937}
+  playerInputHandler: {fileID: 7408531066293585715}
+  weapon: {fileID: 0}
+  gunPosition: {fileID: 0}

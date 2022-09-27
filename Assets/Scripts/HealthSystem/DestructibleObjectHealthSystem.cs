@@ -11,6 +11,10 @@ public class DestructibleObjectHealthSystem : HealthSystem{
     public override float CurrentHealth {get; protected set;}
     public override bool IsAlive {get; protected set;}
 
+    protected void Start(){
+        InitializeVariables();
+    }
+
     protected override void InitializeVariables(){
         MaxHealth = 20000f;
         CurrentHealth = MaxHealth;

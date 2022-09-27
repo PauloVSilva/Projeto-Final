@@ -28,7 +28,7 @@ public class ItemSlot{
         if(stackSize > 0){
             stackSize--;
         }
-        else{
+        if(stackSize == 0){
             new ItemSlot();
         }
     }

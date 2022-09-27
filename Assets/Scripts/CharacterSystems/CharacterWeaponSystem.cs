@@ -6,26 +6,24 @@ using UnityEngine.InputSystem;
 public class CharacterWeaponSystem : MonoBehaviour{
     [SerializeField] private CharacterStats characterStats;
     [SerializeField] private CharacterEvents characterEvents;
+    [SerializeField] private PlayerInputHandler playerInputHandler;
     [SerializeField] private Weapon weapon;
     [SerializeField] private Transform gunPosition;
 
     private void Start() {
-        InitializeVariables();
         SubscribeToEvents();
     }
 
-    private void InitializeVariables(){
-        characterStats = gameObject.transform.parent.GetComponent<CharacterStats>();
-        characterEvents = gameObject.transform.parent.GetComponent<CharacterEvents>();
-        gunPosition = GetComponent<CharacterItemsDisplay>().gunPosition.transform;
+    public void SetGunPosition(){
+        gunPosition = characterEvents.characterObject.GetComponent<CharacterItemsDisplay>().gunPosition.transform;
     }
 
     private void SubscribeToEvents(){
         //INPUT EVENTS
-        gameObject.transform.parent.GetComponent<PlayerInputHandler>().OnCharacterCockHammer += OnCockHammer;
-        gameObject.transform.parent.GetComponent<PlayerInputHandler>().OnCharacterPressTrigger += OnPressTrigger;
-        gameObject.transform.parent.GetComponent<PlayerInputHandler>().OnCharacterReload += OnReload;
-        gameObject.transform.parent.GetComponent<PlayerInputHandler>().OnCharacterDropWeapon += OnDropWeapon;
+        playerInputHandler.OnCharacterCockHammer += OnCockHammer;
+        playerInputHandler.OnCharacterPressTrigger += OnPressTrigger;
+        playerInputHandler.OnCharacterReload += OnReload;
+        playerInputHandler.OnCharacterDropWeapon += OnDropWeapon;
     }
 
     public void OnCockHammer(InputAction.CallbackContext context){

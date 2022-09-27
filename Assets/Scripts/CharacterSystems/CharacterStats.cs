@@ -6,6 +6,7 @@ public enum Animal{hedgehog, pangolin, threeBandedArmadillo}
 public enum TeamColor{none, blue, red, green, yellow}
 
 public class CharacterStats : MonoBehaviour{
+    [SerializeField] private CharacterWeaponSystem characterWeaponSystem;
     public CharacterStatsScriptableObject Character;
 
     //PLAYER VARIABLES
@@ -68,7 +69,7 @@ public class CharacterStats : MonoBehaviour{
         timeToRespawn = 3f;
 
         actionsAreBlocked = false;
-        isArmed = false;
+        isArmed = IsArmed();
         isMountedOnTurret = false;
     }
 
@@ -139,6 +140,9 @@ public class CharacterStats : MonoBehaviour{
         unlimitedLives = true;
     }
 
+
+
+
     public bool CanRespawn(){
         if(totalLives > 0 || unlimitedLives){
             return true;
@@ -147,8 +151,6 @@ public class CharacterStats : MonoBehaviour{
             return false;
         }
     }
-
-
 
     public bool CanMove(){
         if(actionsAreBlocked) return false;
@@ -163,7 +165,13 @@ public class CharacterStats : MonoBehaviour{
         return true;
     }
 
-
-
+    public bool IsArmed(){
+        if(characterWeaponSystem.GetWeapon() != null){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 
 }

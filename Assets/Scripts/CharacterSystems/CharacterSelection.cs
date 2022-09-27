@@ -7,6 +7,9 @@ public class CharacterSelection : MonoBehaviour{
 
     [SerializeField] private CharacterEvents characterEvents;
     [SerializeField] private CharacterStats characterStats;
+    [SerializeField] private HealthSystem characterHealthSystem;
+    [SerializeField] private MovementSystem characterMovementSystem;
+    [SerializeField] private CharacterWeaponSystem characterWeaponSystem;
     [SerializeField] public CharacterStatsScriptableObject Character;
     [SerializeField] public GameObject characterObject;
     [SerializeField] public event System.Action OnCharacterChosen;
@@ -22,8 +25,12 @@ public class CharacterSelection : MonoBehaviour{
         Character = _character;
 
         characterStats.SetStats();
-        characterObject = GameObject.Instantiate(Character.characterModel[0], GameManager.instance.spawnPoints[randomIndex].transform.position, transform.rotation, this.transform);
+        characterObject = GameObject.Instantiate(Character.characterModel[0], transform.position, transform.rotation, this.transform);
         characterEvents.SetEvents();
+        characterHealthSystem.Initialize();
+        characterMovementSystem.Initialize();
+        characterWeaponSystem.SetGunPosition();
+
         transform.parent = GameManager.instance.transform;
         GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
         OnCharacterChosen?.Invoke();

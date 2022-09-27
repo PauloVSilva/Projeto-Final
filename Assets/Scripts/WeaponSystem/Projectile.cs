@@ -26,7 +26,6 @@ public class Projectile : MonoBehaviour, IPooledObjects{
     [SerializeField] private BoxCollider myCollider;
     [SerializeField] private Rigidbody myRigidbody;
     [SerializeField] private GameObject playerOfOrigin;
-    [SerializeField] private GameObject characterOfOrigin;
     [SerializeField] private GameObject weaponOfOrigin;
 
     private void Awake(){
@@ -58,10 +57,9 @@ public class Projectile : MonoBehaviour, IPooledObjects{
         myRigidbody.AddForce(transform.forward * ProjectileToCast.speed, ForceMode.Impulse);
 
         weaponOfOrigin = this.transform.parent.gameObject;
-        characterOfOrigin = weaponOfOrigin.transform.parent.gameObject;
-        playerOfOrigin = characterOfOrigin.transform.parent.gameObject;
+        playerOfOrigin = weaponOfOrigin.transform.parent.gameObject;
 
-        this.transform.parent = null;
+        this.transform.parent = ObjectPooler.instance.transform;
 
         canDamage = true;
 
@@ -85,7 +83,7 @@ public class Projectile : MonoBehaviour, IPooledObjects{
 
     private void OnTriggerEnter(Collider other){
         if(other.gameObject.GetComponent<HealthSystem>() != null && canDamage){
-            other.GetComponent<HealthSystem>().TakeDamage(characterOfOrigin, ProjectileToCast.damageAmount);
+            other.GetComponent<HealthSystem>().TakeDamage(playerOfOrigin, ProjectileToCast.damageAmount);
             this.gameObject.SetActive(false);
         }
         canDamage = false;

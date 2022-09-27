@@ -31,7 +31,12 @@ public class Coin : Item{
         myCollider.radius = pickUpRadius;
 
         age = 0;
-        canBePickedUp = true;
+        canBePickedUp = false;
+        StartCoroutine(CanBePickedUpDelay());
+        IEnumerator CanBePickedUpDelay(){
+            yield return new WaitForSeconds(2f);
+            canBePickedUp = true;
+        }
         pickUpRadius = 1.5f;
         //rotationSpeed = 10f;
         //value = 1;

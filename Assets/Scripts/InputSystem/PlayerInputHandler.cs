@@ -32,6 +32,10 @@ public class PlayerInputHandler : MonoBehaviour{
         playerInput.SwitchCurrentActionMap("UI");
     }
 
+    public void DisableActions(){
+        playerInput.SwitchCurrentActionMap("UI");
+    }
+
     public void PlayerClosedMenu(){
         RestoreActions();
     }
