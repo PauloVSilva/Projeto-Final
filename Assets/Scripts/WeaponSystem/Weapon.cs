@@ -5,7 +5,8 @@ using UnityEngine.InputSystem;
 using System;
     
 public enum ActionType{manual, semiAuto, fullAuto}
-public enum ChamberReloadType{pump, revolver}
+public enum ChamberRefillType{pump, revolver}
+public enum ReloadType{singleBullet, magazine}
 public enum Size{handGun, longGun}
 
 public class Weapon : Item{
@@ -16,7 +17,7 @@ public class Weapon : Item{
     [SerializeField] public Sprite sprite;
     [SerializeField] public string weaponName;
     [SerializeField] private ActionType actionType;
-    [SerializeField] private ChamberReloadType chamberReloadType;
+    [SerializeField] private ChamberRefillType chamberRefillType;
     [SerializeField] private Size size;
     [SerializeField] public int ammoCapacity;
     [SerializeField] private float fireRate; //how many times it can shoot per second
@@ -32,7 +33,7 @@ public class Weapon : Item{
     [SerializeField] private bool canShoot;
     [SerializeField] private bool hammerIsCocked; //for revolvers
     //[SerializeField] private bool pumpIsReady; //for shotguns
-    [SerializeField] private bool canReload;
+    [SerializeField] private bool triggerHeld;
 
     //OTHER ATTRIBUTES
     [SerializeField] private Transform castPoint;
@@ -55,9 +56,9 @@ public class Weapon : Item{
     private void GetScriptableObjectVariables(){
         sprite = weapon.sprite;
         weaponName = weapon.weaponName;
-        actionType = (ActionType)weapon.actionType;
-        chamberReloadType = (ChamberReloadType)weapon.chamberReloadType;
-        size = (Size)weapon.size;
+        actionType = weapon.actionType;
+        chamberRefillType = weapon.chamberRefillType;
+        size = weapon.size;
         ammoCapacity = weapon.ammoCapacity;
         fireRate = weapon.fireRate;
         weight = weapon.weight;
@@ -85,15 +86,15 @@ public class Weapon : Item{
         canShoot = true;
         hammerIsCocked = false;
         //pumpIsReady = false;
-        canReload = true;
+        triggerHeld = false;
     }
 
     private void OnDisable(){
-        StopCoroutine(Reload(reloadTime));
+        StopCoroutine(Reload());
     }
 
     private void FullAutoBehavior(){
-        if(actionType.ToString() == "fullAuto"){
+        if(actionType == ActionType.fullAuto){
             if(shooting && fullAutoClock >= 1 / fireRate){
                 Fire();
             }
@@ -115,18 +116,19 @@ public class Weapon : Item{
 
     public void OnPressTrigger(InputAction.CallbackContext context){
         if(context.performed){
+            StopCoroutine(Reload());
             if(ammo - (int)projectileToCast.cost >= 0){
-                if(actionType.ToString() == "manual" && hammerIsCocked && canShoot){
+                if(actionType == ActionType.manual && hammerIsCocked && canShoot){
                     Fire();
                 }
-                if(actionType.ToString() == "semiAuto" && canShoot){
+                if(actionType == ActionType.semiAuto && canShoot){
                     Fire();
                 }
-                if(actionType.ToString() == "fullAuto"){
+                if(actionType == ActionType.fullAuto){
                     shooting = true;
                 }
             }
-            canReload = false;
+            triggerHeld = true;
         }
         if(context.canceled){
             if(actionType.ToString() == "semiAuto"){
@@ -134,25 +136,32 @@ public class Weapon : Item{
             }
             canShoot = true;
             shooting = false;
-            canReload = true;
+            triggerHeld = false;
         }
     }
 
     public void OnReload(InputAction.CallbackContext context){
         if(context.performed){
-            if(canReload){
-                StartCoroutine(Reload(reloadTime));
+            if(CanReload()){
+                StartCoroutine(Reload());
             }
         }
     }
+
+    private bool CanReload(){
+        if(!triggerHeld && (ammo < ammoCapacity && extraAmmo > 0)){
+            return true;
+        }
+        return false;
+    }
     
-    IEnumerator Reload(float reloadTime){
-        yield return new WaitForSeconds(reloadTime);
-        while (ammo < ammoCapacity && extraAmmo > 0){
+    IEnumerator Reload(){
+        while(CanReload()){
+            yield return new WaitForSeconds(reloadTime);
             extraAmmo--;
             ammo++;
+            holder.transform.GetComponent<CharacterWeaponSystem>()?.WeaponReloaded();
         }
-        holder.transform.GetComponent<CharacterWeaponSystem>().WeaponReloaded();
     }
 
     public void PickedUp(GameObject character){
