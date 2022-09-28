@@ -89,8 +89,12 @@ public class Weapon : Item{
         triggerHeld = false;
     }
 
-    private void OnDisable(){
+    protected override void OnDisable(){
         StopCoroutine(Reload());
+    }
+
+    protected override void MaxAgeReached(){
+        Destroy(this.gameObject);
     }
 
     private void FullAutoBehavior(){

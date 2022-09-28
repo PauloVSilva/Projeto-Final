@@ -154,6 +154,7 @@ MonoBehaviour:
   rotationSpeed: 800
   isBlinking: 0
   myCollider: {fileID: 2784413684905434363}
+  myRigidbody: {fileID: 7690747701783756440}
   objectRenderer: {fileID: 2784413683903831768}
   value: 10000
 --- !u!135 &2784413684905434363

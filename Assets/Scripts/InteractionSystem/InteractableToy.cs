@@ -27,4 +27,8 @@ public class InteractableToy : Item, InteractorInterface{
         }
         return true;
     }
+
+    protected override void MaxAgeReached(){
+        Debug.Log("Somehow, an interactable toy aged. Better check if anything is broken.");
+    }
 }

@@ -39,8 +39,8 @@ public class Spawner : MonoBehaviour{
     }
 
     private void SpawnEntity(){
-        //ObjectPooler.instance.SpawnFromPool(PickRandomObject().prefab, this.transform.position, this.transform.rotation, this.gameObject);
-        Instantiate(PickRandomObject().prefab, this.transform.position, this.transform.rotation);
+        ObjectPooler.instance.SpawnFromPool(PickRandomObject().prefab, this.transform.position, this.transform.rotation, this.gameObject);
+        //Instantiate(PickRandomObject().prefab, this.transform.position, this.transform.rotation);
         //ObjectPooler.instance.SpawnFromPool(projectileToCast.projectileModel, castPoint.position, castPoint.rotation, this.gameObject);
         //Instantiate(objectsToBeSpawned[Random.Range(0, objectsToBeSpawned.Length)], RandomNewSpawnPosition(), transform.rotation);
     }

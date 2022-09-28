@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum CollisionType{contact, explosive, passThrough}
 
-public class Projectile : MonoBehaviour, IPooledObjects{
+public class Projectile : IPooledObjects{
 //public class Projectile : MonoBehaviour{
     public ProjectileScriptableObject ProjectileToCast;
 
@@ -20,7 +20,6 @@ public class Projectile : MonoBehaviour, IPooledObjects{
 
     //VARIABLES FOR INTERNAL USE
     [SerializeField] private bool canDamage;
-    [SerializeField] private bool disableCoroutineIsRunning;
 
     //OTHER ATTRIBUTES
     [SerializeField] private BoxCollider myCollider;
@@ -47,9 +46,9 @@ public class Projectile : MonoBehaviour, IPooledObjects{
         speed = ProjectileToCast.speed;
     }
 
-    public void OnObjectSpawn(){ //replaces Start()
+    public override void OnObjectSpawn(){ //replaces Start()
         if(disableCoroutineIsRunning){
-            DisableCoroutine();
+            DisableCoroutine(ProjectileToCast.lifeTime);
         }
 
         myRigidbody.velocity = Vector3.zero;
@@ -63,22 +62,7 @@ public class Projectile : MonoBehaviour, IPooledObjects{
 
         canDamage = true;
 
-        StartCoroutine(DisableObject());
-    }
-
-    IEnumerator DisableObject(){
-        disableCoroutineIsRunning = true;
-        yield return new WaitForSeconds(ProjectileToCast.lifeTime);
-        this.gameObject.SetActive(false);
-    }
-
-    private void DisableCoroutine(){
-        StopCoroutine(DisableObject());
-        disableCoroutineIsRunning = false;
-    }
-
-    private void OnDisable(){
-        DisableCoroutine();
+        StartCoroutine(DisableObject(ProjectileToCast.lifeTime));
     }
 
     private void OnTriggerEnter(Collider other){

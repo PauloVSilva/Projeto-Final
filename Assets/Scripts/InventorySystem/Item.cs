@@ -4,7 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(SphereCollider))]
 
-public class Item : MonoBehaviour{
+public abstract class Item : IPooledObjects{
     [SerializeField] public ItemScriptableObject item;
     [SerializeField] public bool persistenceRequired;
     [SerializeField] protected float age;
@@ -14,6 +14,7 @@ public class Item : MonoBehaviour{
     [SerializeField] protected float rotationSpeed;
     [SerializeField] protected bool isBlinking;
     [SerializeField] protected SphereCollider myCollider;
+    [SerializeField] protected Rigidbody myRigidbody;
     [SerializeField] protected Renderer objectRenderer;
 
     protected virtual void Awake(){
@@ -25,12 +26,16 @@ public class Item : MonoBehaviour{
         myCollider.isTrigger = true;
         myCollider.radius = pickUpRadius;
 
+        myRigidbody.velocity = Vector3.zero;
+        myRigidbody.angularVelocity = Vector3.zero;
+
         age = 0;
         canBePickedUp = false;
         StartCoroutine(CanBePickedUpDelay());
         pickUpRadius = 1.5f;
         isBlinking = false;
     }
+    
     protected IEnumerator CanBePickedUpDelay(){
         yield return new WaitForSeconds(1f);
         canBePickedUp = true;
@@ -57,10 +62,13 @@ public class Item : MonoBehaviour{
                 StartCoroutine(Flash(0.25f));
             }
             if(age > maxAge){
-                Destroy(this.gameObject);
+                //Destroy(this.gameObject);
+                MaxAgeReached();
             }
         }
     }
+
+    protected abstract void MaxAgeReached();
 
     IEnumerator Flash(float time){
         yield return new WaitForSeconds(time);
@@ -83,7 +91,6 @@ public class Item : MonoBehaviour{
         Gizmos.DrawWireSphere(transform.position, pickUpRadius);
     }
 
-    
     public bool CanBePickedUp(){
         return canBePickedUp;
     }

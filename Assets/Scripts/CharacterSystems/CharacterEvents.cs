@@ -35,7 +35,8 @@ public class CharacterEvents : MonoBehaviour{
                 if(other.gameObject.GetComponent<Coin>()){
                     if(characterInventory.AddToInventory(other.gameObject.GetComponent<Item>().item)){
                         IncreaseScore(other.gameObject.GetComponent<Coin>().value);
-                        Destroy(other.gameObject);
+                        //Destroy(other.gameObject);
+                        other.gameObject.SetActive(false);
                     }
                 }
                 if(other.gameObject.GetComponent<Weapon>()){
