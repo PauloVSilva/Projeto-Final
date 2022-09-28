@@ -490,11 +490,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectsToPool:
-  - tag: 
+  - tag: Silver coins
     prefab: {fileID: 2784413684905434342, guid: 0f15cf83284a6464095c8ffc6cb662c6, type: 3}
-    size: 20
-  - tag: 
+    size: 40
+  - tag: Gold coins
     prefab: {fileID: 2784413684905434342, guid: 54f118bf9fc56674bb45239cdae0def7, type: 3}
+    size: 40
+  - tag: Sapphire coins
+    prefab: {fileID: 2784413684905434342, guid: e207ee261dd878645acea23ac8a516c7, type: 3}
+    size: 20
+  - tag: Amethyst coins
+    prefab: {fileID: 2784413684905434342, guid: 0bf73ba8bea01514b992f5a9b1f96b62, type: 3}
     size: 20
   miniGameUIManager: {fileID: 0}
   miniGameSetup: {fileID: 0}
@@ -503,11 +509,9 @@ MonoBehaviour:
   gameState: 0
   itemSpawnersList: []
   countDown: 0
-  killCountGoal: 0
-  lastStandingLives: 0
+  coins: []
   scoreAmountGoal: 0
   timeLimitGoal: 0
-  coins: []
 --- !u!1001 &897928362
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -735,22 +739,6 @@ PrefabInstance:
       value: -5
       objectReference: {fileID: 0}
     - target: {fileID: 8740977291168480539, guid: dfdc10ed3a0f2ce4b9f9d0a2cd3a72ad, type: 3}
-      propertyPath: ready
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8740977291168480539, guid: dfdc10ed3a0f2ce4b9f9d0a2cd3a72ad, type: 3}
-      propertyPath: cooldown
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8740977291168480539, guid: dfdc10ed3a0f2ce4b9f9d0a2cd3a72ad, type: 3}
-      propertyPath: spawnRange
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 8740977291168480539, guid: dfdc10ed3a0f2ce4b9f9d0a2cd3a72ad, type: 3}
-      propertyPath: spawnerEnabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8740977291168480539, guid: dfdc10ed3a0f2ce4b9f9d0a2cd3a72ad, type: 3}
       propertyPath: maxSpawnInterval
       value: 3
       objectReference: {fileID: 0}
@@ -778,6 +766,38 @@ PrefabInstance:
       propertyPath: objectsToBeSpawned.Array.data[3]
       value: 
       objectReference: {fileID: 2784413684905434342, guid: 0bf73ba8bea01514b992f5a9b1f96b62, type: 3}
+    - target: {fileID: 8740977291168480539, guid: dfdc10ed3a0f2ce4b9f9d0a2cd3a72ad, type: 3}
+      propertyPath: objectsToBeSpawned.Array.data[0].prefab
+      value: 
+      objectReference: {fileID: 2784413684905434342, guid: 0f15cf83284a6464095c8ffc6cb662c6, type: 3}
+    - target: {fileID: 8740977291168480539, guid: dfdc10ed3a0f2ce4b9f9d0a2cd3a72ad, type: 3}
+      propertyPath: objectsToBeSpawned.Array.data[0].weight
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8740977291168480539, guid: dfdc10ed3a0f2ce4b9f9d0a2cd3a72ad, type: 3}
+      propertyPath: objectsToBeSpawned.Array.data[1].prefab
+      value: 
+      objectReference: {fileID: 2784413684905434342, guid: 54f118bf9fc56674bb45239cdae0def7, type: 3}
+    - target: {fileID: 8740977291168480539, guid: dfdc10ed3a0f2ce4b9f9d0a2cd3a72ad, type: 3}
+      propertyPath: objectsToBeSpawned.Array.data[1].weight
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8740977291168480539, guid: dfdc10ed3a0f2ce4b9f9d0a2cd3a72ad, type: 3}
+      propertyPath: objectsToBeSpawned.Array.data[2].prefab
+      value: 
+      objectReference: {fileID: 2784413684905434342, guid: e207ee261dd878645acea23ac8a516c7, type: 3}
+    - target: {fileID: 8740977291168480539, guid: dfdc10ed3a0f2ce4b9f9d0a2cd3a72ad, type: 3}
+      propertyPath: objectsToBeSpawned.Array.data[2].weight
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8740977291168480539, guid: dfdc10ed3a0f2ce4b9f9d0a2cd3a72ad, type: 3}
+      propertyPath: objectsToBeSpawned.Array.data[3].prefab
+      value: 
+      objectReference: {fileID: 2784413684905434342, guid: 0bf73ba8bea01514b992f5a9b1f96b62, type: 3}
+    - target: {fileID: 8740977291168480539, guid: dfdc10ed3a0f2ce4b9f9d0a2cd3a72ad, type: 3}
+      propertyPath: objectsToBeSpawned.Array.data[3].weight
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dfdc10ed3a0f2ce4b9f9d0a2cd3a72ad, type: 3}
 --- !u!1001 &1590704862

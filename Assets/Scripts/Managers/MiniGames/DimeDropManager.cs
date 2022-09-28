@@ -7,6 +7,8 @@ using System;
 public class DimeDropManager : MiniGameManager{
     public static DimeDropManager instance = null;
     [SerializeField] protected GameObject[] coins;
+    public int scoreAmountGoal;
+    public int timeLimitGoal;
 
     protected override void InitializeSingletonInstance(){
         if(instance == null){

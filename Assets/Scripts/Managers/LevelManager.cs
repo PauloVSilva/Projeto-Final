@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class LevelManager : MonoBehaviour{
     [SerializeField] protected Pool[] objectsToPool;
-    private bool objectsPooled = false;
+
     private void Awake(){
         InitializeSingletonInstance();
     }
@@ -13,8 +13,13 @@ public abstract class LevelManager : MonoBehaviour{
         GameManager.instance.SetSpawnPoint();
         GameManager.instance.FullyResetPlayers();
         InitializeLevel();
-        while(!objectsPooled){
-            AddObjectsToPool();
+        for(int i = 0; i < 1000; i++){
+            if(AddObjectsToPool()){
+                break;
+            }
+            if(i == 999){
+                Debug.LogError("Something went wrong. ObjectPooler took too long to be initialized. Return to main menu.");
+            }
         }
     }
 
@@ -26,19 +31,18 @@ public abstract class LevelManager : MonoBehaviour{
         }
     }
 
-    private void AddObjectsToPool(){
+    private bool AddObjectsToPool(){
         if(ObjectPooler.instance == null){
-            return;
+            return false;
         }
-        if(objectsToPool.Length > 0){
-            foreach(Pool pool in objectsToPool){
-                ObjectPooler.instance.AddPool(pool);
-            }
+        if(objectsToPool.Length == 0){
+            Debug.LogWarning("LEVEL HAS NO OBJECTS TO POOL!!!");
+            return false;
         }
-        else{
-            Debug.Log("LEVEL HAS NO OBJECTS TO POOL!!!");
+        foreach(Pool pool in objectsToPool){
+            ObjectPooler.instance.AddPool(pool);
         }
-        objectsPooled = true;
+        return true;
     }
 
     protected abstract void InitializeSingletonInstance();

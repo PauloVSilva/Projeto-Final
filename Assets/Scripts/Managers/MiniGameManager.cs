@@ -19,10 +19,6 @@ public abstract class MiniGameManager : LevelManager{
     [SerializeField] protected GameObject[] itemSpawnersList;
 
     [SerializeField] protected int countDown;
-    [SerializeField] public int killCountGoal;
-    [SerializeField] public int lastStandingLives;
-    [SerializeField] public int scoreAmountGoal;
-    [SerializeField] public int timeLimitGoal;
 
     protected override void InitializeLevel(){
         GameManager.instance.joinAction.Disable();

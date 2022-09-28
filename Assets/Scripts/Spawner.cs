@@ -2,8 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public class SpawnerObject{
+    public GameObject prefab;
+    public int weight;
+    public SpawnerObject(GameObject _prefab, int _weight){
+        prefab = _prefab;
+        weight = _weight;
+    }
+}
+
 public class Spawner : MonoBehaviour{
-    public GameObject[] objectsToBeSpawned;
+    public SpawnerObject[] spawnerObjects;
     public float spawnRange;
     public bool spawnerEnabled;
     public float cooldown;
@@ -22,18 +32,39 @@ public class Spawner : MonoBehaviour{
         ready -= Time.deltaTime;
         if(ready <= 0){
             ready += cooldown;
-            if(objectsToBeSpawned.Length > 0){
+            if(spawnerObjects.Length > 0 && spawnerEnabled){
                 SpawnEntity();
             }
         }
     }
 
     private void SpawnEntity(){
-        if(spawnerEnabled){
-            if(GameManager.instance.playerList.Count > 0){
-                Instantiate(objectsToBeSpawned[Random.Range(0, objectsToBeSpawned.Length)], RandomNewSpawnPosition(), transform.rotation);
-            }
+        //ObjectPooler.instance.SpawnFromPool(PickRandomObject().prefab, this.transform.position, this.transform.rotation, this.gameObject);
+        Instantiate(PickRandomObject().prefab, this.transform.position, this.transform.rotation);
+        //ObjectPooler.instance.SpawnFromPool(projectileToCast.projectileModel, castPoint.position, castPoint.rotation, this.gameObject);
+        //Instantiate(objectsToBeSpawned[Random.Range(0, objectsToBeSpawned.Length)], RandomNewSpawnPosition(), transform.rotation);
+    }
+
+    private SpawnerObject PickRandomObject(){
+        int totalWeight = 0;
+        foreach(SpawnerObject spawnerObject in spawnerObjects){
+            totalWeight += spawnerObject.weight;
         }
+
+        SpawnerObject objectToSpawn = null;
+
+        int randomNumber = Random.Range(0, totalWeight);
+
+        foreach(SpawnerObject spawnerObject in spawnerObjects){
+            if(randomNumber < spawnerObject.weight){
+                objectToSpawn = spawnerObject;
+                break;
+            }
+            randomNumber -= spawnerObject.weight;
+        }
+
+        return objectToSpawn;
+        
     }
 
     private Vector3 RandomNewSpawnPosition(){
