@@ -47,12 +47,11 @@ public class CharacterHealthSystem : HealthSystem{
         CurrentHealth = MaxHealth;
         IsAlive = true;
         IsInvulnerable = false;
-        StartCoroutine(OnEntityBornDelay());
-        IEnumerator OnEntityBornDelay(){
-            yield return new WaitForSeconds(0.05f);
-            characterEvents.PlayerBorn(gameObject);
-        }
         SendHealthUpdateEvent();
+    }
+    protected override IEnumerator OnEntityBornDelay(){
+        yield return new WaitForSeconds(0.05f);
+        characterEvents.PlayerBorn(gameObject);
     }
 
     public override void TakeDamage(GameObject damageSource, float damageTaken){

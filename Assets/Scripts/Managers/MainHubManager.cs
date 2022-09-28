@@ -3,34 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class MainHubManager : MonoBehaviour{
-    //INSTANCES
+public class MainHubManager : LevelManager{
     public static MainHubManager instance = null;
 
-    private void Awake(){
-        InitializeSingletonInstance();
-    }
-
-    private void Start(){
-        InitializeMainHub();
-    }
-
-    private void InitializeSingletonInstance(){
-        if (instance == null){
+    protected override void InitializeSingletonInstance(){
+        if(instance == null){
             instance = this;
         }
-        else if (instance != null){
-            Destroy(this);
+        else if(instance != null){
+            Destroy(gameObject);
         }
     }
 
-    private void InitializeMainHub(){
-        GameManager.instance.SetSpawnPoint();
+    protected override void InitializeLevel(){
         GameManager.instance.joinAction.Enable();
-        if(GameManager.instance.playerList.Count > 0){
-            foreach(var playerInput in GameManager.instance.playerList){
-                playerInput.GetComponent<CharacterEvents>().FullReset();
-            }
-        }
+        GameManager.instance.miniGameIsRunning = false;
     }
 }

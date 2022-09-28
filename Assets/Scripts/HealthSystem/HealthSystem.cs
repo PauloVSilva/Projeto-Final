@@ -16,6 +16,7 @@ public abstract class HealthSystem : MonoBehaviour{
 
     public void Initialize(){
         InitializeVariables();
+        StartCoroutine(OnEntityBornDelay());
     }
 
     public void ResetStats(){
@@ -26,7 +27,10 @@ public abstract class HealthSystem : MonoBehaviour{
         TakeDamage(GameManager.instance.gameObject, float.MaxValue);
     }
 
-    protected virtual void InitializeVariables(){
+    protected abstract void InitializeVariables();
+    protected virtual IEnumerator OnEntityBornDelay(){
+        yield return new WaitForSeconds(0.05f);
+        //holy shirt that's some ugly ash code
     }
 
     public virtual void TakeDamage(GameObject damageSource, float damageTaken){

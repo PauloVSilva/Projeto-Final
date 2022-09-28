@@ -249,8 +249,9 @@ GameObject:
   - component: {fileID: 609034475}
   - component: {fileID: 609034474}
   - component: {fileID: 609034472}
+  - component: {fileID: 609034477}
   m_Layer: 0
-  m_Name: Pitfall
+  m_Name: TheVoid
   m_TagString: Instadeath
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -334,6 +335,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &609034477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 609034471}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e57c4fa01c8b3e643945ac86cddc1b8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &633943673
 GameObject:
   m_ObjectHideFlags: 0
@@ -473,21 +486,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 826944105}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fa5da7a8feeefc4f8fef187e16afc67, type: 3}
+  m_Script: {fileID: 11500000, guid: 690da013439ddd547b38e91643bbab0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objectsToPool:
+  - tag: 
+    prefab: {fileID: 2784413684905434342, guid: 0f15cf83284a6464095c8ffc6cb662c6, type: 3}
+    size: 20
+  - tag: 
+    prefab: {fileID: 2784413684905434342, guid: 54f118bf9fc56674bb45239cdae0def7, type: 3}
+    size: 20
   miniGameUIManager: {fileID: 0}
-  playersAlive: []
   miniGameSetup: {fileID: 0}
   miniGame: 0
   gameGoal: 0
   gameState: 0
+  itemSpawnersList: []
   countDown: 0
   killCountGoal: 0
   lastStandingLives: 0
   scoreAmountGoal: 0
   timeLimitGoal: 0
-  itemSpawnersList: []
   coins: []
 --- !u!1001 &897928362
 PrefabInstance:

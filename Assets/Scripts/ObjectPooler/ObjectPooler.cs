@@ -2,20 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectPooler : MonoBehaviour{
-
-    [System.Serializable]
-    public class Pool{
-        public string tag;
-        public GameObject prefab;
-        public int size;
-
-        public Pool(GameObject _prefab, int _size){
-            prefab = _prefab;
-            size = _size;
-            tag = _prefab.name;
-        }
+[System.Serializable]
+public class Pool{
+    public string tag;
+    public GameObject prefab;
+    public int size;
+    public Pool(GameObject _prefab, int _size){
+        prefab = _prefab;
+        size = _size;
+        tag = _prefab.name;
     }
+}
+
+public class ObjectPooler : MonoBehaviour{
 
     public static ObjectPooler instance;
 
@@ -36,6 +35,10 @@ public class ObjectPooler : MonoBehaviour{
         foreach(Pool pool in pools){
             GeneratePool(pool);
         }
+    }
+
+    public void AddPool(Pool pool){
+        AddPool(pool.prefab, pool.size);
     }
 
     public void AddPool(GameObject _prefab, int _size){
@@ -77,6 +80,10 @@ public class ObjectPooler : MonoBehaviour{
             poolDictionary[pool.prefab].Enqueue(objectToAdd);
             pool.size++;
         }
+    }
+
+    public void RemovePool(Pool pool){
+        RemovePool(pool.prefab);
     }
 
     public void RemovePool(GameObject _prefab){

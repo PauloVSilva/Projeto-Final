@@ -29,19 +29,6 @@ public class CharacterEvents : MonoBehaviour{
         characterObject = GetComponent<CharacterSelection>().characterObject;
     }
 
-    public void SubscribeToPlayerEvents(){ //allow managers to subscribe to this class' events
-        OnPlayerScoredKill += GameManager.instance.GameManagerCharacterKilled;
-        OnPlayerDied += GameManager.instance.GameManagerCharacterDied;
-        OnPlayerBorn += GameManager.instance.GameManagerCharacterSpawned;
-    }
-
-    public void UnsubscribeFromPlayerEvents(){ //allow managers to unsubscribe from this class' events
-        OnPlayerScoredKill -= GameManager.instance.GameManagerCharacterKilled;
-        OnPlayerDied -= GameManager.instance.GameManagerCharacterDied;
-        OnPlayerBorn -= GameManager.instance.GameManagerCharacterSpawned;
-    }
-
-
     public void OnTriggerEnter(Collider other){
         if(!characterStats.IsBlocked()){
             if(other.gameObject.GetComponent<Item>() != null && other.gameObject.GetComponent<Item>().CanBePickedUp()){
@@ -61,7 +48,7 @@ public class CharacterEvents : MonoBehaviour{
     }
 
     public void RefreshStatsUponRespawning(){
-        GetComponent<HealthSystem>().ResetStats();
+        GetComponent<HealthSystem>().Initialize();
         GetComponent<MovementSystem>().ResetStats();
     }
 
@@ -111,7 +98,11 @@ public class CharacterEvents : MonoBehaviour{
         //send that to the UI
         characterInventory.ClearInventory();
         characterStats.ResetStats();
-        RespawnCharacter();
+        this.transform.position = GameManager.instance.spawnPoints[0].transform.position;
+        characterObject.SetActive(true);
+        UnblockActions();
+        GetComponent<HealthSystem>().ResetStats();
+        GetComponent<MovementSystem>().ResetStats();
         OnPlayerStatsReset?.Invoke();
     }
 

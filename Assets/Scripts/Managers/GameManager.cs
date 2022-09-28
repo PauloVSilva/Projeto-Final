@@ -27,13 +27,7 @@ public class GameManager : MonoBehaviour{
     public event Action<PlayerInput> OnPlayerLeftGame;
 
     private void Awake(){
-        if(instance == null){
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else if(instance != null){
-            Destroy(gameObject);
-        }
+        InitializeSingletonInstance();
 
         gameIsPaused = false;
         miniGameIsRunning = false;
@@ -45,29 +39,43 @@ public class GameManager : MonoBehaviour{
         //leaveAction.performed += context => LeaveAction(context);
     }
 
+    private void InitializeSingletonInstance(){
+        if(instance == null){
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else if(instance != null){
+            Destroy(gameObject);
+        }
+    }
+
     private void Start(){
         SetSpawnPoint();
     }
 
     public void ReturnToMainMenu(){
-        LoadMiniGame("MainMenu");
+        levelLoader.LoadLevel("MainMenu");
     }
 
     public void ReturnToMainHub(){
-        LoadMiniGame("MainHub");
+        levelLoader.LoadLevel("MainHub");
     }
 
     public void LoadMiniGame(string _levelName){
-        foreach(var playerInput in GameManager.instance.playerList){
-            playerInput.GetComponent<CharacterEvents>().FullReset();
-        }
         levelLoader.LoadLevel(_levelName);
     }
 
 
-
+    public void FullyResetPlayers(){
+        if(GameManager.instance.playerList.Count > 0){
+            foreach(var playerInput in GameManager.instance.playerList){
+                playerInput.GetComponent<CharacterEvents>().FullReset();
+            }
+        }
+    }
     public void SetSpawnPoint(){
         if(!FindSpawnPoints()){
+            Debug.Log("Player spawnpoints array was empty. Player spawn point was created at GameManager location");
             CreateSpawnPoint();
         }
     }
@@ -75,7 +83,6 @@ public class GameManager : MonoBehaviour{
     private bool FindSpawnPoints(){
         spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
         if(spawnPoints.Count() == 0){
-            Debug.Log("Player spawnpoints array was empty. Player spawn point was created at GameManager location");
             return false;
         }
         else{
@@ -90,16 +97,16 @@ public class GameManager : MonoBehaviour{
 
 
     public void GameManagerCharacterKilled(GameObject character){
-        //print("GameManager detected kill" + character.transform.parent.GetComponent<CharacterStats>().teamColor);
+        //print("GameManager detected kill" + character.GetComponent<PlayerInput>().playerIndex);
     }
 
     public void GameManagerCharacterDied(GameObject character){
-        //print("GameManager detected death" + character.transform.parent.GetComponent<CharacterStats>().teamColor);
+        //print("GameManager detected death" + character.GetComponent<PlayerInput>().playerIndex);
         mainCamera.GetComponent<CameraController>().RemoveCharacter(character);
     }
 
     public void GameManagerCharacterSpawned(GameObject character){
-        //print("GameManager detected spawn" + character.transform.parent.GetComponent<CharacterStats>().teamColor);
+        //print("GameManager detected spawn" + character.GetComponent<PlayerInput>().playerIndex);
         mainCamera.GetComponent<CameraController>().AddCharacter(character);
     }
 
@@ -109,11 +116,15 @@ public class GameManager : MonoBehaviour{
         playerList.Add(playerInput);
         OnPlayerJoinedGame?.Invoke(playerInput);
         
-        playerInput.transform.GetComponent<CharacterEvents>().SubscribeToPlayerEvents();
+        playerInput.GetComponent<CharacterEvents>().OnPlayerScoredKill += GameManagerCharacterKilled;
+        playerInput.GetComponent<CharacterEvents>().OnPlayerDied += GameManagerCharacterDied;
+        playerInput.GetComponent<CharacterEvents>().OnPlayerBorn += GameManagerCharacterSpawned;
     }
 
     void OnPlayerLeft(PlayerInput playerInput){ //THIS METHOD COMES FROM UNITY ITSELF
-        //Debug.Log("Player left - Goodbye!");
+        playerInput.GetComponent<CharacterEvents>().OnPlayerScoredKill -= GameManagerCharacterKilled;
+        playerInput.GetComponent<CharacterEvents>().OnPlayerDied -= GameManagerCharacterDied;
+        playerInput.GetComponent<CharacterEvents>().OnPlayerBorn -= GameManagerCharacterSpawned;
     }
 
     public void JoinAction(InputAction.CallbackContext context){
