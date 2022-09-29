@@ -1650,7 +1650,15 @@ MonoBehaviour:
   - Player $index paused the game
   - Player $index is grabbing a snack
   - PLAYER $index NEEDS TO PEE!!!
-  killMessages: []
+  killMessages:
+  - Player $killer sent Player $dead to Davy Jones' locker
+  - Player $killer slained Player $dead
+  - Player $killer erased Player $dead
+  - Player $dead is sleeping with the fishes
+  playerVictoryMessages:
+  - Player $index wins
+  - Player $index knows how to play the game
+  - Player $index is the new king
 --- !u!1 &351139869
 GameObject:
   m_ObjectHideFlags: 0
@@ -3506,6 +3514,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9080664918875891946, guid: 9d80790846246f644a0d8d4f77e6a0a8, type: 3}
       propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9080664918875891946, guid: 9d80790846246f644a0d8d4f77e6a0a8, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9080664918875891946, guid: 9d80790846246f644a0d8d4f77e6a0a8, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9080664918875891946, guid: 9d80790846246f644a0d8d4f77e6a0a8, type: 3}
+      propertyPath: m_LocalScale.z
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9080664918875891946, guid: 9d80790846246f644a0d8d4f77e6a0a8, type: 3}

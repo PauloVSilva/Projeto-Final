@@ -7,6 +7,7 @@ public class MessageManager : MonoBehaviour{
     [SerializeField] private string[] greetMessages;
     [SerializeField] private string[] pauseMessages;
     [SerializeField] private string[] killMessages;
+    [SerializeField] private string[] playerVictoryMessages;
 
     private void Awake(){
         if(instance == null){
@@ -17,23 +18,21 @@ public class MessageManager : MonoBehaviour{
         }
     }
 
-    public string StringEditor(string originalMessage, string oldPart, string newPart){
-        string newMessage = originalMessage;
-        if(newMessage.Contains(oldPart)){
-            newMessage = newMessage.Replace(oldPart, newPart);
-            return newMessage;
+    public string StringEditor(string message, string oldPart, string newPart){
+        if(message.Contains(oldPart)){
+            message = message.Replace(oldPart, newPart);
         }
-        return originalMessage;
+        return message;
     }
 
-    public string StringEditor(string originalMessage, string oldPart1, string oldPart2, string newPart1, string newPart2){
-        string newMessage = originalMessage;
-        if(newMessage.Contains(oldPart1) && newMessage.Contains(oldPart2)){
-            newMessage = newMessage.Replace(oldPart1, newPart1);
-            newMessage = newMessage.Replace(oldPart2, newPart2);
-            return newMessage;
+    public string StringEditor(string message, string oldPart1, string oldPart2, string newPart1, string newPart2){
+        if(message.Contains(oldPart1)){
+            message = message.Replace(oldPart1, newPart1);
         }
-        return originalMessage;
+        if(message.Contains(oldPart2)){
+            message = message.Replace(oldPart2, newPart2);
+        }
+        return message;
     } 
 
     public string GetGreetMessage(int playerIndex){
@@ -42,12 +41,17 @@ public class MessageManager : MonoBehaviour{
     }
 
     public string GetPauseMessage(int playerIndex){
-        string message = pauseMessages[UnityEngine.Random.Range(0, greetMessages.Length - 1)];
+        string message = pauseMessages[UnityEngine.Random.Range(0, pauseMessages.Length - 1)];
         return StringEditor(message, "$index", playerIndex.ToString());
     }
 
     public string GetKillMessage(int killerPlayerIndex, int deadPlayerIndex){
-        string message = killMessages[UnityEngine.Random.Range(0, greetMessages.Length - 1)];
+        string message = killMessages[UnityEngine.Random.Range(0, killMessages.Length - 1)];
         return StringEditor(message, "$killer", "$dead", killerPlayerIndex.ToString(), deadPlayerIndex.ToString());
+    }
+
+    public string GetPlayerVictoryMessage(int victoriusPlayerIndex){
+        string message = playerVictoryMessages[UnityEngine.Random.Range(0, playerVictoryMessages.Length - 1)];
+        return StringEditor(message, "$index", victoriusPlayerIndex.ToString());
     }
 }

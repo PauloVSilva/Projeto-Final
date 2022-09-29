@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour{
     public static GameManager instance = null;
     public bool gameIsPaused;
     public bool miniGameIsRunning;
-    [SerializeField] private LevelLoader levelLoader;
+    public LevelLoader levelLoader;
     public Camera mainCamera;
     
     public List<PlayerInput> playerList = new List<PlayerInput>();

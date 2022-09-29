@@ -5,19 +5,19 @@ using UnityEngine.InputSystem;
 using System;
 
 public class DimeDropManager : MiniGameManager{
-    public static DimeDropManager instance = null;
+    //public static DimeDropManager instance = null;
     [SerializeField] protected GameObject[] coins;
     public int scoreAmountGoal;
     public int timeLimitGoal;
 
-    protected override void InitializeSingletonInstance(){
+    /*protected override void InitializeSingletonInstance(){
         if(instance == null){
             instance = this;
         }
         else if(instance != null){
             Destroy(gameObject);
         }
-    }
+    }*/
 
     protected override void SetupGame(){
         if(miniGame == MiniGame.dimeDrop){
@@ -37,19 +37,14 @@ public class DimeDropManager : MiniGameManager{
         foreach(var playerInput in GameManager.instance.playerList){
             playerInput.GetComponent<CharacterEvents>().UnblockActions();
         }
-        gameState++;
-        //OnGameStateAdvances?.Invoke();
+        GameStateAdvances();
     }
 
     private void VerifyScoreAmountWinCondition(GameObject player, int _score){
         if(gameGoal == MiniGameGoal.scoreAmount){
             if (_score >= scoreAmountGoal){
-                //Debug.Log("Player " + (player.GetComponent<PlayerInput>().playerIndex + 1).ToString() + " is the winner");
-                gameState++;
-                //OnGameStateAdvances?.Invoke();
-                //OnPlayerWins?.Invoke(player.transform.parent.GetComponent<PlayerInput>());
-                miniGameUIManager.AnnounceWinner(player.GetComponent<PlayerInput>());
-                GameOverSetUp();
+                GameStateAdvances();
+                PlayerWins(player.GetComponent<PlayerInput>());
             }
         }
     }
@@ -66,10 +61,7 @@ public class DimeDropManager : MiniGameManager{
         foreach(var coin in coins){
             coin.GetComponent<Coin>().canBePickedUp = false;
         }
-
-        countDown = 10;
-        gameState++;
-        //OnGameStateAdvances?.Invoke();
+        GameStateAdvances();
         StartCoroutine(GameOver());
     }
 }

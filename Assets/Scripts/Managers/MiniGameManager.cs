@@ -9,7 +9,7 @@ public enum MiniGameGoal{killCount, lastStanding, time, scoreAmount}
 public enum MiniGameState{none, preparation, gameSetUp, gameIsRunning, gameOverSetUp, gameOver}
 
 public abstract class MiniGameManager : LevelManager{
-    [SerializeField] protected MiniGameUIManager miniGameUIManager;
+    [SerializeField] public static MiniGameManager instance;
 
     //MINIGAME VARIABLES
     [SerializeField] public MiniGameGoalScriptableObject miniGameSetup;
@@ -17,18 +17,63 @@ public abstract class MiniGameManager : LevelManager{
     [SerializeField] public MiniGameGoal gameGoal;
     [SerializeField] public MiniGameState gameState;
     [SerializeField] protected GameObject[] itemSpawnersList;
-
+    [SerializeField] public float timeElapsed;
     [SerializeField] protected int countDown;
+
+    //MINIGAME ACTION EVENTS
+    public event System.Action<int> OnCountDownTicks;
+    public event System.Action<string> OnGameGoalIsSet;
+    public event System.Action OnGameStateAdvances;
+    public event System.Action<PlayerInput> OnPlayerWins;
+
+    protected void CountDownTicks(){
+        countDown--;
+        OnCountDownTicks?.Invoke(countDown);
+    }
+
+    protected void GameGoalIsSet(){
+        OnGameGoalIsSet?.Invoke(MiniGameOptionsMenu.instance.GetMiniGameGoalDescription());
+    }
+
+    protected void GameStateAdvances(){
+        gameState++;
+        if(gameState == MiniGameState.preparation) {countDown = 10; StartCoroutine(Preparation());} 
+        if(gameState == MiniGameState.gameSetUp) StartGame();
+        if(gameState == MiniGameState.gameIsRunning) {}
+        if(gameState == MiniGameState.gameOverSetUp) GameOverSetUp();
+        if(gameState == MiniGameState.gameOver) {countDown = 10; /*StartCoroutine(GameOver())*/; Debug.Log("Entrou");}
+
+        OnGameStateAdvances?.Invoke();
+    }
+
+    protected void PlayerWins(PlayerInput playerInput){
+        OnPlayerWins?.Invoke(playerInput);
+    }
+
+    protected void Update(){
+        if(gameState == MiniGameState.gameIsRunning){
+            timeElapsed += Time.deltaTime;
+        }
+        CheckMiniGameEvents();
+    }
+
+    protected override void InitializeSingletonInstance(){
+        if(instance == null){
+            instance = this;
+        }
+        else if(instance != null){
+            Destroy(gameObject);
+        }
+    }
+
+    protected virtual void CheckMiniGameEvents(){}
 
     protected override void InitializeLevel(){
         GameManager.instance.joinAction.Disable();
         GameManager.instance.miniGameIsRunning = true;
 
-        countDown = 10;
-        gameState = MiniGameState.preparation;
+        gameState = MiniGameState.none;
 
-        miniGameUIManager = GameObject.FindWithTag("MiniGameUI").GetComponent<MiniGameUIManager>();
-        miniGameUIManager.InitializeVariables();
         itemSpawnersList = GameObject.FindGameObjectsWithTag("Spawner");
 
         foreach(var playerInput in GameManager.instance.playerList){
@@ -41,32 +86,22 @@ public abstract class MiniGameManager : LevelManager{
         miniGame = miniGameSetup.parentMiniGame.minigame;
         gameGoal = miniGameSetup.miniGameGoal;
         SetupGame();
-
-        StartCoroutine(Preparation());
-        //OnGameGoalIsSet?.Invoke();
-        DisplayGoal();
+        GameStateAdvances();
     }
 
     protected abstract void SetupGame();
 
-    private void DisplayGoal(){
-        miniGameUIManager.SetGameGoalText(MiniGameOptionsMenu.instance.GetMiniGameGoalDescription());
-    }
-
     protected IEnumerator Preparation(){
         yield return new WaitForSeconds(1f);
         if(countDown > 0){
-            countDown--;
-            //OnCountDownTicks?.Invoke(countDown);
-            miniGameUIManager.DisplayCountDown(countDown);
+            CountDownTicks();
             if(gameState == MiniGameState.preparation){
                 StartCoroutine(Preparation());
             }
         }
         else {
-            gameState++;
-            //OnGameStateAdvances?.Invoke();
-            StartGame();
+            GameGoalIsSet();
+            GameStateAdvances();
         }
     }
 
@@ -77,14 +112,12 @@ public abstract class MiniGameManager : LevelManager{
     protected IEnumerator GameOver(){
         yield return new WaitForSeconds(1f);
         if(countDown > 0){
-            countDown--;
-            //OnCountDownTicks?.Invoke(countDown);
-            miniGameUIManager.DisplayCountDown(countDown);
-            StartCoroutine(GameOver());
+            CountDownTicks();
+            if(gameState == MiniGameState.gameOver){
+                StartCoroutine(GameOver());
+            }
         }
         else {
-            miniGameUIManager.InitializeVariables();
-            gameState = MiniGameState.none;
             GameManager.instance.ReturnToMainHub();
         }
     }

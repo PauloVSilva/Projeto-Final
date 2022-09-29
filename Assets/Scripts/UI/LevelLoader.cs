@@ -6,14 +6,28 @@ using UnityEngine.UI;
 using TMPro;
 
 public class LevelLoader : MonoBehaviour{
+    //public static LevelLoader instance = null;
     public GameObject loadingScreen;
     public Slider slider;
     public TextMeshProUGUI percentage;
     private float progress;
 
+    public event System.Action OnSceneLoaded;
+
     private void Awake(){
+        //InitializeSingletonInstance();
         InitializeVariables();
     }
+
+    /*private void InitializeSingletonInstance(){
+        if(instance == null){
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else if(instance != null){
+            Destroy(gameObject);
+        }
+    }*/
 
     private void InitializeVariables(){
         progress = 0f;
@@ -35,6 +49,8 @@ public class LevelLoader : MonoBehaviour{
             yield return null;
         }
         if(operation.isDone){
+            OnSceneLoaded?.Invoke();
+
             loadingScreen.SetActive(false);
 
             progress = 0f;

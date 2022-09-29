@@ -11,9 +11,37 @@ public class MiniGameUIManager : MonoBehaviour{
     [SerializeField] private TextMeshProUGUI winnerBoard;
     [SerializeField] private TextMeshProUGUI gameGoalReminder;
 
+    //Just to be clear, events here mean the event actions baked in the language
+    //These are NOT mini game events such as reaching X spot or stuff
+
+    private void Start(){
+        GameManager.instance.levelLoader.OnSceneLoaded += CheckForMiniGame;
+    }
+
+    private void CheckForMiniGame(){
+        if(MiniGameManager.instance != null){
+            SubscribeToMiniGameEvents();
+            InitializeVariables();
+        }
+        else{
+            UnsubscribeFromMiniGameEvents();
+            InitializeVariables();
+        }
+    }
+
+    public void SubscribeToMiniGameEvents(){
+        MiniGameManager.instance.OnCountDownTicks += DisplayCountDown;
+        MiniGameManager.instance.OnGameGoalIsSet += SetGameGoalText;
+        MiniGameManager.instance.OnPlayerWins += AnnounceWinner;
+    }
+
+    public void UnsubscribeFromMiniGameEvents(){
+        MiniGameManager.instance.OnCountDownTicks -= DisplayCountDown;
+        MiniGameManager.instance.OnGameGoalIsSet -= SetGameGoalText;
+        MiniGameManager.instance.OnPlayerWins -= AnnounceWinner;
+    }
+
     private string GO_SCREEN;
-    private string PLAYER;
-    private string WINNER_ANNOUNCEMENT;
     private string GAME_GOAL_REMINDER;
 
     private void Awake(){
@@ -22,8 +50,6 @@ public class MiniGameUIManager : MonoBehaviour{
 
     public void InitializeVariables(){
         GO_SCREEN = "Go!";
-        PLAYER = "Player ";
-        WINNER_ANNOUNCEMENT = " wins!";
         countDownBoard.text = null;
         winnerBoard.text = null;
         gameGoalReminder.text = null;
@@ -38,7 +64,9 @@ public class MiniGameUIManager : MonoBehaviour{
             countDownBoard.text = seconds.ToString();
         }
         if(seconds == 0){
-            countDownBoard.text = GO_SCREEN;
+            if(MiniGameManager.instance.gameState == MiniGameState.preparation){
+                countDownBoard.text = GO_SCREEN;
+            }
             StartCoroutine(CleanCountDownBoard());
         }
     }
@@ -53,6 +81,6 @@ public class MiniGameUIManager : MonoBehaviour{
     }
 
     public void AnnounceWinner(PlayerInput playerInput){
-        winnerBoard.text = PLAYER + (playerInput.playerIndex + 1).ToString() + WINNER_ANNOUNCEMENT;
+        winnerBoard.text = MessageManager.instance.GetPlayerVictoryMessage(playerInput.playerIndex + 1);
     }
 }
