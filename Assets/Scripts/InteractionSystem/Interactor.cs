@@ -12,7 +12,7 @@ public class Interactor : MonoBehaviour{
     private readonly Collider[] _collider = new Collider[3];
     [SerializeField] private int _numFound;
 
-    private InteractorInterface _interactable;
+    [SerializeField] private InteractorInterface _interactable;
 
     private void Awake() {
         _interactionPoint = gameObject.transform;
@@ -33,20 +33,26 @@ public class Interactor : MonoBehaviour{
         if (_numFound > 0){
             _interactable = _collider[0].GetComponent<InteractorInterface>();
             if (_interactable != null){
-                if (!_interactionPromptUI.isDisplayed) {
-                    _interactionPromptUI.SetUp(_interactable.InteractionPromp);
+                //if (!_interactionPromptUI.isDisplayed) {
+                //    _interactionPromptUI.SetUp(_interactable.InteractionPromp);
+                //}
+                if(!_interactable.PromptUI.isDisplayed){
+                    _interactable.PromptUI.OpenPanel();
                 }
             }
         }
         else{
-            if (_interactable != null) _interactable = null;
-            if (_interactionPromptUI.isDisplayed) _interactionPromptUI.ClosePanel();
+            if(_interactable != null){
+                _interactable.PromptUI.ClosePanel();
+                _interactable = null;
+            }
+            //if (_interactable != null) _interactable = null;
+            //if (_interactionPromptUI.isDisplayed) _interactionPromptUI.ClosePanel();
         }
     }
 
     public void OnInteractWithObject(InputAction.CallbackContext context){
         if(context.performed && _interactable != null){
-            //interactor.KeyIsPressed(context.ReadValue<float>());
             _interactable.Interact(this);
         }
     }

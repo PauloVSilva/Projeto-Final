@@ -109,10 +109,10 @@ public class ObjectPooler : MonoBehaviour{
         poolDictionary.Remove(pool.prefab);
     }
 
-    public GameObject SpawnFromPool(GameObject prefab, Vector3 position, Quaternion rotation, GameObject parent){
+    public bool SpawnFromPool(GameObject prefab, Vector3 position, Quaternion rotation, GameObject parent){
         if(!poolDictionary.ContainsKey(prefab)){
             Debug.LogWarning("Pool with GameObject " + prefab + " doesn't exist.");
-            return null;
+            return false;
         }
 
         GameObject objectToSpawn = poolDictionary[prefab].Dequeue();
@@ -129,6 +129,6 @@ public class ObjectPooler : MonoBehaviour{
 
         poolDictionary[prefab].Enqueue(objectToSpawn);
 
-        return objectToSpawn;
+        return true;
     }
 }

@@ -4,34 +4,40 @@ using UnityEngine;
 using TMPro;
 
 public class InteractionPromptUI : MonoBehaviour{
-    private Camera _mainCam;
-    [SerializeField] private GameObject _uiPanel;
-    [SerializeField] private TextMeshProUGUI _promptText;
+    [SerializeField] private Camera mainCam;
+    [SerializeField] private GameObject uiPanel;
+    [SerializeField] private TextMeshProUGUI promptText;
+    public bool isDisplayed = false;
 
     private void Start(){
-        _mainCam = Camera.main;
-        _uiPanel.SetActive(false);
+        mainCam = Camera.main;
+        uiPanel.SetActive(false);
     }
 
     private void LateUpdate(){
-        if(_mainCam == null){
-            _mainCam = Camera.main;
+        if(mainCam == null){
+            mainCam = Camera.main;
         }
-        var rotation = _mainCam.transform.rotation;
+        var rotation = mainCam.transform.rotation;
         transform.LookAt(transform.position + rotation * Vector3.forward, rotation * Vector3.up);
     }
 
-    public bool isDisplayed = false;
+    public void SetPrompt(string _promptText){
+        promptText.text = _promptText;
+    }
 
-    public void SetUp(string promptText){
-        _promptText.text = promptText;
-        _uiPanel.SetActive(true);
-        isDisplayed = true;
+    public void OpenPanel(){
+        if(!isDisplayed){
+            uiPanel.SetActive(true);
+            isDisplayed = true;
+        }
     }
 
     public void ClosePanel(){
-        _uiPanel.SetActive(false);
-        isDisplayed = false;
+        if(isDisplayed){
+            uiPanel.SetActive(false);
+            isDisplayed = false;
+        }
     }
 
 }

@@ -207,14 +207,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9207b1549e590b548bc7d27dace972b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponSlot: []
   inventorySlots:
   - item: {fileID: 11400000, guid: 55168ddda7c6b5c439cd54bc13268dc9, type: 2}
     itemSprite: {fileID: 0}
-    stackSize: 20
+    stackSize: 10
   - item: {fileID: 0}
     itemSprite: {fileID: 0}
-    stackSize: 0
+    stackSize: 5
   - item: {fileID: 0}
     itemSprite: {fileID: 0}
     stackSize: 0

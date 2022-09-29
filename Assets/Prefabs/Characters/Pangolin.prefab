@@ -357,8 +357,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f0c0ab6a86993043a087cdd0493aab2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _uiPanel: {fileID: 1242727013304805861}
-  _promptText: {fileID: 289502123232289177}
+  mainCam: {fileID: 0}
+  uiPanel: {fileID: 1242727013304805861}
+  promptText: {fileID: 289502123232289177}
   isDisplayed: 0
 --- !u!1 &7422709267290184447
 GameObject:
@@ -581,7 +582,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7023e031ca6d6d54fa161c55d79f0b87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterStats: {fileID: 0}
   characterEvents: {fileID: 0}
   playerInputHandler: {fileID: 0}
   weapon: {fileID: 0}

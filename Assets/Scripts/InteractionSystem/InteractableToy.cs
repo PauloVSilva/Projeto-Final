@@ -7,17 +7,23 @@ using UnityEngine.SceneManagement;
 public class InteractableToy : Item, InteractorInterface{
     [SerializeField] private MiniGameScriptableObject miniGame;
     private List<MiniGameGoalScriptableObject> miniGameGoalsList = new List<MiniGameGoalScriptableObject>();
-    private string _name;
-    private string _prompt;
-    public string InteractionPromp => _prompt;
+    private string toyName;
+    private string toyPrompt;
+    [SerializeField] private InteractionPromptUI interactionPromptUI;
+    public string PromptString => toyPrompt;
+    public InteractionPromptUI PromptUI => interactionPromptUI;
 
     protected override void Awake(){
-        _name = miniGame.miniGameName;
-        _prompt = "Play " + _name + "!";
+        toyName = miniGame.miniGameName;
+        toyPrompt = "Play " + toyName + "!";
         miniGameGoalsList = miniGame.miniGamesGoalsAvaliable.ToList();
     }
 
-    public bool Interact (Interactor interactor){
+    protected void Start(){
+        interactionPromptUI.SetPrompt(toyPrompt);
+    }
+
+    public bool Interact(Interactor interactor){
         if(GameManager.instance.playerList.Count > 1){
             CanvasManager.instance.SwitchMenu(Menu.MiniGameSetupMenu);
             MiniGameOptionsMenu.instance.SetMiniGame(miniGame);

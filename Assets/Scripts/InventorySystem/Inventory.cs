@@ -31,7 +31,11 @@ public class Inventory : MonoBehaviour{
     public virtual void DropAllInventory(){
         for(int i = 0; i < inventorySlots.Count; i++){
             while(inventorySlots[i].stackSize > 0){
-                Instantiate(inventorySlots[i].item.itemModel, this.gameObject.transform.position, this.gameObject.transform.rotation);
+                if(!ObjectPooler.instance.SpawnFromPool(inventorySlots[i].item.itemModel, this.transform.position, this.transform.rotation, this.gameObject)){
+                    Debug.LogWarning("Something went wrong. Object Pooler couldn't Spawn " + inventorySlots[i].item.itemModel);
+                }
+
+                //Instantiate(inventorySlots[i].item.itemModel, this.gameObject.transform.position, this.gameObject.transform.rotation);
                 inventorySlots[i].DropItem();
             }
         }
