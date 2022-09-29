@@ -209,14 +209,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventorySlots:
   - item: {fileID: 11400000, guid: 55168ddda7c6b5c439cd54bc13268dc9, type: 2}
-    itemSprite: {fileID: 0}
     stackSize: 10
-  - item: {fileID: 0}
-    itemSprite: {fileID: 0}
+  - item: {fileID: 11400000, guid: 99dea2ff5af232b48abe6c4fdb888732, type: 2}
     stackSize: 5
   - item: {fileID: 0}
-    itemSprite: {fileID: 0}
     stackSize: 0
   - item: {fileID: 0}
-    itemSprite: {fileID: 0}
     stackSize: 0

@@ -345,6 +345,9 @@ MonoBehaviour:
   timeToRespawn: 0
   actionsAreBlocked: 0
   isMountedOnTurret: 0
+  characterControllerCenter: {x: 0, y: 0, z: 0}
+  characterControllerRadius: 0
+  characterControllerHeight: 0
   animal: 0
   maxHealth: 0
   healthRegenRate: 0
@@ -385,22 +388,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventorySlots:
   - item: {fileID: 0}
-    itemSprite: {fileID: 0}
     stackSize: 0
   - item: {fileID: 0}
-    itemSprite: {fileID: 0}
     stackSize: 0
   - item: {fileID: 0}
-    itemSprite: {fileID: 0}
     stackSize: 0
   - item: {fileID: 0}
-    itemSprite: {fileID: 0}
     stackSize: 0
   characterWeaponSystem: {fileID: -123166407121015900}
   playerInputHandler: {fileID: 7408531066293585715}
   weaponSlot:
     item: {fileID: 0}
-    itemSprite: {fileID: 0}
     stackSize: 0
 --- !u!114 &2604168369563993407
 MonoBehaviour:

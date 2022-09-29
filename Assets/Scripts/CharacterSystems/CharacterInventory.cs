@@ -64,7 +64,7 @@ public class CharacterInventory : Inventory{
         }
         for(int i = 0; i < inventorySlots.Count; i++){
             while(inventorySlots[i].stackSize > 0){
-                if(!ObjectPooler.instance.SpawnFromPool(inventorySlots[i].item.itemModel, this.transform.position, this.transform.rotation, this.gameObject)){
+                if(!ObjectPooler.instance.SpawnFromPool(inventorySlots[i].item.itemModel, this.transform.position, this.transform.rotation)){
                     Debug.LogWarning("Something went wrong. Object Pooler couldn't Spawn " + inventorySlots[i].item.itemModel);
                 }
 

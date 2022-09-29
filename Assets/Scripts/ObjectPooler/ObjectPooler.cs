@@ -109,6 +109,10 @@ public class ObjectPooler : MonoBehaviour{
         poolDictionary.Remove(pool.prefab);
     }
 
+    public bool SpawnFromPool(GameObject prefab, Vector3 position, Quaternion rotation){
+        return SpawnFromPool(prefab, position, rotation, ObjectPooler.instance.gameObject);
+    }
+
     public bool SpawnFromPool(GameObject prefab, Vector3 position, Quaternion rotation, GameObject parent){
         if(!poolDictionary.ContainsKey(prefab)){
             Debug.LogWarning("Pool with GameObject " + prefab + " doesn't exist.");
