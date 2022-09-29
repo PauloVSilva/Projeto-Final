@@ -4,7 +4,8 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class InteractableToy : Item, InteractorInterface{
+public class InteractableToy : MonoBehaviour, InteractorInterface{
+    [SerializeField] private float rotationSpeed;
     [SerializeField] private MiniGameScriptableObject miniGame;
     private List<MiniGameGoalScriptableObject> miniGameGoalsList = new List<MiniGameGoalScriptableObject>();
     private string toyName;
@@ -13,14 +14,18 @@ public class InteractableToy : Item, InteractorInterface{
     public string PromptString => toyPrompt;
     public InteractionPromptUI PromptUI => interactionPromptUI;
 
-    protected override void Awake(){
+    private void Awake(){
         toyName = miniGame.miniGameName;
         toyPrompt = "Play " + toyName + "!";
         miniGameGoalsList = miniGame.miniGamesGoalsAvaliable.ToList();
     }
 
-    protected void Start(){
+    private void Start(){
         interactionPromptUI.SetPrompt(toyPrompt);
+    }
+
+    private void Update(){
+        transform.Rotate(Vector3.up * (rotationSpeed * Time.deltaTime));
     }
 
     public bool Interact(Interactor interactor){
@@ -32,9 +37,5 @@ public class InteractableToy : Item, InteractorInterface{
             Debug.Log("Game requires at least 2 players");
         }
         return true;
-    }
-
-    protected override void MaxAgeReached(){
-        Debug.Log("Somehow, an interactable toy aged. Better check if anything is broken.");
     }
 }

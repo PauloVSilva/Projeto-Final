@@ -1316,17 +1316,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e86a8d1b86ccb4c488988b30b261edd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 0}
-  persistenceRequired: 1
-  age: -1
-  maxAge: 0
-  canBePickedUp: 1
-  pickUpRadius: 0
   rotationSpeed: 50
-  isBlinking: 0
-  myCollider: {fileID: 295753839}
-  myRigidbody: {fileID: 0}
-  objectRenderer: {fileID: 0}
   miniGame: {fileID: 11400000, guid: 433f180c580afef4e8526dc2262e8694, type: 2}
   interactionPromptUI: {fileID: 1162050874}
 --- !u!136 &295753835
@@ -5227,7 +5217,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1162050873
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8541,7 +8531,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1834760413
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8817,17 +8807,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e86a8d1b86ccb4c488988b30b261edd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 0}
-  persistenceRequired: 1
-  age: -1
-  maxAge: 0
-  canBePickedUp: 1
-  pickUpRadius: 0
   rotationSpeed: 50
-  isBlinking: 0
-  myCollider: {fileID: 1863662789}
-  myRigidbody: {fileID: 0}
-  objectRenderer: {fileID: 0}
   miniGame: {fileID: 11400000, guid: e823e793afb450d4bbf4158f9bcb07fd, type: 2}
   interactionPromptUI: {fileID: 1834760414}
 --- !u!136 &1863662785

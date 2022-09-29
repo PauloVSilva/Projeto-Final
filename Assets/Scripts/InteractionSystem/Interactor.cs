@@ -33,21 +33,21 @@ public class Interactor : MonoBehaviour{
         if (_numFound > 0){
             _interactable = _collider[0].GetComponent<InteractorInterface>();
             if (_interactable != null){
-                //if (!_interactionPromptUI.isDisplayed) {
-                //    _interactionPromptUI.SetUp(_interactable.InteractionPromp);
+                _interactionPromptUI.SetPrompt(_interactable.PromptString);
+                _interactionPromptUI.OpenPanel();
+                //if(!_interactable.PromptUI.isDisplayed){
+                //    _interactable.PromptUI.OpenPanel();
                 //}
-                if(!_interactable.PromptUI.isDisplayed){
-                    _interactable.PromptUI.OpenPanel();
-                }
             }
         }
         else{
-            if(_interactable != null){
-                _interactable.PromptUI.ClosePanel();
-                _interactable = null;
-            }
-            //if (_interactable != null) _interactable = null;
-            //if (_interactionPromptUI.isDisplayed) _interactionPromptUI.ClosePanel();
+            _interactable = null;
+            _interactionPromptUI.ClosePanel();
+            _interactionPromptUI.ClearPrompt();
+            //if(_interactable != null){
+            //    _interactable.PromptUI.ClosePanel();
+            //    _interactable = null;
+            //}
         }
     }
 

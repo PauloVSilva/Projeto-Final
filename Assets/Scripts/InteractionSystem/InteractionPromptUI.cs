@@ -26,6 +26,10 @@ public class InteractionPromptUI : MonoBehaviour{
         promptText.text = _promptText;
     }
 
+    public void ClearPrompt(){
+        promptText.text = null;
+    }
+
     public void OpenPanel(){
         if(!isDisplayed){
             uiPanel.SetActive(true);
