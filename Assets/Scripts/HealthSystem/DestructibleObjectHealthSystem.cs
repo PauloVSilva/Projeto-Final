@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class DestructibleObjectHealthSystem : HealthSystem{
-    [SerializeField] private Inventory inventory;
+    [SerializeField] private DestructibleObject destructibleObject;
     //VARIABLES THAT WILL COME FROM SOMEWHERE
     public override float MaxHealth {get; protected set;}
 
@@ -17,7 +17,7 @@ public class DestructibleObjectHealthSystem : HealthSystem{
     }
 
     protected override void InitializeVariables(){
-        MaxHealth = 300f;
+        MaxHealth = destructibleObject.MaxHealth;
         CurrentHealth = MaxHealth;
         IsAlive = true;
         IsInvulnerable = false;
@@ -41,7 +41,7 @@ public class DestructibleObjectHealthSystem : HealthSystem{
     public override void Die(GameObject damageSource){
         IsAlive = false;
         CurrentHealth = 0;
-        inventory.DropAllInventory();
+        InvokeOnDeath();
         Destroy(gameObject);
     }
 }

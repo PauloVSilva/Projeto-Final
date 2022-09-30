@@ -38,10 +38,11 @@ public abstract class MiniGameManager : LevelManager{
     protected void GameStateAdvances(){
         gameState++;
         if(gameState == MiniGameState.preparation) {countDown = 10; StartCoroutine(Preparation());} 
-        if(gameState == MiniGameState.gameSetUp) StartGame();
+        if(gameState == MiniGameState.gameSetUp) {StartGame();}
         if(gameState == MiniGameState.gameIsRunning) {}
-        if(gameState == MiniGameState.gameOverSetUp) GameOverSetUp();
-        if(gameState == MiniGameState.gameOver) {countDown = 10; /*StartCoroutine(GameOver())*/; Debug.Log("Entrou");}
+        if(gameState == MiniGameState.gameOverSetUp) {GameOverSetUp();}
+        if(gameState == MiniGameState.gameOver) {countDown = 10; /*StartCoroutine(GameOver()); Debug.Log("called gameover");*/}
+        //for some fucked up reason, the last verification is called twice and I have no fucking clue why
 
         OnGameStateAdvances?.Invoke();
     }

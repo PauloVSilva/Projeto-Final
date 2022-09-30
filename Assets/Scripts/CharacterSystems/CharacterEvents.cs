@@ -49,7 +49,7 @@ public class CharacterEvents : MonoBehaviour{
     }
 
     public void RefreshStatsUponRespawning(){
-        GetComponent<HealthSystem>().Initialize();
+        GetComponent<CharacterHealthSystem>().Initialize();
         GetComponent<MovementSystem>().ResetStats();
     }
 
@@ -102,7 +102,7 @@ public class CharacterEvents : MonoBehaviour{
         this.transform.position = GameManager.instance.spawnPoints[0].transform.position;
         characterObject.SetActive(true);
         UnblockActions();
-        GetComponent<HealthSystem>().ResetStats();
+        GetComponent<CharacterHealthSystem>().ResetStats();
         GetComponent<MovementSystem>().ResetStats();
         OnPlayerStatsReset?.Invoke();
     }

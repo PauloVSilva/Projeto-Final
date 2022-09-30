@@ -22,6 +22,29 @@ public class CharacterHealthSystem : HealthSystem{
         RegenerateHealth();
     }
 
+    public void Initialize(){
+        InitializeVariables();
+        StartCoroutine(OnEntityBornDelay());
+        IEnumerator OnEntityBornDelay(){
+            yield return new WaitForSeconds(0.05f);
+            characterEvents.PlayerBorn(gameObject);
+        }
+    }
+
+    protected override void InitializeVariables(){        
+        MaxHealth = characterStats.MaxHealth;
+        HealthRegenRate = characterStats.HealthRegenRate;
+
+        CurrentHealth = MaxHealth;
+        IsAlive = true;
+        IsInvulnerable = false;
+        SendHealthUpdateEvent();
+    }
+
+    public void ResetStats(){
+        InitializeVariables();
+    }
+
     private void RegenerateHealth(){
         if(IsAlive && CanRegenHealth){
             CurrentHealth = Math.Min(CurrentHealth += HealthRegenRate * Time.deltaTime, MaxHealth);
@@ -38,20 +61,6 @@ public class CharacterHealthSystem : HealthSystem{
 
     private void SendHealthUpdateEvent(){
         characterEvents.PlayerHealthUpdated(CurrentHealth, MaxHealth);
-    }
-
-    protected override void InitializeVariables(){        
-        MaxHealth = characterStats.MaxHealth;
-        HealthRegenRate = characterStats.HealthRegenRate;
-
-        CurrentHealth = MaxHealth;
-        IsAlive = true;
-        IsInvulnerable = false;
-        SendHealthUpdateEvent();
-    }
-    protected override IEnumerator OnEntityBornDelay(){
-        yield return new WaitForSeconds(0.05f);
-        characterEvents.PlayerBorn(gameObject);
     }
 
     public override void TakeDamage(GameObject damageSource, float damageTaken){

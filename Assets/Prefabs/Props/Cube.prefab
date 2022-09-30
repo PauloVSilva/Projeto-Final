@@ -44,10 +44,10 @@ GameObject:
   - component: {fileID: 9080664918875891944}
   - component: {fileID: 9080664918875891959}
   - component: {fileID: 9080664918875891958}
+  - component: {fileID: 5832791046633643336}
   - component: {fileID: 9080664918875891947}
-  - component: {fileID: 9080664918875891948}
-  - component: {fileID: 2489176867682319389}
   - component: {fileID: 8212072158344372498}
+  - component: {fileID: 9080664918875891948}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -150,6 +150,22 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &5832791046633643336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9080664918875891957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a12c98f2cc9b97244ab163f58dd9febe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthSystem: {fileID: 9080664918875891947}
+  inventory: {fileID: 8212072158344372498}
+  damageFeedback: {fileID: 9080664918875891948}
+  MaxHealth: 300
 --- !u!114 &9080664918875891947
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -162,39 +178,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6048663dd5413b45a484b91e0135151, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventory: {fileID: 8212072158344372498}
---- !u!114 &9080664918875891948
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9080664918875891957}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47608e5919a0bcc46833408e411e3fee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  healthSystem: {fileID: 9080664918875891947}
-  floatingPanelPrefab: {fileID: 9080664918875891957, guid: 5e01e24b2112265438541d50e2953c60, type: 3}
-  lastDamageTaken: 0
-  castPoint: {fileID: 240770023493267780}
---- !u!114 &2489176867682319389
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9080664918875891957}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 674e4f3678281204cb24ddbd3790b16c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  healthSystem: {fileID: 9080664918875891947}
-  mainCam: {fileID: 0}
-  uiPanel: {fileID: 0}
-  healthBar: {fileID: 0}
+  destructibleObject: {fileID: 5832791046633643336}
 --- !u!114 &8212072158344372498
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -212,7 +196,17 @@ MonoBehaviour:
     stackSize: 10
   - item: {fileID: 11400000, guid: 99dea2ff5af232b48abe6c4fdb888732, type: 2}
     stackSize: 5
-  - item: {fileID: 0}
-    stackSize: 0
-  - item: {fileID: 0}
-    stackSize: 0
+--- !u!114 &9080664918875891948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9080664918875891957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47608e5919a0bcc46833408e411e3fee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  floatingPanelPrefab: {fileID: 9080664918875891957, guid: 5e01e24b2112265438541d50e2953c60, type: 3}
+  castPoint: {fileID: 240770023493267780}

@@ -298,6 +298,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f3a57943292ce044983ae630e994602, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInput: {fileID: 7408531066293585714}
   characterEvents: {fileID: -7353346912697764937}
   characterStats: {fileID: -6532263821112973344}
   characterHealthSystem: {fileID: -3360404993604576978}

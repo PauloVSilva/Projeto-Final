@@ -5,19 +5,9 @@ using UnityEngine.InputSystem;
 using System;
 
 public class SharpshooterManager : MiniGameManager{
-    //public static SharpshooterManager instance = null;
     [SerializeField] private List<PlayerInput> playersAlive = new List<PlayerInput>();
     public int killCountGoal;
     public int lastStandingLives;
-
-    /*protected override void InitializeSingletonInstance(){
-        if(instance == null){
-            instance = this;
-        }
-        else if(instance != null){
-            Destroy(gameObject);
-        }
-    }*/
 
     protected override void SetupGame(){
         if(miniGame == MiniGame.sharpShooter){
