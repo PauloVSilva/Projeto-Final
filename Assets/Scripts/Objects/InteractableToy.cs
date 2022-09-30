@@ -2,17 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class InteractableToy : MonoBehaviour, InteractorInterface{
     [SerializeField] private float rotationSpeed;
     [SerializeField] private MiniGameScriptableObject miniGame;
-    private List<MiniGameGoalScriptableObject> miniGameGoalsList = new List<MiniGameGoalScriptableObject>();
-    private string toyName;
-    private string toyPrompt;
-    [SerializeField] private InteractionPromptUI interactionPromptUI;
-    public string PromptString => toyPrompt;
-    public InteractionPromptUI PromptUI => interactionPromptUI;
+    [SerializeField] private List<MiniGameGoalScriptableObject> miniGameGoalsList = new List<MiniGameGoalScriptableObject>();
+    [SerializeField] private string toyName;
 
     private void Awake(){
         toyName = miniGame.miniGameName;
@@ -20,14 +15,20 @@ public class InteractableToy : MonoBehaviour, InteractorInterface{
         miniGameGoalsList = miniGame.miniGamesGoalsAvaliable.ToList();
     }
 
-    private void Start(){
-        interactionPromptUI.SetPrompt(toyPrompt);
-    }
+    //private void Start(){
+    //    interactionPromptUI.SetPrompt(toyPrompt);
+    //}
 
     private void Update(){
         transform.Rotate(Vector3.up * (rotationSpeed * Time.deltaTime));
     }
 
+
+    //REQUIRED BY INTERACTOR INTERFACE
+    [SerializeField] private string toyPrompt;
+    [SerializeField] private InteractionPromptUI interactionPromptUI;
+    [SerializeField] public string PromptString => toyPrompt; //property that returns string
+    [SerializeField] public InteractionPromptUI PromptUI => interactionPromptUI; //property that returns InteractionPromptUI
     public bool Interact(Interactor interactor){
         if(GameManager.instance.playerList.Count > 1){
             CanvasManager.instance.SwitchMenu(Menu.MiniGameSetupMenu);

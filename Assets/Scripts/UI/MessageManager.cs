@@ -36,22 +36,22 @@ public class MessageManager : MonoBehaviour{
     } 
 
     public string GetGreetMessage(int playerIndex){
-        string message = greetMessages[UnityEngine.Random.Range(0, greetMessages.Length - 1)];
+        string message = greetMessages[UnityEngine.Random.Range(0, greetMessages.Length)];
         return StringEditor(message, "$index", playerIndex.ToString());
     }
 
     public string GetPauseMessage(int playerIndex){
-        string message = pauseMessages[UnityEngine.Random.Range(0, pauseMessages.Length - 1)];
+        string message = pauseMessages[UnityEngine.Random.Range(0, pauseMessages.Length)];
         return StringEditor(message, "$index", playerIndex.ToString());
     }
 
     public string GetKillMessage(int killerPlayerIndex, int deadPlayerIndex){
-        string message = killMessages[UnityEngine.Random.Range(0, killMessages.Length - 1)];
+        string message = killMessages[UnityEngine.Random.Range(0, killMessages.Length)];
         return StringEditor(message, "$killer", "$dead", killerPlayerIndex.ToString(), deadPlayerIndex.ToString());
     }
 
     public string GetPlayerVictoryMessage(int victoriusPlayerIndex){
-        string message = playerVictoryMessages[UnityEngine.Random.Range(0, playerVictoryMessages.Length - 1)];
+        string message = playerVictoryMessages[UnityEngine.Random.Range(0, playerVictoryMessages.Length)];
         return StringEditor(message, "$index", victoriusPlayerIndex.ToString());
     }
 }
