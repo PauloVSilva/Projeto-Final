@@ -34,7 +34,7 @@ public class CharacterEvents : MonoBehaviour{
             if(other.gameObject.GetComponent<Item>() != null && other.gameObject.GetComponent<Item>().CanBePickedUp()){
                 if(other.gameObject.GetComponent<Coin>()){
                     if(characterInventory.AddToInventory(other.gameObject.GetComponent<Item>().item)){
-                        IncreaseScore(other.gameObject.GetComponent<Coin>().value);
+                        IncreaseScore(other.gameObject.GetComponent<Coin>().Value);
                         //Destroy(other.gameObject);
                         other.gameObject.SetActive(false);
                     }

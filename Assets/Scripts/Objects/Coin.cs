@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Coin : Item, IPooledObjects{
-    [SerializeField] public int value;
+    [SerializeField] private int value;
+
+    public int Value => value;
 
     public void OnObjectSpawn(){ //replaces Start()
         InitializeItemVariables();

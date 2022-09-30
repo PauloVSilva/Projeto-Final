@@ -21,7 +21,7 @@ public abstract class Item : Entity{
     protected virtual void InitializeItemVariables(){
         itemCollider = GetComponent<SphereCollider>();
         itemRigidbody = GetComponent<Rigidbody>();
-        
+
         objectRenderer.enabled = true;
         itemCollider.isTrigger = true;
         itemCollider.enabled = true;
@@ -39,7 +39,7 @@ public abstract class Item : Entity{
     }
     
     protected IEnumerator CanBePickedUpDelay(){
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
         canBePickedUp = true;
     }
 
