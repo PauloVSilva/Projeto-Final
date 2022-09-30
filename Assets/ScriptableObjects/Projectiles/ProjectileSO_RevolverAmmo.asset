@@ -18,5 +18,5 @@ MonoBehaviour:
   collisionType: 0
   damageAmount: 30
   cost: 1
-  lifeTime: 3
+  maxAge: 10
   speed: 50

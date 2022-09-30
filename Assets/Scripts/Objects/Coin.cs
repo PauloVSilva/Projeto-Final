@@ -2,15 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Coin : Item{
+public class Coin : Item, IPooledObjects{
     [SerializeField] public int value;
 
-    public override void OnObjectSpawn(){ //replaces Start()
-        InitializeVariables();
-        this.transform.parent = ObjectPooler.instance.transform;
-    }
+    public void OnObjectSpawn(){ //replaces Start()
+        InitializeItemVariables();
 
-    protected override void MaxAgeReached(){
-        this.gameObject.SetActive(false);
+        this.transform.parent = ObjectPooler.instance.transform;
+
+        isPooled = true;
     }
 }

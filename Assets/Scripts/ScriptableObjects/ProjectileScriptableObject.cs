@@ -10,7 +10,7 @@ public class ProjectileScriptableObject : ScriptableObject{
     [SerializeField] public string projectileName;
     [SerializeField] public CollisionType collisionType;
     [SerializeField] public float damageAmount;
-    [SerializeField] public float cost;
-    [SerializeField] public float lifeTime;
+    [SerializeField] public int cost;
+    [SerializeField] public float maxAge;
     [SerializeField] public float speed;
 }

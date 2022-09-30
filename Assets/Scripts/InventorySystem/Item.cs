@@ -4,31 +4,33 @@ using UnityEngine;
 
 [RequireComponent(typeof(SphereCollider))]
 
-public abstract class Item : IPooledObjects{
+public abstract class Item : Entity{
     [SerializeField] public ItemScriptableObject item;
-    [SerializeField] public bool persistenceRequired;
-    [SerializeField] protected float age;
-    [SerializeField] protected int maxAge;
     [SerializeField] public bool canBePickedUp;
     [SerializeField] protected float pickUpRadius;
     [SerializeField] protected float rotationSpeed;
     [SerializeField] protected bool isBlinking;
-    [SerializeField] protected SphereCollider myCollider;
-    [SerializeField] protected Rigidbody myRigidbody;
+    [SerializeField] protected SphereCollider itemCollider;
+    [SerializeField] protected Rigidbody itemRigidbody;
     [SerializeField] protected Renderer objectRenderer;
 
     protected virtual void Awake(){
-        InitializeVariables();
+        InitializeItemVariables();
     }
 
-    protected virtual void InitializeVariables(){
+    protected virtual void InitializeItemVariables(){
+        itemCollider = GetComponent<SphereCollider>();
+        itemRigidbody = GetComponent<Rigidbody>();
+        
         objectRenderer.enabled = true;
-        myCollider.isTrigger = true;
-        myCollider.radius = pickUpRadius;
+        itemCollider.isTrigger = true;
+        itemCollider.enabled = true;
+        itemCollider.radius = pickUpRadius;
 
-        myRigidbody.velocity = Vector3.zero;
-        myRigidbody.angularVelocity = Vector3.zero;
+        itemRigidbody.velocity = Vector3.zero;
+        itemRigidbody.angularVelocity = Vector3.zero;
 
+        isPooled = false;
         age = 0;
         canBePickedUp = false;
         StartCoroutine(CanBePickedUpDelay());
@@ -41,7 +43,7 @@ public abstract class Item : IPooledObjects{
         canBePickedUp = true;
     }
 
-    protected virtual void Update(){
+    protected override void Update(){
         CollectableBehaviour();
         AgeBehaviour();
     }
@@ -52,7 +54,7 @@ public abstract class Item : IPooledObjects{
         }
     }
 
-    protected virtual void AgeBehaviour(){
+    protected override void AgeBehaviour(){
         if(!persistenceRequired && canBePickedUp){
             if(age >= 0){
                 age += Time.deltaTime;
@@ -62,13 +64,10 @@ public abstract class Item : IPooledObjects{
                 StartCoroutine(Flash(0.25f));
             }
             if(age > maxAge){
-                //Destroy(this.gameObject);
                 MaxAgeReached();
             }
         }
     }
-
-    protected abstract void MaxAgeReached();
 
     IEnumerator Flash(float time){
         yield return new WaitForSeconds(time);

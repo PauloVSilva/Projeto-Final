@@ -37,14 +37,12 @@ public class Weapon : Item{
 
     //OTHER ATTRIBUTES
     [SerializeField] private Transform castPoint;
+    [SerializeField] protected SphereCollider gunCollider;
     [SerializeField] public GameObject holder;
 
-    protected override void Awake(){
-        GetScriptableObjectVariables();
-    }
-
     protected void Start(){
-        InitializeInternalVariables();
+        GetScriptableObjectVariables();
+        InitializeWeaponVariables();
     }
 
     protected override void Update(){
@@ -65,19 +63,8 @@ public class Weapon : Item{
         reloadTime = weapon.reloadTime;
     }
 
-    private void InitializeInternalVariables(){
-        myCollider.isTrigger = true;
-        if(transform.parent != null){
-            holder = gameObject.transform.parent.gameObject;
-            canBePickedUp = false;
-            myCollider.enabled = false;
-        }
-        else{
-            holder = null;
-            canBePickedUp = true;
-            myCollider.enabled = true;
-        }
-
+    private void InitializeWeaponVariables(){
+        holder = null;
         ammo = ammoCapacity;
         extraAmmo = 999;
         fullAutoClock = 0;
@@ -89,12 +76,8 @@ public class Weapon : Item{
         triggerHeld = false;
     }
 
-    protected override void OnDisable(){
+    protected void OnDisable(){
         StopCoroutine(Reload());
-    }
-
-    protected override void MaxAgeReached(){
-        Destroy(this.gameObject);
     }
 
     private void FullAutoBehavior(){
@@ -173,20 +156,24 @@ public class Weapon : Item{
         canBePickedUp = false;
         age = 0;
         isBlinking = false;
-        myCollider.enabled = false;
+        itemCollider.enabled = false;
+        gunCollider.enabled = false;
+        itemRigidbody.useGravity = false;
     }
 
     public void Dropped(){
         holder = null;
-        myCollider.enabled = true;
+        itemCollider.enabled = true;
+        gunCollider.enabled = true;
+        itemRigidbody.useGravity = true;
         persistenceRequired = false;
         StartCoroutine(CanBePickedUpDelay());
     }
 
     private void Fire(){
-        if(ammo - (int)projectileToCast.cost >= 0){
+        if(ammo - projectileToCast.cost >= 0){
             CastProjectile();
-            ammo -= (int)projectileToCast.cost;
+            ammo -= projectileToCast.cost;
             hammerIsCocked = false;
             canShoot = false;
             fullAutoClock = 0;

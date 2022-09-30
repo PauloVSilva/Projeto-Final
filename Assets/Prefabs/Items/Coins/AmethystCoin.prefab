@@ -145,16 +145,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c54ec4c507502dd41b3ad10edadec179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 11400000, guid: 3f0832af1accfd745adc05f78ec10567, type: 2}
+  isPooled: 0
   persistenceRequired: 0
   age: 0
   maxAge: 30
+  item: {fileID: 11400000, guid: 3f0832af1accfd745adc05f78ec10567, type: 2}
   canBePickedUp: 1
   pickUpRadius: 0.5
   rotationSpeed: 800
   isBlinking: 0
-  myCollider: {fileID: 2784413684905434363}
-  myRigidbody: {fileID: 7690747701783756440}
+  itemCollider: {fileID: 2784413684905434363}
+  itemRigidbody: {fileID: 7690747701783756440}
   objectRenderer: {fileID: 2784413683903831768}
   value: 10000
 --- !u!135 &2784413684905434363

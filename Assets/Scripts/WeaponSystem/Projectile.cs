@@ -4,18 +4,16 @@ using UnityEngine;
 
 public enum CollisionType{contact, explosive, passThrough}
 
-public class Projectile : IPooledObjects{
+public class Projectile : Entity, IPooledObjects{
 //public class Projectile : MonoBehaviour{
     public ProjectileScriptableObject ProjectileToCast;
 
     //ATTRIBUTES FROM SCRIPTABLE OBJECT
-    [SerializeField] public GameObject projectileModel;
     [SerializeField] public Sprite sprite;
     [SerializeField] public string projectileName;
     [SerializeField] public CollisionType collisionType;
     [SerializeField] public float damageAmount;
     [SerializeField] public float cost;
-    [SerializeField] public float lifeTime;
     [SerializeField] public float speed;
 
     //VARIABLES FOR INTERNAL USE
@@ -29,28 +27,32 @@ public class Projectile : IPooledObjects{
 
     private void Awake(){
         GetScriptableObjectVariables();
+        InitializeVariables();
+    }
 
-        myCollider = GetComponent<BoxCollider>();
-        myCollider.isTrigger = true;
-        myRigidbody = GetComponent<Rigidbody>();
-        disableCoroutineIsRunning = false;
+    protected override void Update(){
+        AgeBehaviour();
     }
 
     private void GetScriptableObjectVariables(){
         sprite = ProjectileToCast.sprite;
         projectileName = ProjectileToCast.projectileName;
-        collisionType = (CollisionType)ProjectileToCast.collisionType;
+        collisionType = ProjectileToCast.collisionType;
         damageAmount = ProjectileToCast.damageAmount;
         cost = ProjectileToCast.cost;
-        lifeTime = ProjectileToCast.lifeTime;
+        maxAge = ProjectileToCast.maxAge;
         speed = ProjectileToCast.speed;
     }
 
-    public override void OnObjectSpawn(){ //replaces Start()
-        if(disableCoroutineIsRunning){
-            DisableCoroutine(ProjectileToCast.lifeTime);
-        }
+    private void InitializeVariables(){
+        myCollider = GetComponent<BoxCollider>();
+        myCollider.isTrigger = true;
+        myRigidbody = GetComponent<Rigidbody>();
+        age = 0;
+        isPooled = false;
+    }
 
+    public void OnObjectSpawn(){ //replaces Start()
         myRigidbody.velocity = Vector3.zero;
         myRigidbody.angularVelocity = Vector3.zero;
         myRigidbody.AddForce(transform.forward * ProjectileToCast.speed, ForceMode.Impulse);
@@ -60,9 +62,9 @@ public class Projectile : IPooledObjects{
 
         this.transform.parent = ObjectPooler.instance.transform;
 
+        age = 0;
+        isPooled = true;
         canDamage = true;
-
-        StartCoroutine(DisableObject(ProjectileToCast.lifeTime));
     }
 
     private void OnTriggerEnter(Collider other){
