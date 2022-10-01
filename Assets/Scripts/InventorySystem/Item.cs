@@ -64,7 +64,7 @@ public abstract class Item : Entity{
                 StartCoroutine(Flash(0.25f));
             }
             if(age > maxAge){
-                MaxAgeReached();
+                Despawn();
             }
         }
     }

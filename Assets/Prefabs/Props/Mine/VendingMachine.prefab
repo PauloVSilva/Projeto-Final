@@ -462,7 +462,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d95031ba20bddaf48b6bcfc292a45455, type: 2}
+  - {fileID: 2100000, guid: 3cbeac487cbb9a9499c1a05af12be0e5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -533,7 +533,7 @@ MonoBehaviour:
   costToBuy: 1
   dropPoint: {fileID: 7290386298806259330}
   machinePrompt: 
-  interactionPromptUI: {fileID: 0}
+  interactionPromptUI: {fileID: 9198069274976196072}
 --- !u!114 &9080664918875891947
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -546,7 +546,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6048663dd5413b45a484b91e0135151, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destructibleObject: {fileID: 7664362993089217216}
 --- !u!114 &8212072158344372498
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -561,7 +560,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventorySlots:
   - item: {fileID: 11400000, guid: 60715083ea7fe0c46968bbdbcf874719, type: 2}
-    stackSize: 999
+    stackSize: 20
 --- !u!114 &9080664918875891948
 MonoBehaviour:
   m_ObjectHideFlags: 0

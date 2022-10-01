@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class VendingMachine : DestructibleObject, InteractorInterface{
     [SerializeField] ItemScriptableObject itemSold;
-    [SerializeField] int costToBuy = 1;
+    [SerializeField] int costToBuy = 350;
     [SerializeField] Transform dropPoint;
+    [SerializeField] bool isBroken;
 
     protected override void Start(){
         itemSold = inventory.GetItemOnSlot(0);
@@ -17,6 +18,17 @@ public class VendingMachine : DestructibleObject, InteractorInterface{
         interactionPromptUI.SetPrompt(machinePrompt);
     }
 
+    protected override void ObjectTookDamage(float _damage){
+        damageFeedback?.DisplayDamageTaken(_damage);
+        if(healthSystem.CurrentHealth < MaxHealth * 0.5){
+            Break();
+        }
+    }
+
+    protected void Break(){
+        isBroken = true;
+    }
+
 
     //REQUIRED BY INTERACTOR INTERFACE
     [SerializeField] private string machinePrompt;
@@ -24,13 +36,19 @@ public class VendingMachine : DestructibleObject, InteractorInterface{
     [SerializeField] public string PromptString => machinePrompt;
     [SerializeField] public InteractionPromptUI PromptUI => interactionPromptUI;
     public bool Interact(Interactor interactor){
-        Debug.Log(interactor.transform.parent.GetComponent<CharacterStats>().score);
-        if(interactor.transform.parent.GetComponent<CharacterStats>().score > costToBuy){
-            interactor.transform.parent.GetComponent<CharacterStats>().score -= costToBuy;
-            inventory.DropItem(0, dropPoint);
-            Debug.Log("bought");
+        if(!isBroken){
+            if(interactor.transform.parent.GetComponent<CharacterStats>().score > costToBuy){
+                interactor.transform.parent.GetComponent<CharacterStats>().score -= costToBuy;
+                inventory.DropItem(0, dropPoint);
+                Debug.Log("bought");
+                return true;
+            }
+            return false;
         }
-        return true;
+        else{
+            Debug.Log("Machine is broken");
+            return false;
+        }
     }
     
 }

@@ -16,12 +16,12 @@ public abstract class Entity : MonoBehaviour{
                 age += Time.deltaTime;
             }
             if(age > maxAge){
-                MaxAgeReached();
+                Despawn();
             }
         }
     }
 
-    protected virtual void MaxAgeReached(){
+    public virtual void Despawn(){
         if(isPooled){
             this.gameObject.SetActive(false);
         }
