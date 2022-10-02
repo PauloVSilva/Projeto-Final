@@ -11,7 +11,12 @@ public class VendingMachine : DestructibleObject, InteractorInterface{
     protected override void Start(){
         itemSold = inventory.GetItemOnSlot(0);
         
-        machinePrompt = "Buy " + itemSold.itemName + " for " + costToBuy;
+        if(itemSold != null){
+            machinePrompt = "Buy " + itemSold.itemName + " for " + costToBuy;
+        }
+        else{
+            machinePrompt = "Out of order D:";
+        }
 
         healthSystem.OnDeath += ObjectDestroyed;
         healthSystem.OnDamaged += ObjectTookDamage;

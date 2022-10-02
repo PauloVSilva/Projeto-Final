@@ -35,12 +35,15 @@ public class SharpshooterManager : MiniGameManager{
         foreach(var playerInput in GameManager.instance.playerList){
             playerInput.GetComponent<CharacterEvents>().UnblockActions();
         }
+        StartCoroutine(GiveGoldToPlayerDelay());
         GameStateAdvances();
     }
 
-    protected override void CheckMiniGameEvents(){
-        if(Math.Round((decimal)timeElapsed) % 2 == 0){
-            GiveGoldToPlayers();
+    IEnumerator GiveGoldToPlayerDelay(){
+        yield return new WaitForSeconds(2f);
+        GiveGoldToPlayers();
+        if(gameState == MiniGameState.gameIsRunning){
+            StartCoroutine(GiveGoldToPlayerDelay());
         }
     }
 
