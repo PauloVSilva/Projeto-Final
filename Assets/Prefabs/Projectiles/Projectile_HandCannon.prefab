@@ -5019,7 +5019,7 @@ GameObject:
   - component: {fileID: 5888012009511954047}
   - component: {fileID: 881815892272264937}
   m_Layer: 0
-  m_Name: Projectile_Revolver
+  m_Name: Projectile_HandCannon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5060,7 +5060,7 @@ MonoBehaviour:
   persistenceRequired: 0
   age: 0
   maxAge: 0
-  ProjectileToCast: {fileID: 11400000, guid: a947b6543823d914da85bc036ea53372, type: 2}
+  ProjectileToCast: {fileID: 11400000, guid: b9715341ef4f538409e4b1f8319ac05d, type: 2}
   sprite: {fileID: 0}
   projectileName: 
   collisionType: 0

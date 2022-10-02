@@ -109,7 +109,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -876546973899608171, guid: 23324ae6d50751b4c8967959144d5088, type: 3}
+  - {fileID: 2100000, guid: f85fbdb786b287447a55198aef39f0b1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -144,7 +144,7 @@ GameObject:
   - component: {fileID: 4454049430203434874}
   - component: {fileID: -6847266752148747554}
   m_Layer: 0
-  m_Name: DoubleActionRevolver
+  m_Name: HandCannon
   m_TagString: Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -211,7 +211,7 @@ MonoBehaviour:
   persistenceRequired: 0
   age: 0
   maxAge: 60
-  item: {fileID: 11400000, guid: 60715083ea7fe0c46968bbdbcf874719, type: 2}
+  item: {fileID: 11400000, guid: 08e910b3859995344a9be7725a3e7529, type: 2}
   canBePickedUp: 1
   pickUpRadius: 1.5
   rotationSpeed: 150
@@ -219,8 +219,8 @@ MonoBehaviour:
   itemCollider: {fileID: 535941993235239520}
   itemRigidbody: {fileID: 4454049430203434874}
   objectRenderer: {fileID: 4115066245624394644}
-  weapon: {fileID: 11400000, guid: 8a794cf3a90b5f246be5e3e1bd35faa5, type: 2}
-  projectileToCast: {fileID: 11400000, guid: a947b6543823d914da85bc036ea53372, type: 2}
+  weapon: {fileID: 11400000, guid: a4cb0423e6895604384039af18b86e81, type: 2}
+  projectileToCast: {fileID: 11400000, guid: b9715341ef4f538409e4b1f8319ac05d, type: 2}
   sprite: {fileID: 0}
   weaponName: 
   actionType: 0

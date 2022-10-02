@@ -16,7 +16,7 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: 96552f21458d5a346832e36455eebe47, type: 3}
   weaponName: Double Action Revolver
   actionType: 1
-  chamberRefillType: 0
+  chamberRefillType: 1
   reloadType: 0
   size: 0
   ammoCapacity: 6

@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bf820d9f4a8ef754f9837c2c80bddd38, type: 3}
-  m_Name: WeaponSO_Revolver
+  m_Name: WeaponSO_HandCannon
   m_EditorClassIdentifier: 
-  weaponModel: {fileID: 2526096355226271964, guid: a4b73a376005e53498b7eca416ef3bac, type: 3}
+  weaponModel: {fileID: 2526096355226271964, guid: fc0b5969eef99f04cb7ba1ee29dcbc9e, type: 3}
   sprite: {fileID: 21300000, guid: 96552f21458d5a346832e36455eebe47, type: 3}
-  weaponName: Revolver
-  actionType: 0
+  weaponName: Hand Cannon
+  actionType: 1
   chamberRefillType: 1
   reloadType: 0
   size: 0
-  ammoCapacity: 6
+  ammoCapacity: 1
   fireRate: 1
   weight: 0
-  reloadTime: 0
+  reloadTime: 0.5

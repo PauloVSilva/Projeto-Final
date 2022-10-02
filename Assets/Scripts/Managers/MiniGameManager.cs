@@ -54,8 +54,8 @@ public abstract class MiniGameManager : LevelManager{
     protected void Update(){
         if(gameState == MiniGameState.gameIsRunning){
             timeElapsed += Time.deltaTime;
+            CheckMiniGameEvents();
         }
-        CheckMiniGameEvents();
     }
 
     protected override void InitializeSingletonInstance(){

@@ -25,6 +25,9 @@ public class SharpshooterManager : MiniGameManager{
                     playersAlive.Add(playerInput);
                 }
             }
+            foreach(var playerInput in GameManager.instance.playerList){
+                playerInput.GetComponent<CharacterEvents>().IncreaseScore(250);
+            }
         }
     }
 
@@ -33,6 +36,18 @@ public class SharpshooterManager : MiniGameManager{
             playerInput.GetComponent<CharacterEvents>().UnblockActions();
         }
         GameStateAdvances();
+    }
+
+    protected override void CheckMiniGameEvents(){
+        if(Math.Round((decimal)timeElapsed) % 2 == 0){
+            GiveGoldToPlayers();
+        }
+    }
+
+    protected void GiveGoldToPlayers(){
+        foreach(var playerInput in GameManager.instance.playerList){
+            playerInput.GetComponent<CharacterEvents>().IncreaseScore(10);
+        }
     }
 
     private void VerifyLastStandingWinCondition(GameObject player){
