@@ -178,7 +178,7 @@ MonoBehaviour:
   persistenceRequired: 0
   age: 0
   maxAge: 30
-  item: {fileID: 11400000, guid: 1c1dd6c1da0b190418d30d14b021f7ca, type: 2}
+  item: {fileID: 0}
   canBePickedUp: 1
   pickUpRadius: 0.5
   rotationSpeed: 800
@@ -186,4 +186,5 @@ MonoBehaviour:
   itemCollider: {fileID: 2784413684905434363}
   itemRigidbody: {fileID: 7690747701783756440}
   objectRenderer: {fileID: 2784413683903831768}
-  value: 1000
+  coin: {fileID: 11400000, guid: 7d23ba0c48ab0a145a42a160bd0487cf, type: 2}
+  value: 0

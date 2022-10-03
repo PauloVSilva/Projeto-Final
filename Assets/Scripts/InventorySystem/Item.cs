@@ -5,20 +5,26 @@ using UnityEngine;
 [RequireComponent(typeof(SphereCollider))]
 
 public abstract class Item : Entity{
-    [SerializeField] public ItemScriptableObject item;
-    [SerializeField] public bool canBePickedUp;
-    [SerializeField] protected float pickUpRadius;
-    [SerializeField] protected float rotationSpeed;
-    [SerializeField] protected bool isBlinking;
-    [SerializeField] protected SphereCollider itemCollider;
-    [SerializeField] protected Rigidbody itemRigidbody;
+    public ItemScriptableObject item {get; protected set;}
+    [SerializeField] protected bool canBePickedUp;
+    protected bool canBeStored;
+    protected float pickUpRadius;
+    protected float rotationSpeed;
+    protected bool isBlinking;
+    protected SphereCollider itemCollider;
+    protected Rigidbody itemRigidbody;
     [SerializeField] protected Renderer objectRenderer;
 
+    public bool CanBePickedUp => canBePickedUp;
+    public bool CanBeStored => canBeStored;
+
     protected virtual void Awake(){
+        SetScriptableObjectVariables();
+        InitializeItemComponents();
         InitializeItemVariables();
     }
 
-    protected virtual void InitializeItemVariables(){
+    private void InitializeItemComponents(){
         itemCollider = GetComponent<SphereCollider>();
         itemRigidbody = GetComponent<Rigidbody>();
 
@@ -26,15 +32,23 @@ public abstract class Item : Entity{
         itemCollider.isTrigger = true;
         itemCollider.enabled = true;
         itemCollider.radius = pickUpRadius;
-
         itemRigidbody.velocity = Vector3.zero;
         itemRigidbody.angularVelocity = Vector3.zero;
 
         isPooled = false;
+    }
+
+    protected virtual void SetScriptableObjectVariables(){
+        maxAge = item.maxAge;
+        canBeStored = item.canBeStored;
+        pickUpRadius = item.pickUpRadius;
+        rotationSpeed = item.rotationSpeed;
+    }
+
+    protected virtual void InitializeItemVariables(){
         age = 0;
         canBePickedUp = false;
         StartCoroutine(CanBePickedUpDelay());
-        pickUpRadius = 1.5f;
         isBlinking = false;
     }
     
@@ -44,14 +58,8 @@ public abstract class Item : Entity{
     }
 
     protected override void Update(){
-        CollectableBehaviour();
         AgeBehaviour();
-    }
-
-    protected virtual void CollectableBehaviour(){
-        if(canBePickedUp){
-            transform.Rotate(Vector3.up * (rotationSpeed * Time.deltaTime));
-        }
+        CollectableBehaviour();
     }
 
     protected override void AgeBehaviour(){
@@ -66,6 +74,12 @@ public abstract class Item : Entity{
             if(age > maxAge){
                 Despawn();
             }
+        }
+    }
+
+    protected virtual void CollectableBehaviour(){
+        if(canBePickedUp){
+            transform.Rotate(Vector3.up * (rotationSpeed * Time.deltaTime));
         }
     }
 
@@ -88,9 +102,5 @@ public abstract class Item : Entity{
     protected virtual void OnDrawGizmos(){
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, pickUpRadius);
-    }
-
-    public bool CanBePickedUp(){
-        return canBePickedUp;
     }
 }

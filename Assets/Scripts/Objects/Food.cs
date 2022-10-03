@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Coin : Item, IPooledObjects{
-    [SerializeField] private CoinScriptableObject coin;
+public class Food : Item, IPooledObjects{
+    [SerializeField] private FoodScriptableObject food;
     [SerializeField] private int value;
     public int Value => value;
 
@@ -12,11 +12,11 @@ public class Coin : Item, IPooledObjects{
     }
 
     protected override void SetScriptableObjectVariables(){
-        item = coin;
+        item = food;
         
         base.SetScriptableObjectVariables();
 
-        value = coin.value;
+        value = food.value;
     }
 
     public void OnObjectSpawn(){ //replaces Start()
@@ -28,7 +28,7 @@ public class Coin : Item, IPooledObjects{
     }
 
     public void PickedUp(GameObject _gameObject){
-        _gameObject.GetComponent<CharacterEvents>().IncreaseScore(value);
+        _gameObject.GetComponent<HealthSystem>().Heal(value);
         Despawn();
     }
 }

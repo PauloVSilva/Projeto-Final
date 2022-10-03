@@ -9,10 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac308a6662c9f254f969d371ddbe1eb2, type: 3}
-  m_Name: ItemSO_AmethystCoin
+  m_Script: {fileID: 11500000, guid: 9a5456794a2f27047839f13d8f3586f5, type: 3}
+  m_Name: CoinSO_Amethyst
   m_EditorClassIdentifier: 
-  itemName: Amethyst Coin
+  itemName: Amethys Coin
   itemSprite: {fileID: 21300000, guid: 855a357a1b5e0ca4f8aefa0b3f8ec1d1, type: 3}
   maxStackSize: 999
   itemModel: {fileID: 2784413684905434342, guid: 0bf73ba8bea01514b992f5a9b1f96b62, type: 3}
+  maxAge: 30
+  canBeStored: 1
+  pickUpRadius: 1.5
+  rotationSpeed: 1600
+  value: 10000

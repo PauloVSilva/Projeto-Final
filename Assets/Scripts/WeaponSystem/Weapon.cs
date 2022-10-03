@@ -10,7 +10,7 @@ public enum ReloadType{singleBullet, magazine}
 public enum Size{handGun, longGun}
 
 public class Weapon : Item{
-    [SerializeField] public WeaponScriptableObject weapon;
+    [SerializeField] private WeaponScriptableObject weapon;
     [SerializeField] public ProjectileScriptableObject projectileToCast;
 
     //ATTRIBUTES FROM SCRIPTABLE OBJECT
@@ -40,20 +40,19 @@ public class Weapon : Item{
     [SerializeField] protected SphereCollider gunCollider;
     [SerializeField] public GameObject holder;
 
-    protected void Start(){
-        GetScriptableObjectVariables();
-        InitializeWeaponVariables();
-    }
-
     protected override void Update(){
-        FullAutoBehavior();
-        CollectableBehaviour();
         AgeBehaviour();
+        CollectableBehaviour();
+        FullAutoBehavior();
     }
 
-    private void GetScriptableObjectVariables(){
-        sprite = weapon.sprite;
-        weaponName = weapon.weaponName;
+    protected override void SetScriptableObjectVariables(){
+        item = weapon;
+
+        base.SetScriptableObjectVariables();
+
+        sprite = weapon.itemSprite;
+        weaponName = weapon.itemName;
         actionType = weapon.actionType;
         chamberRefillType = weapon.chamberRefillType;
         size = weapon.size;
@@ -63,7 +62,9 @@ public class Weapon : Item{
         reloadTime = weapon.reloadTime;
     }
 
-    private void InitializeWeaponVariables(){
+    protected override void InitializeItemVariables(){
+        base.InitializeItemVariables();
+
         holder = null;
         ammo = ammoCapacity;
         extraAmmo = 999;

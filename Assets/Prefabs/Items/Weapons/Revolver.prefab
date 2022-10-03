@@ -80,7 +80,7 @@ MonoBehaviour:
   persistenceRequired: 0
   age: 0
   maxAge: 60
-  item: {fileID: 11400000, guid: 8ead17b252377504197d627f5b60c4f6, type: 2}
+  item: {fileID: 0}
   canBePickedUp: 1
   pickUpRadius: 1.5
   rotationSpeed: 150

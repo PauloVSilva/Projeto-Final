@@ -47,10 +47,10 @@ public class DimeDropManager : MiniGameManager{
         foreach(var spawner in itemSpawnersList){
             spawner.GetComponent<Spawner>().spawnerEnabled = false;
         }
-        coins = GameObject.FindGameObjectsWithTag("Coin");
-        foreach(var coin in coins){
-            coin.GetComponent<Coin>().canBePickedUp = false;
-        }
+        //coins = GameObject.FindGameObjectsWithTag("Coin");
+        //foreach(var coin in coins){
+        //    coin.GetComponent<Coin>().canBePickedUp = false;
+        //}
         GameStateAdvances();
         StartCoroutine(GameOver());
     }

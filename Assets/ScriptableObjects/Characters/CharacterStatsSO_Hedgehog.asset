@@ -22,7 +22,7 @@ MonoBehaviour:
   _characterControllerHeight: 1
   _animal: 0
   _maxHealth: 100
-  _healthRegenRate: 5
+  _healthRegenRate: 2
   _walkSpeed: 5
   _sprintSpeed: 9
   _maxStamina: 60

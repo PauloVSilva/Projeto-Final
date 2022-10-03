@@ -19,4 +19,4 @@ MonoBehaviour:
   damageAmount: 80
   cost: 1
   maxAge: 10
-  speed: 20
+  speed: 15

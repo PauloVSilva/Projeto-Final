@@ -31,12 +31,15 @@ public class CharacterEvents : MonoBehaviour{
 
     public void OnTriggerEnter(Collider other){
         if(!characterStats.IsBlocked()){
-            if(other.gameObject.GetComponent<Item>() != null && other.gameObject.GetComponent<Item>().CanBePickedUp()){
+            if(other.gameObject.GetComponent<Item>() != null && other.gameObject.GetComponent<Item>().CanBePickedUp){
+                Debug.Log("Collided");
                 if(other.gameObject.GetComponent<Coin>()){
                     if(characterInventory.AddToInventory(other.gameObject.GetComponent<Item>().item)){
-                        IncreaseScore(other.gameObject.GetComponent<Coin>().Value);
-                        other.gameObject.GetComponent<Coin>().Despawn();
+                        other.GetComponent<Coin>().PickedUp(this.gameObject);
                     }
+                }
+                if(other.gameObject.GetComponent<Food>()){
+                    other.GetComponent<Food>().PickedUp(this.gameObject);
                 }
                 if(other.gameObject.GetComponent<Weapon>()){
                     if(!characterStats.IsArmed()){

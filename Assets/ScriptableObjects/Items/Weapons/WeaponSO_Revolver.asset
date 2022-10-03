@@ -12,9 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf820d9f4a8ef754f9837c2c80bddd38, type: 3}
   m_Name: WeaponSO_Revolver
   m_EditorClassIdentifier: 
-  weaponModel: {fileID: 2526096355226271964, guid: a4b73a376005e53498b7eca416ef3bac, type: 3}
-  sprite: {fileID: 21300000, guid: 96552f21458d5a346832e36455eebe47, type: 3}
-  weaponName: Revolver
+  itemName: Revolver
+  itemSprite: {fileID: 21300000, guid: 96552f21458d5a346832e36455eebe47, type: 3}
+  maxStackSize: 1
+  itemModel: {fileID: 2526096355226271964, guid: a4b73a376005e53498b7eca416ef3bac, type: 3}
+  maxAge: 60
+  canBeStored: 1
+  pickUpRadius: 1.5
+  rotationSpeed: 150
   actionType: 0
   chamberRefillType: 1
   reloadType: 0

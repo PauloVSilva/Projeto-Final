@@ -532,6 +532,7 @@ MonoBehaviour:
   itemSold: {fileID: 0}
   costToBuy: 1
   dropPoint: {fileID: 7290386298806259330}
+  isBroken: 0
   machinePrompt: 
   interactionPromptUI: {fileID: 9198069274976196072}
 --- !u!114 &9080664918875891947
@@ -559,7 +560,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventorySlots:
-  - item: {fileID: 11400000, guid: 60715083ea7fe0c46968bbdbcf874719, type: 2}
+  - item: {fileID: 11400000, guid: 8a794cf3a90b5f246be5e3e1bd35faa5, type: 2}
     stackSize: 20
 --- !u!114 &9080664918875891948
 MonoBehaviour:

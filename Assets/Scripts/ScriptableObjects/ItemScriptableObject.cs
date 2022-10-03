@@ -9,4 +9,8 @@ public class ItemScriptableObject : ScriptableObject{
     public Sprite itemSprite;
     public int maxStackSize;
     public GameObject itemModel;
+    public int maxAge;
+    public bool canBeStored;
+    public float pickUpRadius;
+    public float rotationSpeed;
 }
