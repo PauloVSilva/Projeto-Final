@@ -385,7 +385,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8291060839251093444}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 1.5}
+  m_LocalPosition: {x: 0, y: 0, z: 1.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -424,9 +424,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9080664918875891957}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 1
+  m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalScale: {x: 2, y: 3, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1779042420693430008}
   - {fileID: 240770023493267780}
@@ -530,9 +530,14 @@ MonoBehaviour:
   damageFeedback: {fileID: 9080664918875891948}
   MaxHealth: 9999
   itemSold: {fileID: 0}
+  meshRenderer: {fileID: 0}
+  materials:
+  - {fileID: 2100000, guid: ac2d3bddb558f62408418d4112cfabf0, type: 2}
+  - {fileID: 2100000, guid: 26e2f60afff35a5458aff5e72cba1fa3, type: 2}
+  - {fileID: 2100000, guid: d95031ba20bddaf48b6bcfc292a45455, type: 2}
   costToBuy: 1
   dropPoint: {fileID: 7290386298806259330}
-  isBroken: 0
+  machineState: 0
   machinePrompt: 
   interactionPromptUI: {fileID: 9198069274976196072}
 --- !u!114 &9080664918875891947

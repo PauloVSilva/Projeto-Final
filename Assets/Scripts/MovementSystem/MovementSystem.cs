@@ -34,6 +34,7 @@ public class MovementSystem : MonoBehaviour{
     [SerializeField] private bool groundedPlayer;
     [SerializeField] private float gravityValue = -9.81f;
     [SerializeField] private Vector3 move;
+    [SerializeField] private float airTime;
 
     public void Initialize(){
         InitializeVariables();
@@ -88,12 +89,25 @@ public class MovementSystem : MonoBehaviour{
             controller.Move(playerVelocity * Time.deltaTime);
 
             SprintBehavior();
+            AirTimeDamage();
             StaminaRegen();
         }
     }
 
     public void ResetStats(){
         InitializeVariables();
+    }
+
+    private void AirTimeDamage(){
+        if(!groundedPlayer && playerVelocity.y < 0){
+            airTime += Time.deltaTime;
+        }
+        if(groundedPlayer){
+            if(airTime > 1){
+                characterEvents.TakeDamage(airTime * 10);
+            }
+            airTime = 0;
+        }
     }
 
     public void StaminaRegen(){
@@ -156,6 +170,7 @@ public class MovementSystem : MonoBehaviour{
                 if(JumpsRemaining > 0){
                     playerVelocity.y = Mathf.Sqrt(JumpStrength * -3.0f * gravityValue);
                     JumpsRemaining--;
+                    airTime = 0;
                     SpendStamina(JumpStaminaCost);
                 }
             }

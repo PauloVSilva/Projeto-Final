@@ -4,9 +4,12 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class CharacterEvents : MonoBehaviour{
+    //SYSTEMS
     [SerializeField] private PlayerInputHandler playerInputHandler;
-    [SerializeField] private CharacterStats characterStats;
     [SerializeField] private CharacterController controller;
+    [SerializeField] private CharacterStats characterStats;
+    [SerializeField] private CharacterHealthSystem characterHealthSystem;
+    [SerializeField] private MovementSystem characterMovementSystem;
     [SerializeField] public CharacterInventory characterInventory;
     [SerializeField] public GameObject characterObject;
 
@@ -26,6 +29,14 @@ public class CharacterEvents : MonoBehaviour{
     public event System.Action OnPlayerStatsReset;
 
     public void SetEvents(){
+        playerInputHandler = GetComponent<PlayerInputHandler>();
+        controller = GetComponent<CharacterController>();
+
+        characterStats = GetComponent<CharacterStats>();
+        characterHealthSystem = GetComponent<CharacterHealthSystem>();
+        characterMovementSystem = GetComponent<MovementSystem>();
+        characterInventory = GetComponent<CharacterInventory>();
+
         characterObject = GetComponent<CharacterSelection>().characterObject;
     }
 
@@ -51,8 +62,8 @@ public class CharacterEvents : MonoBehaviour{
     }
 
     public void RefreshStatsUponRespawning(){
-        GetComponent<CharacterHealthSystem>().Initialize();
-        GetComponent<MovementSystem>().ResetStats();
+        characterHealthSystem.Initialize();
+        characterMovementSystem.ResetStats();
     }
 
 
@@ -86,6 +97,12 @@ public class CharacterEvents : MonoBehaviour{
         characterStats.actionsAreBlocked = false;
         playerInputHandler.RestoreActions();
     }
+
+
+    public void TakeDamage(float _damage){
+        characterHealthSystem.TakeDamage(_damage);
+    }
+
 
 
 

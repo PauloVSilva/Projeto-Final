@@ -193,7 +193,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 122
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &-6847266752148747554
 MonoBehaviour:
@@ -211,13 +211,7 @@ MonoBehaviour:
   persistenceRequired: 0
   age: 0
   maxAge: 60
-  item: {fileID: 0}
   canBePickedUp: 1
-  pickUpRadius: 1.5
-  rotationSpeed: 150
-  isBlinking: 0
-  itemCollider: {fileID: 535941993235239520}
-  itemRigidbody: {fileID: 4454049430203434874}
   objectRenderer: {fileID: 4115066245624394644}
   weapon: {fileID: 11400000, guid: a4cb0423e6895604384039af18b86e81, type: 2}
   projectileToCast: {fileID: 11400000, guid: b9715341ef4f538409e4b1f8319ac05d, type: 2}

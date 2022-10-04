@@ -178,7 +178,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6048663dd5413b45a484b91e0135151, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destructibleObject: {fileID: 5832791046633643336}
 --- !u!114 &8212072158344372498
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -192,9 +191,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventorySlots:
-  - item: {fileID: 11400000, guid: 55168ddda7c6b5c439cd54bc13268dc9, type: 2}
+  - item: {fileID: 11400000, guid: c7929217662b1ca4d960b30ef0f2d58e, type: 2}
     stackSize: 10
-  - item: {fileID: 11400000, guid: 99dea2ff5af232b48abe6c4fdb888732, type: 2}
+  - item: {fileID: 11400000, guid: 1eb20debbac64284889ee3de1d880b9d, type: 2}
     stackSize: 5
 --- !u!114 &9080664918875891948
 MonoBehaviour:

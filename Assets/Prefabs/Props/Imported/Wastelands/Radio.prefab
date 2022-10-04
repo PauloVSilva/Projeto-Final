@@ -191,9 +191,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventorySlots:
-  - item: {fileID: 11400000, guid: 55168ddda7c6b5c439cd54bc13268dc9, type: 2}
+  - item: {fileID: 11400000, guid: c7929217662b1ca4d960b30ef0f2d58e, type: 2}
     stackSize: 3
-  - item: {fileID: 11400000, guid: 99dea2ff5af232b48abe6c4fdb888732, type: 2}
+  - item: {fileID: 11400000, guid: 1eb20debbac64284889ee3de1d880b9d, type: 2}
     stackSize: 1
 --- !u!114 &6249726205726930074
 MonoBehaviour:

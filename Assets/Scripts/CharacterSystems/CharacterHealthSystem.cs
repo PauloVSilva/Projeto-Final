@@ -63,6 +63,10 @@ public class CharacterHealthSystem : HealthSystem{
         characterEvents.PlayerHealthUpdated(CurrentHealth, MaxHealth);
     }
 
+    public void TakeDamage(float damageTaken){
+        TakeDamage(null, damageTaken);
+    }
+
     public override void TakeDamage(GameObject damageSource, float damageTaken){
         if(!IsInvulnerable){
             CurrentHealth = Math.Max(CurrentHealth -= damageTaken, 0);

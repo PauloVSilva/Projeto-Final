@@ -320,6 +320,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerInputHandler: {fileID: 7408531066293585715}
   characterStats: {fileID: -6532263821112973344}
+  characterHealthSystem: {fileID: -3360404993604576978}
+  characterMovementSystem: {fileID: 2604168369563993407}
   controller: {fileID: 87397543814161862}
   characterInventory: {fileID: 5021916059996529337}
   characterObject: {fileID: 0}

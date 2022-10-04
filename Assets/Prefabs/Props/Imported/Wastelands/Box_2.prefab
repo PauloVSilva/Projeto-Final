@@ -191,11 +191,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventorySlots:
-  - item: {fileID: 11400000, guid: 55168ddda7c6b5c439cd54bc13268dc9, type: 2}
+  - item: {fileID: 11400000, guid: 1eb20debbac64284889ee3de1d880b9d, type: 2}
     stackSize: 7
-  - item: {fileID: 11400000, guid: 99dea2ff5af232b48abe6c4fdb888732, type: 2}
+  - item: {fileID: 11400000, guid: c7929217662b1ca4d960b30ef0f2d58e, type: 2}
     stackSize: 13
-  - item: {fileID: 11400000, guid: 1c1dd6c1da0b190418d30d14b021f7ca, type: 2}
+  - item: {fileID: 11400000, guid: 7d23ba0c48ab0a145a42a160bd0487cf, type: 2}
     stackSize: 4
 --- !u!114 &1145812977630342320
 MonoBehaviour:
