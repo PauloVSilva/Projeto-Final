@@ -18,7 +18,7 @@ public class CharacterSelectionMenu : MonoBehaviour{
     [SerializeField] private TextMeshProUGUI playerControllingMenu;
 
     //SPECIFIC TO THIS MENU
-    [SerializeField] private CharacterSelection characterSelection;
+    [SerializeField] private CharacterManager characterManager;
     [SerializeField] private List<CharacterStatsScriptableObject> characterList = new List<CharacterStatsScriptableObject>();
     [SerializeField] private CharacterStatsScriptableObject displayedCharacter;
     [SerializeField] private int index;
@@ -47,7 +47,7 @@ public class CharacterSelectionMenu : MonoBehaviour{
 
     private void MenuOpened(){
         index = 0;
-        characterSelection = playerInput.GetComponent<CharacterSelection>();
+        characterManager = playerInput.GetComponent<CharacterManager>();
         displayedCharacter = characterList[index];
         UpdateCharacter();
         firstSelected.Select();
@@ -82,7 +82,7 @@ public class CharacterSelectionMenu : MonoBehaviour{
 
     public void ConfirmCharacter(){
         CharacterStatsScriptableObject selectedCharacter = displayedCharacter;
-        characterSelection.SpawnCharacter(selectedCharacter);
+        characterManager.SpawnCharacter(selectedCharacter);
     }
 
     public void CancelSelection(){

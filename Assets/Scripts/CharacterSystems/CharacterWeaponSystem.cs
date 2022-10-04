@@ -4,17 +4,18 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class CharacterWeaponSystem : MonoBehaviour{
-    [SerializeField] private CharacterEvents characterEvents;
+    [SerializeField] private CharacterManager characterManager;
     [SerializeField] private PlayerInputHandler playerInputHandler;
     [SerializeField] private Weapon weapon;
     [SerializeField] private Transform gunPosition;
 
     private void Start(){
+        characterManager = GetComponent<CharacterManager>();
         SubscribeToEvents();
     }
 
     public void SetGunPosition(){
-        gunPosition = characterEvents.characterObject.GetComponent<CharacterItemsDisplay>().gunPosition.transform;
+        gunPosition = characterManager.characterObject.GetComponent<CharacterItemsDisplay>().gunPosition.transform;
     }
 
     private void SubscribeToEvents(){
@@ -40,7 +41,7 @@ public class CharacterWeaponSystem : MonoBehaviour{
         weapon.transform.parent = null;
         weapon.Dropped();
         weapon = null;
-        characterEvents.PlayerDroppedWeapon();
+        characterManager.PlayerDroppedWeapon();
     }
 
     public void DestroyWeapon(){
@@ -56,15 +57,15 @@ public class CharacterWeaponSystem : MonoBehaviour{
         weapon.transform.position = gunPosition.transform.position;
 
         weapon.PickedUp(this.gameObject);
-        characterEvents.PlayerPickedUpWeapon(weapon);
+        characterManager.PlayerPickedUpWeapon(weapon);
     }
 
     public void WeaponFired(){
-        characterEvents.PlayerShotWeapon(weapon);
+        characterManager.PlayerShotWeapon(weapon);
     }
 
     public void WeaponReloaded(){
-        characterEvents.PlayerReloadedWeapon(weapon);
+        characterManager.PlayerReloadedWeapon(weapon);
     }
 
     public Weapon GetWeapon(){

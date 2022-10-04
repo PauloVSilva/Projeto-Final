@@ -22,7 +22,7 @@ public class CameraController : MonoBehaviour{
     }
 
     public void RemovePlayer(PlayerInput playerInput){
-        if(playerInput.GetComponent<CharacterSelection>().characterObject != null){
+        if(playerInput.GetComponent<CharacterManager>().characterObject != null){
             objectsTracked.Remove(playerInput.transform.gameObject);
         }
     }

@@ -5,12 +5,11 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class MovementSystem : MonoBehaviour{
-    [SerializeField] private CharacterStats characterStats;
-    [SerializeField] private CharacterEvents characterEvents;
-    [SerializeField] private PlayerInputHandler playerInputHandler;
+    private CharacterManager characterManager;
+    private PlayerInputHandler playerInputHandler;
     [SerializeField] private CharacterController controller;
 
-    //VARIABLES THAT WILL COME FROM CHARACTERSTATS
+    //VARIABLES THAT WILL COME FROM CHARACTER SCRIPTABLE OBJECT
     public float WalkSpeed {get; protected set;}
     public float SprintSpeed {get; protected set;}
     public float MaxStamina {get; protected set;}
@@ -28,13 +27,23 @@ public class MovementSystem : MonoBehaviour{
     public float StaminaRegenCooldown {get; protected set;}
     public bool CanRegenStamina {get; protected set;}
     public int JumpsRemaining {get; protected set;}
+    public float airTime;
 
     //OTHER VARIABLES
     [SerializeField] private Vector3 playerVelocity;
     [SerializeField] private bool groundedPlayer;
     [SerializeField] private float gravityValue = -9.81f;
     [SerializeField] private Vector3 move;
-    [SerializeField] private float airTime;
+
+    private void Awake(){
+        InitializeComponents();
+    }
+
+    private void InitializeComponents(){
+        playerInputHandler = GetComponent<PlayerInputHandler>();
+        characterManager = GetComponent<CharacterManager>();
+        controller = GetComponent<CharacterController>();
+    }
 
     public void Initialize(){
         InitializeVariables();
@@ -42,19 +51,19 @@ public class MovementSystem : MonoBehaviour{
     }
 
     private void InitializeVariables(){
-        controller.radius = characterStats.characterControllerRadius;
-        controller.height = characterStats.characterControllerHeight;
-        controller.center = characterStats.characterControllerCenter;
+        controller.radius = characterManager.Character.characterControllerRadius;
+        controller.height = characterManager.Character.characterControllerHeight;
+        controller.center = characterManager.Character.characterControllerCenter;
         
-        WalkSpeed = characterStats.WalkSpeed;
-        SprintSpeed = characterStats.SprintSpeed;
-        MaxStamina = characterStats.MaxStamina;
-        StaminaRegenRate = characterStats.StaminaRegenRate;
-        JumpStrength = characterStats.JumpStrength;
-        TotalJumps = characterStats.TotalJumps;
-        JumpStaminaCost = characterStats.JumpStaminaCost;
-        DashStaminaCost = characterStats.DashStaminaCost;
-        SprintStaminaCost = characterStats.SprintStaminaCost;
+        WalkSpeed = characterManager.Character.walkSpeed;
+        SprintSpeed = characterManager.Character.sprintSpeed;
+        MaxStamina = characterManager.Character.maxStamina;
+        StaminaRegenRate = characterManager.Character.staminaRegenRate;
+        JumpStrength = characterManager.Character.jumpStrength;
+        TotalJumps = characterManager.Character.totalJumps;
+        JumpStaminaCost = characterManager.Character.jumpStaminaCost;
+        DashStaminaCost = characterManager.Character.dashStaminaCost;
+        SprintStaminaCost = characterManager.Character.sprintStaminaCost;
 
         moveSpeed = WalkSpeed;
         isSprinting = false;
@@ -64,7 +73,6 @@ public class MovementSystem : MonoBehaviour{
     }
 
     private void SubscribeToEvents(){
-        //INPUT EVENTS
         playerInputHandler.OnCharacterMove += OnMove;
         playerInputHandler.OnCharacterSprint += OnSprint;
         playerInputHandler.OnCharacterJump += OnJump;
@@ -72,7 +80,7 @@ public class MovementSystem : MonoBehaviour{
     }
 
     private void Update(){
-        if(controller != null){
+        if(characterManager.Character != null){
             groundedPlayer = controller.isGrounded;
             if (groundedPlayer && playerVelocity.y < 0){
                 playerVelocity.y = 0f;
@@ -102,9 +110,27 @@ public class MovementSystem : MonoBehaviour{
         if(!groundedPlayer && playerVelocity.y < 0){
             airTime += Time.deltaTime;
         }
+        //if(groundedPlayer){
+        //    if(airTime > 1){
+        //        characterManager.TakeDamage(airTime * 10);
+        //    }
+        //    airTime = 0;
+        //}
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit other){
+        if(other.transform.GetComponent<CharacterManager>() != null){
+            if(airTime > 0.5){
+                other.transform.GetComponent<CharacterManager>().TakeDamage(this.gameObject, airTime * 20);
+            }
+            if(airTime > 1){
+                characterManager.TakeDamage(airTime * 10);
+            }
+            airTime = 0;
+        }
         if(groundedPlayer){
             if(airTime > 1){
-                characterEvents.TakeDamage(airTime * 10);
+                characterManager.TakeDamage(airTime * 10);
             }
             airTime = 0;
         }
@@ -142,7 +168,7 @@ public class MovementSystem : MonoBehaviour{
     }
 
     private void SendStaminaUpdateEvent(){
-        characterEvents.PlayerStaminaUpdated(CurrentStamina, MaxStamina);
+        characterManager.PlayerStaminaUpdated(CurrentStamina, MaxStamina);
     }
 
     public void OnMove(InputAction.CallbackContext context){

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Tombstone : MonoBehaviour{
     void Start(){
-        float delay = transform.parent.GetComponent<CharacterStats>().timeToRespawn;
+        float delay = transform.parent.GetComponent<CharacterManager>().timeToRespawn;
         Destroy(gameObject, delay);
     }
 }

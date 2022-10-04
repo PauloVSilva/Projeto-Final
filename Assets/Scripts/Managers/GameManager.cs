@@ -70,7 +70,7 @@ public class GameManager : MonoBehaviour{
         if(GameManager.instance.playerList.Count > 0){
             mainCamera.GetComponent<CameraController>().objectsTracked.Clear();
             foreach(var playerInput in GameManager.instance.playerList){
-                playerInput.GetComponent<CharacterEvents>().FullReset();
+                playerInput.GetComponent<CharacterManager>().FullReset();
                 mainCamera.GetComponent<CameraController>().AddPlayer(playerInput);
             }
         }
@@ -118,15 +118,15 @@ public class GameManager : MonoBehaviour{
         playerList.Add(playerInput);
         OnPlayerJoinedGame?.Invoke(playerInput);
         
-        playerInput.GetComponent<CharacterEvents>().OnPlayerScoredKill += GameManagerCharacterKilled;
-        playerInput.GetComponent<CharacterEvents>().OnPlayerDied += GameManagerCharacterDied;
-        playerInput.GetComponent<CharacterEvents>().OnPlayerBorn += GameManagerCharacterSpawned;
+        playerInput.GetComponent<CharacterManager>().OnPlayerScoredKill += GameManagerCharacterKilled;
+        playerInput.GetComponent<CharacterManager>().OnPlayerDied += GameManagerCharacterDied;
+        playerInput.GetComponent<CharacterManager>().OnPlayerBorn += GameManagerCharacterSpawned;
     }
 
     void OnPlayerLeft(PlayerInput playerInput){ //THIS METHOD COMES FROM UNITY ITSELF
-        playerInput.GetComponent<CharacterEvents>().OnPlayerScoredKill -= GameManagerCharacterKilled;
-        playerInput.GetComponent<CharacterEvents>().OnPlayerDied -= GameManagerCharacterDied;
-        playerInput.GetComponent<CharacterEvents>().OnPlayerBorn -= GameManagerCharacterSpawned;
+        playerInput.GetComponent<CharacterManager>().OnPlayerScoredKill -= GameManagerCharacterKilled;
+        playerInput.GetComponent<CharacterManager>().OnPlayerDied -= GameManagerCharacterDied;
+        playerInput.GetComponent<CharacterManager>().OnPlayerBorn -= GameManagerCharacterSpawned;
     }
 
     public void JoinAction(InputAction.CallbackContext context){

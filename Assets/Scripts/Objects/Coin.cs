@@ -28,7 +28,7 @@ public class Coin : Item, IPooledObjects{
     }
 
     public void PickedUp(GameObject _gameObject){
-        _gameObject.GetComponent<CharacterEvents>().IncreaseScore(value);
+        _gameObject.GetComponent<CharacterManager>().IncreaseScore(value);
         Despawn();
     }
 }

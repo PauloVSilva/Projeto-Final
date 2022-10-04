@@ -79,8 +79,8 @@ public class VendingMachine : DestructibleObject, InteractorInterface{
     [SerializeField] public InteractionPromptUI PromptUI => interactionPromptUI;
     public bool Interact(Interactor interactor){
         if(machineState == MachineState.fullyFunctional){
-            if(interactor.transform.parent.GetComponent<CharacterStats>().score > costToBuy){
-                interactor.transform.parent.GetComponent<CharacterStats>().score -= costToBuy;
+            if(interactor.transform.parent.GetComponent<CharacterManager>().score > costToBuy){
+                interactor.transform.parent.GetComponent<CharacterManager>().score -= costToBuy;
                 inventory.DropItem(0, dropPoint);
                 Debug.Log("bought");
                 return true;

@@ -4,10 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CharacterHealthSystem : HealthSystem{
-    [SerializeField] private CharacterStats characterStats;
-    [SerializeField] private CharacterEvents characterEvents;
+    private CharacterManager characterManager;
 
-    //VARIABLES THAT WILL COME FROM CHARACTERSTATS
+    //VARIABLES THAT WILL COME FROM CHARACTER SCRIPTABLE OBJECT
     public override float MaxHealth {get; protected set;}
     public float HealthRegenRate {get; protected set;}
 
@@ -18,6 +17,14 @@ public class CharacterHealthSystem : HealthSystem{
     public override bool IsAlive {get; protected set;}
     public override bool IsInvulnerable {get; protected set;}
 
+    private void Awake(){
+        InitializeComponents();
+    }
+
+    private void InitializeComponents(){
+        characterManager = GetComponent<CharacterManager>();
+    }
+
     private void Update(){
         RegenerateHealth();
     }
@@ -27,13 +34,13 @@ public class CharacterHealthSystem : HealthSystem{
         StartCoroutine(OnEntityBornDelay());
         IEnumerator OnEntityBornDelay(){
             yield return new WaitForSeconds(0.05f);
-            characterEvents.PlayerBorn(gameObject);
+            characterManager.PlayerBorn(gameObject);
         }
     }
 
     protected override void InitializeVariables(){        
-        MaxHealth = characterStats.MaxHealth;
-        HealthRegenRate = characterStats.HealthRegenRate;
+        MaxHealth = characterManager.Character.maxHealth;
+        HealthRegenRate = characterManager.Character.healthRegenRate;
 
         CurrentHealth = MaxHealth;
         IsAlive = true;
@@ -60,7 +67,7 @@ public class CharacterHealthSystem : HealthSystem{
     }
 
     private void SendHealthUpdateEvent(){
-        characterEvents.PlayerHealthUpdated(CurrentHealth, MaxHealth);
+        characterManager.PlayerHealthUpdated(CurrentHealth, MaxHealth);
     }
 
     public void TakeDamage(float damageTaken){
@@ -73,7 +80,7 @@ public class CharacterHealthSystem : HealthSystem{
             if(CurrentHealth <= 0){
                 Die(damageSource);
             }
-            characterEvents.PlayerWasDamaged(damageTaken);
+            characterManager.PlayerWasDamaged(damageTaken);
             HealthRegenCooldown = 1f;
             CanRegenHealth = false;
             SendHealthUpdateEvent();
@@ -82,7 +89,7 @@ public class CharacterHealthSystem : HealthSystem{
 
     public override void Heal(float heal){
         CurrentHealth = Math.Min(CurrentHealth += heal, MaxHealth);
-        characterEvents.PlayerWasHealed(heal);
+        characterManager.PlayerWasHealed(heal);
         SendHealthUpdateEvent();
     }
 
@@ -90,9 +97,9 @@ public class CharacterHealthSystem : HealthSystem{
         IsAlive = false;
         IsInvulnerable = true;
         CurrentHealth = 0;
-        characterEvents.PlayerDied(gameObject);
+        characterManager.PlayerDied(gameObject);
         if(damageSource.CompareTag("Player")){
-            damageSource.transform.GetComponent<CharacterEvents>().PlayerScoredKill(damageSource);
+            damageSource.transform.GetComponent<CharacterManager>().PlayerScoredKill(damageSource);
         }
     }
 }

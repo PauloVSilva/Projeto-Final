@@ -80,7 +80,7 @@ public abstract class MiniGameManager : LevelManager{
         foreach(var playerInput in GameManager.instance.playerList){
             int index = playerInput.playerIndex % GameManager.instance.spawnPoints.Length;
             playerInput.transform.position = GameManager.instance.spawnPoints[index].transform.position;
-            playerInput.GetComponent<CharacterEvents>().BlockActions();
+            playerInput.GetComponent<CharacterManager>().BlockActions();
         }
 
         miniGameSetup = MiniGameOptionsMenu.instance.GetMiniGameGoal();

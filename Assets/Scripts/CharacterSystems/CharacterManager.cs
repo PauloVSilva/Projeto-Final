@@ -3,17 +3,35 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CharacterEvents : MonoBehaviour{
-    //SYSTEMS
-    [SerializeField] private PlayerInputHandler playerInputHandler;
-    [SerializeField] private CharacterController controller;
-    [SerializeField] private CharacterStats characterStats;
-    [SerializeField] private CharacterHealthSystem characterHealthSystem;
-    [SerializeField] private MovementSystem characterMovementSystem;
-    [SerializeField] public CharacterInventory characterInventory;
-    [SerializeField] public GameObject characterObject;
+public enum Animal{hedgehog, pangolin, threeBandedArmadillo}
+public enum TeamColor{none, blue, red, green, yellow}
 
-    //EVENTS THAT WILL BE SENT TO OTHER CLASSES
+public class CharacterManager : MonoBehaviour{
+    #region "SYSTEMS"
+    [SerializeField] public PlayerInput playerInput;
+    [SerializeField] public PlayerInputHandler playerInputHandler;
+    [SerializeField] public CharacterController controller;
+    [SerializeField] public CharacterHealthSystem characterHealthSystem;
+    [SerializeField] public MovementSystem characterMovementSystem;
+    [SerializeField] public CharacterInventory characterInventory;
+    [SerializeField] public CharacterWeaponSystem characterWeaponSystem;
+    [SerializeField] public CharacterStatsScriptableObject Character;
+    [SerializeField] public GameObject characterObject;
+    #endregion "SYSTEMS"
+
+    #region "STATS"
+    public TeamColor teamColor;
+    public int score;
+    public int kills;
+    public int deaths;
+    public bool unlimitedLives;
+    public int totalLives;
+    public float timeToRespawn;
+    public bool actionsAreBlocked;
+    public bool isMountedOnTurret;
+    #endregion "STATS"
+
+    #region "EVENTS"
     public event System.Action<GameObject, int> OnPlayerScoreChanged;
     public event System.Action<GameObject> OnPlayerScoredKill;
     public event System.Action<GameObject> OnPlayerDied;
@@ -27,21 +45,58 @@ public class CharacterEvents : MonoBehaviour{
     public event System.Action<Weapon> OnPlayerPickedUpWeapon;
     public event System.Action OnPlayerDroppedWeapon;
     public event System.Action OnPlayerStatsReset;
+    public event System.Action OnCharacterChosen;
+    #endregion "EVENTS"
 
-    public void SetEvents(){
+    private void Awake(){
+        InitializeComponents();
+        InitializePlayerVariables();
+    }
+
+    private void InitializeComponents(){
+        characterObject = null;
+        playerInput = GetComponent<PlayerInput>();
         playerInputHandler = GetComponent<PlayerInputHandler>();
         controller = GetComponent<CharacterController>();
 
-        characterStats = GetComponent<CharacterStats>();
         characterHealthSystem = GetComponent<CharacterHealthSystem>();
         characterMovementSystem = GetComponent<MovementSystem>();
         characterInventory = GetComponent<CharacterInventory>();
+        characterWeaponSystem = GetComponent<CharacterWeaponSystem>();
+    }
 
-        characterObject = GetComponent<CharacterSelection>().characterObject;
+    private void InitializePlayerVariables(){
+        teamColor = TeamColor.none;
+        score = 0;
+        kills = 0;
+        deaths = 0;
+        unlimitedLives = true;
+        totalLives = 0;
+        timeToRespawn = 3f;
+
+        actionsAreBlocked = false;
+        isMountedOnTurret = false;
+    }
+
+    public void ResetStats(){
+        InitializePlayerVariables();
+    }
+
+    public void SpawnCharacter(CharacterStatsScriptableObject _character){
+        Character = _character;
+
+        characterObject = GameObject.Instantiate(Character.characterModel[0], transform.position, transform.rotation, this.transform);
+        characterHealthSystem.Initialize();
+        characterMovementSystem.Initialize();
+        characterWeaponSystem.SetGunPosition();
+
+        transform.parent = GameManager.instance.transform;
+        playerInput.SwitchCurrentActionMap("Player");
+        OnCharacterChosen?.Invoke();
     }
 
     public void OnTriggerEnter(Collider other){
-        if(!characterStats.IsBlocked()){
+        if(!IsBlocked()){
             if(other.gameObject.GetComponent<Item>() != null && other.gameObject.GetComponent<Item>().CanBePickedUp){
                 Debug.Log("Collided");
                 if(other.gameObject.GetComponent<Coin>()){
@@ -53,7 +108,7 @@ public class CharacterEvents : MonoBehaviour{
                     other.GetComponent<Food>().PickedUp(this.gameObject);
                 }
                 if(other.gameObject.GetComponent<Weapon>()){
-                    if(!characterStats.IsArmed()){
+                    if(!IsArmed()){
                         characterInventory.PickWeapon(other.gameObject);
                     }
                 }
@@ -68,7 +123,7 @@ public class CharacterEvents : MonoBehaviour{
 
 
     public void BeginRespawnProcess(){
-        if(characterStats.CanRespawn()){
+        if(CanRespawn()){
             StartCoroutine(RespawnCharacterDelay());
         }
         characterObject.SetActive(false);
@@ -76,7 +131,7 @@ public class CharacterEvents : MonoBehaviour{
     }
 
     IEnumerator RespawnCharacterDelay(){
-        yield return new WaitForSeconds(characterStats.timeToRespawn);
+        yield return new WaitForSeconds(timeToRespawn);
         RespawnCharacter();
     }
 
@@ -89,23 +144,74 @@ public class CharacterEvents : MonoBehaviour{
     }
 
     public void BlockActions(){
-        characterStats.actionsAreBlocked = true;
+        actionsAreBlocked = true;
         playerInputHandler.DisableActions();
     }
 
     public void UnblockActions(){
-        characterStats.actionsAreBlocked = false;
+        actionsAreBlocked = false;
         playerInputHandler.RestoreActions();
     }
+
 
 
     public void TakeDamage(float _damage){
         characterHealthSystem.TakeDamage(_damage);
     }
+    public void TakeDamage(GameObject damageSource, float _damage){
+        characterHealthSystem.TakeDamage(damageSource, _damage);
+    }
 
 
 
 
+
+    public void SetTeam(TeamColor _teamColor){
+        teamColor = _teamColor;
+    }
+
+    public int GetScore(){
+        return score;
+    }
+
+    public void IncreaseLives(int _amount){
+        totalLives += _amount;
+    }
+
+    public void SetUnlimitedLives(){
+        totalLives = -1;
+        unlimitedLives = true;
+    }
+
+    public bool IsBlocked(){
+        return actionsAreBlocked;
+    }
+
+    public bool CanRespawn(){
+        if(totalLives > 0 || unlimitedLives){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public bool CanMove(){
+        if(actionsAreBlocked) return false;
+        
+        return true;
+    }
+
+    public bool CanUseFireGun(){
+        if(actionsAreBlocked) return false;
+        if(!IsArmed()) return false;
+
+        return true;
+    }
+
+    public bool IsArmed(){
+        return characterInventory.IsArmed();
+    }
 
     #region "Methods that invoke events"
     public void FullReset(){
@@ -117,38 +223,35 @@ public class CharacterEvents : MonoBehaviour{
         //reset health and movement systems
         //send that to the UI
         characterInventory.ClearInventory();
-        characterStats.ResetStats();
+        ResetStats();
         this.transform.position = GameManager.instance.spawnPoints[0].transform.position;
         characterObject.SetActive(true);
         UnblockActions();
-        GetComponent<CharacterHealthSystem>().ResetStats();
-        GetComponent<MovementSystem>().ResetStats();
+        characterHealthSystem.ResetStats();
+        characterMovementSystem.ResetStats();
         OnPlayerStatsReset?.Invoke();
     }
 
-    public void RefreshStats(){
-        OnPlayerStatsReset?.Invoke();
-    }
-
-    public void SetLimitedLives(int _lives){
-        characterStats.SetLimitedLives(_lives);
+    public void SetLimitedLives(int _amount){
+        totalLives = _amount;
+        unlimitedLives = false;
         OnPlayerStatsReset?.Invoke();
     }
 
     public void IncreaseScore(int value){
-        characterStats.IncreaseScore(value);
-        OnPlayerScoreChanged?.Invoke(gameObject, characterStats.GetScore());
+        score += value;
+        OnPlayerScoreChanged?.Invoke(gameObject, GetScore());
     }
 
     public void PlayerScoredKill(GameObject character){
-        characterStats.IncreaseKills();
+        kills++;
         OnPlayerScoredKill?.Invoke(character);
     }
 
     public void PlayerDied(GameObject character){
-        characterStats.IncreaseDeaths();
-        if(!characterStats.unlimitedLives){
-            characterStats.DecreaseLives();
+        deaths++;
+        if(!unlimitedLives){
+            totalLives--;
         }
         BeginRespawnProcess();
         characterInventory.DropAllInventory();

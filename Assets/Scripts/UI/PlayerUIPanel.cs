@@ -7,9 +7,7 @@ using TMPro;
 
 public class PlayerUIPanel : MonoBehaviour{
     public PlayerInput player;
-    [SerializeField] CharacterStats characterStats;
-    [SerializeField] CharacterEvents characterEvents;
-    [SerializeField] CharacterSelection characterSelection;
+    [SerializeField] CharacterManager characterManager;
     [SerializeField] CharacterWeaponSystem characterWeaponSystem;
 
     [SerializeField] private GameObject playerInfo;
@@ -56,35 +54,35 @@ public class PlayerUIPanel : MonoBehaviour{
     }
 
     private void SubscribeToPlayerEvents(){
-        characterEvents.OnPlayerHealthUpdated += UpdateHealth;
-        characterEvents.OnPlayerStaminaUpdated += UpdateStamina;
-        characterEvents.OnPlayerScoreChanged += UpdateScore;
+        characterManager.OnPlayerHealthUpdated += UpdateHealth;
+        characterManager.OnPlayerStaminaUpdated += UpdateStamina;
+        characterManager.OnPlayerScoreChanged += UpdateScore;
 
-        characterEvents.OnPlayerPickedUpWeapon += DisplayWeapon;
-        characterEvents.OnPlayerDroppedWeapon += HideWeapon;
-        characterEvents.OnPlayerShotWeapon += UpdateAmmo;
-        characterEvents.OnPlayerReloadedWeapon += UpdateAmmo;
+        characterManager.OnPlayerPickedUpWeapon += DisplayWeapon;
+        characterManager.OnPlayerDroppedWeapon += HideWeapon;
+        characterManager.OnPlayerShotWeapon += UpdateAmmo;
+        characterManager.OnPlayerReloadedWeapon += UpdateAmmo;
 
-        characterEvents.OnPlayerScoredKill += UpdateKillCount;
-        characterEvents.OnPlayerDied += UpdateDeathCount;
+        characterManager.OnPlayerScoredKill += UpdateKillCount;
+        characterManager.OnPlayerDied += UpdateDeathCount;
 
-        characterEvents.OnPlayerStatsReset += UpdatePanel;
+        characterManager.OnPlayerStatsReset += UpdatePanel;
     }
 
     private void UnsubscribeToPlayerEvents(){
-        characterEvents.OnPlayerHealthUpdated -= UpdateHealth;
-        characterEvents.OnPlayerStaminaUpdated -= UpdateStamina;
-        characterEvents.OnPlayerScoreChanged -= UpdateScore;
+        characterManager.OnPlayerHealthUpdated -= UpdateHealth;
+        characterManager.OnPlayerStaminaUpdated -= UpdateStamina;
+        characterManager.OnPlayerScoreChanged -= UpdateScore;
 
-        characterEvents.OnPlayerPickedUpWeapon -= DisplayWeapon;
-        characterEvents.OnPlayerDroppedWeapon -= HideWeapon;
-        characterEvents.OnPlayerShotWeapon -= UpdateAmmo;
-        characterEvents.OnPlayerReloadedWeapon -= UpdateAmmo;
+        characterManager.OnPlayerPickedUpWeapon -= DisplayWeapon;
+        characterManager.OnPlayerDroppedWeapon -= HideWeapon;
+        characterManager.OnPlayerShotWeapon -= UpdateAmmo;
+        characterManager.OnPlayerReloadedWeapon -= UpdateAmmo;
 
-        characterEvents.OnPlayerScoredKill -= UpdateKillCount;
-        characterEvents.OnPlayerDied -= UpdateDeathCount;
+        characterManager.OnPlayerScoredKill -= UpdateKillCount;
+        characterManager.OnPlayerDied -= UpdateDeathCount;
 
-        characterEvents.OnPlayerStatsReset -= UpdatePanel;
+        characterManager.OnPlayerStatsReset -= UpdatePanel;
     }
 
     private void UpdatePanel(){
@@ -93,31 +91,31 @@ public class PlayerUIPanel : MonoBehaviour{
     }
 
     private void InitializeStats(){
-        _playerHealthBar.maxValue = characterStats.MaxHealth;
-        _playerHealthBar.value = characterStats.MaxHealth;
+        _playerHealthBar.maxValue = characterManager.characterHealthSystem.MaxHealth;
+        _playerHealthBar.value = characterManager.characterHealthSystem.CurrentHealth;
         
-        _playerStaminaBar.maxValue = characterStats.MaxStamina;
-        _playerStaminaBar.value = characterStats.MaxStamina;
+        _playerStaminaBar.maxValue = characterManager.characterMovementSystem.MaxStamina;
+        _playerStaminaBar.value = characterManager.characterMovementSystem.CurrentStamina;
 
-        _playerTotalLives.text = characterStats.totalLives.ToString();
+        _playerTotalLives.text = characterManager.totalLives.ToString();
         playerIndex.text = (player.playerIndex + 1).ToString();
 
-        if(characterStats.teamColor == TeamColor.none){
+        if(characterManager.teamColor == TeamColor.none){
             playerTeam.text = null;
         }
         else{
-            playerTeam.text = characterStats.teamColor.ToString();
+            playerTeam.text = characterManager.teamColor.ToString();
         }
 
-        characterSprite.sprite = characterSelection.Character.sprite[0];
-        characterName.text = characterSelection.Character.characterName.ToString();
+        characterSprite.sprite = characterManager.Character.sprite[0];
+        characterName.text = characterManager.Character.characterName.ToString();
 
-        playerHealth.text = characterStats.MaxHealth.ToString() + "/" + characterStats.MaxHealth.ToString();
-        playerStamina.text = characterStats.MaxStamina.ToString() + "/" + characterStats.MaxStamina.ToString();
-        playerScore.text = characterStats.score.ToString();
+        playerHealth.text = characterManager.characterHealthSystem.MaxHealth.ToString() + "/" + characterManager.characterHealthSystem.CurrentHealth.ToString();
+        playerStamina.text = characterManager.characterMovementSystem.MaxStamina.ToString() + "/" + characterManager.characterMovementSystem.CurrentStamina.ToString();
+        playerScore.text = characterManager.score.ToString();
 
-        playerKillCount.text = characterStats.kills.ToString();
-        playerDeathCount.text = characterStats.deaths.ToString();
+        playerKillCount.text = characterManager.kills.ToString();
+        playerDeathCount.text = characterManager.deaths.ToString();
     }
 
     private void InitializeBars(){
@@ -132,7 +130,7 @@ public class PlayerUIPanel : MonoBehaviour{
     IEnumerator AssignPlayerDelay(PlayerInput playerInput){
         yield return new WaitForSeconds(0.01f);
         player = playerInput;
-        player.transform.GetComponent<CharacterSelection>().OnCharacterChosen += AssignCharacter;
+        player.transform.GetComponent<CharacterManager>().OnCharacterChosen += AssignCharacter;
     }
 
     public void AssignCharacter(){
@@ -141,9 +139,7 @@ public class PlayerUIPanel : MonoBehaviour{
 
     IEnumerator AssignCharacterDelay(){
         yield return new WaitForSeconds(0.01f);
-        characterEvents = player.transform.GetComponent<CharacterEvents>();
-        characterStats = player.transform.GetComponent<CharacterStats>();
-        characterSelection = player.transform.GetComponent<CharacterSelection>();
+        characterManager = player.transform.GetComponent<CharacterManager>();
         characterWeaponSystem = player.transform.GetComponent<CharacterWeaponSystem>();
         SetStatsActive();
         SubscribeToPlayerEvents();
@@ -166,11 +162,9 @@ public class PlayerUIPanel : MonoBehaviour{
         if(player != null){
             SetStatsInactive();
             UnsubscribeToPlayerEvents();
-            player.transform.GetComponent<CharacterSelection>().OnCharacterChosen -= AssignCharacter;
+            player.transform.GetComponent<CharacterManager>().OnCharacterChosen -= AssignCharacter;
             player = null;
-            characterEvents = null;
-            characterStats = null;
-            characterSelection = null;
+            characterManager = null;
         }
     }
 
@@ -207,11 +201,11 @@ public class PlayerUIPanel : MonoBehaviour{
     }
 
     private void UpdateKillCount(GameObject character){
-        playerKillCount.text = characterStats.kills.ToString();
+        playerKillCount.text = characterManager.kills.ToString();
     }
 
     private void UpdateDeathCount(GameObject character){
-        playerDeathCount.text = characterStats.deaths.ToString();
-        _playerTotalLives.text = characterStats.totalLives.ToString();
+        playerDeathCount.text = characterManager.deaths.ToString();
+        _playerTotalLives.text = characterManager.totalLives.ToString();
     }
 }

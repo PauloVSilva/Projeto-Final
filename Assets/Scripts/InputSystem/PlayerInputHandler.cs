@@ -6,9 +6,8 @@ using System;
 
 public class PlayerInputHandler : MonoBehaviour{
 
-    [SerializeField] private PlayerInput playerInput;
-    [SerializeField] private CharacterEvents characterEvents;
-    [SerializeField] private CharacterStats characterStats;
+    private PlayerInput playerInput;
+    private CharacterManager characterManager;
     public event System.Action<PlayerInput> OnCharacterPressMenuButton;
     public event System.Action<InputAction.CallbackContext> OnCharacterMove;
     public event System.Action<InputAction.CallbackContext> OnCharacterJump;
@@ -22,8 +21,7 @@ public class PlayerInputHandler : MonoBehaviour{
 
     private void Start(){
         playerInput = GetComponent<PlayerInput>();
-        characterEvents = GetComponent<CharacterEvents>();
-        characterStats = GetComponent<CharacterStats>();
+        characterManager = GetComponent<CharacterManager>();
     }
 
     public void PlayerOpenedMenu(){
@@ -39,7 +37,7 @@ public class PlayerInputHandler : MonoBehaviour{
     }
 
     public void RestoreActions(){
-        //if(characterStats.isMountedOnTurret){
+        //if(characterManager.isMountedOnTurret){
         //    playerInput.SwitchCurrentActionMap("Turret");
         //    return;
         //}
@@ -52,30 +50,30 @@ public class PlayerInputHandler : MonoBehaviour{
 
     public void OnPressMenuButton(InputAction.CallbackContext context){
         if(context.performed){
-            OnCharacterPressMenuButton?.Invoke(GetComponent<PlayerInput>());
+            OnCharacterPressMenuButton?.Invoke(playerInput);
         }
     }
 
     public void OnMove(InputAction.CallbackContext context){
-        if(characterStats.CanMove()){
+        if(characterManager.CanMove()){
             OnCharacterMove?.Invoke(context);
         }
     }
 
     public void OnJump(InputAction.CallbackContext context){
-        if(characterStats.CanMove()){
+        if(characterManager.CanMove()){
             OnCharacterJump?.Invoke(context);
         }
     }
 
     public void OnDash(InputAction.CallbackContext context){
-        if(characterStats.CanMove()){
+        if(characterManager.CanMove()){
             OnCharacterDash?.Invoke(context);
         }
     }
 
     public void OnSprint(InputAction.CallbackContext context){
-        if(characterStats.CanMove()){
+        if(characterManager.CanMove()){
             OnCharacterSprint?.Invoke(context);
         }
     }
@@ -85,25 +83,25 @@ public class PlayerInputHandler : MonoBehaviour{
     }
 
     public void OnCockHammer(InputAction.CallbackContext context){
-        if(characterStats.CanUseFireGun()){
+        if(characterManager.CanUseFireGun()){
             OnCharacterCockHammer?.Invoke(context);
         }
     }
 
     public void OnPressTrigger(InputAction.CallbackContext context){
-        if(characterStats.CanUseFireGun()){
+        if(characterManager.CanUseFireGun()){
             OnCharacterPressTrigger?.Invoke(context);
         }
     }
 
     public void OnReload(InputAction.CallbackContext context){
-        if(characterStats.CanUseFireGun()){
+        if(characterManager.CanUseFireGun()){
             OnCharacterReload?.Invoke(context);
         }
     }
 
     public void OnDropItem(InputAction.CallbackContext context){
-        if(!characterStats.IsBlocked()){
+        if(!characterManager.IsBlocked()){
             OnCharacterDropItem?.Invoke(context);
         }
     }

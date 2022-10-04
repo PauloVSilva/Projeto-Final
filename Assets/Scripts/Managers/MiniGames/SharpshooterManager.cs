@@ -14,26 +14,26 @@ public class SharpshooterManager : MiniGameManager{
             if(gameGoal == MiniGameGoal.killCount){
                 killCountGoal = MiniGameOptionsMenu.instance.GetMiniGameGoalAmount();
                 foreach (var playerInput in GameManager.instance.playerList){
-                    playerInput.GetComponent<CharacterEvents>().OnPlayerScoredKill += VerifyKillCountWinCondition;
+                    playerInput.GetComponent<CharacterManager>().OnPlayerScoredKill += VerifyKillCountWinCondition;
                 }
             }
             if(gameGoal == MiniGameGoal.lastStanding){
                 lastStandingLives = MiniGameOptionsMenu.instance.GetMiniGameGoalAmount();
                 foreach (var playerInput in GameManager.instance.playerList){
-                    playerInput.GetComponent<CharacterEvents>().OnPlayerDied += VerifyLastStandingWinCondition;
-                    playerInput.GetComponent<CharacterEvents>().SetLimitedLives(lastStandingLives);
+                    playerInput.GetComponent<CharacterManager>().OnPlayerDied += VerifyLastStandingWinCondition;
+                    playerInput.GetComponent<CharacterManager>().SetLimitedLives(lastStandingLives);
                     playersAlive.Add(playerInput);
                 }
             }
             foreach(var playerInput in GameManager.instance.playerList){
-                playerInput.GetComponent<CharacterEvents>().IncreaseScore(250);
+                playerInput.GetComponent<CharacterManager>().IncreaseScore(250);
             }
         }
     }
 
     protected override void StartGame(){
         foreach(var playerInput in GameManager.instance.playerList){
-            playerInput.GetComponent<CharacterEvents>().UnblockActions();
+            playerInput.GetComponent<CharacterManager>().UnblockActions();
         }
         StartCoroutine(GiveGoldToPlayerDelay());
         GameStateAdvances();
@@ -49,13 +49,13 @@ public class SharpshooterManager : MiniGameManager{
 
     protected void GiveGoldToPlayers(){
         foreach(var playerInput in GameManager.instance.playerList){
-            playerInput.GetComponent<CharacterEvents>().IncreaseScore(10);
+            playerInput.GetComponent<CharacterManager>().IncreaseScore(10);
         }
     }
 
     private void VerifyLastStandingWinCondition(GameObject player){
         if(gameGoal == MiniGameGoal.lastStanding){
-            if(!player.GetComponent<CharacterStats>().CanRespawn()){
+            if(!player.GetComponent<CharacterManager>().CanRespawn()){
                 playersAlive.Remove(player.GetComponent<PlayerInput>());
             }
             if (playersAlive.Count == 1){
@@ -67,7 +67,7 @@ public class SharpshooterManager : MiniGameManager{
 
     private void VerifyKillCountWinCondition(GameObject player){
         if(gameGoal == MiniGameGoal.killCount){
-            if (player.GetComponent<CharacterStats>().kills >= killCountGoal){
+            if (player.GetComponent<CharacterManager>().kills >= killCountGoal){
                 GameStateAdvances();
                 PlayerWins(player.GetComponent<PlayerInput>());
             }
@@ -76,8 +76,8 @@ public class SharpshooterManager : MiniGameManager{
 
     protected override void GameOverSetUp(){
         foreach(var playerInput in GameManager.instance.playerList){
-            playerInput.GetComponent<CharacterEvents>().OnPlayerScoredKill -= VerifyKillCountWinCondition;
-            playerInput.GetComponent<CharacterEvents>().OnPlayerDied -= VerifyLastStandingWinCondition;
+            playerInput.GetComponent<CharacterManager>().OnPlayerScoredKill -= VerifyKillCountWinCondition;
+            playerInput.GetComponent<CharacterManager>().OnPlayerDied -= VerifyLastStandingWinCondition;
         }
         GameStateAdvances();
         StartCoroutine(GameOver());
