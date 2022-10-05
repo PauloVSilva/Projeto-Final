@@ -130,25 +130,22 @@ public class MovementSystem : MonoBehaviour{
         }
     }
 
-    public void ResetStats(){
-        InitializeVariables();
-    }
-
     private void OnControllerColliderHit(ControllerColliderHit other){
         if(other.transform.GetComponent<CharacterManager>() != null){
             if(AirTime > 0.5){
                 other.transform.GetComponent<CharacterHealthSystem>().TakeDamage(this.gameObject, AirDamage);
             }
             if(AirTime > 1){
-                characterManager.TakeDamage(AirDamage * 0.5f);
+                characterManager.characterHealthSystem.TakeDamage(AirDamage * 0.5f);
             }
             AirTime = 0;
 
             if(IsDashing){
                 other.transform.GetComponent<MovementSystem>().Push(velocityX * WalkSpeed * velocityDecelerationMultiplier, velocityZ * WalkSpeed * velocityDecelerationMultiplier);
+                other.transform.GetComponent<CharacterHealthSystem>().TakeDamage(this.gameObject, 0);
                 StopDash();
             }
-            else{
+            else if(move != Vector3.zero){
                 other.transform.GetComponent<MovementSystem>().Push(velocityX * WalkSpeed, velocityZ * WalkSpeed);
             }
         }
@@ -166,7 +163,7 @@ public class MovementSystem : MonoBehaviour{
         }
         if(groundedPlayer){
             if(AirTime > 1){
-                characterManager.TakeDamage(AirDamage);
+                characterManager.characterHealthSystem.TakeDamage(AirDamage);
             }
             AirTime = 0;
         }
@@ -197,7 +194,7 @@ public class MovementSystem : MonoBehaviour{
             velocityZ = Mathf.Sin(Mathf.PI / 180 * angleY);
         }
         if(quadrant == 2){
-            velocityX = Mathf.Sin(Mathf.PI / 180 * angleY);
+            velocityX = Mathf.Sin(Mathf.PI / 180 * angleY) * -1;
             velocityZ = Mathf.Cos(Mathf.PI / 180 * angleY) * -1;
         }
         if(quadrant == 3){

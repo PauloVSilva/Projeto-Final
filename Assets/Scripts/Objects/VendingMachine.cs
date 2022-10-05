@@ -77,6 +77,7 @@ public class VendingMachine : DestructibleObject, InteractorInterface{
     [SerializeField] private InteractionPromptUI interactionPromptUI;
     [SerializeField] public string PromptString => machinePrompt;
     [SerializeField] public InteractionPromptUI PromptUI => interactionPromptUI;
+    
     public bool Interact(Interactor interactor){
         if(machineState == MachineState.fullyFunctional){
             if(interactor.transform.parent.GetComponent<CharacterManager>().score > costToBuy){

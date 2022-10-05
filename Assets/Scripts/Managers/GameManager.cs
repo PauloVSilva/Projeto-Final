@@ -11,7 +11,10 @@ public class GameManager : MonoBehaviour{
     public static GameManager instance = null;
     public bool gameIsPaused;
     public bool miniGameIsRunning;
+
     public LevelLoader levelLoader;
+    public ItemsDatabank itemsDatabank;
+
     public Camera mainCamera;
     
     public List<PlayerInput> playerList = new List<PlayerInput>();

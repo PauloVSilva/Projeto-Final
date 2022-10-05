@@ -26,7 +26,12 @@ public class SharpshooterManager : MiniGameManager{
                 }
             }
             foreach(var playerInput in GameManager.instance.playerList){
-                playerInput.GetComponent<CharacterManager>().IncreaseScore(250);
+                CoinScriptableObject itemToAdd = (CoinScriptableObject)GameManager.instance.itemsDatabank.GetItem("gold_coin");
+                for(int i = 0; i < 3; i++){
+                    if(playerInput.GetComponent<CharacterManager>().characterInventory.AddToInventory(itemToAdd)){
+                        playerInput.GetComponent<CharacterManager>().IncreaseScore(itemToAdd.value);
+                    }
+                }
             }
         }
     }
@@ -35,21 +40,24 @@ public class SharpshooterManager : MiniGameManager{
         foreach(var playerInput in GameManager.instance.playerList){
             playerInput.GetComponent<CharacterManager>().UnblockActions();
         }
-        StartCoroutine(GiveGoldToPlayerDelay());
+        StartCoroutine(GiveCoinToPlayersDelay());
         GameStateAdvances();
     }
 
-    IEnumerator GiveGoldToPlayerDelay(){
+    IEnumerator GiveCoinToPlayersDelay(){
         yield return new WaitForSeconds(2f);
-        GiveGoldToPlayers();
+        GiveCoinToPlayers();
         if(gameState == MiniGameState.gameIsRunning){
-            StartCoroutine(GiveGoldToPlayerDelay());
+            StartCoroutine(GiveCoinToPlayersDelay());
         }
     }
 
-    protected void GiveGoldToPlayers(){
+    protected void GiveCoinToPlayers(){
         foreach(var playerInput in GameManager.instance.playerList){
-            playerInput.GetComponent<CharacterManager>().IncreaseScore(10);
+            CoinScriptableObject itemToAdd = (CoinScriptableObject)GameManager.instance.itemsDatabank.GetItem("silver_coin");
+            if(playerInput.GetComponent<CharacterManager>().characterInventory.AddToInventory(itemToAdd)){
+                playerInput.GetComponent<CharacterManager>().IncreaseScore(itemToAdd.value);
+            }
         }
     }
 

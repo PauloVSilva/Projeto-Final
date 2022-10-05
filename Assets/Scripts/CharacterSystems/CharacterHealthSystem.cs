@@ -17,16 +17,16 @@ public class CharacterHealthSystem : HealthSystem{
     public override bool IsAlive {get; protected set;}
     public override bool IsInvulnerable {get; protected set;}
 
+    public GameObject lastDamagingPlayer;
+    public float lastDamagingPlayerTime;
+
+
     private void Awake(){
         InitializeComponents();
     }
 
     private void InitializeComponents(){
         characterManager = GetComponent<CharacterManager>();
-    }
-
-    private void Update(){
-        RegenerateHealth();
     }
 
     public void Initialize(){
@@ -42,14 +42,17 @@ public class CharacterHealthSystem : HealthSystem{
         MaxHealth = characterManager.Character.maxHealth;
         HealthRegenRate = characterManager.Character.healthRegenRate;
 
+        lastDamagingPlayer = null;
+
         CurrentHealth = MaxHealth;
         IsAlive = true;
         IsInvulnerable = false;
         SendHealthUpdateEvent();
     }
 
-    public void ResetStats(){
-        InitializeVariables();
+    private void Update(){
+        RegenerateHealth();
+        LastDamageSourceRememberTime();
     }
 
     private void RegenerateHealth(){
@@ -66,6 +69,13 @@ public class CharacterHealthSystem : HealthSystem{
         }
     }
 
+    private void LastDamageSourceRememberTime(){
+        lastDamagingPlayerTime = Math.Max(lastDamagingPlayerTime -= Time.deltaTime, 0);
+        if(lastDamagingPlayerTime == 0){
+            lastDamagingPlayer = null;
+        }
+    }
+
     private void SendHealthUpdateEvent(){
         characterManager.PlayerHealthUpdated(CurrentHealth, MaxHealth);
     }
@@ -74,12 +84,24 @@ public class CharacterHealthSystem : HealthSystem{
         TakeDamage(null, damageTaken);
     }
 
-    public override void TakeDamage(GameObject damageSource, float damageTaken){
+    public override void TakeDamage(GameObject _damageSource, float damageTaken){
         if(!IsInvulnerable){
             CurrentHealth = Math.Max(CurrentHealth -= damageTaken, 0);
-            if(CurrentHealth <= 0){
-                Die(damageSource);
+
+            if(_damageSource.CompareTag("Player")){
+                lastDamagingPlayer = _damageSource;
+                lastDamagingPlayerTime = 3f;
             }
+
+            if(CurrentHealth <= 0){
+                if(lastDamagingPlayer != null){
+                    Die(lastDamagingPlayer);
+                }
+                else{
+                    Die(_damageSource);
+                }
+            }
+
             characterManager.PlayerWasDamaged(damageTaken);
             HealthRegenCooldown = 1f;
             CanRegenHealth = false;
@@ -93,13 +115,13 @@ public class CharacterHealthSystem : HealthSystem{
         SendHealthUpdateEvent();
     }
 
-    public override void Die(GameObject damageSource){
+    public override void Die(GameObject _damageSource){
         IsAlive = false;
         IsInvulnerable = true;
         CurrentHealth = 0;
         characterManager.PlayerDied(gameObject);
-        if(damageSource.CompareTag("Player")){
-            damageSource.transform.GetComponent<CharacterManager>().PlayerScoredKill(damageSource);
+        if(_damageSource.CompareTag("Player")){
+            _damageSource.transform.GetComponent<CharacterManager>().PlayerScoredKill(_damageSource);
         }
     }
 }

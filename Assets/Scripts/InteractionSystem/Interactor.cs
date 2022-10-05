@@ -23,7 +23,6 @@ public class Interactor : MonoBehaviour{
     }
 
     private void SubscribeToEvents(){
-        //INPUT EVENTS
         gameObject.transform.parent.GetComponent<PlayerInputHandler>().OnCharacterInteractWithObject += OnInteractWithObject;
     }
 

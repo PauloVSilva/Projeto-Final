@@ -11,7 +11,6 @@ public class CharacterManager : MonoBehaviour{
     #region "SYSTEMS"
     [SerializeField] public PlayerInput playerInput;
     [SerializeField] public PlayerInputHandler playerInputHandler;
-    [SerializeField] public CharacterController controller;
     [SerializeField] public CharacterHealthSystem characterHealthSystem;
     [SerializeField] public MovementSystem characterMovementSystem;
     [SerializeField] public CharacterInventory characterInventory;
@@ -58,7 +57,6 @@ public class CharacterManager : MonoBehaviour{
         characterObject = null;
         playerInput = GetComponent<PlayerInput>();
         playerInputHandler = GetComponent<PlayerInputHandler>();
-        controller = GetComponent<CharacterController>();
 
         characterHealthSystem = GetComponent<CharacterHealthSystem>();
         characterMovementSystem = GetComponent<MovementSystem>();
@@ -119,7 +117,7 @@ public class CharacterManager : MonoBehaviour{
 
     public void RefreshStatsUponRespawning(){
         characterHealthSystem.Initialize();
-        characterMovementSystem.ResetStats();
+        characterMovementSystem.Initialize();
     }
 
 
@@ -152,15 +150,6 @@ public class CharacterManager : MonoBehaviour{
     public void UnblockActions(){
         actionsAreBlocked = false;
         playerInputHandler.RestoreActions();
-    }
-
-
-
-    public void TakeDamage(float _damage){
-        characterHealthSystem.TakeDamage(_damage);
-    }
-    public void TakeDamage(GameObject damageSource, float _damage){
-        characterHealthSystem.TakeDamage(damageSource, _damage);
     }
 
 
@@ -228,8 +217,8 @@ public class CharacterManager : MonoBehaviour{
         this.transform.position = GameManager.instance.spawnPoints[0].transform.position;
         characterObject.SetActive(true);
         UnblockActions();
-        characterHealthSystem.ResetStats();
-        characterMovementSystem.ResetStats();
+        characterHealthSystem.Initialize();
+        characterMovementSystem.Initialize();
         OnPlayerStatsReset?.Invoke();
     }
 
