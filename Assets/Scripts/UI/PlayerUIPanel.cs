@@ -110,8 +110,8 @@ public class PlayerUIPanel : MonoBehaviour{
         characterSprite.sprite = characterManager.Character.sprite[0];
         characterName.text = characterManager.Character.characterName.ToString();
 
-        playerHealth.text = characterManager.characterHealthSystem.MaxHealth.ToString() + "/" + characterManager.characterHealthSystem.CurrentHealth.ToString();
-        playerStamina.text = characterManager.characterMovementSystem.MaxStamina.ToString() + "/" + characterManager.characterMovementSystem.CurrentStamina.ToString();
+        playerHealth.text = characterManager.characterHealthSystem.CurrentHealth.ToString() + "/" + characterManager.characterHealthSystem.MaxHealth.ToString();
+        playerStamina.text = characterManager.characterMovementSystem.CurrentStamina.ToString() + "/" + characterManager.characterMovementSystem.MaxStamina.ToString();
         playerScore.text = characterManager.score.ToString();
 
         playerKillCount.text = characterManager.kills.ToString();

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -240,7 +241,11 @@ public class CharacterManager : MonoBehaviour{
 
     public void IncreaseScore(int value){
         score += value;
-        OnPlayerScoreChanged?.Invoke(gameObject, GetScore());
+        OnPlayerScoreChanged?.Invoke(gameObject, score);
+    }
+
+    public void DecreaseScore(int value){
+        score = Math.Max(score -= value, 0);
     }
 
     public void PlayerScoredKill(GameObject character){

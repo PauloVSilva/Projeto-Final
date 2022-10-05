@@ -4,13 +4,11 @@ using UnityEngine;
 
 [System.Serializable]
 public class Pool{
-    public string tag;
     public GameObject prefab;
     public int size;
     public Pool(GameObject _prefab, int _size){
         prefab = _prefab;
         size = _size;
-        tag = _prefab.name;
     }
 }
 
@@ -109,14 +107,14 @@ public class ObjectPooler : MonoBehaviour{
         poolDictionary.Remove(pool.prefab);
     }
 
-    public bool SpawnFromPool(GameObject prefab, Vector3 position, Quaternion rotation){
+    public GameObject SpawnFromPool(GameObject prefab, Vector3 position, Quaternion rotation){
         return SpawnFromPool(prefab, position, rotation, ObjectPooler.instance.gameObject);
     }
 
-    public bool SpawnFromPool(GameObject prefab, Vector3 position, Quaternion rotation, GameObject parent){
+    public GameObject SpawnFromPool(GameObject prefab, Vector3 position, Quaternion rotation, GameObject parent){
         if(!poolDictionary.ContainsKey(prefab)){
             Debug.LogWarning("Pool with GameObject " + prefab + " doesn't exist.");
-            return false;
+            return null;
         }
 
         GameObject objectToSpawn = poolDictionary[prefab].Dequeue();
@@ -133,6 +131,6 @@ public class ObjectPooler : MonoBehaviour{
 
         poolDictionary[prefab].Enqueue(objectToSpawn);
 
-        return true;
+        return objectToSpawn;
     }
 }

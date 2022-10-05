@@ -17,18 +17,18 @@ MonoBehaviour:
   sprite:
   - {fileID: 21300000, guid: 3206d78ae0ecdd744b7a793690f74c70, type: 3}
   characterName: Hedgehog
-  _characterControllerCenter: {x: 0, y: 0.4, z: 0}
-  _characterControllerRadius: 0.5
-  _characterControllerHeight: 1
-  _animal: 0
-  _maxHealth: 100
-  _healthRegenRate: 2
-  _walkSpeed: 5
-  _sprintSpeed: 9
-  _maxStamina: 60
-  _staminaRegenRate: 10
-  _jumpStrength: 1
-  _totalJumps: 2
-  _jumpStaminaCost: 15
-  _dashStaminaCost: 15
-  _sprintStaminaCost: 15
+  characterControllerCenter: {x: 0, y: 0.4, z: 0}
+  characterControllerRadius: 0.5
+  characterControllerHeight: 1
+  animal: 0
+  maxHealth: 100
+  healthRegenRate: 2
+  walkSpeed: 5
+  sprintSpeed: 9
+  maxStamina: 60
+  staminaRegenRate: 10
+  jumpStrength: 1
+  totalJumps: 2
+  jumpStaminaCost: 15
+  dashStaminaCost: 15
+  sprintStaminaCost: 15

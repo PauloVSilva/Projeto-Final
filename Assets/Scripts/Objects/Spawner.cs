@@ -40,7 +40,7 @@ public class Spawner : MonoBehaviour{
 
     private void SpawnEntity(){
         GameObject randomObject = PickRandomObject().prefab;
-        if(!ObjectPooler.instance.SpawnFromPool(randomObject, this.transform.position, this.transform.rotation)){
+        if(ObjectPooler.instance.SpawnFromPool(randomObject, this.transform.position, this.transform.rotation) == null){
             Debug.LogWarning("Something went wrong. Object Pooler couldn't Spawn " + randomObject);
         }
     }

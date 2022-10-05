@@ -4,16 +4,23 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class CharacterInventory : Inventory{
-    [SerializeField] private CharacterWeaponSystem characterWeaponSystem;
-    [SerializeField] private PlayerInputHandler playerInputHandler;
+    private CharacterManager characterManager;
+    private CharacterWeaponSystem characterWeaponSystem;
+    private PlayerInputHandler playerInputHandler;
     [SerializeField] private ItemSlot weaponSlot = new ItemSlot();
 
-    private void Start(){
+    private void Awake(){
+        InitializeComponents();
         SubscribeToEvents();
     }
 
+    private void InitializeComponents(){
+        characterManager = GetComponent<CharacterManager>();
+        characterWeaponSystem = GetComponent<CharacterWeaponSystem>();
+        playerInputHandler = GetComponent<PlayerInputHandler>();
+    }
+
     private void SubscribeToEvents(){
-        //INPUT EVENTS
         playerInputHandler.OnCharacterDropItem += OnDropItem;
     }
 
@@ -47,30 +54,34 @@ public class CharacterInventory : Inventory{
     }
 
     public override void ClearInventory(){
+        for(int i = 0; i < inventorySlots.Count; i++){
+            inventorySlots[i] = new ItemSlot();
+        }
         if(weaponSlot.stackSize > 0){
             characterWeaponSystem.DestroyWeapon();
             weaponSlot = new ItemSlot();
         }
-        for(int i = 0; i < inventorySlots.Count; i++){
-            inventorySlots[i] = new ItemSlot();
-        }
     }
 
     public override void DropAllInventory(){
-        if(weaponSlot.stackSize > 0){
-            //Instantiate(weaponSlot.item.itemModel, this.gameObject.transform.position, this.gameObject.transform.rotation);
-            characterWeaponSystem.DropWeapon();
-            weaponSlot.DropItem();
-        }
         for(int i = 0; i < inventorySlots.Count; i++){
             while(inventorySlots[i].stackSize > 0){
-                if(!ObjectPooler.instance.SpawnFromPool(inventorySlots[i].item.itemModel, this.transform.position, this.transform.rotation)){
-                    Debug.LogWarning("Something went wrong. Object Pooler couldn't Spawn " + inventorySlots[i].item.itemModel);
+                GameObject droppedItem = ObjectPooler.instance.SpawnFromPool(inventorySlots[i].item.itemModel, this.transform.position, this.transform.rotation);
+                if(droppedItem == null){
+                    Debug.LogWarning("Object Pooler couldn't Spawn " + inventorySlots[i].item.itemModel + ". Item will be instantiated instead.");
+                    Instantiate(inventorySlots[i].item.itemModel, this.gameObject.transform.position, this.gameObject.transform.rotation);
                 }
-
-                //Instantiate(inventorySlots[i].item.itemModel, this.gameObject.transform.position, this.gameObject.transform.rotation);
+                if(droppedItem.GetComponent<Coin>() != null){
+                    characterManager.DecreaseScore(droppedItem.GetComponent<Coin>().Value);
+                }
                 inventorySlots[i].DropItem();
             }
+        }
+
+
+        if(weaponSlot.stackSize > 0){
+            characterWeaponSystem.DropWeapon();
+            weaponSlot.DropItem();
         }
     }
 }
