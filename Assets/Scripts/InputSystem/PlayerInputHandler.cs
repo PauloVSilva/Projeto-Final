@@ -55,27 +55,19 @@ public class PlayerInputHandler : MonoBehaviour{
     }
 
     public void OnMove(InputAction.CallbackContext context){
-        if(characterManager.CanMove()){
-            OnCharacterMove?.Invoke(context);
-        }
+        OnCharacterMove?.Invoke(context);
     }
 
     public void OnJump(InputAction.CallbackContext context){
-        if(characterManager.CanMove()){
-            OnCharacterJump?.Invoke(context);
-        }
+        OnCharacterJump?.Invoke(context);
     }
 
     public void OnDash(InputAction.CallbackContext context){
-        if(characterManager.CanMove()){
-            OnCharacterDash?.Invoke(context);
-        }
+        OnCharacterDash?.Invoke(context);
     }
 
     public void OnSprint(InputAction.CallbackContext context){
-        if(characterManager.CanMove()){
-            OnCharacterSprint?.Invoke(context);
-        }
+        OnCharacterSprint?.Invoke(context);
     }
 
     public void OnInteractWithObject(InputAction.CallbackContext context){

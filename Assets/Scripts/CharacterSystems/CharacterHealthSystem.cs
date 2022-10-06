@@ -30,6 +30,7 @@ public class CharacterHealthSystem : HealthSystem{
     }
 
     public void Initialize(){
+        SetScriptableObjectVariables();
         InitializeVariables();
         StartCoroutine(OnEntityBornDelay());
         IEnumerator OnEntityBornDelay(){
@@ -38,10 +39,12 @@ public class CharacterHealthSystem : HealthSystem{
         }
     }
 
-    protected override void InitializeVariables(){        
+    private void SetScriptableObjectVariables(){
         MaxHealth = characterManager.Character.maxHealth;
         HealthRegenRate = characterManager.Character.healthRegenRate;
+    }
 
+    public override void InitializeVariables(){
         lastDamagingPlayer = null;
 
         CurrentHealth = MaxHealth;

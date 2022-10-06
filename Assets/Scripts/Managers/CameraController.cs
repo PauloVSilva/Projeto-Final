@@ -9,6 +9,10 @@ public class CameraController : MonoBehaviour{
     public float smoothSpeed;
     public List<GameObject> objectsTracked = new List<GameObject>();
 
+    public void ClearList(){
+        objectsTracked.Clear();
+    }
+
     public void AddCharacter(GameObject character){
         objectsTracked.Add(character);
     }

@@ -490,24 +490,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectsToPool:
-  - tag: Silver coins
-    prefab: {fileID: 2784413684905434342, guid: 0f15cf83284a6464095c8ffc6cb662c6, type: 3}
+  - prefab: {fileID: 2784413684905434342, guid: 0f15cf83284a6464095c8ffc6cb662c6, type: 3}
     size: 40
-  - tag: Gold coins
-    prefab: {fileID: 2784413684905434342, guid: 54f118bf9fc56674bb45239cdae0def7, type: 3}
+  - prefab: {fileID: 2784413684905434342, guid: 54f118bf9fc56674bb45239cdae0def7, type: 3}
     size: 40
-  - tag: Sapphire coins
-    prefab: {fileID: 2784413684905434342, guid: e207ee261dd878645acea23ac8a516c7, type: 3}
+  - prefab: {fileID: 2784413684905434342, guid: e207ee261dd878645acea23ac8a516c7, type: 3}
     size: 20
-  - tag: Amethyst coins
-    prefab: {fileID: 2784413684905434342, guid: 0bf73ba8bea01514b992f5a9b1f96b62, type: 3}
+  - prefab: {fileID: 2784413684905434342, guid: 0bf73ba8bea01514b992f5a9b1f96b62, type: 3}
     size: 20
-  miniGameUIManager: {fileID: 0}
   miniGameSetup: {fileID: 0}
   miniGame: 0
   gameGoal: 0
   gameState: 0
   itemSpawnersList: []
+  timeElapsed: 0
   countDown: 0
   coins: []
   scoreAmountGoal: 0

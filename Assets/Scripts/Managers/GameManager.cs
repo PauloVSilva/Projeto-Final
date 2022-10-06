@@ -71,10 +71,9 @@ public class GameManager : MonoBehaviour{
 
     public void FullyResetPlayers(){
         if(GameManager.instance.playerList.Count > 0){
-            mainCamera.GetComponent<CameraController>().objectsTracked.Clear();
+            mainCamera.GetComponent<CameraController>().ClearList();
             foreach(var playerInput in GameManager.instance.playerList){
                 playerInput.GetComponent<CharacterManager>().FullReset();
-                mainCamera.GetComponent<CameraController>().AddPlayer(playerInput);
             }
         }
     }

@@ -19,7 +19,7 @@ public abstract class HealthSystem : MonoBehaviour{
         TakeDamage(GameManager.instance.gameObject, float.MaxValue);
     }
 
-    protected abstract void InitializeVariables();
+    public abstract void InitializeVariables();
 
     public abstract void TakeDamage(GameObject damageSource, float damageTaken);
 

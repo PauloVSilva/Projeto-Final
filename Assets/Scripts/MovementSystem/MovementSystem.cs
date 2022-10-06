@@ -38,10 +38,10 @@ public class MovementSystem : MonoBehaviour{
     public float StaminaRegenCooldown {get; protected set;}
     public bool CanRegenStamina {get; protected set;}
 
-    private float angleY;
-    private int quadrant;
-    private float velocityX;
-    private float velocityZ;
+    public float angleY;
+    public int quadrant;
+    public float velocityX;
+    public float velocityZ;
 
     private float velocityStopThreshold;
     private float velocityDecelerationMultiplier;
@@ -84,12 +84,11 @@ public class MovementSystem : MonoBehaviour{
         SprintStaminaCost = characterManager.Character.sprintStaminaCost;
     }
 
-    private void InitializeVariables(){
+    public void InitializeVariables(){
         gravityValue = -9.81f;
 
-        playerVelocity.y = 0f;
-        playerVelocity.x = 0f;
-        playerVelocity.z = 0f;
+        playerVelocity = new Vector3(0, 0, 0);
+        move = new Vector3(0, 0, 0);
 
         MoveSpeed = WalkSpeed;
         IsSprinting = false;
@@ -191,7 +190,7 @@ public class MovementSystem : MonoBehaviour{
         }
         if(quadrant == 1){
             velocityX = Mathf.Cos(Mathf.PI / 180 * angleY);
-            velocityZ = Mathf.Sin(Mathf.PI / 180 * angleY);
+            velocityZ = Mathf.Sin(Mathf.PI / 180 * angleY) * -1;
         }
         if(quadrant == 2){
             velocityX = Mathf.Sin(Mathf.PI / 180 * angleY) * -1;
@@ -303,14 +302,14 @@ public class MovementSystem : MonoBehaviour{
     }
 
     public void OnMove(InputAction.CallbackContext context){
-        if(!IsDashing){
+        if(!IsDashing && characterManager.CanMove()){
             Vector2 movement = context.ReadValue<Vector2>();
             move = new Vector3(movement.x, 0, movement.y);
         }
     }
 
     public void OnSprint(InputAction.CallbackContext context){
-        if(context.performed){
+        if(context.performed && characterManager.CanMove()){
             if(CurrentStamina > 1f){
                 ToggleSprint();
             }
@@ -318,7 +317,7 @@ public class MovementSystem : MonoBehaviour{
     }
 
     public void OnJump(InputAction.CallbackContext context){
-        if(context.performed){
+        if(context.performed && characterManager.CanMove()){
             if(CurrentStamina > 1f && JumpsRemaining > 0){
                 Jump();
             }
@@ -326,7 +325,7 @@ public class MovementSystem : MonoBehaviour{
     }
 
     public void OnDash(InputAction.CallbackContext context){
-        if(context.performed){
+        if(context.performed && characterManager.CanMove()){
             if(CurrentStamina > 1f && CanDash){
                 Dash();
             }
