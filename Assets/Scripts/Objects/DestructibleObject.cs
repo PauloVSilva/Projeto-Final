@@ -6,28 +6,49 @@ public class DestructibleObject : MonoBehaviour{
     [SerializeField] protected DestructibleObjectHealthSystem healthSystem;
     [SerializeField] protected Inventory inventory;
     [SerializeField] protected DamageFeedback damageFeedback;
-    [SerializeField] public int MaxHealth = 1;
-    //[SerializeField] public int MaxHealth {get; protected set;}
+    [SerializeField] protected FloatingHealthBar floatingHealthBar;
+    public int MaxHealth = 1;
+    //public int MaxHealth {get; protected set;}
 
     protected virtual void Awake(){
         //MaxHealth = 300;
+        InitializeComponents();
+        InitializeVariables();
+        SubscribeToEvents();
     }
 
-    protected virtual void Start(){
+    protected void Start(){
+        InitializeOthers();
+    }
+
+    protected virtual void InitializeComponents(){
         healthSystem = GetComponent<DestructibleObjectHealthSystem>();
         inventory = GetComponent<Inventory>();
-        damageFeedback = GetComponent<DamageFeedback>();
+        //damageFeedback = GetComponent<DamageFeedback>();
+        //floatingHealthBar = GetComponent<FloatingHealthBar>();
 
+        damageFeedback = GetComponentInChildren<DamageFeedback>();
+        floatingHealthBar = GetComponentInChildren<FloatingHealthBar>();
+    }
+
+    protected virtual void InitializeVariables(){}
+
+    protected virtual void SubscribeToEvents(){
         healthSystem.OnDeath += ObjectDestroyed;
         healthSystem.OnDamaged += ObjectTookDamage;
+    }
+
+    protected void InitializeOthers(){
+        floatingHealthBar?.SetMaxHealth(healthSystem.MaxHealth);
+    }
+
+    protected virtual void ObjectTookDamage(float _damage){
+        damageFeedback?.DisplayDamageTaken(_damage);
+        floatingHealthBar?.UpdateHealthBar(healthSystem.CurrentHealth);
     }
 
     protected virtual void ObjectDestroyed(){
         inventory?.DropAllInventory();
         Destroy(gameObject);
-    }
-
-    protected virtual void ObjectTookDamage(float _damage){
-        damageFeedback?.DisplayDamageTaken(_damage);
     }
 }

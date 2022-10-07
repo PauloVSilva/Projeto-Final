@@ -12,13 +12,16 @@ public class DestructibleObjectHealthSystem : HealthSystem{
     public override bool IsAlive {get; protected set;}
     public override bool IsInvulnerable {get; protected set;}
 
-    private void Start(){
+    private void Awake(){
+        InitializeComponents();
         InitializeVariables();
     }
 
-    public override void InitializeVariables(){
+    private void InitializeComponents(){
         destructibleObject = GetComponent<DestructibleObject>();
+    }
 
+    public override void InitializeVariables(){
         MaxHealth = destructibleObject.MaxHealth;
         CurrentHealth = MaxHealth;
         IsAlive = true;

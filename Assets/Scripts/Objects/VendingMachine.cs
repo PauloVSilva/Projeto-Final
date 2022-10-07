@@ -12,9 +12,12 @@ public class VendingMachine : DestructibleObject, InteractorInterface{
     [SerializeField] Transform dropPoint;
     [SerializeField] MachineState machineState;
 
-    protected override void Start(){
+    protected override void InitializeComponents(){
+        base.InitializeComponents();
         meshRenderer = GetComponent<MeshRenderer>();
+    }
 
+    protected override void InitializeVariables(){
         itemSold = inventory.GetItemOnSlot(0);
         
         if(machineState == MachineState.fullyFunctional && itemSold != null){
@@ -28,13 +31,12 @@ public class VendingMachine : DestructibleObject, InteractorInterface{
             Break();
         }
 
-        healthSystem.OnDeath += ObjectDestroyed;
-        healthSystem.OnDamaged += ObjectTookDamage;
         interactionPromptUI.SetPrompt(machinePrompt);
     }
 
     protected override void ObjectTookDamage(float _damage){
-        damageFeedback?.DisplayDamageTaken(_damage);
+        base.ObjectTookDamage(_damage);
+
         if(healthSystem.CurrentHealth < MaxHealth * 0.8 && machineState == MachineState.fullyFunctional){
             Malfunction();
         }

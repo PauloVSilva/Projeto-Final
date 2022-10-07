@@ -54,6 +54,7 @@ public class MovementSystem : MonoBehaviour{
 
     private void Awake(){
         InitializeComponents();
+        SubscribeToEvents();
     }
 
     private void InitializeComponents(){
@@ -65,7 +66,6 @@ public class MovementSystem : MonoBehaviour{
     public void Initialize(){
         SetScriptableObjectVariables();
         InitializeVariables();
-        SubscribeToEvents();
     }
 
     private void SetScriptableObjectVariables(){
