@@ -16,8 +16,8 @@ MonoBehaviour:
   itemSprite: {fileID: 21300000, guid: 855a357a1b5e0ca4f8aefa0b3f8ec1d1, type: 3}
   maxStackSize: 999
   itemModel: {fileID: 2784413684905434342, guid: 54f118bf9fc56674bb45239cdae0def7, type: 3}
-  maxAge: 30
+  maxAge: 20
   canBeStored: 1
   pickUpRadius: 1.5
   rotationSpeed: 400
-  value: 100
+  value: 50

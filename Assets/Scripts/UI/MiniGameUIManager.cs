@@ -7,6 +7,7 @@ using TMPro;
 
 public class MiniGameUIManager : MonoBehaviour{
 
+    [SerializeField] private TextMeshProUGUI countDownMessage;
     [SerializeField] private TextMeshProUGUI countDownBoard;
     [SerializeField] private TextMeshProUGUI winnerBoard;
     [SerializeField] private TextMeshProUGUI gameGoalReminder;
@@ -29,43 +30,62 @@ public class MiniGameUIManager : MonoBehaviour{
         }
     }
 
-    public void SubscribeToMiniGameEvents(){
+    private void SubscribeToMiniGameEvents(){
         MiniGameManager.instance.OnCountDownTicks += DisplayCountDown;
         MiniGameManager.instance.OnGameGoalIsSet += SetGameGoalText;
         MiniGameManager.instance.OnPlayerWins += AnnounceWinner;
+        MiniGameManager.instance.OnGameEnds += DisablePanels;
     }
 
-    public void UnsubscribeFromMiniGameEvents(){
+    private void UnsubscribeFromMiniGameEvents(){
         MiniGameManager.instance.OnCountDownTicks -= DisplayCountDown;
         MiniGameManager.instance.OnGameGoalIsSet -= SetGameGoalText;
         MiniGameManager.instance.OnPlayerWins -= AnnounceWinner;
+        MiniGameManager.instance.OnGameEnds -= DisablePanels;
     }
 
-    private string GO_SCREEN;
-    private string GAME_GOAL_REMINDER;
+    private string go;
+    private string returningToLobbyInSeconds;
+    private string gameBeginsInSeconds;
 
     private void Awake(){
         InitializeVariables();
     }
 
     public void InitializeVariables(){
-        GO_SCREEN = "Go!";
-        countDownBoard.text = null;
-        winnerBoard.text = null;
-        gameGoalReminder.text = null;
+        go = "Go!";
+        returningToLobbyInSeconds = "Returning to lobby in ";
+        gameBeginsInSeconds = "Game begins in ";
+
+        countDownMessage.text = "_COUNTDOWN_MESSAGE";
+        countDownBoard.text = "_COUNTDOWN_TIME";
+        winnerBoard.text = "_WINNER_MESSAGE";
+        gameGoalReminder.text = "_GOAL_REMINDER";
     }
 
-    private void OnDisable(){
-        InitializeVariables();
+    private void DisablePanels(){
+        countDownMessage.gameObject.SetActive(false);
+        countDownBoard.gameObject.SetActive(false);
+        winnerBoard.gameObject.SetActive(false);
+        gameGoalReminder.gameObject.SetActive(false);
     }
 
     public void DisplayCountDown(int seconds){
         if(seconds > 0 && seconds < 6){
+            if(MiniGameManager.instance.gameState == MiniGameState.preparation){
+                countDownMessage.gameObject.SetActive(true);
+                countDownMessage.text = gameBeginsInSeconds;
+            }
+            if(MiniGameManager.instance.gameState == MiniGameState.gameOver){
+                countDownMessage.gameObject.SetActive(true);
+                countDownMessage.text = returningToLobbyInSeconds;
+            }
+            countDownBoard.gameObject.SetActive(true);
             countDownBoard.text = seconds.ToString();
         }
         if(seconds == 0){
             if(MiniGameManager.instance.gameState == MiniGameState.preparation){
-                countDownBoard.text = GO_SCREEN;
+                countDownBoard.text = go;
             }
             StartCoroutine(CleanCountDownBoard());
         }
@@ -73,14 +93,17 @@ public class MiniGameUIManager : MonoBehaviour{
 
     IEnumerator CleanCountDownBoard(){
         yield return new WaitForSeconds(1f);
-        countDownBoard.text = null;
+        countDownMessage.gameObject.SetActive(false);
+        countDownBoard.gameObject.SetActive(false);
     }
 
     public void SetGameGoalText(string text){
-        gameGoalReminder.text = text; 
+        gameGoalReminder.gameObject.SetActive(true);
+        gameGoalReminder.text = text;
     }
 
     public void AnnounceWinner(PlayerInput playerInput){
+        winnerBoard.gameObject.SetActive(true);
         winnerBoard.text = MessageManager.instance.GetPlayerVictoryMessage(playerInput.playerIndex + 1);
     }
 }

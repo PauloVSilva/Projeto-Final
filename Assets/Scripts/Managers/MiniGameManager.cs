@@ -24,6 +24,7 @@ public abstract class MiniGameManager : LevelManager{
     public event System.Action<int> OnCountDownTicks;
     public event System.Action<string> OnGameGoalIsSet;
     public event System.Action OnGameStateAdvances;
+    public event System.Action OnGameEnds;
     public event System.Action<PlayerInput> OnPlayerWins;
 
     protected void CountDownTicks(){
@@ -119,6 +120,7 @@ public abstract class MiniGameManager : LevelManager{
             }
         }
         else {
+            OnGameEnds?.Invoke();
             GameManager.instance.ReturnToMainHub();
         }
     }

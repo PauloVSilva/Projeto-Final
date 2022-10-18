@@ -12,27 +12,35 @@ public class PlayerUIPanel : MonoBehaviour{
 
     [SerializeField] private GameObject playerInfo;
     [SerializeField] private GameObject joinMessage;
+    [SerializeField] private TextMeshProUGUI pressToJoin;
 
-    [SerializeField] private TextMeshProUGUI playerIndex;
-    [SerializeField] private TextMeshProUGUI playerTeam;
+    
+    [Header("MainInfo")]
     [SerializeField] private Image characterSprite;
+    [SerializeField] private TextMeshProUGUI playerIndex;
     [SerializeField] private TextMeshProUGUI characterName;
-    [SerializeField] private TextMeshProUGUI _playerTotalLives;
+    [SerializeField] private TextMeshProUGUI playerTeam;
     [SerializeField] private TextMeshProUGUI playerHealth;
     [SerializeField] private TextMeshProUGUI playerStamina;
+    [SerializeField] private Slider _playerHealthBar;
+    [SerializeField] private Slider _playerStaminaBar;
+
+    [Space(5)]
+    [Header("Stats")]
+    [SerializeField] private TextMeshProUGUI _playerTotalLives;
+    [SerializeField] private TextMeshProUGUI playerKillCount;
+    [SerializeField] private TextMeshProUGUI playerDeathCount;
     [SerializeField] private TextMeshProUGUI playerScore;
 
+    [Space(5)]
+    [Header("Weapon")]
+    [SerializeField] private GameObject weaponPanel;
     [SerializeField] private Image weaponSprite;
     [SerializeField] private TextMeshProUGUI weaponName;
     [SerializeField] private TextMeshProUGUI weaponAmmo;
 
-    [SerializeField] private TextMeshProUGUI playerKillCount;
-    [SerializeField] private TextMeshProUGUI playerDeathCount;
 
-    [SerializeField] private Slider _playerHealthBar;
-    [SerializeField] private Slider _playerStaminaBar;
 
-    [SerializeField] private TextMeshProUGUI pressToJoin;
 
     private void Start(){
         SetStatsInactive();
@@ -185,7 +193,7 @@ public class PlayerUIPanel : MonoBehaviour{
     }
 
     private void DisplayWeapon(Weapon _weapon){
-        weaponSprite.gameObject.SetActive(true);
+        weaponPanel.SetActive(true);
         weaponSprite.sprite = _weapon.sprite;
         weaponName.text = _weapon.weaponName;
         UpdateAmmo(_weapon);
@@ -193,7 +201,9 @@ public class PlayerUIPanel : MonoBehaviour{
 
     private void HideWeapon(){
         weaponSprite.sprite = null;
-        weaponSprite.gameObject.SetActive(false);
+        weaponName.text = null;
+        weaponAmmo.text = null;
+        weaponPanel.SetActive(false);
     }
 
     private void UpdateAmmo(Weapon _weapon){
