@@ -91,7 +91,7 @@ public class CharacterHealthSystem : HealthSystem{
         if(!IsInvulnerable){
             CurrentHealth = Math.Max(CurrentHealth -= damageTaken, 0);
 
-            if(_damageSource.CompareTag("Player")){
+            if(_damageSource != null && _damageSource.CompareTag("Player")){
                 lastDamagingPlayer = _damageSource;
                 lastDamagingPlayerTime = 3f;
             }
@@ -123,7 +123,7 @@ public class CharacterHealthSystem : HealthSystem{
         IsInvulnerable = true;
         CurrentHealth = 0;
         characterManager.PlayerDied(gameObject);
-        if(_damageSource.CompareTag("Player")){
+        if(_damageSource != null && _damageSource.CompareTag("Player")){
             _damageSource.transform.GetComponent<CharacterManager>().PlayerScoredKill(_damageSource);
         }
     }

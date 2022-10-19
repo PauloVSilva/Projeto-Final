@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 
 public class MovementSystem : MonoBehaviour{
     private CharacterManager characterManager;
+    private CharacterHealthSystem characterHealthSystem;
     private PlayerInputHandler playerInputHandler;
     private CharacterController controller;
 
@@ -60,6 +61,7 @@ public class MovementSystem : MonoBehaviour{
     private void InitializeComponents(){
         playerInputHandler = GetComponent<PlayerInputHandler>();
         characterManager = GetComponent<CharacterManager>();
+        characterHealthSystem = GetComponent<CharacterHealthSystem>();
         controller = GetComponent<CharacterController>();
     }
 
@@ -169,7 +171,7 @@ public class MovementSystem : MonoBehaviour{
     }
 
     public void StaminaRegen(){
-        if(CanRegenStamina){
+        if(CanRegenStamina && characterHealthSystem.IsAlive){
             CurrentStamina = Math.Min(CurrentStamina += StaminaRegenRate * Time.deltaTime, MaxStamina);
             SendStaminaUpdateEvent();
         }
@@ -215,7 +217,7 @@ public class MovementSystem : MonoBehaviour{
         }
         controller.Move(move * Time.deltaTime * MoveSpeed); //player input - horizontal movement
 
-        playerVelocity.y += (AirTime * -1) + gravityValue * Time.deltaTime;
+        playerVelocity.y += (AirTime * -1f) + gravityValue * Time.deltaTime;
 
         if(playerVelocity.x != 0f){
             playerVelocity.x -= (velocityDecelerationMultiplier * playerVelocity.x) * Time.deltaTime;
