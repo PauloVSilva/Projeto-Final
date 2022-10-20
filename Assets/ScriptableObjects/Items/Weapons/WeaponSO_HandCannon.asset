@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: WeaponSO_HandCannon
   m_EditorClassIdentifier: 
   itemName: Hand Cannon
-  itemSprite: {fileID: 21300000, guid: 96552f21458d5a346832e36455eebe47, type: 3}
+  itemSprite: {fileID: 21300000, guid: 11632ed4705de4842b155bd92747ac6c, type: 3}
   maxStackSize: 1
   itemModel: {fileID: 2526096355226271964, guid: fc0b5969eef99f04cb7ba1ee29dcbc9e, type: 3}
   maxAge: 60

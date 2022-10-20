@@ -24,9 +24,9 @@ MonoBehaviour:
   maxHealth: 100
   healthRegenRate: 2
   walkSpeed: 5
-  sprintSpeed: 9
+  sprintSpeed: 10
   maxStamina: 60
-  staminaRegenRate: 10
+  staminaRegenRate: 15
   jumpStrength: 1
   totalJumps: 2
   jumpStaminaCost: 15

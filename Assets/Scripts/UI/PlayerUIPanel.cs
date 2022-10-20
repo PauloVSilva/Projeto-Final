@@ -16,6 +16,7 @@ public class PlayerUIPanel : MonoBehaviour{
 
     
     [Header("MainInfo")]
+    [SerializeField] private GameObject mainInfoPanel;
     [SerializeField] private Image characterSprite;
     [SerializeField] private TextMeshProUGUI playerIndex;
     [SerializeField] private TextMeshProUGUI characterName;
@@ -27,6 +28,7 @@ public class PlayerUIPanel : MonoBehaviour{
 
     [Space(5)]
     [Header("Stats")]
+    [SerializeField] private GameObject statsPanel;
     [SerializeField] private TextMeshProUGUI _playerTotalLives;
     [SerializeField] private TextMeshProUGUI playerKillCount;
     [SerializeField] private TextMeshProUGUI playerDeathCount;

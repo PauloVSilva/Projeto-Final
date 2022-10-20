@@ -19,13 +19,13 @@ public class MiniGameUIManager : MonoBehaviour{
         GameManager.instance.levelLoader.OnSceneLoaded += CheckForMiniGame;
     }
 
+    private void OnDestroy(){
+        UnsubscribeFromMiniGameEvents();
+    }
+
     private void CheckForMiniGame(){
         if(MiniGameManager.instance != null){
             SubscribeToMiniGameEvents();
-            InitializeVariables();
-        }
-        else{
-            UnsubscribeFromMiniGameEvents();
             InitializeVariables();
         }
     }
@@ -47,10 +47,6 @@ public class MiniGameUIManager : MonoBehaviour{
     private string go;
     private string returningToLobbyInSeconds;
     private string gameBeginsInSeconds;
-
-    private void Awake(){
-        InitializeVariables();
-    }
 
     public void InitializeVariables(){
         go = "Go!";

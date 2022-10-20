@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: WeaponSO_DoubleActionRevolver
   m_EditorClassIdentifier: 
   itemName: Double Action Revolver
-  itemSprite: {fileID: 21300000, guid: 96552f21458d5a346832e36455eebe47, type: 3}
+  itemSprite: {fileID: 21300000, guid: 9422b886256a0fa44a5b4a999d9e14d7, type: 3}
   maxStackSize: 1
   itemModel: {fileID: 2526096355226271964, guid: e60fb6bf6e0df5d428313c4982144859, type: 3}
   maxAge: 60

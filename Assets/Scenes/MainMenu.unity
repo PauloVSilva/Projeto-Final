@@ -15872,6 +15872,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LoadingScreen
       objectReference: {fileID: 0}
+    - target: {fileID: 4125100380530153164, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4125100380530153167, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -15882,7 +15886,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4125100380530153167, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4125100380530153167, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
       propertyPath: m_AnchorMax.x
@@ -15956,8 +15960,27 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4125100381021657472, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4125100381021657472, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
+--- !u!114 &4125100381456075494 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5716953383416045942, guid: e5cae7436d25fa04284fbd554d2ef98b, type: 3}
+  m_PrefabInstance: {fileID: 4125100381456075493}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5727162172497527793
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16017,6 +16040,10 @@ PrefabInstance:
       propertyPath: slider
       value: 
       objectReference: {fileID: 1993825204}
+    - target: {fileID: 5727162172024774461, guid: fcd7f07e86325284db7b66257bc116e9, type: 3}
+      propertyPath: loading
+      value: 
+      objectReference: {fileID: 4125100381456075494}
     - target: {fileID: 5727162172024774461, guid: fcd7f07e86325284db7b66257bc116e9, type: 3}
       propertyPath: percentage
       value: 

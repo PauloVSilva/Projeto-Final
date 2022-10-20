@@ -7,9 +7,11 @@ using TMPro;
 
 public class LevelLoader : MonoBehaviour{
     //public static LevelLoader instance = null;
-    public GameObject loadingScreen;
-    public Slider slider;
-    public TextMeshProUGUI percentage;
+    [SerializeField] private GameObject loadingScreen;
+    [SerializeField] private Slider slider;
+    [SerializeField] private TextMeshProUGUI percentage;
+    [SerializeField] private TextMeshProUGUI loading;
+    private string loadingString;
     private float progress;
 
     public event System.Action OnSceneLoaded;
@@ -30,11 +32,13 @@ public class LevelLoader : MonoBehaviour{
     }*/
 
     private void InitializeVariables(){
+        loadingString = "Loading";
         progress = 0f;
     }
 
     public void LoadLevel(string sceneName){
         StartCoroutine(LoadAsynchronously(sceneName));
+        loading.text = loadingString;
         loadingScreen.SetActive(true);
     }
 
@@ -43,9 +47,9 @@ public class LevelLoader : MonoBehaviour{
         AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
         while(!operation.isDone){
             progress = Mathf.Clamp01(operation.progress / .9f);
-            //Debug.Log(progress);
+            progress = Mathf.Round(progress * 100f);
             slider.value = progress;
-            percentage.text = progress * 100f + "%";
+            percentage.text = progress + "%";
             yield return null;
         }
         if(operation.isDone){
@@ -57,6 +61,7 @@ public class LevelLoader : MonoBehaviour{
             slider.value = progress;
             percentage.text = progress + "%";
 
+            Debug.Log(sceneName);
             if(sceneName == "MainMenu"){
                 Destroy(GameManager.instance.gameObject);
                 //SceneManager.UnloadSceneAsync("MainHub");

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parentMiniGame: {fileID: 11400000, guid: 433f180c580afef4e8526dc2262e8694, type: 2}
   miniGameGoal: 1
-  goalSprite: {fileID: 21300000, guid: 38314bea06c5b97489956b5ae121cfe5, type: 3}
+  goalSprite: {fileID: 21300000, guid: 0e380ada98f5d764fac03f23a66d250e, type: 3}
   goalName: Last Standing
   goalDescription: Last player to lose all lives wins
   goalKeyword: Lives

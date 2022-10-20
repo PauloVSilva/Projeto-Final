@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MiniGameSO_Dimedrop
   m_EditorClassIdentifier: 
   minigame: 1
-  miniGameSprite: {fileID: 21300000, guid: 855a357a1b5e0ca4f8aefa0b3f8ec1d1, type: 3}
+  miniGameSprite: {fileID: 21300000, guid: 108fa975a7a940f43a4ec87b1e13fbf7, type: 3}
   miniGameName: DimeDrop
   miniGamesGoalsAvaliable:
   - {fileID: 11400000, guid: 3f69935aa5292a449aa95648077d0e88, type: 2}
