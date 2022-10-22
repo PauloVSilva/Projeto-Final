@@ -21,11 +21,10 @@ public class PlayerUIPanel : MonoBehaviour{
     [SerializeField] private TextMeshProUGUI playerIndex;
     [SerializeField] private TextMeshProUGUI characterName;
     [SerializeField] private TextMeshProUGUI playerTeam;
-    [SerializeField] private TextMeshProUGUI playerHealth;
-    [SerializeField] private TextMeshProUGUI playerStamina;
     [SerializeField] private Slider _playerHealthBar;
+    [SerializeField] private Slider _playerShadowHealthBar;
     [SerializeField] private Slider _playerStaminaBar;
-
+ 
     [Space(5)]
     [Header("Stats")]
     [SerializeField] private GameObject statsPanel;
@@ -40,6 +39,8 @@ public class PlayerUIPanel : MonoBehaviour{
     [SerializeField] private Image weaponSprite;
     [SerializeField] private TextMeshProUGUI weaponName;
     [SerializeField] private TextMeshProUGUI weaponAmmo;
+    [SerializeField] private TextMeshProUGUI weaponAmmoCapacity;
+    [SerializeField] private TextMeshProUGUI weaponAmmoTotal;
 
 
 
@@ -101,36 +102,33 @@ public class PlayerUIPanel : MonoBehaviour{
     }
 
     private void InitializeStats(){
+        characterSprite.sprite = characterManager.Character.sprite[0];
+        playerIndex.text = (player.playerIndex + 1).ToString();
+        characterName.text = characterManager.Character.characterName.ToString();
+
+        if(characterManager.teamColor == TeamColor.none)    playerTeam.text = null;
+        else playerTeam.text = characterManager.teamColor.ToString();
+
         _playerHealthBar.maxValue = characterManager.characterHealthSystem.MaxHealth;
         _playerHealthBar.value = characterManager.characterHealthSystem.CurrentHealth;
+
+        _playerShadowHealthBar.maxValue = _playerHealthBar.maxValue;
+        _playerShadowHealthBar.value = _playerHealthBar.value;
         
         _playerStaminaBar.maxValue = characterManager.characterMovementSystem.MaxStamina;
         _playerStaminaBar.value = characterManager.characterMovementSystem.CurrentStamina;
 
+
         _playerTotalLives.text = characterManager.totalLives.ToString();
-        playerIndex.text = (player.playerIndex + 1).ToString();
-
-        if(characterManager.teamColor == TeamColor.none){
-            playerTeam.text = null;
-        }
-        else{
-            playerTeam.text = characterManager.teamColor.ToString();
-        }
-
-        characterSprite.sprite = characterManager.Character.sprite[0];
-        characterName.text = characterManager.Character.characterName.ToString();
-
-        playerHealth.text = characterManager.characterHealthSystem.CurrentHealth.ToString() + "/" + characterManager.characterHealthSystem.MaxHealth.ToString();
-        playerStamina.text = characterManager.characterMovementSystem.CurrentStamina.ToString() + "/" + characterManager.characterMovementSystem.MaxStamina.ToString();
-        playerScore.text = characterManager.score.ToString();
-
         playerKillCount.text = characterManager.kills.ToString();
         playerDeathCount.text = characterManager.deaths.ToString();
+        playerScore.text = characterManager.score.ToString();
     }
 
     private void InitializeBars(){
         _playerHealthBar.minValue = 0;
         _playerStaminaBar.minValue = 0;
+        _playerShadowHealthBar.minValue = 0;
     }
 
     public void AssignPlayer(PlayerInput playerInput){
@@ -180,13 +178,29 @@ public class PlayerUIPanel : MonoBehaviour{
 
     private void UpdateHealth(float _health, float _maxHealth){
         _health = (int)_health;
-        playerHealth.text = _health.ToString() + "/" + _maxHealth.ToString();
         _playerHealthBar.value = _health;
+        StartCoroutine(UpdateShadowHealthDelay());
+    }
+
+    IEnumerator UpdateShadowHealthDelay(){
+        yield return new WaitForSeconds(0.1f);
+        UpdateShadowHealth();
+    }
+
+    private void UpdateShadowHealth(){
+        if(_playerShadowHealthBar.value < _playerHealthBar.value){
+            _playerShadowHealthBar.value++;
+            UpdateShadowHealthDelay();
+        }
+        if(_playerShadowHealthBar.value > _playerHealthBar.value){
+            _playerShadowHealthBar.value--;
+            UpdateShadowHealthDelay();
+        }
+
     }
 
     private void UpdateStamina(float _stamina, float _maxStamina){
         _stamina = (int)_stamina;
-        playerStamina.text = _stamina.ToString() + "/" + _maxStamina.ToString();
         _playerStaminaBar.value = _stamina;
     }
 
@@ -209,7 +223,9 @@ public class PlayerUIPanel : MonoBehaviour{
     }
 
     private void UpdateAmmo(Weapon _weapon){
-        weaponAmmo.text = _weapon.ammo.ToString() + "/" + _weapon.ammoCapacity.ToString();
+        weaponAmmo.text = _weapon.ammo.ToString();
+        weaponAmmoCapacity.text = "/" + _weapon.ammoCapacity.ToString();
+        weaponAmmoTotal.text = "(" + _weapon.totalAmmo.ToString() + ")";
     }
 
     private void UpdateKillCount(GameObject character){

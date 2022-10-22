@@ -26,7 +26,7 @@ public class Weapon : Item{
 
     //VARIABLES FOR INTERNAL USE
     [SerializeField] public int ammo = 0;
-    [SerializeField] private int extraAmmo = 0;
+    [SerializeField] public int totalAmmo = 0;
     [SerializeField] private float fullAutoClock;
     [SerializeField] private float fullAutoReady; //firerate clock
     [SerializeField] private bool shooting;
@@ -67,7 +67,7 @@ public class Weapon : Item{
 
         holder = null;
         ammo = ammoCapacity;
-        extraAmmo = 999;
+        totalAmmo = 999;
         fullAutoClock = 0;
         fullAutoReady = 1 / fireRate;
         shooting = false;
@@ -137,7 +137,7 @@ public class Weapon : Item{
     }
 
     private bool CanReload(){
-        if(!triggerHeld && (ammo < ammoCapacity && extraAmmo > 0)){
+        if(!triggerHeld && (ammo < ammoCapacity && totalAmmo > 0)){
             return true;
         }
         return false;
@@ -146,7 +146,7 @@ public class Weapon : Item{
     IEnumerator Reload(){
         while(CanReload()){
             yield return new WaitForSeconds(reloadTime);
-            extraAmmo--;
+            totalAmmo--;
             ammo++;
             holder.transform.GetComponent<CharacterWeaponSystem>()?.WeaponReloaded();
         }
