@@ -9,6 +9,12 @@ using TMPro;
 
 public class PauseMenu : MonoBehaviour{
     public static PauseMenu instance = null;
+
+    [SerializeField] private CanvasButtonDisplay[] canvasButtonDisplays; //0 back
+    [SerializeField] private List<GameObject> footerButtons = new List<GameObject>();
+    [SerializeField] private GameObject footer;
+    [SerializeField] private GameObject buttonDisplayPrefab;
+
     //COMMON TO ALL MENUS
     [SerializeField] private Button firstSelected;
     [SerializeField] private TextMeshProUGUI menuName;
@@ -19,7 +25,6 @@ public class PauseMenu : MonoBehaviour{
     [SerializeField] private TextMeshProUGUI playerControllingMenu;
 
     //SPECIFIC TO THIS MENU
-    [SerializeField] private Button DropOutButton;
     [SerializeField] private string pauseMessage;
 
     private void Awake(){
@@ -33,25 +38,58 @@ public class PauseMenu : MonoBehaviour{
 
     private void Start(){
         ListenToPlayerJoined();
+        CreateFooterButtons();
     }
 
     private void ListenToPlayerJoined(){
         GameManager.instance.OnPlayerJoinedGame += SubscribeToPlayerEvent;
     }
 
-    private void SubscribeToPlayerEvent(PlayerInput _playerInput){
-        _playerInput.GetComponent<PlayerInputHandler>().OnCharacterPressMenuButton += PlayerPressedPause;
+    private void CreateFooterButtons(){
+        for(int i = 0; i < canvasButtonDisplays.Count(); i++){
+            GameObject ButtonDisplay = Instantiate(buttonDisplayPrefab);
+            ButtonDisplay.transform.parent = footer.transform;
+            footerButtons.Add(ButtonDisplay);
+        }
     }
 
-    private void PlayerPressedPause(PlayerInput _playerInput){
-        firstSelected.Select();
+    private void SubscribeToPlayerEvent(PlayerInput _playerInput){
+        _playerInput.GetComponent<PlayerInputHandler>().OnCharacterPressMenuButton += MenuOpened;
+    }
+
+    public void MenuOpened(PlayerInput _playerInput){
+        AssignPlayerToMenu(_playerInput);
+        InitializeMenu();
+    }
+
+    private void AssignPlayerToMenu(PlayerInput _playerInput){
         playerInput = _playerInput;
         inputSystemUIInputModule.actionsAsset = playerInput.actions;
         //_playerInput.InputSystemUIInputModule = inputSystemUIInputModule;
-        pauseMessage = MessageManager.instance.GetPauseMessage(_playerInput.playerIndex + 1);
+        playerInput.GetComponent<PlayerInputHandler>().OnPlayerPressedBackButton += PlayerPressedBackButton;
+    }
+
+    private void InitializeMenu(){
+        pauseMessage = MessageManager.instance.GetPauseMessage(playerInput.playerIndex + 1);
         playerControllingMenu.text = pauseMessage;
-        //Pause();
+
+        for(int i = 0; i < footerButtons.Count(); i++){
+            footerButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = canvasButtonDisplays[i].buttonString;
+            if(playerInput.devices[0].name.ToString() == "DualShock4GamepadHID"){
+                footerButtons[i].GetComponentInChildren<Image>().sprite = canvasButtonDisplays[i].buttonSprite[1];
+            }
+            else{
+                footerButtons[i].GetComponentInChildren<Image>().sprite = canvasButtonDisplays[i].buttonSprite[0];
+            }
+        }
+
         CanvasManager.instance.SwitchMenu(Menu.PauseMenu);
+        firstSelected.Select();
+    }
+
+    private void PlayerPressedBackButton(InputAction.CallbackContext context){
+        playerInput.GetComponent<PlayerInputHandler>().OnPlayerPressedBackButton -= PlayerPressedBackButton;
+        CanvasManager.instance.CloseMenu();
     }
 
     public IEnumerator PauseDelay(){
@@ -66,7 +104,6 @@ public class PauseMenu : MonoBehaviour{
         }
         GameManager.instance.joinAction.Disable();
         GameManager.instance.gameIsPaused = true;
-        DropOutButton.interactable = !GameManager.instance.miniGameIsRunning;
     }
 
     public void Resume(){

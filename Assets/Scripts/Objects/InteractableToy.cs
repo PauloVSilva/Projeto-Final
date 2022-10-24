@@ -32,7 +32,6 @@ public class InteractableToy : MonoBehaviour, InteractorInterface{
     
     public bool Interact(Interactor interactor){
         if(GameManager.instance.playerList.Count > 1){
-            CanvasManager.instance.SwitchMenu(Menu.MiniGameSetupMenu);
             MiniGameOptionsMenu.instance.SetMiniGame(miniGame);
         }
         else{

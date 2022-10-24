@@ -188,6 +188,7 @@ public class CharacterManager : MonoBehaviour{
 
     public bool CanMove(){
         if(actionsAreBlocked) return false;
+        if(GameManager.instance.gameIsPaused) return false;
         
         return true;
     }

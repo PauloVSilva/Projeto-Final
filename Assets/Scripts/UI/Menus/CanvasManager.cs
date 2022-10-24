@@ -5,6 +5,16 @@ using UnityEngine;
 
 public enum Menu{MiniGameSetupMenu, PauseMenu, CharacterSelectionMenu}
 
+[System.Serializable]
+public class CanvasButtonDisplay{
+    //public enum DeviceType{none, MouseAndKeyboard, PSController, XboxController}
+    //public DeviceType device;
+    public string buttonID;
+    public string buttonString;
+    public Sprite[] buttonSprite;
+
+}
+
 public class CanvasManager : MonoBehaviour{
     //INSTANCES
     public static CanvasManager instance = null;

@@ -47,8 +47,10 @@ public class MiniGameOptionsMenu : MonoBehaviour{
         displayedMiniGameGoal = miniGameGoalsList[miniGameIndex];
         miniGameGoalAmount = 1 * displayedMiniGameGoal.goalMultiplier;
 
-        firstSelected.Select();
         UpdateMenu();
+
+        CanvasManager.instance.SwitchMenu(Menu.MiniGameSetupMenu);
+        firstSelected.Select();
     }
 
     public void NextGoal(){

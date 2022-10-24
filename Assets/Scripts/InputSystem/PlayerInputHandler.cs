@@ -19,6 +19,10 @@ public class PlayerInputHandler : MonoBehaviour{
     public event System.Action<InputAction.CallbackContext> OnCharacterReload;
     public event System.Action<InputAction.CallbackContext> OnCharacterDropItem;
 
+
+    public event System.Action<InputAction.CallbackContext> OnPlayerPressedBackButton;
+
+
     private void Start(){
         playerInput = GetComponent<PlayerInput>();
         characterManager = GetComponent<CharacterManager>();
@@ -55,19 +59,27 @@ public class PlayerInputHandler : MonoBehaviour{
     }
 
     public void OnMove(InputAction.CallbackContext context){
-        OnCharacterMove?.Invoke(context);
+        if(characterManager.CanMove()){
+            OnCharacterMove?.Invoke(context);
+        }
     }
 
     public void OnJump(InputAction.CallbackContext context){
-        OnCharacterJump?.Invoke(context);
+        if(characterManager.CanMove()){
+            OnCharacterJump?.Invoke(context);
+        }
     }
 
     public void OnDash(InputAction.CallbackContext context){
-        OnCharacterDash?.Invoke(context);
+        if(characterManager.CanMove()){
+            OnCharacterDash?.Invoke(context);
+        }
     }
 
     public void OnSprint(InputAction.CallbackContext context){
-        OnCharacterSprint?.Invoke(context);
+        if(characterManager.CanMove()){
+            OnCharacterSprint?.Invoke(context);
+        }
     }
 
     public void OnInteractWithObject(InputAction.CallbackContext context){
@@ -95,6 +107,13 @@ public class PlayerInputHandler : MonoBehaviour{
     public void OnDropItem(InputAction.CallbackContext context){
         if(!characterManager.IsBlocked()){
             OnCharacterDropItem?.Invoke(context);
+        }
+    }
+
+
+    public void OnPressBackButton(InputAction.CallbackContext context){
+        if(context.performed){
+            OnPlayerPressedBackButton?.Invoke(context);
         }
     }
 }

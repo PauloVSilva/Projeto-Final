@@ -31,25 +31,30 @@ public class CharacterSelectionMenu : MonoBehaviour{
     }
 
     private void ListenToPlayerJoined(){
-        GameManager.instance.OnPlayerJoinedGame += PlayerJoined;
+        GameManager.instance.OnPlayerJoinedGame += MenuOpened;
     }
 
-    private void PlayerJoined(PlayerInput _playerInput){
-        firstSelected.Select();
+    public void MenuOpened(PlayerInput _playerInput){
+        AssignPlayerToMenu(_playerInput);
+        InitializeMenu();
+    }
+
+    private void AssignPlayerToMenu(PlayerInput _playerInput){
         playerInput = _playerInput;
         inputSystemUIInputModule.actionsAsset = playerInput.actions;
         //_playerInput.InputSystemUIInputModule = inputSystemUIInputModule;
-        greetMessage = MessageManager.instance.GetGreetMessage(_playerInput.playerIndex + 1);
-        playerControllingMenu.text = greetMessage;
-        MenuOpened();
-        CanvasManager.instance.SwitchMenu(Menu.CharacterSelectionMenu);
     }
 
-    private void MenuOpened(){
+    private void InitializeMenu(){
+        greetMessage = MessageManager.instance.GetGreetMessage(playerInput.playerIndex + 1);
+        playerControllingMenu.text = greetMessage;
+        
         index = 0;
         characterManager = playerInput.GetComponent<CharacterManager>();
         displayedCharacter = characterList[index];
         UpdateCharacter();
+
+        CanvasManager.instance.SwitchMenu(Menu.CharacterSelectionMenu);
         firstSelected.Select();
     }
 
