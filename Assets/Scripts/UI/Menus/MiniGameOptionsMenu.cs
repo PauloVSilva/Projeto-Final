@@ -6,28 +6,18 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using TMPro;
 
-public class MiniGameOptionsMenu : MonoBehaviour{
+public class MiniGameOptionsMenu : MenuBase{
     public static MiniGameOptionsMenu instance;
-    [SerializeField] private GameObject miniGameOptionsMenuUI;
-    [SerializeField] private MiniGameScriptableObject miniGame;
-    [SerializeField] private List<MiniGameGoalScriptableObject> miniGameGoalsList;
-    [SerializeField] private MiniGameGoalScriptableObject displayedMiniGameGoal;
-
-    [SerializeField] private TextMeshProUGUI miniGameName;
-
+    private List<MiniGameGoalScriptableObject> miniGameGoalsList;
+    private MiniGameGoalScriptableObject displayedMiniGameGoal;
+    private int miniGameGoalAmount;
+    private int miniGameIndex;
     [SerializeField] private Image goalSprite;
     [SerializeField] private TextMeshProUGUI goalName;
     [SerializeField] private TextMeshProUGUI goalDescription;
     [SerializeField] private TextMeshProUGUI goalKeyword;
     [SerializeField] private TextMeshProUGUI goalAmount;
 
-    [SerializeField] private int miniGameGoalAmount;
-    [SerializeField] private int miniGameIndex;
-
-    [SerializeField] private Image mapSprite;
-    [SerializeField] private TextMeshProUGUI mapName; 
-    [SerializeField] private TextMeshProUGUI mapDescription;
-    [SerializeField] private Button firstSelected;
 
     private void Awake(){
         if(instance == null){
@@ -38,10 +28,19 @@ public class MiniGameOptionsMenu : MonoBehaviour{
         }
     }
 
-    public void SetMiniGame(MiniGameScriptableObject _miniGame){
+    private void Start(){
+        base.CreateFooterButtons();
+    }
+
+    public void MenuOpened(PlayerInput _playerInput, MiniGameScriptableObject _miniGame){
+        base.AssignPlayerToMenu(_playerInput);
+        InitializeMenu(_miniGame);
+    }
+
+    public void InitializeMenu(MiniGameScriptableObject _miniGame){
         miniGameIndex = 0;
 
-        miniGameName.text = _miniGame.miniGameName;
+        menuName.text = _miniGame.miniGameName;
         miniGameGoalsList = _miniGame.miniGamesGoalsAvaliable.ToList();
 
         displayedMiniGameGoal = miniGameGoalsList[miniGameIndex];
@@ -49,6 +48,7 @@ public class MiniGameOptionsMenu : MonoBehaviour{
 
         UpdateMenu();
 
+        base.SetUpCanvasButtons();
         CanvasManager.instance.SwitchMenu(Menu.MiniGameSetupMenu);
         firstSelected.Select();
     }
@@ -100,7 +100,7 @@ public class MiniGameOptionsMenu : MonoBehaviour{
     }
 
     public void ConfirmSettings(){
-        GameManager.instance.LoadMiniGame(miniGameName.text);
+        GameManager.instance.LoadMiniGame(menuName.text);
     }
 
     public MiniGameGoalScriptableObject GetMiniGameGoal(){

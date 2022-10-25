@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class InteractableToy : MonoBehaviour, InteractorInterface{
     [SerializeField] private float rotationSpeed;
@@ -32,7 +33,7 @@ public class InteractableToy : MonoBehaviour, InteractorInterface{
     
     public bool Interact(Interactor interactor){
         if(GameManager.instance.playerList.Count > 1){
-            MiniGameOptionsMenu.instance.SetMiniGame(miniGame);
+            MiniGameOptionsMenu.instance.MenuOpened(interactor.GetComponentInParent<PlayerInput>(), miniGame);
         }
         else{
             Debug.Log("Game requires at least 2 players");

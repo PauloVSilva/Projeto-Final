@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public enum Menu{MiniGameSetupMenu, PauseMenu, CharacterSelectionMenu}
+public enum Menu{MainMenu, ControlsMenu, SettingsMenu, MiniGameSetupMenu, PauseMenu, CharacterSelectionMenu}
+public enum ButtonType{Back, Submit, Navigate}
 
 [System.Serializable]
 public class CanvasButtonDisplay{
-    //public enum DeviceType{none, MouseAndKeyboard, PSController, XboxController}
-    //public DeviceType device;
-    public string buttonID;
+    public ButtonType buttonType;
     public string buttonString;
     public Sprite[] buttonSprite;
 
@@ -21,11 +20,13 @@ public class CanvasManager : MonoBehaviour{
     [SerializeField] private List<MenuController> menuControllersList;
     [SerializeField] private List<MenuController> allActiveMenus = new List<MenuController>();
     [SerializeField] private MenuController lastActiveMenu;
+    [SerializeField] public List<CanvasButtonDisplay> canvasButtonsList;
+    [SerializeField] public GameObject buttonDisplayPrefab;
 
     private void Awake(){
         if(instance == null){
             instance = this;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
         }
         else if(instance != null){
             Destroy(gameObject);

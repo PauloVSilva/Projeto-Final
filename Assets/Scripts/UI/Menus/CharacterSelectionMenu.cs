@@ -7,27 +7,18 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
 using TMPro;
 
-public class CharacterSelectionMenu : MonoBehaviour{
-    //COMMON TO ALL MENUS
-    [SerializeField] private Button firstSelected;
-    [SerializeField] private TextMeshProUGUI menuName;
-
-    //COMMON TO PLAYER-SPECIFIC MENU
-    [SerializeField] private PlayerInput playerInput;
-    [SerializeField] private InputSystemUIInputModule inputSystemUIInputModule;
-    [SerializeField] private TextMeshProUGUI playerControllingMenu;
-
-    //SPECIFIC TO THIS MENU
-    [SerializeField] private CharacterManager characterManager;
+public class CharacterSelectionMenu : MenuBase{
+    private CharacterManager characterManager;
+    private CharacterStatsScriptableObject displayedCharacter;
+    private int index;
+    private string greetMessage;
     [SerializeField] private List<CharacterStatsScriptableObject> characterList = new List<CharacterStatsScriptableObject>();
-    [SerializeField] private CharacterStatsScriptableObject displayedCharacter;
-    [SerializeField] private int index;
     [SerializeField] private Image characterSprite;
     [SerializeField] private TextMeshProUGUI characterName;
-    [SerializeField] private string greetMessage;
 
     private void Start(){
         ListenToPlayerJoined();
+        base.CreateFooterButtons();
     }
 
     private void ListenToPlayerJoined(){
@@ -39,10 +30,9 @@ public class CharacterSelectionMenu : MonoBehaviour{
         InitializeMenu();
     }
 
-    private void AssignPlayerToMenu(PlayerInput _playerInput){
+    protected override void AssignPlayerToMenu(PlayerInput _playerInput){
         playerInput = _playerInput;
         inputSystemUIInputModule.actionsAsset = playerInput.actions;
-        //_playerInput.InputSystemUIInputModule = inputSystemUIInputModule;
     }
 
     private void InitializeMenu(){
@@ -54,6 +44,7 @@ public class CharacterSelectionMenu : MonoBehaviour{
         displayedCharacter = characterList[index];
         UpdateCharacter();
 
+        base.SetUpCanvasButtons();
         CanvasManager.instance.SwitchMenu(Menu.CharacterSelectionMenu);
         firstSelected.Select();
     }
