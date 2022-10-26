@@ -12,18 +12,15 @@ public class GameManager : MonoBehaviour{
     public bool gameIsPaused;
     public bool miniGameIsRunning;
 
-    public LevelLoader levelLoader;
     public ItemsDatabank itemsDatabank;
 
     public Camera mainCamera;
     
     public List<PlayerInput> playerList = new List<PlayerInput>();
-    public GameObject spawnPointPrefab;
     public GameObject[] spawnPoints;
     public GameObject DeathSpot;
 
     public InputAction joinAction;
-    //public InputAction leaveAction;
 
     //EVENTS
     public event Action<PlayerInput> OnPlayerJoinedGame;
@@ -35,11 +32,8 @@ public class GameManager : MonoBehaviour{
         gameIsPaused = false;
         miniGameIsRunning = false;
 
-        joinAction.Enable();
+        //joinAction.Enable();
         joinAction.performed += context => {JoinAction(context); Debug.Log("Player Joined");};
-
-        //leaveAction.Enable();
-        //leaveAction.performed += context => LeaveAction(context);
     }
 
     private void InitializeSingletonInstance(){
@@ -52,22 +46,6 @@ public class GameManager : MonoBehaviour{
         }
     }
 
-    private void Start(){
-        SetSpawnPoint();
-    }
-
-    public void ReturnToMainMenu(){
-        levelLoader.LoadLevel("MainMenu");
-    }
-
-    public void ReturnToMainHub(){
-        levelLoader.LoadLevel("MainHub");
-    }
-
-    public void LoadMiniGame(string _levelName){
-        levelLoader.LoadLevel(_levelName);
-    }
-
 
     public void FullyResetPlayers(){
         if(GameManager.instance.playerList.Count > 0){
@@ -76,26 +54,6 @@ public class GameManager : MonoBehaviour{
                 playerInput.GetComponent<CharacterManager>().FullReset();
             }
         }
-    }
-    public void SetSpawnPoint(){
-        if(!FindSpawnPoints()){
-            Debug.Log("Player spawnpoints array was empty. Player spawn point was created at GameManager location");
-            CreateSpawnPoint();
-        }
-    }
-
-    private bool FindSpawnPoints(){
-        spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
-        if(spawnPoints.Count() == 0){
-            return false;
-        }
-        else{
-            return true;
-        }
-    }
-
-    private void CreateSpawnPoint(){
-        Instantiate(spawnPointPrefab, GameManager.instance.transform.position, Quaternion.identity); 
     }
 
 

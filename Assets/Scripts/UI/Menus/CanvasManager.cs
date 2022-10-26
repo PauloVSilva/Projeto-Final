@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum Menu{MainMenu, ControlsMenu, SettingsMenu, MiniGameSetupMenu, PauseMenu, CharacterSelectionMenu}
 public enum ButtonType{Back, Submit, Navigate}
@@ -17,6 +18,8 @@ public class CanvasButtonDisplay{
 public class CanvasManager : MonoBehaviour{
     //INSTANCES
     public static CanvasManager instance = null;
+    public GameObject playerPanels;
+    public GameObject miniGameUI;
     [SerializeField] private List<MenuController> menuControllersList;
     [SerializeField] private List<MenuController> allActiveMenus = new List<MenuController>();
     [SerializeField] private MenuController lastActiveMenu;
@@ -26,7 +29,7 @@ public class CanvasManager : MonoBehaviour{
     private void Awake(){
         if(instance == null){
             instance = this;
-            //DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(gameObject);
         }
         else if(instance != null){
             Destroy(gameObject);
@@ -35,6 +38,28 @@ public class CanvasManager : MonoBehaviour{
         //menuControllersList = GetComponentsInChildren<MenuController>().ToList();
         menuControllersList.ForEach(x => x.gameObject.SetActive(false)); //x is menuController
         //SwitchMenu(Menu.MiniGameSetupMenu); this line is only used if I want a specific menu to pop up as soon as the scene opens
+    }
+
+    public void OpenMenu(int menuIndex){
+        OpenMenu((Menu)menuIndex);
+    }
+
+    public void SwitchMenu(int menuIndex){
+        SwitchMenu((Menu)menuIndex);
+    }
+
+    public void OpenMenu(Menu _menu){
+        MenuController desiredMenu = menuControllersList.Find(x => x.menu == _menu);
+        if(desiredMenu != null){
+            desiredMenu.gameObject.SetActive(true);
+            allActiveMenus.Add(desiredMenu);
+            lastActiveMenu = desiredMenu;
+
+            //StartCoroutine(PauseMenu.instance.PauseDelay());
+        }
+        else{
+            Debug.LogWarning("Desired menu was not found D:");
+        }
     }
 
     public void SwitchMenu(Menu _menu){
@@ -47,7 +72,7 @@ public class CanvasManager : MonoBehaviour{
             desiredMenu.gameObject.SetActive(true);
             lastActiveMenu = desiredMenu;
 
-            StartCoroutine(PauseMenu.instance.PauseDelay());
+            //StartCoroutine(PauseMenu.instance.PauseDelay());
         }
         else{
             Debug.LogWarning("Desired menu was not found D:");
@@ -64,22 +89,7 @@ public class CanvasManager : MonoBehaviour{
             lastActiveMenu = allActiveMenus[allActiveMenus.Count() - 1];
         }
         if(allActiveMenus.Count() == 0){
-            PauseMenu.instance.Resume();
-        }
-    }
-
-    public void OpenMenu(Menu _menu){
-        MenuController desiredMenu = menuControllersList.Find(x => x.menu == _menu);
-        if(desiredMenu != null){
-            desiredMenu.gameObject.SetActive(true);
-            allActiveMenus.Add(desiredMenu);
-            lastActiveMenu = desiredMenu;
-
-            PauseMenu.instance.Pause();
-            Debug.Log("CanvasManager OpenMenu() desiredMenu != null");
-        }
-        else{
-            Debug.LogWarning("Desired menu was not found D:");
+            //PauseMenu.instance.Resume();
         }
     }
 }

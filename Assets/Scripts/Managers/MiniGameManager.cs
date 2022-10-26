@@ -76,8 +76,6 @@ public abstract class MiniGameManager : LevelManager{
 
         gameState = MiniGameState.none;
 
-        itemSpawnersList = GameObject.FindGameObjectsWithTag("Spawner");
-
         foreach(var playerInput in GameManager.instance.playerList){
             int index = playerInput.playerIndex % GameManager.instance.spawnPoints.Length;
             playerInput.transform.position = GameManager.instance.spawnPoints[index].transform.position;
@@ -121,7 +119,8 @@ public abstract class MiniGameManager : LevelManager{
         }
         else {
             OnGameEnds?.Invoke();
-            GameManager.instance.ReturnToMainHub();
+            //GameManager.instance.ReturnToMainHub();
+            LevelLoader.instance.LoadLevel("MainHub");
         }
     }
 }

@@ -45,7 +45,8 @@ public class CharacterSelectionMenu : MenuBase{
         UpdateCharacter();
 
         base.SetUpCanvasButtons();
-        CanvasManager.instance.SwitchMenu(Menu.CharacterSelectionMenu);
+        CanvasManager.instance.OpenMenu(Menu.CharacterSelectionMenu);
+        StartCoroutine(PauseMenu.instance.PauseDelay());
         firstSelected.Select();
     }
 
@@ -79,6 +80,8 @@ public class CharacterSelectionMenu : MenuBase{
     public void ConfirmCharacter(){
         CharacterStatsScriptableObject selectedCharacter = displayedCharacter;
         characterManager.SpawnCharacter(selectedCharacter);
+        CanvasManager.instance.CloseMenu();
+        PauseMenu.instance.Resume();
     }
 
     public void CancelSelection(){

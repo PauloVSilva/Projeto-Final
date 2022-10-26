@@ -16,7 +16,7 @@ public class MiniGameUIManager : MonoBehaviour{
     //These are NOT mini game events such as reaching X spot or stuff
 
     private void Start(){
-        GameManager.instance.levelLoader.OnSceneLoaded += CheckForMiniGame;
+        LevelLoader.instance.OnSceneLoaded += CheckForMiniGame;
     }
 
     private void OnDestroy(){

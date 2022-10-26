@@ -4,22 +4,22 @@ using UnityEngine;
 
 public abstract class LevelManager : MonoBehaviour{
     [SerializeField] protected Pool[] objectsToPool;
+    public GameObject[] levelSpawnPoints;
+    public Camera mainCamera;
 
     private void Awake(){
         InitializeSingletonInstance();
     }
 
     private void Start(){
-        GameManager.instance.SetSpawnPoint();
+        GameManager.instance.spawnPoints = levelSpawnPoints;
+        GameManager.instance.mainCamera = mainCamera;
         GameManager.instance.FullyResetPlayers();
+
         InitializeLevel();
-        for(int i = 0; i < 1000; i++){
-            if(AddObjectsToPool()){
-                break;
-            }
-            if(i == 999){
-                Debug.LogError("Something went wrong. ObjectPooler took too long to be initialized. Return to main menu.");
-            }
+        
+        if(!AddObjectsToPool()){
+            Debug.LogError("Something went wrong. ObjectPooler couldn't be initialized. Return to main menu.");
         }
     }
 

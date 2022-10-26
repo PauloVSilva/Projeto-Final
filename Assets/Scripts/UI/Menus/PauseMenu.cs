@@ -43,7 +43,8 @@ public class PauseMenu : MenuBase{
         playerControllingMenu.text = pauseMessage;
 
         base.SetUpCanvasButtons();
-        CanvasManager.instance.SwitchMenu(Menu.PauseMenu);
+        CanvasManager.instance.OpenMenu(Menu.PauseMenu);
+        StartCoroutine(PauseDelay());
         firstSelected.Select();
     }
 
@@ -82,6 +83,10 @@ public class PauseMenu : MenuBase{
 
     public void QuitToMainMenu(){
         Time.timeScale = 1f;
-        GameManager.instance.ReturnToMainMenu();
+        CanvasManager.instance.CloseMenu();
+        while(GameManager.instance.playerList.Count() > 0){
+            GameManager.instance.UnregisterPlayer(GameManager.instance.playerList[0]);
+        }
+        LevelLoader.instance.LoadLevel("MainMenu");
     }
 }

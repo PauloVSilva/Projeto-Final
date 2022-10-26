@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 
 public class LevelLoader : MonoBehaviour{
-    //public static LevelLoader instance = null;
+    public static LevelLoader instance = null;
     [SerializeField] private GameObject loadingScreen;
     [SerializeField] private Slider slider;
     [SerializeField] private TextMeshProUGUI percentage;
@@ -17,11 +17,11 @@ public class LevelLoader : MonoBehaviour{
     public event System.Action OnSceneLoaded;
 
     private void Awake(){
-        //InitializeSingletonInstance();
+        InitializeSingletonInstance();
         InitializeVariables();
     }
 
-    /*private void InitializeSingletonInstance(){
+    private void InitializeSingletonInstance(){
         if(instance == null){
             instance = this;
             DontDestroyOnLoad(gameObject);
@@ -29,7 +29,7 @@ public class LevelLoader : MonoBehaviour{
         else if(instance != null){
             Destroy(gameObject);
         }
-    }*/
+    }
 
     private void InitializeVariables(){
         loadingString = "Loading";
@@ -37,6 +37,7 @@ public class LevelLoader : MonoBehaviour{
     }
 
     public void LoadLevel(string sceneName){
+        GameManager.instance.mainCamera = null;
         StartCoroutine(LoadAsynchronously(sceneName));
         loading.text = loadingString;
         loadingScreen.SetActive(true);
@@ -60,12 +61,11 @@ public class LevelLoader : MonoBehaviour{
             progress = 0f;
             slider.value = progress;
             percentage.text = progress + "%";
-
-            Debug.Log(sceneName);
-            if(sceneName == "MainMenu"){
-                Destroy(GameManager.instance.gameObject);
-                //SceneManager.UnloadSceneAsync("MainHub");
-            }
         }
+    }
+
+    public void QuitGame(){
+        Debug.Log("QUIT!");
+        Application.Quit();
     }
 }

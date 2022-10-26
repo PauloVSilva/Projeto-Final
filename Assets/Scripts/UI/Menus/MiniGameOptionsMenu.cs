@@ -49,7 +49,8 @@ public class MiniGameOptionsMenu : MenuBase{
         UpdateMenu();
 
         base.SetUpCanvasButtons();
-        CanvasManager.instance.SwitchMenu(Menu.MiniGameSetupMenu);
+        CanvasManager.instance.OpenMenu(Menu.MiniGameSetupMenu);
+        StartCoroutine(PauseMenu.instance.PauseDelay());
         firstSelected.Select();
     }
 
@@ -100,7 +101,14 @@ public class MiniGameOptionsMenu : MenuBase{
     }
 
     public void ConfirmSettings(){
-        GameManager.instance.LoadMiniGame(menuName.text);
+        CanvasManager.instance.CloseMenu();
+        PauseMenu.instance.Resume();
+        LevelLoader.instance.LoadLevel(menuName.text);
+    }
+
+    public void CancelSelection(){
+        CanvasManager.instance.CloseMenu();
+        PauseMenu.instance.Resume();
     }
 
     public MiniGameGoalScriptableObject GetMiniGameGoal(){
