@@ -97,7 +97,7 @@ public class CharacterManager : MonoBehaviour{
     public void OnTriggerEnter(Collider other){
         if(!IsBlocked()){
             if(other.gameObject.GetComponent<Item>() != null && other.gameObject.GetComponent<Item>().CanBePickedUp){
-                Debug.Log("Collided");
+                //Debug.Log("Collided");
                 if(other.gameObject.GetComponent<Coin>()){
                     if(characterInventory.AddToInventory(other.gameObject.GetComponent<Item>().item)){
                         other.GetComponent<Coin>().PickedUp(this.gameObject);

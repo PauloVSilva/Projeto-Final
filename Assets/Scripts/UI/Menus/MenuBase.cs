@@ -19,7 +19,7 @@ public abstract class MenuBase : MonoBehaviour{
     [SerializeField] protected TextMeshProUGUI menuName;
 
     //COMMON TO PLAYER-SPECIFIC MENU
-    protected PlayerInput playerInput;
+    [SerializeField] protected PlayerInput playerInput;
     [SerializeField] protected InputSystemUIInputModule inputSystemUIInputModule;
     [SerializeField] protected TextMeshProUGUI playerControllingMenu;
 
@@ -39,6 +39,8 @@ public abstract class MenuBase : MonoBehaviour{
 
     protected void SetUpCanvasButtons(){
         if(playerInput != null){
+            Debug.Log(playerInput.devices[0].GetType().ToString());
+            Debug.Log(playerInput.devices[0].name.ToString());
             for(int i = 0; i < footerButtons.Count(); i++){
                 footerButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = canvasButtonsList[i].buttonString;
                 if(playerInput.devices[0].name.ToString() == "DualShock4GamepadHID"){
