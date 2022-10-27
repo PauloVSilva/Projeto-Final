@@ -12,7 +12,7 @@ public class InteractableToy : MonoBehaviour, InteractorInterface{
 
     private void Awake(){
         toyName = miniGame.miniGameName;
-        toyPrompt = "Play " + toyName + "!";
+        toyPrompt = "Play " + toyName;
         miniGameGoalsList = miniGame.miniGamesGoalsAvaliable.ToList();
     }
 

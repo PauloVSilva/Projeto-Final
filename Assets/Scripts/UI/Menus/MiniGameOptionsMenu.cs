@@ -51,7 +51,6 @@ public class MiniGameOptionsMenu : MenuBase{
         base.SetUpCanvasButtons();
         CanvasManager.instance.OpenMenu(Menu.MiniGameSetupMenu);
         StartCoroutine(PauseMenu.instance.PauseDelay());
-        firstSelected.Select();
     }
 
     public void NextGoal(){

@@ -45,12 +45,6 @@ public class PauseMenu : MenuBase{
         base.SetUpCanvasButtons();
         CanvasManager.instance.OpenMenu(Menu.PauseMenu);
         StartCoroutine(PauseDelay());
-        firstSelected.Select();
-    }
-
-    private void PlayerPressedBackButton(InputAction.CallbackContext context){
-        playerInput.GetComponent<PlayerInputHandler>().OnPlayerPressedBackButton -= PlayerPressedBackButton;
-        CanvasManager.instance.CloseMenu();
     }
 
     public IEnumerator PauseDelay(){

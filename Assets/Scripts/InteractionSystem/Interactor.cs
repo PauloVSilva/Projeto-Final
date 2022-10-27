@@ -27,7 +27,7 @@ public class Interactor : MonoBehaviour{
         
         if (numFound > 0){
             interactable = _collider[0].GetComponent<InteractorInterface>();
-            if (interactable != null){
+            if (interactable != null && !interactionPromptUI.isDisplayed){
                 interactionPromptUI.SetPrompt(characterManager.playerInput, interactable.PromptString);
                 interactionPromptUI.OpenPanel();
             }

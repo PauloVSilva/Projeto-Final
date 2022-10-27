@@ -14,12 +14,12 @@ public abstract class MenuBase : MonoBehaviour{
     protected List<GameObject> footerButtons = new List<GameObject>();
     [SerializeField] protected GameObject footer;
 
-    //COMMON TO ALL MENUS
-    public Button firstSelected;
-    [SerializeField] protected TextMeshProUGUI menuName;
 
-    //COMMON TO PLAYER-SPECIFIC MENU
-    [SerializeField] protected PlayerInput playerInput;
+    [SerializeField] protected MenuController menuController;
+
+
+    protected PlayerInput playerInput;
+    [SerializeField] protected TextMeshProUGUI menuName;
     [SerializeField] protected InputSystemUIInputModule inputSystemUIInputModule;
     [SerializeField] protected TextMeshProUGUI playerControllingMenu;
 
@@ -39,11 +39,10 @@ public abstract class MenuBase : MonoBehaviour{
 
     protected void SetUpCanvasButtons(){
         if(playerInput != null){
-            Debug.Log(playerInput.devices[0].GetType().ToString());
-            Debug.Log(playerInput.devices[0].name.ToString());
+            //Debug.Log(playerInput.devices[0].GetType().ToString());
             for(int i = 0; i < footerButtons.Count(); i++){
                 footerButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = canvasButtonsList[i].buttonString;
-                if(playerInput.devices[0].name.ToString() == "DualShock4GamepadHID"){
+                if(playerInput.devices[0].GetType().ToString() == "UnityEngine.InputSystem.DualShock.FastDualShock4GamepadHID"){
                     footerButtons[i].GetComponentInChildren<Image>().sprite = canvasButtonsList[i].buttonSprite[1];
                 }
                 else{
@@ -60,8 +59,10 @@ public abstract class MenuBase : MonoBehaviour{
         playerInput.GetComponent<PlayerInputHandler>().OnPlayerPressedBackButton += PlayerPressedBackButton;
     }
 
-    protected void PlayerPressedBackButton(InputAction.CallbackContext context){
-        playerInput.GetComponent<PlayerInputHandler>().OnPlayerPressedBackButton -= PlayerPressedBackButton;
-        CanvasManager.instance.CloseMenu();
+    protected virtual void PlayerPressedBackButton(InputAction.CallbackContext context){
+        if(CanvasManager.instance.lastActiveMenu == menuController){
+            playerInput.GetComponent<PlayerInputHandler>().OnPlayerPressedBackButton -= PlayerPressedBackButton;
+            CanvasManager.instance.CloseMenu();
+        }
     }
 }

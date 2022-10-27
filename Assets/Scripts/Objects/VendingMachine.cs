@@ -21,7 +21,7 @@ public class VendingMachine : DestructibleObject, InteractorInterface{
         itemSold = inventory.GetItemOnSlot(0);
         
         if(machineState == MachineState.fullyFunctional && itemSold != null){
-            machinePrompt = "Buy " + itemSold.itemName + " for " + costToBuy;
+            machinePrompt = "Buy " + itemSold.itemName + " for " + costToBuy + " gold";
             meshRenderer.materials[0] = materials[(int)machineState];
         }
         else if(machineState == MachineState.malfunctioning){

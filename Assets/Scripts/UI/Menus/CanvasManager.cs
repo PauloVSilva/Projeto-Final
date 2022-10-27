@@ -23,7 +23,7 @@ public class CanvasManager : MonoBehaviour{
     public GameObject miniGameUI;
     [SerializeField] private List<MenuController> menuControllersList;
     [SerializeField] private List<MenuController> allActiveMenus = new List<MenuController>();
-    [SerializeField] private MenuController lastActiveMenu;
+    [SerializeField] public MenuController lastActiveMenu;
     [SerializeField] public List<CanvasButtonDisplay> canvasButtonsList;
     [SerializeField] public GameObject buttonDisplayPrefab;
 
@@ -55,6 +55,7 @@ public class CanvasManager : MonoBehaviour{
             desiredMenu.gameObject.SetActive(true);
             allActiveMenus.Add(desiredMenu);
             lastActiveMenu = desiredMenu;
+            lastActiveMenu.firstSelected.Select();
 
             //StartCoroutine(PauseMenu.instance.PauseDelay());
         }
@@ -72,6 +73,7 @@ public class CanvasManager : MonoBehaviour{
         if(desiredMenu != null){
             desiredMenu.gameObject.SetActive(true);
             lastActiveMenu = desiredMenu;
+            lastActiveMenu.firstSelected.Select();
 
             //StartCoroutine(PauseMenu.instance.PauseDelay());
         }
@@ -88,9 +90,10 @@ public class CanvasManager : MonoBehaviour{
         }
         if(allActiveMenus.Count() > 0){
             lastActiveMenu = allActiveMenus[allActiveMenus.Count() - 1];
+            lastActiveMenu.firstSelected.Select();
         }
         if(allActiveMenus.Count() == 0){
-            //PauseMenu.instance.Resume();
+            PauseMenu.instance.Resume();
         }
     }
 }

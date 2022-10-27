@@ -47,7 +47,6 @@ public class CharacterSelectionMenu : MenuBase{
         base.SetUpCanvasButtons();
         CanvasManager.instance.OpenMenu(Menu.CharacterSelectionMenu);
         StartCoroutine(PauseMenu.instance.PauseDelay());
-        firstSelected.Select();
     }
 
     public void NextCharacter(){
@@ -82,10 +81,6 @@ public class CharacterSelectionMenu : MenuBase{
         characterManager.SpawnCharacter(selectedCharacter);
         CanvasManager.instance.CloseMenu();
         PauseMenu.instance.Resume();
-    }
-
-    public void CancelSelection(){
-        GameManager.instance.UnregisterPlayer(playerInput);
     }
 
 }
