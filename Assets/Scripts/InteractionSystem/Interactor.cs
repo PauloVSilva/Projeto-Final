@@ -4,60 +4,51 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Interactor : MonoBehaviour{
-    [SerializeField] private Transform _interactionPoint;
-    [SerializeField] private float _interactionPointRadius;
-    [SerializeField] private LayerMask _interactableMask;
-    [SerializeField] private InteractionPromptUI _interactionPromptUI;
+    public CharacterManager characterManager;
+    private InteractionPromptUI interactionPromptUI;
+    private InteractorInterface interactable;
+    [SerializeField] private Transform interactionPoint;
+    [SerializeField] private float interactionPointRadius;
+    [SerializeField] private LayerMask interactableMask;
 
     private readonly Collider[] _collider = new Collider[3];
-    [SerializeField] private int _numFound;
+    [SerializeField] private int numFound;
 
-    [SerializeField] private InteractorInterface _interactable;
-
-    private void Awake() {
-        _interactionPoint = gameObject.transform;
-    }
 
     private void Start(){
-        SubscribeToEvents();
-    }
-
-    private void SubscribeToEvents(){
-        gameObject.transform.parent.GetComponent<PlayerInputHandler>().OnCharacterInteractWithObject += OnInteractWithObject;
+        characterManager = GetComponent<CharacterManager>();
+        interactionPromptUI = GetComponentInChildren<InteractionPromptUI>();
+        interactionPoint = gameObject.transform;
+        GetComponent<PlayerInputHandler>().OnCharacterInteractWithObject += OnInteractWithObject;
     }
 
     private void Update(){
-        _numFound = Physics.OverlapSphereNonAlloc(_interactionPoint.position, _interactionPointRadius, _collider, _interactableMask);
+        numFound = Physics.OverlapSphereNonAlloc(interactionPoint.position, interactionPointRadius, _collider, interactableMask);
         
-        if (_numFound > 0){
-            _interactable = _collider[0].GetComponent<InteractorInterface>();
-            if (_interactable != null){
-                _interactionPromptUI.SetPrompt(_interactable.PromptString);
-                _interactionPromptUI.OpenPanel();
-                //if(!_interactable.PromptUI.isDisplayed){
-                //    _interactable.PromptUI.OpenPanel();
-                //}
+        if (numFound > 0){
+            interactable = _collider[0].GetComponent<InteractorInterface>();
+            if (interactable != null){
+                interactionPromptUI.SetPrompt(characterManager.playerInput, interactable.PromptString);
+                interactionPromptUI.OpenPanel();
             }
         }
         else{
-            _interactable = null;
-            _interactionPromptUI.ClosePanel();
-            _interactionPromptUI.ClearPrompt();
-            //if(_interactable != null){
-            //    _interactable.PromptUI.ClosePanel();
-            //    _interactable = null;
-            //}
+            if(interactable != null){
+                interactable = null;
+                interactionPromptUI.ClosePanel();
+                interactionPromptUI.ClearPrompt();
+            }
         }
     }
 
     public void OnInteractWithObject(InputAction.CallbackContext context){
-        if(context.performed && _interactable != null){
-            _interactable.Interact(this);
+        if(context.performed && interactable != null){
+            interactable.Interact(this);
         }
     }
 
     private void OnDrawGizmos(){
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(_interactionPoint.position, _interactionPointRadius);
+        Gizmos.DrawWireSphere(interactionPoint.position, interactionPointRadius);
     }
 }

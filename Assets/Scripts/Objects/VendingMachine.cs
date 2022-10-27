@@ -30,8 +30,6 @@ public class VendingMachine : DestructibleObject, InteractorInterface{
         else if(machineState == MachineState.broken){
             Break();
         }
-
-        interactionPromptUI.SetPrompt(machinePrompt);
     }
 
     protected override void ObjectTookDamage(float _damage){
@@ -76,14 +74,12 @@ public class VendingMachine : DestructibleObject, InteractorInterface{
 
     //REQUIRED BY INTERACTOR INTERFACE
     [SerializeField] private string machinePrompt;
-    [SerializeField] private InteractionPromptUI interactionPromptUI;
     [SerializeField] public string PromptString => machinePrompt;
-    [SerializeField] public InteractionPromptUI PromptUI => interactionPromptUI;
     
     public bool Interact(Interactor interactor){
         if(machineState == MachineState.fullyFunctional){
-            if(interactor.transform.parent.GetComponent<CharacterManager>().score > costToBuy){
-                interactor.transform.parent.GetComponent<CharacterManager>().score -= costToBuy;
+            if(interactor.characterManager.score > costToBuy){
+                interactor.characterManager.score -= costToBuy;
                 inventory.DropItem(0, dropPoint);
                 Debug.Log("bought");
                 return true;

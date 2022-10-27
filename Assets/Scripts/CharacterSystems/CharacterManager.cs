@@ -15,6 +15,7 @@ public class CharacterManager : MonoBehaviour{
     [SerializeField] public MovementSystem characterMovementSystem;
     [SerializeField] public CharacterInventory characterInventory;
     [SerializeField] public CharacterWeaponSystem characterWeaponSystem;
+    [SerializeField] public Interactor characterInteractor;
     [SerializeField] public CharacterStatsScriptableObject Character;
     [SerializeField] public GameObject characterObject;
     #endregion "SYSTEMS"
@@ -62,6 +63,7 @@ public class CharacterManager : MonoBehaviour{
         characterMovementSystem = GetComponent<MovementSystem>();
         characterInventory = GetComponent<CharacterInventory>();
         characterWeaponSystem = GetComponent<CharacterWeaponSystem>();
+        characterInteractor = GetComponent<Interactor>();
     }
 
     private void InitializePlayerVariables(){

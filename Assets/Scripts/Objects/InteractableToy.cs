@@ -16,10 +16,6 @@ public class InteractableToy : MonoBehaviour, InteractorInterface{
         miniGameGoalsList = miniGame.miniGamesGoalsAvaliable.ToList();
     }
 
-    private void Start(){
-        interactionPromptUI.SetPrompt(toyPrompt);
-    }
-
     private void Update(){
         transform.Rotate(Vector3.up * (rotationSpeed * Time.deltaTime));
     }
@@ -27,13 +23,11 @@ public class InteractableToy : MonoBehaviour, InteractorInterface{
 
     //REQUIRED BY INTERACTOR INTERFACE
     [SerializeField] private string toyPrompt;
-    [SerializeField] private InteractionPromptUI interactionPromptUI;
     [SerializeField] public string PromptString => toyPrompt; //property that returns string
-    [SerializeField] public InteractionPromptUI PromptUI => interactionPromptUI; //property that returns InteractionPromptUI
     
     public bool Interact(Interactor interactor){
         if(GameManager.instance.playerList.Count > 1){
-            MiniGameOptionsMenu.instance.MenuOpened(interactor.GetComponentInParent<PlayerInput>(), miniGame);
+            MiniGameOptionsMenu.instance.MenuOpened(interactor.characterManager.playerInput, miniGame);
         }
         else{
             Debug.Log("Game requires at least 2 players");

@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public enum Menu{MainMenu, ControlsMenu, SettingsMenu, MiniGameSetupMenu, PauseMenu, CharacterSelectionMenu}
-public enum ButtonType{Back, Submit, Navigate}
+public enum ButtonType{Back, Submit, Navigate, Interact}
 
 [System.Serializable]
 public class CanvasButtonDisplay{

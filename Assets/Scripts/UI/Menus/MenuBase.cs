@@ -15,7 +15,7 @@ public abstract class MenuBase : MonoBehaviour{
     [SerializeField] protected GameObject footer;
 
     //COMMON TO ALL MENUS
-    [SerializeField] protected Button firstSelected;
+    public Button firstSelected;
     [SerializeField] protected TextMeshProUGUI menuName;
 
     //COMMON TO PLAYER-SPECIFIC MENU
