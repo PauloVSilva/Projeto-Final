@@ -80,7 +80,7 @@ public class CharacterSelectionMenu : MenuBase{
         CharacterStatsScriptableObject selectedCharacter = displayedCharacter;
         characterManager.SpawnCharacter(selectedCharacter);
         CanvasManager.instance.CloseMenu();
-        PauseMenu.instance.Resume();
+        //PauseMenu.instance.Resume();
     }
 
 }

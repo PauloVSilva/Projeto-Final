@@ -123,11 +123,17 @@ public class MovementSystem : MonoBehaviour{
     private void Update(){
         if(characterManager.Character != null){
             AngleCalculator();
-            MovementBehaviour();
+            //MovementBehaviour();
             SprintBehaviour();
             DashBehaviour();
             AirTimeDamage();
             StaminaRegen();
+        }
+    }
+
+    private void FixedUpdate(){
+        if(characterManager.Character != null){
+            MovementBehaviour();
         }
     }
 

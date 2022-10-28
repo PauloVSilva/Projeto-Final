@@ -101,7 +101,7 @@ public class MiniGameOptionsMenu : MenuBase{
 
     public void ConfirmSettings(){
         CanvasManager.instance.CloseMenu();
-        PauseMenu.instance.Resume();
+        //PauseMenu.instance.Resume();
         LevelLoader.instance.LoadLevel(menuName.text);
     }
 

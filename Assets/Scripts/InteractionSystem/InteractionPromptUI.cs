@@ -41,7 +41,7 @@ public class InteractionPromptUI : MonoBehaviour{
         }
         
         if(playerInput != null){
-            Debug.Log(playerInput.devices[0].GetType().ToString());
+            //Debug.Log(playerInput.devices[0].GetType().ToString());
             if(playerInput.devices[0].GetType().ToString() == "UnityEngine.InputSystem.DualShock.FastDualShock4GamepadHID"){
                 promptImage.sprite = canvasButtonDisplay.buttonSprite[1];
             }

@@ -32,7 +32,8 @@ public abstract class MenuBase : MonoBehaviour{
                 }
             }
             GameObject ButtonDisplay = Instantiate(CanvasManager.instance.buttonDisplayPrefab);
-            ButtonDisplay.transform.parent = footer.transform;
+            //ButtonDisplay.transform.parent = footer.transform;
+            ButtonDisplay.transform.SetParent(footer.transform, false);
             footerButtons.Add(ButtonDisplay);
         }
     }

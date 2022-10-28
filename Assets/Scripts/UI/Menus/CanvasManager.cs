@@ -94,6 +94,7 @@ public class CanvasManager : MonoBehaviour{
         }
         if(allActiveMenus.Count() == 0){
             PauseMenu.instance.Resume();
+            //StartCoroutine(PauseMenu.instance.ResumeDelay());
         }
     }
 }

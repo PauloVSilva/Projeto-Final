@@ -31,9 +31,8 @@ public class GameManager : MonoBehaviour{
 
         gameIsPaused = false;
         miniGameIsRunning = false;
-
-        //joinAction.Enable();
-        joinAction.performed += context => {JoinAction(context); Debug.Log("Player Joined");};
+        
+        joinAction.performed += context => {JoinAction(context); joinAction.Disable(); Debug.Log("Player Joined");};
     }
 
     private void InitializeSingletonInstance(){
@@ -81,6 +80,8 @@ public class GameManager : MonoBehaviour{
         playerInput.GetComponent<CharacterManager>().OnPlayerScoredKill += GameManagerCharacterKilled;
         playerInput.GetComponent<CharacterManager>().OnPlayerDied += GameManagerCharacterDied;
         playerInput.GetComponent<CharacterManager>().OnPlayerBorn += GameManagerCharacterSpawned;
+
+        joinAction.Enable();
     }
 
     void OnPlayerLeft(PlayerInput playerInput){ //THIS METHOD COMES FROM UNITY ITSELF
@@ -91,6 +92,13 @@ public class GameManager : MonoBehaviour{
 
     public void JoinAction(InputAction.CallbackContext context){
         PlayerInputManager.instance.JoinPlayerFromActionIfNotAlreadyJoined(context);
+    }
+
+    public void UnregisterPlayer(PlayerInput playerInput){
+        playerList.Remove(playerInput);
+        mainCamera.GetComponent<CameraController>().RemovePlayer(playerInput);
+        OnPlayerLeftGame?.Invoke(playerInput);
+        Destroy(playerInput.transform.gameObject);
     }
 
     public void LeaveAction(InputAction.CallbackContext context){
@@ -104,12 +112,5 @@ public class GameManager : MonoBehaviour{
                 }
             }
         }
-    }
-
-    public void UnregisterPlayer(PlayerInput playerInput){
-        playerList.Remove(playerInput);
-        mainCamera.GetComponent<CameraController>().RemovePlayer(playerInput);
-        OnPlayerLeftGame?.Invoke(playerInput);
-        Destroy(playerInput.transform.gameObject);
     }
 }

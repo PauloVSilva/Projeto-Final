@@ -52,6 +52,11 @@ public class PauseMenu : MenuBase{
         Pause();
     }
 
+    public IEnumerator ResumeDelay(){
+        yield return new WaitForSeconds(0.01f);
+        Resume();
+    }
+
     public void Pause(){
         Time.timeScale = 0f;
         foreach(var playerInput in GameManager.instance.playerList){

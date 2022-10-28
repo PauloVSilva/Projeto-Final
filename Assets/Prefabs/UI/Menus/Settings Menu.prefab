@@ -182,8 +182,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 4401638891957725344}
+  m_Children: []
   m_Father: {fileID: 4401638892179485359}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -387,7 +386,7 @@ MonoBehaviour:
   m_Interactable: 1
   m_TargetGraphic: {fileID: 4401638892179485356}
   toggleTransition: 1
-  graphic: {fileID: 758151645864210125}
+  graphic: {fileID: 4401638891957725345}
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
@@ -2954,13 +2953,13 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8125333247958168200}
-  m_RootOrder: 0
+  m_Father: {fileID: 4401638892179485359}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -2, y: 5}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: -20, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4401638891957725358
 CanvasRenderer:
@@ -3476,6 +3475,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8125333247958168200}
+  - {fileID: 4401638891957725344}
   m_Father: {fileID: 4401638890678293790}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

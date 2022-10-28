@@ -12,11 +12,20 @@ public class MiniGameUIManager : MonoBehaviour{
     [SerializeField] private TextMeshProUGUI winnerBoard;
     [SerializeField] private TextMeshProUGUI gameGoalReminder;
 
+    private bool isSubscribed;
+
+
+    private string go;
+    private string returningToLobbyInSeconds;
+    private string gameBeginsInSeconds;
+
+
     //Just to be clear, events here mean the event actions baked in the language
     //These are NOT mini game events such as reaching X spot or stuff
 
     private void Start(){
         LevelLoader.instance.OnSceneLoaded += CheckForMiniGame;
+        isSubscribed = false;
     }
 
     private void OnDestroy(){
@@ -35,18 +44,20 @@ public class MiniGameUIManager : MonoBehaviour{
         MiniGameManager.instance.OnGameGoalIsSet += SetGameGoalText;
         MiniGameManager.instance.OnPlayerWins += AnnounceWinner;
         MiniGameManager.instance.OnGameEnds += DisablePanels;
+
+        isSubscribed = true;
     }
 
     private void UnsubscribeFromMiniGameEvents(){
-        MiniGameManager.instance.OnCountDownTicks -= DisplayCountDown;
-        MiniGameManager.instance.OnGameGoalIsSet -= SetGameGoalText;
-        MiniGameManager.instance.OnPlayerWins -= AnnounceWinner;
-        MiniGameManager.instance.OnGameEnds -= DisablePanels;
-    }
+        if(isSubscribed){
+            MiniGameManager.instance.OnCountDownTicks -= DisplayCountDown;
+            MiniGameManager.instance.OnGameGoalIsSet -= SetGameGoalText;
+            MiniGameManager.instance.OnPlayerWins -= AnnounceWinner;
+            MiniGameManager.instance.OnGameEnds -= DisablePanels;
 
-    private string go;
-    private string returningToLobbyInSeconds;
-    private string gameBeginsInSeconds;
+            isSubscribed = false;
+        }
+    }
 
     public void InitializeVariables(){
         go = "Go!";
