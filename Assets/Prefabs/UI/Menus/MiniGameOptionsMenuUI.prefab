@@ -1,5 +1,42 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &238290995762027778
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6987750007094815940}
+  m_Layer: 5
+  m_Name: Container
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &6987750007094815940
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 238290995762027778}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 8043112785244639209}
+  m_Father: {fileID: 8043112785052232262}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &891606990992368637
 GameObject:
   m_ObjectHideFlags: 0
@@ -1610,7 +1647,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1216807281747070418}
         m_TargetAssemblyTypeName: MiniGameOptionsMenu, Assembly-CSharp
         m_MethodName: NextGoal
         m_Mode: 1
@@ -1745,7 +1782,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1216807281747070418}
         m_TargetAssemblyTypeName: MiniGameOptionsMenu, Assembly-CSharp
         m_MethodName: IncreaseGoalAmount
         m_Mode: 1
@@ -1766,7 +1803,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8043112785052232262}
-  - component: {fileID: 8043112785052232257}
+  - component: {fileID: 1216807281747070418}
   m_Layer: 5
   m_Name: MiniGameOptionsMenuUI
   m_TagString: Untagged
@@ -1786,7 +1823,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 8043112785244639209}
+  - {fileID: 6987750007094815940}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1795,7 +1832,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &8043112785052232257
+--- !u!114 &1216807281747070418
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1804,11 +1841,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 8043112785052232263}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91d7c27d86b2fa94f8289986eafdc815, type: 3}
+  m_Script: {fileID: 11500000, guid: 4a504c5a1cfbb634783ecc36f3f00e5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   menu: 3
+  menuContainer: {fileID: 238290995762027778}
   firstSelected: {fileID: 8043112784826621470}
+  buttonTypes: 020000000100000000000000
+  menuName: {fileID: 8043112785077830382}
+  playerControllingMenu: {fileID: 0}
+  tabGroup: {fileID: 0}
+  footer: {fileID: 8043112785179916021}
+  inputSystemUIInputModule: {fileID: 8043112784102667787}
+  goalSprite: {fileID: 8043112784121142942}
+  goalName: {fileID: 8043112785477772796}
+  goalDescription: {fileID: 8043112784634396799}
+  goalKeyword: {fileID: 8043112784144148073}
+  goalAmount: {fileID: 8043112786197801308}
 --- !u!1 &8043112785077830383
 GameObject:
   m_ObjectHideFlags: 0
@@ -2033,7 +2082,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8043112785244639214}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2041,13 +2090,13 @@ RectTransform:
   - {fileID: 8043112785663231175}
   - {fileID: 8043112785179916020}
   - {fileID: 8043112784102667784}
-  m_Father: {fileID: 8043112785052232262}
+  m_Father: {fileID: 6987750007094815940}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8043112785244639211
 CanvasRenderer:
@@ -2365,7 +2414,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1216807281747070418}
         m_TargetAssemblyTypeName: MiniGameOptionsMenu, Assembly-CSharp
         m_MethodName: PreviousGoal
         m_Mode: 1
@@ -2644,7 +2693,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1216807281747070418}
         m_TargetAssemblyTypeName: MiniGameOptionsMenu, Assembly-CSharp
         m_MethodName: CancelSelection
         m_Mode: 1
@@ -3049,7 +3098,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1216807281747070418}
         m_TargetAssemblyTypeName: MiniGameOptionsMenu, Assembly-CSharp
         m_MethodName: DecreaseGoalAmount
         m_Mode: 1
@@ -3183,7 +3232,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1216807281747070418}
         m_TargetAssemblyTypeName: MiniGameOptionsMenu, Assembly-CSharp
         m_MethodName: ConfirmSettings
         m_Mode: 1

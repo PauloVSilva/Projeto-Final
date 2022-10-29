@@ -19,7 +19,11 @@ public class TabGroup : MonoBehaviour
 
     private void OnEnable(){
         index = 0;
-        OnTabSelected(tabButtons[index]);
+        StartCoroutine(OnEnableDelay());
+        IEnumerator OnEnableDelay(){
+            yield return new WaitForSecondsRealtime(0.01f);
+            OnTabSelected(tabButtons[index]);
+        }
     }
 
     public void SelectNextTab(){

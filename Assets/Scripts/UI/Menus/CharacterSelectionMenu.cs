@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
 using TMPro;
 
-public class CharacterSelectionMenu : MenuBase{
+public class CharacterSelectionMenu : MenuController{
     private CharacterManager characterManager;
     private CharacterStatsScriptableObject displayedCharacter;
     private int index;
@@ -16,9 +16,9 @@ public class CharacterSelectionMenu : MenuBase{
     [SerializeField] private Image characterSprite;
     [SerializeField] private TextMeshProUGUI characterName;
 
-    private void Start(){
+    protected override void Start(){
+        base.Start();
         ListenToPlayerJoined();
-        base.CreateFooterButtons();
     }
 
     private void ListenToPlayerJoined(){
@@ -26,13 +26,8 @@ public class CharacterSelectionMenu : MenuBase{
     }
 
     public void MenuOpened(PlayerInput _playerInput){
-        AssignPlayerToMenu(_playerInput);
+        base.AssignPlayerToMenu(_playerInput);
         InitializeMenu();
-    }
-
-    protected override void AssignPlayerToMenu(PlayerInput _playerInput){
-        playerInput = _playerInput;
-        inputSystemUIInputModule.actionsAsset = playerInput.actions;
     }
 
     private void InitializeMenu(){
@@ -42,13 +37,20 @@ public class CharacterSelectionMenu : MenuBase{
         index = 0;
         characterManager = playerInput.GetComponent<CharacterManager>();
         displayedCharacter = characterList[index];
+
         UpdateCharacter();
 
-        base.SetUpCanvasButtons();
-        CanvasManager.instance.OpenMenu(Menu.CharacterSelectionMenu);
-        StartCoroutine(PauseMenu.instance.PauseDelay());
+        CanvasManager.instance.OpenMenu(this.menu);
+        StartCoroutine(PauseMenu.instance.FreezeGameDelay());
     }
 
+    private void UpdateCharacter(){
+        characterSprite.sprite = displayedCharacter.sprite[0];
+        characterName.text = displayedCharacter.characterName.ToString();
+    }
+
+
+    #region BUTTONS
     public void NextCharacter(){
         if(index < characterList.Count - 1){
             index++;
@@ -71,16 +73,10 @@ public class CharacterSelectionMenu : MenuBase{
         UpdateCharacter();
     }
 
-    private void UpdateCharacter(){
-        characterSprite.sprite = displayedCharacter.sprite[0];
-        characterName.text = displayedCharacter.characterName.ToString();
-    }
-
     public void ConfirmCharacter(){
         CharacterStatsScriptableObject selectedCharacter = displayedCharacter;
         characterManager.SpawnCharacter(selectedCharacter);
-        CanvasManager.instance.CloseMenu();
-        //PauseMenu.instance.Resume();
+        base.Back();
     }
-
+    #endregion BUTTONS
 }

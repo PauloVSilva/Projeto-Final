@@ -5,7 +5,7 @@ using UnityEngine.Audio;
 using UnityEngine.UI;
 using TMPro;
 
-public class SettingsMenu : MonoBehaviour{
+public class SettingsMenu : MenuController{
     public AudioMixer audioMixer;
     public TMPro.TMP_Dropdown resolutionDropdown;
     Resolution[] resolutions;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public enum Menu{MainMenu, ControlsMenu, SettingsMenu, MiniGameSetupMenu, PauseMenu, CharacterSelectionMenu}
@@ -10,6 +11,7 @@ public enum ButtonType{Back, Submit, Navigate, Interact}
 
 [System.Serializable]
 public class CanvasButtonDisplay{
+    public InputActionMap inputAction;
     public ButtonType buttonType;
     public string buttonString;
     public Sprite[] buttonSprite;
@@ -32,12 +34,12 @@ public class CanvasManager : MonoBehaviour{
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
-        else if(instance != null){
+        else{
             Destroy(gameObject);
         }
 
-        //menuControllersList = GetComponentsInChildren<MenuController>().ToList();
-        menuControllersList.ForEach(x => x.gameObject.SetActive(false)); //x is menuController
+        menuControllersList = GetComponentsInChildren<MenuController>().ToList();
+        //menuControllersList.ForEach(x => x.gameObject.SetActive(false)); //x is menuController
         //SwitchMenu(Menu.MiniGameSetupMenu); this line is only used if I want a specific menu to pop up as soon as the scene opens
     }
 
@@ -52,10 +54,9 @@ public class CanvasManager : MonoBehaviour{
     public void OpenMenu(Menu _menu){
         MenuController desiredMenu = menuControllersList.Find(x => x.menu == _menu);
         if(desiredMenu != null){
-            desiredMenu.gameObject.SetActive(true);
-            allActiveMenus.Add(desiredMenu);
             currentMenu = desiredMenu;
-            currentMenu.firstSelected.Select();
+            allActiveMenus.Add(currentMenu);
+            currentMenu.Open();
         }
         else{
             Debug.LogWarning("Desired menu was not found D:");
@@ -70,15 +71,15 @@ public class CanvasManager : MonoBehaviour{
     public void CloseMenu(){
         if(currentMenu != null){
             allActiveMenus.Remove(currentMenu);
-            currentMenu.gameObject.SetActive(false);
+            currentMenu.Close();
         }
         if(allActiveMenus.Count() > 0){
             currentMenu = allActiveMenus[allActiveMenus.Count() - 1];
-            currentMenu.firstSelected.Select();
+            currentMenu.GainControl();
         }
         else{
             currentMenu = null;
-            PauseMenu.instance.Resume();
+            PauseMenu.instance.UnfreezeGame();
         }
     }
 }

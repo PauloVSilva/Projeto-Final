@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
 using TMPro;
 
-public class PauseMenu : MenuBase{
+public class PauseMenu : MenuController{
     public static PauseMenu instance = null;
     private string pauseMessage;
 
@@ -20,16 +20,16 @@ public class PauseMenu : MenuBase{
         }
     }
 
-    private void Start(){
+    protected override void Start(){
+        base.Start();
         ListenToPlayerJoined();
-        base.CreateFooterButtons();
     }
 
     private void ListenToPlayerJoined(){
-        GameManager.instance.OnPlayerJoinedGame += SubscribeToPlayerEvent;
+        GameManager.instance.OnPlayerJoinedGame += SubscribeToPlayerButtonPress;
     }
 
-    private void SubscribeToPlayerEvent(PlayerInput _playerInput){
+    private void SubscribeToPlayerButtonPress(PlayerInput _playerInput){
         _playerInput.GetComponent<PlayerInputHandler>().OnCharacterPressMenuButton += MenuOpened;
     }
 
@@ -42,22 +42,21 @@ public class PauseMenu : MenuBase{
         pauseMessage = MessageManager.instance.GetPauseMessage(playerInput.playerIndex + 1);
         playerControllingMenu.text = pauseMessage;
 
-        base.SetUpCanvasButtons();
-        CanvasManager.instance.OpenMenu(Menu.PauseMenu);
-        StartCoroutine(PauseDelay());
+        CanvasManager.instance.OpenMenu(this.menu);
+        StartCoroutine(FreezeGameDelay());
     }
 
-    public IEnumerator PauseDelay(){
-        yield return new WaitForSeconds(0.01f);
-        Pause();
+    public IEnumerator FreezeGameDelay(){
+        yield return new WaitForSecondsRealtime(0.01f);
+        FreezeGame();
     }
 
-    public IEnumerator ResumeDelay(){
-        yield return new WaitForSeconds(0.01f);
-        Resume();
+    public IEnumerator UnfreezeGameDelay(){
+        yield return new WaitForSecondsRealtime(0.01f);
+        UnfreezeGame();
     }
 
-    public void Pause(){
+    public void FreezeGame(){
         Time.timeScale = 0f;
         foreach(var playerInput in GameManager.instance.playerList){
             playerInput.GetComponent<PlayerInputHandler>().PlayerOpenedMenu();
@@ -66,13 +65,28 @@ public class PauseMenu : MenuBase{
         GameManager.instance.gameIsPaused = true;
     }
 
-    public void Resume(){
+    public void UnfreezeGame(){
         Time.timeScale = 1f;
         foreach(var playerInput in GameManager.instance.playerList){
             playerInput.GetComponent<PlayerInputHandler>().PlayerClosedMenu();
         }
         GameManager.instance.joinAction.Enable();
         GameManager.instance.gameIsPaused = false;
+    }
+
+
+    #region BUTTONS
+    public void Resume(){
+        base.Back();
+        UnfreezeGame();
+    }
+
+    public void Controls(){
+        CanvasManager.instance.OpenMenu(Menu.ControlsMenu);
+    }
+
+    public void Settings(){
+        CanvasManager.instance.OpenMenu(Menu.SettingsMenu);
     }
 
     public void DropOut(){
@@ -82,10 +96,11 @@ public class PauseMenu : MenuBase{
 
     public void QuitToMainMenu(){
         Time.timeScale = 1f;
-        CanvasManager.instance.CloseMenu();
+        base.Back();
         while(GameManager.instance.playerList.Count() > 0){
             GameManager.instance.UnregisterPlayer(GameManager.instance.playerList[0]);
         }
         LevelLoader.instance.LoadLevel("MainMenu");
     }
+    #endregion BUTTONS
 }
