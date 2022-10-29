@@ -19,8 +19,10 @@ public class PlayerInputHandler : MonoBehaviour{
     public event System.Action<InputAction.CallbackContext> OnCharacterReload;
     public event System.Action<InputAction.CallbackContext> OnCharacterDropItem;
 
-
+    //UI ACTIONS
     public event System.Action<InputAction.CallbackContext> OnPlayerPressedBackButton;
+    public event System.Action<InputAction.CallbackContext> OnPlayerPressedPreviousTabButton;
+    public event System.Action<InputAction.CallbackContext> OnPlayerPressedNextTabButton;
 
 
     private void Start(){
@@ -116,4 +118,5 @@ public class PlayerInputHandler : MonoBehaviour{
             OnPlayerPressedBackButton?.Invoke(context);
         }
     }
+    
 }

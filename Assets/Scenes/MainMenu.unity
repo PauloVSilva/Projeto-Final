@@ -5321,7 +5321,7 @@ MonoBehaviour:
   - {fileID: 373543393}
   - {fileID: 783525525}
   allActiveMenus: []
-  lastActiveMenu: {fileID: 0}
+  currentMenu: {fileID: 0}
   canvasButtonsList:
   - buttonType: 0
     buttonString: Back
@@ -5356,7 +5356,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc0d0fec0b6c4c447b67f6843b8f735b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonTypes: 0100000002000000
+  buttonTypes: 0200000001000000
   footer: {fileID: 783525519}
   menuController: {fileID: 783525525}
   menuName: {fileID: 783525524}
@@ -5379,7 +5379,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a504c5a1cfbb634783ecc36f3f00e5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonTypes: 000000000100000002000000
+  buttonTypes: 020000000100000000000000
   footer: {fileID: 89779468}
   menuController: {fileID: 89779476}
   menuName: {fileID: 89779475}
@@ -5402,7 +5402,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2d27d4e2e460df4abe254c365f8709b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonTypes: 000000000100000002000000
+  buttonTypes: 020000000100000000000000
   footer: {fileID: 373543389}
   menuController: {fileID: 373543393}
   menuName: {fileID: 373543392}
@@ -10538,6 +10538,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4401638892511549891, guid: 277b7bee988ff3d46bd3a6a1198ce7f7, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7223650083967633623, guid: 277b7bee988ff3d46bd3a6a1198ce7f7, type: 3}
+      propertyPath: tabButtons.Array.size
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

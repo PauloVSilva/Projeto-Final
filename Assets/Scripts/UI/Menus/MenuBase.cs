@@ -17,6 +17,8 @@ public abstract class MenuBase : MonoBehaviour{
 
     [SerializeField] protected MenuController menuController;
 
+    [SerializeField] protected TabGroup tabGroup;
+
 
     protected PlayerInput playerInput;
     [SerializeField] protected TextMeshProUGUI menuName;
@@ -32,7 +34,6 @@ public abstract class MenuBase : MonoBehaviour{
                 }
             }
             GameObject ButtonDisplay = Instantiate(CanvasManager.instance.buttonDisplayPrefab);
-            //ButtonDisplay.transform.parent = footer.transform;
             ButtonDisplay.transform.SetParent(footer.transform, false);
             footerButtons.Add(ButtonDisplay);
         }
@@ -40,7 +41,6 @@ public abstract class MenuBase : MonoBehaviour{
 
     protected void SetUpCanvasButtons(){
         if(playerInput != null){
-            //Debug.Log(playerInput.devices[0].GetType().ToString());
             for(int i = 0; i < footerButtons.Count(); i++){
                 footerButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = canvasButtonsList[i].buttonString;
                 if(playerInput.devices[0].GetType().ToString() == "UnityEngine.InputSystem.DualShock.FastDualShock4GamepadHID"){
@@ -57,13 +57,35 @@ public abstract class MenuBase : MonoBehaviour{
         playerInput = _playerInput;
         inputSystemUIInputModule.actionsAsset = playerInput.actions;
         //_playerInput.InputSystemUIInputModule = inputSystemUIInputModule;
-        playerInput.GetComponent<PlayerInputHandler>().OnPlayerPressedBackButton += PlayerPressedBackButton;
+        //playerInput.GetComponent<PlayerInputHandler>().OnPlayerPressedBackButton += PlayerPressedBackButton;
+        playerInput.actions["Back"].performed += PlayerPressedBackButton;
+        playerInput.actions["PreviousTab"].performed += PlayerPressedPreviousTabButton;
+        playerInput.actions["NextTab"].performed += PlayerPressedNextTabButton;
     }
 
     protected virtual void PlayerPressedBackButton(InputAction.CallbackContext context){
-        if(CanvasManager.instance.lastActiveMenu == menuController){
-            playerInput.GetComponent<PlayerInputHandler>().OnPlayerPressedBackButton -= PlayerPressedBackButton;
-            CanvasManager.instance.CloseMenu();
+        CanvasManager.instance.CloseMenu();
+        if(CanvasManager.instance.currentMenu == null){
+            //playerInput.GetComponent<PlayerInputHandler>().OnPlayerPressedBackButton -= PlayerPressedBackButton;
+            playerInput.actions["Back"].performed -= PlayerPressedBackButton;
+            playerInput.actions["PreviousTab"].performed -= PlayerPressedPreviousTabButton;
+            playerInput.actions["NextTab"].performed -= PlayerPressedNextTabButton;
+        }
+    }
+
+    protected virtual void PlayerPressedPreviousTabButton(InputAction.CallbackContext context){
+        Debug.Log(CanvasManager.instance.currentMenu);
+        Debug.Log(this.menuController);
+        if(CanvasManager.instance.currentMenu == this.menuController){
+            tabGroup?.SelectPreviousTab();
+        }
+    }
+
+    protected virtual void PlayerPressedNextTabButton(InputAction.CallbackContext context){
+        Debug.Log(CanvasManager.instance.currentMenu);
+        Debug.Log(this.menuController);
+        if(CanvasManager.instance.currentMenu == this.menuController){
+            tabGroup?.SelectNextTab();
         }
     }
 }

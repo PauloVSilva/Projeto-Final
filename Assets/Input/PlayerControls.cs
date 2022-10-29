@@ -487,6 +487,24 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PreviousTab"",
+                    ""type"": ""Button"",
+                    ""id"": ""c6661d26-aa9f-47b0-8bd8-271ab3463715"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""NextTab"",
+                    ""type"": ""Button"",
+                    ""id"": ""87c0382b-d6ec-4981-9a88-7417d559e352"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -929,6 +947,50 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""Back"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""883d7b29-3fb5-4937-bb3a-861ae1aeb5c1"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KB+M"",
+                    ""action"": ""PreviousTab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""362eceac-f6eb-4902-9a67-c47f2c592498"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""PreviousTab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""379de44c-e093-4b6a-bf46-7acf2806e9ab"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KB+M"",
+                    ""action"": ""NextTab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f5ea87dd-0f1c-4b9f-852c-4497ba33df46"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""NextTab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -988,6 +1050,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
         m_UI_Back = m_UI.FindAction("Back", throwIfNotFound: true);
+        m_UI_PreviousTab = m_UI.FindAction("PreviousTab", throwIfNotFound: true);
+        m_UI_NextTab = m_UI.FindAction("NextTab", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1163,6 +1227,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_TrackedDevicePosition;
     private readonly InputAction m_UI_TrackedDeviceOrientation;
     private readonly InputAction m_UI_Back;
+    private readonly InputAction m_UI_PreviousTab;
+    private readonly InputAction m_UI_NextTab;
     public struct UIActions
     {
         private @PlayerControls m_Wrapper;
@@ -1178,6 +1244,8 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @TrackedDevicePosition => m_Wrapper.m_UI_TrackedDevicePosition;
         public InputAction @TrackedDeviceOrientation => m_Wrapper.m_UI_TrackedDeviceOrientation;
         public InputAction @Back => m_Wrapper.m_UI_Back;
+        public InputAction @PreviousTab => m_Wrapper.m_UI_PreviousTab;
+        public InputAction @NextTab => m_Wrapper.m_UI_NextTab;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1220,6 +1288,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Back.started -= m_Wrapper.m_UIActionsCallbackInterface.OnBack;
                 @Back.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnBack;
                 @Back.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnBack;
+                @PreviousTab.started -= m_Wrapper.m_UIActionsCallbackInterface.OnPreviousTab;
+                @PreviousTab.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnPreviousTab;
+                @PreviousTab.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnPreviousTab;
+                @NextTab.started -= m_Wrapper.m_UIActionsCallbackInterface.OnNextTab;
+                @NextTab.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnNextTab;
+                @NextTab.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnNextTab;
             }
             m_Wrapper.m_UIActionsCallbackInterface = instance;
             if (instance != null)
@@ -1257,6 +1331,12 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Back.started += instance.OnBack;
                 @Back.performed += instance.OnBack;
                 @Back.canceled += instance.OnBack;
+                @PreviousTab.started += instance.OnPreviousTab;
+                @PreviousTab.performed += instance.OnPreviousTab;
+                @PreviousTab.canceled += instance.OnPreviousTab;
+                @NextTab.started += instance.OnNextTab;
+                @NextTab.performed += instance.OnNextTab;
+                @NextTab.canceled += instance.OnNextTab;
             }
         }
     }
@@ -1305,5 +1385,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnTrackedDevicePosition(InputAction.CallbackContext context);
         void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
         void OnBack(InputAction.CallbackContext context);
+        void OnPreviousTab(InputAction.CallbackContext context);
+        void OnNextTab(InputAction.CallbackContext context);
     }
 }

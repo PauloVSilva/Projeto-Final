@@ -23,7 +23,7 @@ public class CanvasManager : MonoBehaviour{
     public GameObject miniGameUI;
     [SerializeField] private List<MenuController> menuControllersList;
     [SerializeField] private List<MenuController> allActiveMenus = new List<MenuController>();
-    [SerializeField] public MenuController lastActiveMenu;
+    [SerializeField] public MenuController currentMenu;
     [SerializeField] public List<CanvasButtonDisplay> canvasButtonsList;
     [SerializeField] public GameObject buttonDisplayPrefab;
 
@@ -54,10 +54,8 @@ public class CanvasManager : MonoBehaviour{
         if(desiredMenu != null){
             desiredMenu.gameObject.SetActive(true);
             allActiveMenus.Add(desiredMenu);
-            lastActiveMenu = desiredMenu;
-            lastActiveMenu.firstSelected.Select();
-
-            //StartCoroutine(PauseMenu.instance.PauseDelay());
+            currentMenu = desiredMenu;
+            currentMenu.firstSelected.Select();
         }
         else{
             Debug.LogWarning("Desired menu was not found D:");
@@ -65,36 +63,22 @@ public class CanvasManager : MonoBehaviour{
     }
 
     public void SwitchMenu(Menu _menu){
-        if(lastActiveMenu != null){
-            lastActiveMenu.gameObject.SetActive(false);
-        }
-
-        MenuController desiredMenu = menuControllersList.Find(x => x.menu == _menu);
-        if(desiredMenu != null){
-            desiredMenu.gameObject.SetActive(true);
-            lastActiveMenu = desiredMenu;
-            lastActiveMenu.firstSelected.Select();
-
-            //StartCoroutine(PauseMenu.instance.PauseDelay());
-        }
-        else{
-            Debug.LogWarning("Desired menu was not found D:");
-        }
-
+        CloseMenu();
+        OpenMenu(_menu);
     }
 
     public void CloseMenu(){
-        if(lastActiveMenu != null){
-            allActiveMenus.Remove(lastActiveMenu);
-            lastActiveMenu.gameObject.SetActive(false);
+        if(currentMenu != null){
+            allActiveMenus.Remove(currentMenu);
+            currentMenu.gameObject.SetActive(false);
         }
         if(allActiveMenus.Count() > 0){
-            lastActiveMenu = allActiveMenus[allActiveMenus.Count() - 1];
-            lastActiveMenu.firstSelected.Select();
+            currentMenu = allActiveMenus[allActiveMenus.Count() - 1];
+            currentMenu.firstSelected.Select();
         }
-        if(allActiveMenus.Count() == 0){
+        else{
+            currentMenu = null;
             PauseMenu.instance.Resume();
-            //StartCoroutine(PauseMenu.instance.ResumeDelay());
         }
     }
 }
