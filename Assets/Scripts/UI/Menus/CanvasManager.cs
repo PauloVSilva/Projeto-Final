@@ -7,11 +7,12 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public enum Menu{MainMenu, ControlsMenu, SettingsMenu, MiniGameSetupMenu, PauseMenu, CharacterSelectionMenu}
-public enum ButtonType{Back, Submit, Navigate, Interact}
+public enum Device{Keyboard, DualShock, XboxController}
+public enum ButtonType{Back, Submit, Navigate, Interact, TabNavigation, PreviousTab, NextTab}
 
 [System.Serializable]
 public class CanvasButtonDisplay{
-    public InputActionMap inputAction;
+    //public InputActionMap inputAction;
     public ButtonType buttonType;
     public string buttonString;
     public Sprite[] buttonSprite;

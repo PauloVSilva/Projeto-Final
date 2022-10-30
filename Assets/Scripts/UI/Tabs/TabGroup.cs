@@ -7,14 +7,20 @@ using UnityEngine.UI;
 public class TabGroup : MonoBehaviour
 {
     public List<TabButton> tabButtons = new List<TabButton>();
+    public List<Image> tabLabels = new List<Image>();
     public Sprite tabIdle;
     public Sprite tabHover;
     public Sprite tabActive;
     public TabButton selectedTab;
     public int index;
+    public ButtonType[] buttonTypes;
 
     private void Awake(){
         tabButtons = GetComponentsInChildren<TabButton>().ToList();
+
+        List<Image> images = GetComponentsInChildren<Image>().ToList();
+        tabLabels.Add(images.First());
+        tabLabels.Add(images.Last());
     }
 
     private void OnEnable(){
@@ -68,6 +74,7 @@ public class TabGroup : MonoBehaviour
 
         selectedTab.Select();
 
-        index = button.transform.GetSiblingIndex();
+        //index = button.transform.GetSiblingIndex();
+        index = tabButtons.FindIndex(a => a == button);
     }
 }

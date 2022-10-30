@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class MainMenuManager : MonoBehaviour{
-    private void Start(){
+    private void OnEnable(){
         InitializeMainMenu();
     }
 

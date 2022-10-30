@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.DualShock;
 
 public enum Animal{hedgehog, pangolin, threeBandedArmadillo}
 public enum TeamColor{none, blue, red, green, yellow}
@@ -64,6 +65,15 @@ public class CharacterManager : MonoBehaviour{
         characterInventory = GetComponent<CharacterInventory>();
         characterWeaponSystem = GetComponent<CharacterWeaponSystem>();
         characterInteractor = GetComponent<Interactor>();
+
+        var device = playerInput.devices[0];
+        Debug.Log(device.GetType().ToString());
+        //if (device.GetType().ToString() == "UnityEngine.InputSystem.DualShock.DualShock4GamepadHID"){
+        if (device.GetType().ToString() == "UnityEngine.InputSystem.DualShock.FastDualShock4GamepadHID"){
+            Debug.Log("Entrou");
+            DualShockGamepad ds4 = (DualShockGamepad)device;
+            ds4.SetLightBarColor(Color.blue);
+        }
     }
 
     private void InitializePlayerVariables(){
