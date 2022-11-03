@@ -49,7 +49,11 @@ public class CharacterWeaponSystem : MonoBehaviour{
         weapon = null;
     }
 
-    public void PickUpWeapon(GameObject _weapon){
+    public bool PickUpWeapon(GameObject _weapon){
+        if(gunPosition == null){
+            return false;
+        }
+
         weapon = _weapon.GetComponent<Weapon>();
         
         weapon.transform.parent = this.transform;
@@ -57,7 +61,9 @@ public class CharacterWeaponSystem : MonoBehaviour{
         weapon.transform.position = gunPosition.transform.position;
 
         weapon.PickedUp(this.gameObject);
-        characterManager.PlayerPickedUpWeapon(weapon);
+        characterManager.PlayerPickedUpWeapon(weapon); //this method calls a method that invokes an event. Pretty spaghetti I know
+
+        return true;
     }
 
     public void WeaponFired(){

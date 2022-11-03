@@ -41,8 +41,9 @@ public class CharacterInventory : Inventory{
     }
 
     public void PickWeapon(GameObject _weapon){
-        characterWeaponSystem.PickUpWeapon(_weapon);
-        AddToWeaponSlot(_weapon.GetComponent<Weapon>().item);
+        if(characterWeaponSystem.PickUpWeapon(_weapon)){
+            AddToWeaponSlot(_weapon.GetComponent<Weapon>().item);
+        }
     }
 
     public bool AddToWeaponSlot(ItemScriptableObject _item){

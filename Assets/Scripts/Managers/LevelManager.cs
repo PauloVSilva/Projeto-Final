@@ -9,12 +9,18 @@ public abstract class LevelManager : MonoBehaviour{
 
     private void Awake(){
         InitializeSingletonInstance();
-    }
 
-    private void Start(){
         GameManager.instance.spawnPoints = levelSpawnPoints;
         GameManager.instance.mainCamera = mainCamera;
         GameManager.instance.FullyResetPlayers();
+    }
+
+    private void Start(){
+        foreach(var playerInput in GameManager.instance.playerList){
+            int index = playerInput.playerIndex % GameManager.instance.spawnPoints.Length;
+            playerInput.transform.position = GameManager.instance.spawnPoints[index].transform.position;
+        }
+
 
         InitializeLevel();
         

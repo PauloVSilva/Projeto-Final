@@ -1092,7 +1092,8 @@ MonoBehaviour:
   miniGame: 0
   gameGoal: 0
   gameState: 0
-  itemSpawnersList: []
+  itemSpawnersList:
+  - {fileID: 1082257814}
   timeElapsed: 0
   countDown: 0
   coins: []
@@ -1855,6 +1856,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dfdc10ed3a0f2ce4b9f9d0a2cd3a72ad, type: 3}
+--- !u!1 &1082257814 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8740977291168480536, guid: dfdc10ed3a0f2ce4b9f9d0a2cd3a72ad, type: 3}
+  m_PrefabInstance: {fileID: 1082257813}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1084074957
 PrefabInstance:
   m_ObjectHideFlags: 0
