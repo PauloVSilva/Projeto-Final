@@ -139,10 +139,10 @@ public class MovementSystem : MonoBehaviour{
 
     private void OnControllerColliderHit(ControllerColliderHit other){
         if(other.transform.GetComponent<CharacterManager>() != null){
-            if(AirTime > 0.5){
+            if(AirTime > 0.25){
                 other.transform.GetComponent<CharacterHealthSystem>().TakeDamage(this.gameObject, AirDamage);
             }
-            if(AirTime > 1){
+            if(AirTime > 1.5){
                 characterManager.characterHealthSystem.TakeDamage(AirDamage * 0.5f);
             }
             AirTime = 0;
@@ -223,7 +223,7 @@ public class MovementSystem : MonoBehaviour{
         }
         controller.Move(move * Time.deltaTime * MoveSpeed); //player input - horizontal movement
 
-        playerVelocity.y += (AirTime * -1f) + gravityValue * Time.deltaTime;
+        playerVelocity.y += /*(AirTime * -1f) + */ 2 * gravityValue * Time.deltaTime;
 
         if(playerVelocity.x != 0f){
             playerVelocity.x -= (velocityDecelerationMultiplier * playerVelocity.x) * Time.deltaTime;

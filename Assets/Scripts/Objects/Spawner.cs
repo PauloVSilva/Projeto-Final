@@ -72,4 +72,9 @@ public class Spawner : MonoBehaviour{
         float randomPosZ = Random.Range(-spawnRange, spawnRange);
         return new Vector3(this.transform.position.x + randomPosX, this.transform.position.y, this.transform.position.z + randomPosZ);
     }
+
+    private void OnDrawGizmos(){
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(this.transform.position, spawnRange);
+    }
 }
