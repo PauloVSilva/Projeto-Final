@@ -9,6 +9,7 @@ using UnityEngine.SceneManagement;
 public enum Menu{MainMenu, ControlsMenu, SettingsMenu, MiniGameSetupMenu, PauseMenu, CharacterSelectionMenu}
 public enum Device{Keyboard, DualShock, XboxController}
 public enum ButtonType{Back, Submit, Navigate, Interact, TabNavigation, PreviousTab, NextTab}
+public enum Interactions {Hold, MultiTap, Press, SlowTap, Tap}
 
 [System.Serializable]
 public class CanvasButtonDisplay{

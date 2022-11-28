@@ -27,7 +27,7 @@ MonoBehaviour:
   sprintSpeed: 10
   maxStamina: 60
   staminaRegenRate: 15
-  jumpStrength: 1.5
+  jumpStrength: 4
   totalJumps: 2
   jumpStaminaCost: 15
   dashStaminaCost: 15

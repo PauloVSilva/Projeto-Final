@@ -24,6 +24,7 @@ public class Projectile : Entity, IPooledObjects{
     [SerializeField] private Rigidbody myRigidbody;
     [SerializeField] private GameObject playerOfOrigin;
     [SerializeField] private GameObject weaponOfOrigin;
+    [SerializeField] private TrailRenderer trailRenderer;
 
     private void Awake(){
         GetScriptableObjectVariables();
@@ -65,13 +66,15 @@ public class Projectile : Entity, IPooledObjects{
         age = 0;
         isPooled = true;
         canDamage = true;
+        trailRenderer.emitting = true;
     }
 
     private void OnTriggerEnter(Collider other){
         if(other.gameObject.GetComponent<HealthSystem>() != null && canDamage){
             other.GetComponent<HealthSystem>().TakeDamage(playerOfOrigin, ProjectileToCast.damageAmount);
-            this.gameObject.SetActive(false);
+            Despawn();
         }
         canDamage = false;
+        trailRenderer.emitting = false;
     }
 }

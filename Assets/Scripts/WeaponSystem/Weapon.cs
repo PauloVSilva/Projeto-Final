@@ -173,6 +173,7 @@ public class Weapon : Item{
 
     private void Fire(){
         if(ammo - projectileToCast.cost >= 0){
+            //play gun fire sound
             CastProjectile();
             ammo -= projectileToCast.cost;
             hammerIsCocked = false;
