@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 8463049207392376649}
   - component: {fileID: 1250474442572999399}
   m_Layer: 0
-  m_Name: Hedgehog
+  m_Name: Arturito
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -198,7 +198,7 @@ PrefabInstance:
     - target: {fileID: -4683669308469848369, guid: 67ea9654a67971c43a392ce1c489bba3, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: -876546973899608171, guid: 67ea9654a67971c43a392ce1c489bba3, type: 3}
+      objectReference: {fileID: 2100000, guid: 61c88148e0a32a94da7b9bac5a8de5e8, type: 2}
     - target: {fileID: -516098083770646512, guid: 67ea9654a67971c43a392ce1c489bba3, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -207,6 +207,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: hedgehog1
       objectReference: {fileID: 0}
+    - target: {fileID: 6317578925029434746, guid: 67ea9654a67971c43a392ce1c489bba3, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 61c88148e0a32a94da7b9bac5a8de5e8, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 67ea9654a67971c43a392ce1c489bba3, type: 3}
 --- !u!4 &6899938742116791364 stripped
