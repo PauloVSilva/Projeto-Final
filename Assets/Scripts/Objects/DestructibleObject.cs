@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
+
 public class DestructibleObject : MonoBehaviour{
     [SerializeField] protected DestructibleObjectHealthSystem healthSystem;
     [SerializeField] protected Inventory inventory;
@@ -9,6 +11,8 @@ public class DestructibleObject : MonoBehaviour{
     [SerializeField] protected FloatingHealthBar floatingHealthBar;
     public int MaxHealth = 1;
     //public int MaxHealth {get; protected set;}
+
+    [SerializeField] private AudioSource audioData;
 
     protected virtual void Awake(){
         //MaxHealth = 300;
@@ -29,6 +33,8 @@ public class DestructibleObject : MonoBehaviour{
 
         damageFeedback = GetComponentInChildren<DamageFeedback>();
         floatingHealthBar = GetComponentInChildren<FloatingHealthBar>();
+
+        audioData = GetComponent<AudioSource>();
     }
 
     protected virtual void InitializeVariables(){}
@@ -45,9 +51,15 @@ public class DestructibleObject : MonoBehaviour{
     protected virtual void ObjectTookDamage(float _damage){
         damageFeedback?.DisplayDamageTaken(_damage);
         floatingHealthBar?.UpdateHealthBar(healthSystem.CurrentHealth);
+
+        //play destruction damage
+        audioData.Play(0);
     }
 
     protected virtual void ObjectDestroyed(){
+        //play destruction damage
+        audioData.Play(0);
+
         inventory?.DropAllInventory();
         Destroy(gameObject);
     }

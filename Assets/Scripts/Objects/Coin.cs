@@ -24,6 +24,8 @@ public class Coin : Item, IPooledObjects{
 
         this.transform.parent = ObjectPooler.instance.transform;
 
+        transform.Rotate(0, 0, 0);
+
         isPooled = true;
     }
 

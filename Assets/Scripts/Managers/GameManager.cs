@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour{
         gameIsPaused = false;
         miniGameIsRunning = false;
         
-        joinAction.performed += context => {JoinAction(context); joinAction.Disable(); Debug.Log("Player Joined");};
+        joinAction.performed += context => {JoinAction(context); /*joinAction.Disable();*/ Debug.Log("Player Joined");};
     }
 
     private void InitializeSingletonInstance(){

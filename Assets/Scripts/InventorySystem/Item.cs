@@ -81,10 +81,6 @@ public abstract class Item : Entity{
         if(canBePickedUp){
             transform.Rotate(Vector3.up * (rotationSpeed * Time.deltaTime));
         }
-        if(this.transform.rotation.y != 0)
-        {
-            transform.Rotate(0, 0, 0);
-        }
     }
 
     IEnumerator Flash(float time){
