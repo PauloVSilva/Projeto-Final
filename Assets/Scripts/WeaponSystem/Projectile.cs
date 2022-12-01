@@ -33,6 +33,7 @@ public class Projectile : Entity, IPooledObjects{
 
     protected override void Update(){
         AgeBehaviour();
+        SpeedBehaviour();
     }
 
     private void GetScriptableObjectVariables(){
@@ -51,6 +52,20 @@ public class Projectile : Entity, IPooledObjects{
         myRigidbody = GetComponent<Rigidbody>();
         age = 0;
         isPooled = false;
+    }
+
+    private void SpeedBehaviour()
+    {
+        if(myRigidbody.velocity.magnitude < 0.2)
+        {
+            canDamage = false;
+            trailRenderer.emitting = false;
+        }
+        else
+        {
+            canDamage = true;
+            trailRenderer.emitting = true;
+        }
     }
 
     public void OnObjectSpawn(){ //replaces Start()
@@ -74,7 +89,7 @@ public class Projectile : Entity, IPooledObjects{
             other.GetComponent<HealthSystem>().TakeDamage(playerOfOrigin, ProjectileToCast.damageAmount);
             Despawn();
         }
-        canDamage = false;
-        trailRenderer.emitting = false;
+        //canDamage = false;
+        //trailRenderer.emitting = false;
     }
 }
