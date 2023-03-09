@@ -101,7 +101,7 @@ public class CharacterManager : MonoBehaviour{
         characterMovementSystem.Initialize();
         characterWeaponSystem.SetGunPosition();
 
-        transform.parent = GameManager.instance.transform;
+        transform.parent = GameManager.Instance.transform;
         playerInput.SwitchCurrentActionMap("Player");
         OnCharacterChosen?.Invoke();
     }
@@ -147,8 +147,8 @@ public class CharacterManager : MonoBehaviour{
     }
 
     public void RespawnCharacter(){
-        int randomIndex = UnityEngine.Random.Range(0, GameManager.instance.spawnPoints.Length);
-        this.transform.position = GameManager.instance.spawnPoints[randomIndex].transform.position;
+        int randomIndex = UnityEngine.Random.Range(0, GameManager.Instance.spawnPoints.Length);
+        this.transform.position = GameManager.Instance.spawnPoints[randomIndex].transform.position;
         characterObject.SetActive(true);
         UnblockActions();
         RefreshStatsUponRespawning();
@@ -200,7 +200,7 @@ public class CharacterManager : MonoBehaviour{
 
     public bool CanMove(){
         if(actionsAreBlocked) return false;
-        if(GameManager.instance.gameIsPaused) return false;
+        if(GameManager.Instance.gameIsPaused) return false;
         
         return true;
     }
@@ -227,7 +227,7 @@ public class CharacterManager : MonoBehaviour{
         //send that to the UI
         characterInventory.ClearInventory();
         ResetStats();
-        this.transform.position = GameManager.instance.spawnPoints[0].transform.position;
+        this.transform.position = GameManager.Instance.spawnPoints[0].transform.position;
         characterObject.SetActive(true);
         UnblockActions();
         characterHealthSystem.Initialize();
@@ -263,7 +263,7 @@ public class CharacterManager : MonoBehaviour{
         BeginRespawnProcess();
         characterInventory.DropAllInventory();
 
-        Instantiate(GameManager.instance.DeathSpot, character.transform.position, Quaternion.Euler(0, 0, 0), this.transform);
+        Instantiate(GameManager.Instance.DeathSpot, character.transform.position, Quaternion.Euler(0, 0, 0), this.transform);
         OnPlayerDied?.Invoke(character);
     }
 

@@ -8,13 +8,13 @@ public class PlayerUIManager : MonoBehaviour{
     public List<PlayerUIPanel> playerUIPanels = new List<PlayerUIPanel>();
 
     private void OnEnable(){
-        GameManager.instance.OnPlayerJoinedGame += PlayerJoinedGame;
-        GameManager.instance.OnPlayerLeftGame += PlayerLeftGame;
+        GameManager.Instance.OnPlayerJoinedGame += PlayerJoinedGame;
+        GameManager.Instance.OnPlayerLeftGame += PlayerLeftGame;
     }
 
     private void OnDisable(){
-        GameManager.instance.OnPlayerJoinedGame -= PlayerJoinedGame;
-        GameManager.instance.OnPlayerLeftGame -= PlayerLeftGame;
+        GameManager.Instance.OnPlayerJoinedGame -= PlayerJoinedGame;
+        GameManager.Instance.OnPlayerLeftGame -= PlayerLeftGame;
     }
 
     void PlayerJoinedGame(PlayerInput playerInput){

@@ -16,7 +16,7 @@ public abstract class HealthSystem : MonoBehaviour{
     public abstract bool IsInvulnerable {get; protected set;}
 
     public void Kill(){
-        TakeDamage(GameManager.instance.gameObject, float.MaxValue);
+        TakeDamage(GameManager.Instance.gameObject, float.MaxValue);
     }
 
     public abstract void InitializeVariables();

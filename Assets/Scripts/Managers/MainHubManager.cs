@@ -16,8 +16,8 @@ public class MainHubManager : LevelManager{
     }
 
     protected override void InitializeLevel(){
-        GameManager.instance.joinAction.Enable();
-        GameManager.instance.miniGameIsRunning = false;
+        GameManager.Instance.joinAction.Enable();
+        GameManager.Instance.miniGameIsRunning = false;
 
         CanvasManager.instance.playerPanels.SetActive(true);
         CanvasManager.instance.miniGameUI.SetActive(true);

@@ -37,7 +37,7 @@ public class LevelLoader : MonoBehaviour{
     }
 
     public void LoadLevel(string sceneName){
-        GameManager.instance.mainCamera = null;
+        GameManager.Instance.mainCamera = null;
         StartCoroutine(LoadAsynchronously(sceneName));
         loading.text = loadingString;
         loadingScreen.SetActive(true);

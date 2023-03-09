@@ -26,7 +26,7 @@ public class PauseMenu : MenuController{
     }
 
     private void ListenToPlayerJoined(){
-        GameManager.instance.OnPlayerJoinedGame += SubscribeToPlayerButtonPress;
+        GameManager.Instance.OnPlayerJoinedGame += SubscribeToPlayerButtonPress;
     }
 
     private void SubscribeToPlayerButtonPress(PlayerInput _playerInput){
@@ -58,20 +58,20 @@ public class PauseMenu : MenuController{
 
     public void FreezeGame(){
         Time.timeScale = 0f;
-        foreach(var playerInput in GameManager.instance.playerList){
+        foreach(var playerInput in GameManager.Instance.playerList){
             playerInput.GetComponent<PlayerInputHandler>().PlayerOpenedMenu();
         }
-        GameManager.instance.joinAction.Disable();
-        GameManager.instance.gameIsPaused = true;
+        GameManager.Instance.joinAction.Disable();
+        GameManager.Instance.gameIsPaused = true;
     }
 
     public void UnfreezeGame(){
         Time.timeScale = 1f;
-        foreach(var playerInput in GameManager.instance.playerList){
+        foreach(var playerInput in GameManager.Instance.playerList){
             playerInput.GetComponent<PlayerInputHandler>().PlayerClosedMenu();
         }
-        GameManager.instance.joinAction.Enable();
-        GameManager.instance.gameIsPaused = false;
+        GameManager.Instance.joinAction.Enable();
+        GameManager.Instance.gameIsPaused = false;
     }
 
 
@@ -90,15 +90,15 @@ public class PauseMenu : MenuController{
     }
 
     public void DropOut(){
-        GameManager.instance.UnregisterPlayer(playerInput);
+        GameManager.Instance.UnregisterPlayer(playerInput);
         Resume();
     }
 
     public void QuitToMainMenu(){
         Time.timeScale = 1f;
         base.Back();
-        while(GameManager.instance.playerList.Count() > 0){
-            GameManager.instance.UnregisterPlayer(GameManager.instance.playerList[0]);
+        while(GameManager.Instance.playerList.Count() > 0){
+            GameManager.Instance.UnregisterPlayer(GameManager.Instance.playerList[0]);
         }
         LevelLoader.instance.LoadLevel("MainMenu");
     }

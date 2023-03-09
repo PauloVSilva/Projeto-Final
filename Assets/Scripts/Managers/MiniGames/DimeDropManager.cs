@@ -13,7 +13,7 @@ public class DimeDropManager : MiniGameManager{
         if(miniGame == MiniGame.dimeDrop){
             if(gameGoal == MiniGameGoal.scoreAmount){
                 scoreAmountGoal = MiniGameOptionsMenu.instance.GetMiniGameGoalAmount();
-                foreach(var playerInput in GameManager.instance.playerList){
+                foreach(var playerInput in GameManager.Instance.playerList){
                     playerInput.GetComponent<CharacterManager>().OnPlayerScoreChanged += VerifyScoreAmountWinCondition;
                 }
             }
@@ -24,7 +24,7 @@ public class DimeDropManager : MiniGameManager{
         foreach(var spawner in itemSpawnersList){
             spawner.GetComponent<Spawner>().spawnerEnabled = true;
         }
-        foreach(var playerInput in GameManager.instance.playerList){
+        foreach(var playerInput in GameManager.Instance.playerList){
             playerInput.GetComponent<CharacterManager>().UnblockActions();
         }
         GameStateAdvances();
@@ -40,7 +40,7 @@ public class DimeDropManager : MiniGameManager{
     }
 
     protected override void GameOverSetUp(){
-        foreach(var playerInput in GameManager.instance.playerList){
+        foreach(var playerInput in GameManager.Instance.playerList){
             playerInput.GetComponent<CharacterManager>().OnPlayerScoreChanged -= VerifyScoreAmountWinCondition;
         }
 

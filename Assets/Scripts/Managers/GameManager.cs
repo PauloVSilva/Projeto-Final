@@ -2,13 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 using System.Linq;
-using System;
 
-public class GameManager : MonoBehaviour{
-    //INSTANCES
-    public static GameManager instance = null;
+public class GameManager : PersistentSingleton<GameManager>
+{
+
     public bool gameIsPaused;
     public bool miniGameIsRunning;
 
@@ -23,11 +21,11 @@ public class GameManager : MonoBehaviour{
     public InputAction joinAction;
 
     //EVENTS
-    public event Action<PlayerInput> OnPlayerJoinedGame;
-    public event Action<PlayerInput> OnPlayerLeftGame;
+    public event System.Action<PlayerInput> OnPlayerJoinedGame;
+    public event System.Action<PlayerInput> OnPlayerLeftGame;
 
-    private void Awake(){
-        InitializeSingletonInstance();
+    protected override void Awake(){
+        base.Awake();
 
         gameIsPaused = false;
         miniGameIsRunning = false;
@@ -35,21 +33,11 @@ public class GameManager : MonoBehaviour{
         joinAction.performed += context => {JoinAction(context); /*joinAction.Disable();*/ Debug.Log("Player Joined");};
     }
 
-    private void InitializeSingletonInstance(){
-        if(instance == null){
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else if(instance != null){
-            Destroy(gameObject);
-        }
-    }
-
 
     public void FullyResetPlayers(){
-        if(GameManager.instance.playerList.Count > 0){
+        if(GameManager.Instance.playerList.Count > 0){
             mainCamera.GetComponent<CameraController>().ClearList();
-            foreach(var playerInput in GameManager.instance.playerList){
+            foreach(var playerInput in GameManager.Instance.playerList){
                 playerInput.GetComponent<CharacterManager>().FullReset();
             }
         }

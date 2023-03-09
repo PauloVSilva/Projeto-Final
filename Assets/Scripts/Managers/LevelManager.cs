@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class LevelManager : MonoBehaviour{
+public abstract class LevelManager : MonoBehaviour
+{
     [SerializeField] protected Pool[] objectsToPool;
     public GameObject[] levelSpawnPoints;
     public Camera mainCamera;
@@ -10,15 +11,15 @@ public abstract class LevelManager : MonoBehaviour{
     private void Awake(){
         InitializeSingletonInstance();
 
-        GameManager.instance.spawnPoints = levelSpawnPoints;
-        GameManager.instance.mainCamera = mainCamera;
-        GameManager.instance.FullyResetPlayers();
+        GameManager.Instance.spawnPoints = levelSpawnPoints;
+        GameManager.Instance.mainCamera = mainCamera;
+        GameManager.Instance.FullyResetPlayers();
     }
 
     private void Start(){
-        foreach(var playerInput in GameManager.instance.playerList){
-            int index = playerInput.playerIndex % GameManager.instance.spawnPoints.Length;
-            playerInput.transform.position = GameManager.instance.spawnPoints[index].transform.position;
+        foreach(var playerInput in GameManager.Instance.playerList){
+            int index = playerInput.playerIndex % GameManager.Instance.spawnPoints.Length;
+            playerInput.transform.position = GameManager.Instance.spawnPoints[index].transform.position;
         }
 
 

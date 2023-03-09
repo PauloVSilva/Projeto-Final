@@ -22,7 +22,7 @@ public class CharacterSelectionMenu : MenuController{
     }
 
     private void ListenToPlayerJoined(){
-        GameManager.instance.OnPlayerJoinedGame += MenuOpened;
+        GameManager.Instance.OnPlayerJoinedGame += MenuOpened;
     }
 
     public void MenuOpened(PlayerInput _playerInput){

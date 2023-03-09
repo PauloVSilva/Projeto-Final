@@ -71,12 +71,12 @@ public abstract class MiniGameManager : LevelManager{
     protected virtual void CheckMiniGameEvents(){}
 
     protected override void InitializeLevel(){
-        GameManager.instance.joinAction.Disable();
-        GameManager.instance.miniGameIsRunning = true;
+        GameManager.Instance.joinAction.Disable();
+        GameManager.Instance.miniGameIsRunning = true;
 
         gameState = MiniGameState.none;
 
-        foreach(var playerInput in GameManager.instance.playerList){
+        foreach(var playerInput in GameManager.Instance.playerList){
             playerInput.GetComponent<CharacterManager>().BlockActions();
         }
 

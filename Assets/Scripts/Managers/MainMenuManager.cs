@@ -10,8 +10,8 @@ public class MainMenuManager : MonoBehaviour{
     }
 
     private void InitializeMainMenu(){
-        GameManager.instance.joinAction.Disable();
-        GameManager.instance.miniGameIsRunning = false;
+        GameManager.Instance.joinAction.Disable();
+        GameManager.Instance.miniGameIsRunning = false;
 
         CanvasManager.instance.playerPanels.SetActive(false);
         CanvasManager.instance.miniGameUI.SetActive(false);

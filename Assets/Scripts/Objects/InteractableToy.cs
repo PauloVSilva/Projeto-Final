@@ -26,7 +26,7 @@ public class InteractableToy : MonoBehaviour, InteractorInterface{
     [SerializeField] public string PromptString => toyPrompt; //property that returns string
     
     public bool Interact(Interactor interactor){
-        if(GameManager.instance.playerList.Count > 1){
+        if(GameManager.Instance.playerList.Count > 1){
             MiniGameOptionsMenu.instance.MenuOpened(interactor.characterManager.playerInput, miniGame);
         }
         else{
