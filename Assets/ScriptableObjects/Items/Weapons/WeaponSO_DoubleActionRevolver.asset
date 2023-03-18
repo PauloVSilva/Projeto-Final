@@ -27,4 +27,4 @@ MonoBehaviour:
   ammoCapacity: 6
   fireRate: 1
   weight: 0
-  reloadTime: 0
+  reloadTime: 1

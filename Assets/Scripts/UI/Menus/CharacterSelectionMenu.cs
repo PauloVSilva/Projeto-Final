@@ -16,21 +16,27 @@ public class CharacterSelectionMenu : MenuController{
     [SerializeField] private Image characterSprite;
     [SerializeField] private TextMeshProUGUI characterName;
 
-    protected override void Start(){
+    protected override void Start()
+    {
         base.Start();
+
         ListenToPlayerJoined();
     }
 
-    private void ListenToPlayerJoined(){
+    private void ListenToPlayerJoined()
+    {
         GameManager.Instance.OnPlayerJoinedGame += MenuOpened;
     }
 
-    public void MenuOpened(PlayerInput _playerInput){
+    public void MenuOpened(PlayerInput _playerInput)
+    {
         base.AssignPlayerToMenu(_playerInput);
+
         InitializeMenu();
     }
 
-    private void InitializeMenu(){
+    private void InitializeMenu()
+    {
         greetMessage = MessageManager.instance.GetGreetMessage(playerInput.playerIndex + 1);
         playerControllingMenu.text = greetMessage;
         
@@ -73,7 +79,8 @@ public class CharacterSelectionMenu : MenuController{
         UpdateCharacter();
     }
 
-    public void ConfirmCharacter(){
+    public void ConfirmCharacter()
+    {
         CharacterStatsScriptableObject selectedCharacter = displayedCharacter;
         characterManager.SpawnCharacter(selectedCharacter);
         base.Back();

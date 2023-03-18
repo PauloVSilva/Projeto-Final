@@ -30,7 +30,7 @@ public class CharacterHealthSystem : HealthSystem{
     }
 
     public void Initialize(){
-        SetScriptableObjectVariables();
+        GetScriptableObjectVariables();
         InitializeVariables();
         StartCoroutine(OnEntityBornDelay());
         IEnumerator OnEntityBornDelay(){
@@ -39,7 +39,7 @@ public class CharacterHealthSystem : HealthSystem{
         }
     }
 
-    private void SetScriptableObjectVariables(){
+    private void GetScriptableObjectVariables(){
         MaxHealth = characterManager.Character.maxHealth;
         HealthRegenRate = characterManager.Character.healthRegenRate;
     }
@@ -59,72 +59,94 @@ public class CharacterHealthSystem : HealthSystem{
     }
 
     private void RegenerateHealth(){
-        if(IsAlive && CanRegenHealth){
+        if(IsAlive && CanRegenHealth)
+        {
             CurrentHealth = Math.Min(CurrentHealth += HealthRegenRate * Time.deltaTime, MaxHealth);
             SendHealthUpdateEvent();
         }
-        if(HealthRegenCooldown > 0){
+
+        if(HealthRegenCooldown > 0)
+        {
             HealthRegenCooldown -= Time.deltaTime;
         }
-        if(HealthRegenCooldown <= 0){
+
+        if(HealthRegenCooldown <= 0)
+        {
             HealthRegenCooldown = 0;
             CanRegenHealth = true;
         }
     }
 
-    private void LastDamageSourceRememberTime(){
+    private void LastDamageSourceRememberTime()
+    {
         lastDamagingPlayerTime = Math.Max(lastDamagingPlayerTime -= Time.deltaTime, 0);
-        if(lastDamagingPlayerTime == 0){
+
+        if(lastDamagingPlayerTime == 0)
+        {
             lastDamagingPlayer = null;
         }
     }
 
-    private void SendHealthUpdateEvent(){
+    private void SendHealthUpdateEvent()
+    {
         characterManager.PlayerHealthUpdated(CurrentHealth, MaxHealth);
     }
 
-    public void TakeDamage(float damageTaken){
+    public void TakeDamage(float damageTaken)
+    {
         TakeDamage(null, damageTaken);
     }
 
     public override void TakeDamage(GameObject _damageSource, float damageTaken){
-        if(!IsInvulnerable){
-            CurrentHealth = Math.Max(CurrentHealth -= damageTaken, 0);
+        if (IsInvulnerable) return;
 
-            if(_damageSource != null && _damageSource.CompareTag("Player")){
-                lastDamagingPlayer = _damageSource;
-                lastDamagingPlayerTime = 3f;
-            }
-
-            if(CurrentHealth <= 0){
-                if(lastDamagingPlayer != null){
-                    Die(lastDamagingPlayer);
-                }
-                else{
-                    Die(_damageSource);
-                }
-            }
-
-            characterManager.PlayerWasDamaged(damageTaken);
-            HealthRegenCooldown = 1f;
-            CanRegenHealth = false;
-            SendHealthUpdateEvent();
+        CurrentHealth = Math.Max(CurrentHealth -= damageTaken, 0);
+        
+        if(_damageSource != null && _damageSource.CompareTag("Player"))
+        {
+            lastDamagingPlayer = _damageSource;
+            lastDamagingPlayerTime = 3f;
         }
+        
+        if(CurrentHealth <= 0)
+        {
+            if(lastDamagingPlayer != null)
+            {
+                Die(lastDamagingPlayer);
+            }
+            else
+            {
+                Die(_damageSource);
+            }
+        }
+        
+        characterManager.PlayerWasDamaged(damageTaken);
+        HealthRegenCooldown = 1f;
+        CanRegenHealth = false;
+        SendHealthUpdateEvent();
+        
     }
 
-    public override void Heal(float heal){
+    public override void Heal(float heal)
+    {
         CurrentHealth = Math.Min(CurrentHealth += heal, MaxHealth);
         characterManager.PlayerWasHealed(heal);
         SendHealthUpdateEvent();
     }
 
-    public override void Die(GameObject _damageSource){
+    public override void Die(GameObject _damageSource)
+    {
         IsAlive = false;
         IsInvulnerable = true;
         CurrentHealth = 0;
         characterManager.PlayerDied(gameObject);
-        if(_damageSource != null && _damageSource.CompareTag("Player")){
-            _damageSource.transform.GetComponent<CharacterManager>().PlayerScoredKill(_damageSource);
+
+        if(_damageSource != null && _damageSource.CompareTag("Player"))
+        {
+            //_damageSource.transform.GetComponent<CharacterManager>().PlayerScoredKill(_damageSource);
+
+            _damageSource.transform.TryGetComponent(out CharacterManager _characterManager);
+            _characterManager.PlayerScoredKill(_damageSource);
         }
     }
 }

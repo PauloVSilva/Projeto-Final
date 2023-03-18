@@ -8,6 +8,7 @@ public class CharacterStatsScriptableObject : ScriptableObject{
     [Space(5)]
     [Header("Models/Skins")]
     public GameObject[] characterModel;
+    public GameObject tombstone;
     public Sprite[] sprite;
     public string characterName;
 

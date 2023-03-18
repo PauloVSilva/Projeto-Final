@@ -106,8 +106,8 @@ public class PlayerUIPanel : MonoBehaviour{
         playerIndex.text = (player.playerIndex + 1).ToString();
         characterName.text = characterManager.Character.characterName.ToString();
 
-        if(characterManager.teamColor == TeamColor.none)    playerTeam.text = null;
-        else playerTeam.text = characterManager.teamColor.ToString();
+        //if(characterManager.teamColor == TeamColor.none)    playerTeam.text = null;
+        //else playerTeam.text = characterManager.teamColor.ToString();
 
         _playerHealthBar.maxValue = characterManager.characterHealthSystem.MaxHealth;
         _playerHealthBar.value = characterManager.characterHealthSystem.CurrentHealth;

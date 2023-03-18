@@ -9,26 +9,67 @@ public class CameraController : MonoBehaviour{
     public float smoothSpeed;
     public List<GameObject> objectsTracked = new List<GameObject>();
 
-    public void ClearList(){
-        objectsTracked.Clear();
+
+    private void Start()
+    {
+        SubscribeToEvents();
     }
 
-    public void AddCharacter(GameObject character){
+    private void OnDestroy()
+    {
+        UnsubscribeFromEvents();
+    }
+
+
+    private void SubscribeToEvents()
+    {
+        GameManager.Instance.OnPlayerJoinedGame += TrackPlayer;
+        GameManager.Instance.OnPlayerLeftGame += UntrackPlayer;
+    }
+
+    private void UnsubscribeFromEvents()
+    {
+        GameManager.Instance.OnPlayerJoinedGame -= TrackPlayer;
+        GameManager.Instance.OnPlayerLeftGame -= UntrackPlayer;
+    }
+
+
+    public void ResetTrackedList()
+    {
+        objectsTracked.Clear();
+
+        foreach (PlayerInput playerInput in GameManager.Instance.playerList)
+        {
+            TrackPlayer(playerInput);
+        }
+    }
+
+    private void TrackPlayer(PlayerInput playerInput)
+    {
+        playerInput.TryGetComponent(out CharacterManager _characterManager);
+
+        _characterManager.OnPlayerBorn += AddCharacter;
+        _characterManager.OnPlayerDied += RemoveCharacter;
+    }
+
+    private void UntrackPlayer(PlayerInput playerInput)
+    {
+        playerInput.TryGetComponent(out CharacterManager _characterManager);
+
+        _characterManager.OnPlayerBorn -= AddCharacter;
+        _characterManager.OnPlayerDied -= RemoveCharacter;
+
+        RemoveCharacter(_characterManager.transform.gameObject);
+    }
+
+    private void AddCharacter(GameObject character)
+    {
         objectsTracked.Add(character);
     }
 
-    public void AddPlayer(PlayerInput playerInput){
-        objectsTracked.Add(playerInput.transform.gameObject);
-    }
-
-    public void RemoveCharacter(GameObject character){
+    private void RemoveCharacter(GameObject character)
+    {
         objectsTracked.Remove(character);
-    }
-
-    public void RemovePlayer(PlayerInput playerInput){
-        if(playerInput.GetComponent<CharacterManager>().characterObject != null){
-            objectsTracked.Remove(playerInput.transform.gameObject);
-        }
     }
 
     void FixedUpdate(){

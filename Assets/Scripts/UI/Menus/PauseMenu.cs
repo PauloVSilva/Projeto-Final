@@ -46,13 +46,17 @@ public class PauseMenu : MenuController{
         StartCoroutine(FreezeGameDelay());
     }
 
-    public IEnumerator FreezeGameDelay(){
+    public IEnumerator FreezeGameDelay()
+    {
         yield return new WaitForSecondsRealtime(0.01f);
+        //yield return new WaitForEndOfFrame();
         FreezeGame();
     }
 
-    public IEnumerator UnfreezeGameDelay(){
+    public IEnumerator UnfreezeGameDelay()
+    {
         yield return new WaitForSecondsRealtime(0.01f);
+        //yield return new WaitForEndOfFrame();
         UnfreezeGame();
     }
 
@@ -94,12 +98,17 @@ public class PauseMenu : MenuController{
         Resume();
     }
 
-    public void QuitToMainMenu(){
+    public void QuitToMainMenu()
+    {
         Time.timeScale = 1f;
+
         base.Back();
-        while(GameManager.Instance.playerList.Count() > 0){
+
+        while(GameManager.Instance.playerList.Count() > 0)
+        {
             GameManager.Instance.UnregisterPlayer(GameManager.Instance.playerList[0]);
         }
+
         LevelLoader.instance.LoadLevel("MainMenu");
     }
     #endregion BUTTONS

@@ -556,6 +556,14 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: ba020648-05d4-4f41-b56a-c57bc53fb65f
     m_ActionName: UI/Back[/Keyboard/escape,/DualShock4GamepadHID/buttonEast]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c6661d26-aa9f-47b0-8bd8-271ab3463715
+    m_ActionName: UI/PreviousTab[/Keyboard/q,/DualSenseGamepadHID/leftShoulder,/DualShock4GamepadHID/leftShoulder]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 87c0382b-d6ec-4981-9a88-7417d559e352
+    m_ActionName: UI/NextTab[/Keyboard/e,/DualSenseGamepadHID/rightShoulder,/DualShock4GamepadHID/rightShoulder]
   m_NeverAutoSwitchControlSchemes: 1
   m_DefaultControlScheme: 
   m_DefaultActionMap: UI
@@ -594,7 +602,12 @@ MonoBehaviour:
   characterInteractor: {fileID: 0}
   Character: {fileID: 0}
   characterObject: {fileID: 0}
-  teamColor: 0
+  colors:
+  - {r: 0, g: 0, b: 1, a: 1}
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 0, g: 1, b: 0, a: 1}
+  - {r: 1, g: 0, b: 1, a: 1}
+  color: {r: 1, g: 1, b: 1, a: 1}
   score: 0
   kills: 0
   deaths: 0
@@ -602,7 +615,6 @@ MonoBehaviour:
   totalLives: 0
   timeToRespawn: 0
   actionsAreBlocked: 0
-  isMountedOnTurret: 0
 --- !u!114 &-3360404993604576978
 MonoBehaviour:
   m_ObjectHideFlags: 0

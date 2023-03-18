@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterModel:
   - {fileID: 8463049207392376651, guid: a40a1569d3a5552479b1ddc3b59e995e, type: 3}
+  tombstone: {fileID: 1045390783213288524, guid: cafb86b1b51ac5743b6e3691f456f500, type: 3}
   sprite:
   - {fileID: 21300000, guid: 01dbf05326305424b9899deec2520fb6, type: 3}
   characterName: Arturito

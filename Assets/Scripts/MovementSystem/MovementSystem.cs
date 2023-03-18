@@ -115,76 +115,104 @@ public class MovementSystem : MonoBehaviour{
 
     private void SubscribeToEvents(){
         playerInputHandler.OnCharacterMove += OnMove;
-        playerInputHandler.OnCharacterSprint += OnSprint;
+        //playerInputHandler.OnCharacterSprint += OnSprint;
         playerInputHandler.OnCharacterJump += OnJump;
         playerInputHandler.OnCharacterDash += OnDash;
     }
 
-    private void Update(){
-        if(characterManager.Character != null){
-            AngleCalculator();
-            //MovementBehaviour();
-            SprintBehaviour();
-            DashBehaviour();
-            AirTimeDamage();
-            StaminaRegen();
-        }
-    }
-
     private void FixedUpdate(){
-        if(characterManager.Character != null){
-            MovementBehaviour();
+        if(characterManager.Character == null)
+        {
+            Debug.Log("Character is null");
+            return;
+        }
+
+        AngleCalculator();
+        MovementBehaviour();
+        //SprintBehaviour();
+        DashBehaviour();
+        AirTimeDamage();
+        StaminaRegen();
+    }
+
+    //private void FixedUpdate(){
+    //    if(characterManager.Character != null){
+    //        MovementBehaviour();
+    //    }
+    //}
+
+    private void OnControllerColliderHit(ControllerColliderHit other)
+    {
+        if(other.transform.GetComponent<CharacterManager>() == null)
+        {
+            //Debug.Log("CharacterManager not found on character");
+            return;
+        }
+
+        CharacterManager otherCharacter = other.transform.GetComponent<CharacterManager>();
+
+        if(AirTime > 0.25)
+        {
+            otherCharacter.characterHealthSystem.TakeDamage(this.gameObject, 10 + AirDamage * 2);
+        }
+
+        if(AirTime > 1.5)
+        {
+            characterManager.characterHealthSystem.TakeDamage(AirDamage * 0.5f);
+        }
+
+        AirTime = 0;
+
+        if(IsDashing)
+        {
+            otherCharacter.characterMovementSystem.Push(velocityX * WalkSpeed * velocityDecelerationMultiplier, velocityZ * WalkSpeed * velocityDecelerationMultiplier);
+            otherCharacter.characterHealthSystem.TakeDamage(this.gameObject, 0);
+
+            StopDash();
+        }
+
+        else if(move != Vector3.zero)
+        {
+            otherCharacter.characterMovementSystem.Push(velocityX * WalkSpeed, velocityZ * WalkSpeed);
         }
     }
 
-    private void OnControllerColliderHit(ControllerColliderHit other){
-        if(other.transform.GetComponent<CharacterManager>() != null){
-            if(AirTime > 0.25){
-                other.transform.GetComponent<CharacterHealthSystem>().TakeDamage(this.gameObject, 10 + AirDamage * 2);
-            }
-            if(AirTime > 1.5){
-                characterManager.characterHealthSystem.TakeDamage(AirDamage * 0.5f);
-            }
-            AirTime = 0;
-
-            if(IsDashing){
-                other.transform.GetComponent<MovementSystem>().Push(velocityX * WalkSpeed * velocityDecelerationMultiplier, velocityZ * WalkSpeed * velocityDecelerationMultiplier);
-                other.transform.GetComponent<CharacterHealthSystem>().TakeDamage(this.gameObject, 0);
-                StopDash();
-            }
-            else if(move != Vector3.zero){
-                other.transform.GetComponent<MovementSystem>().Push(velocityX * WalkSpeed, velocityZ * WalkSpeed);
-            }
-        }
-    }
-
-    public void Push(float velocityX, float velocityZ){
+    public void Push(float velocityX, float velocityZ)
+    {
         playerVelocity.x = velocityX;
         playerVelocity.z = velocityZ;
     }
 
-    private void AirTimeDamage(){
-        if(!groundedPlayer && playerVelocity.y < 0){
+    private void AirTimeDamage()
+    {
+        if(!groundedPlayer && playerVelocity.y < 0)
+        {
             AirTime += Time.deltaTime;
             AirDamage = (playerVelocity.y * -1);
         }
-        if(groundedPlayer){
-            if(AirTime > 1){
+        if(groundedPlayer)
+        {
+            if(AirTime > 1)
+            {
                 characterManager.characterHealthSystem.TakeDamage(AirDamage);
             }
             AirTime = 0;
         }
     }
 
-    public void StaminaRegen(){
-        if(CanRegenStamina && characterHealthSystem.IsAlive){
+    public void StaminaRegen()
+    {
+        if(CanRegenStamina && characterHealthSystem.IsAlive)
+        {
             CurrentStamina = Math.Min(CurrentStamina += StaminaRegenRate * Time.deltaTime, MaxStamina);
             SendStaminaUpdateEvent();
         }
-        if(StaminaRegenCooldown > 0){
+        if(StaminaRegenCooldown > 0)
+        {
             StaminaRegenCooldown = Math.Max(StaminaRegenCooldown -= Time.deltaTime, 0);
         }
-        if(StaminaRegenCooldown == 0){
+        if(StaminaRegenCooldown == 0)
+        {
             CanRegenStamina = true;
         }
     }
@@ -247,20 +275,20 @@ public class MovementSystem : MonoBehaviour{
         controller.Move(playerVelocity * Time.deltaTime); //fake physics - vertical movement
     }
 
-    private void SprintBehaviour(){
-        if(IsSprinting && CurrentStamina > 0f){
-            MoveSpeed = SprintSpeed;
-            SpendStamina(SprintStaminaCost * Time.deltaTime);
-        }
-        else{
-            MoveSpeed = WalkSpeed;
-            IsSprinting = false;
-        }
-    }
+    //private void SprintBehaviour(){
+    //    if(IsSprinting && CurrentStamina > 0f){
+    //        MoveSpeed = SprintSpeed;
+    //        SpendStamina(SprintStaminaCost * Time.deltaTime);
+    //    }
+    //    else{
+    //        MoveSpeed = WalkSpeed;
+    //        IsSprinting = false;
+    //    }
+    //}
 
     private void DashBehaviour(){
         if(IsDashing){
-            controller.Move(transform.forward * (MoveSpeed * 5f * Time.deltaTime));
+            controller.Move(transform.forward * (MoveSpeed * 3f * Time.deltaTime));
             DashTime = Math.Min(DashTime + Time.deltaTime, DashDuration);
         }
         if(DashTime == DashDuration){
@@ -275,22 +303,24 @@ public class MovementSystem : MonoBehaviour{
 
     }
 
-    private void ToggleSprint(){
-        IsSprinting = !IsSprinting;
-    }
+    //private void ToggleSprint(){
+    //    IsSprinting = !IsSprinting;
+    //}
 
     private void Jump(){
         playerVelocity.y = Mathf.Sqrt(JumpStrength * -3.0f * gravityValue);
         JumpsRemaining--;
         AirTime = 0;
-        SpendStamina(JumpStaminaCost);
+        //SpendStamina(JumpStaminaCost);
+        SpendStamina(0);
     }
 
     private void Dash(){
         IsDashing = true;
-        DashCooldown = 0.25f;
+        DashCooldown = 0.5f;
         CanDash = false;
-        SpendStamina(DashStaminaCost);
+        //SpendStamina(DashStaminaCost);
+        SpendStamina(0);
     }
 
     private void StopDash(){
@@ -316,17 +346,17 @@ public class MovementSystem : MonoBehaviour{
         }
     }
 
-    public void OnSprint(InputAction.CallbackContext context){
-        if(context.performed && characterManager.CanMove()){
-            if(CurrentStamina > 1f){
-                ToggleSprint();
-            }
-        }
-    }
+    //public void OnSprint(InputAction.CallbackContext context){
+    //    if(context.performed && characterManager.CanMove()){
+    //        if(CurrentStamina > 1f){
+    //            ToggleSprint();
+    //        }
+    //    }
+    //}
 
     public void OnJump(InputAction.CallbackContext context){
         if(context.performed && characterManager.CanMove()){
-            if(CurrentStamina > 1f && JumpsRemaining > 0){
+            if(JumpsRemaining > 0){
                 Jump();
             }
         }
@@ -334,7 +364,7 @@ public class MovementSystem : MonoBehaviour{
 
     public void OnDash(InputAction.CallbackContext context){
         if(context.performed && characterManager.CanMove()){
-            if(CurrentStamina > 1f && CanDash){
+            if(CanDash){
                 Dash();
             }
         }

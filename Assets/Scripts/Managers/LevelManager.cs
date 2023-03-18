@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public abstract class LevelManager : MonoBehaviour
 {
@@ -13,7 +14,8 @@ public abstract class LevelManager : MonoBehaviour
 
         GameManager.Instance.spawnPoints = levelSpawnPoints;
         GameManager.Instance.mainCamera = mainCamera;
-        GameManager.Instance.FullyResetPlayers();
+
+        FullyResetPlayers();
     }
 
     private void Start(){
@@ -31,12 +33,22 @@ public abstract class LevelManager : MonoBehaviour
     }
 
     private void OnDestroy(){
-        if(objectsToPool.Length > 0){
-            foreach(Pool pool in objectsToPool){
-                ObjectPooler.instance.RemovePool(pool);
-            }
+        ClearPools();
+    }
+
+
+    private void FullyResetPlayers()
+    {
+        if (GameManager.Instance.playerList.Count == 0) return;
+
+        mainCamera.GetComponent<CameraController>().ResetTrackedList();
+
+        foreach (PlayerInput playerInput in GameManager.Instance.playerList)
+        {
+            playerInput.GetComponent<CharacterManager>().FullReset();
         }
     }
+
 
     private bool AddObjectsToPool(){
         if(ObjectPooler.instance == null){
@@ -50,6 +62,17 @@ public abstract class LevelManager : MonoBehaviour
             ObjectPooler.instance.AddPool(pool);
         }
         return true;
+    }
+
+    private void ClearPools()
+    {
+        if (objectsToPool.Length > 0)
+        {
+            foreach (Pool pool in objectsToPool)
+            {
+                ObjectPooler.instance.RemovePool(pool);
+            }
+        }
     }
 
     protected abstract void InitializeSingletonInstance();

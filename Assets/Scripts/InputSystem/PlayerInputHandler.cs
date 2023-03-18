@@ -80,7 +80,7 @@ public class PlayerInputHandler : MonoBehaviour{
 
     public void OnSprint(InputAction.CallbackContext context){
         if(characterManager.CanMove()){
-            OnCharacterSprint?.Invoke(context);
+            //OnCharacterSprint?.Invoke(context);
         }
     }
 
@@ -90,7 +90,7 @@ public class PlayerInputHandler : MonoBehaviour{
 
     public void OnCockHammer(InputAction.CallbackContext context){
         if(characterManager.CanUseFireGun()){
-            OnCharacterCockHammer?.Invoke(context);
+            //OnCharacterCockHammer?.Invoke(context);
         }
     }
 
@@ -102,7 +102,7 @@ public class PlayerInputHandler : MonoBehaviour{
 
     public void OnReload(InputAction.CallbackContext context){
         if(characterManager.CanUseFireGun()){
-            OnCharacterReload?.Invoke(context);
+            //OnCharacterReload?.Invoke(context);
         }
     }
 

@@ -73,7 +73,8 @@ public class Weapon : Item{
 
         holder = null;
         ammo = ammoCapacity;
-        totalAmmo = 999;
+        //totalAmmo = 999;
+        totalAmmo = ammoCapacity * 10;
         fullAutoClock = 0;
         fullAutoReady = 1 / fireRate;
         shooting = false;
@@ -149,11 +150,18 @@ public class Weapon : Item{
         return false;
     }
     
-    IEnumerator Reload(){
-        while(CanReload()){
+    IEnumerator Reload()
+    {
+        if(CanReload())
+        {
             yield return new WaitForSeconds(reloadTime);
-            totalAmmo--;
-            ammo++;
+
+            for(int i = 0; i < ammoCapacity && totalAmmo > 0; i++)
+            {
+                ammo++;
+                totalAmmo--;
+            }
+
             holder.transform.GetComponent<CharacterWeaponSystem>()?.WeaponReloaded();
         }
     }
@@ -189,11 +197,26 @@ public class Weapon : Item{
             fullAutoClock = 0;
 
             holder.transform.GetComponent<CharacterWeaponSystem>().WeaponFired();
+
+            if(ammo == 0)
+            {
+                StartCoroutine(Reload());
+            }
+            if(totalAmmo == 0)
+            {
+                //Dropped();
+                holder.transform.GetComponent<CharacterWeaponSystem>()?.DropWeapon();
+
+                canBePickedUp = false;
+                age = maxAge - 10;
+            }
+
         }
     }
 
     private void CastProjectile(){
-        if(ObjectPooler.instance.SpawnFromPool(projectileToCast.projectileModel, castPoint.position, castPoint.rotation, this.gameObject) == null){
+        if(ObjectPooler.instance.SpawnFromPool(projectileToCast.projectileModel, castPoint.position, castPoint.rotation, this.gameObject) == null)
+        {
             Debug.LogWarning("Something went wrong. Object Pooler couldn't Spawn " + projectileToCast.projectileModel);
         }
     }

@@ -6,7 +6,6 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.DualShock;
 
 public enum Animal{hedgehog, pangolin, threeBandedArmadillo}
-public enum TeamColor{none, blue, red, green, yellow}
 
 public class CharacterManager : MonoBehaviour{
     #region "SYSTEMS"
@@ -19,10 +18,13 @@ public class CharacterManager : MonoBehaviour{
     [SerializeField] public Interactor characterInteractor;
     [SerializeField] public CharacterStatsScriptableObject Character;
     [SerializeField] public GameObject characterObject;
+    [SerializeField] public GameObject characterTombstone;
     #endregion "SYSTEMS"
 
     #region "STATS"
-    public TeamColor teamColor;
+    [SerializeField] private Color[] colors;
+
+    public Color color;
     public int score;
     public int kills;
     public int deaths;
@@ -30,7 +32,6 @@ public class CharacterManager : MonoBehaviour{
     public int totalLives;
     public float timeToRespawn;
     public bool actionsAreBlocked;
-    public bool isMountedOnTurret;
     #endregion "STATS"
 
     #region "EVENTS"
@@ -53,10 +54,13 @@ public class CharacterManager : MonoBehaviour{
     private void Awake(){
         InitializeComponents();
         InitializePlayerVariables();
+        SetupControllerLights();
     }
 
     private void InitializeComponents(){
         characterObject = null;
+        characterTombstone = null;
+
         playerInput = GetComponent<PlayerInput>();
         playerInputHandler = GetComponent<PlayerInputHandler>();
 
@@ -65,19 +69,11 @@ public class CharacterManager : MonoBehaviour{
         characterInventory = GetComponent<CharacterInventory>();
         characterWeaponSystem = GetComponent<CharacterWeaponSystem>();
         characterInteractor = GetComponent<Interactor>();
-
-        var device = playerInput.devices[0];
-        Debug.Log(device.GetType().ToString());
-        //if (device.GetType().ToString() == "UnityEngine.InputSystem.DualShock.DualShock4GamepadHID"){
-        if (device.GetType().ToString() == "UnityEngine.InputSystem.DualShock.FastDualShock4GamepadHID"){
-            Debug.Log("Entrou");
-            DualShockGamepad ds4 = (DualShockGamepad)device;
-            ds4.SetLightBarColor(Color.blue);
-        }
     }
 
     private void InitializePlayerVariables(){
-        teamColor = TeamColor.none;
+        color = colors[playerInput.playerIndex];
+
         score = 0;
         kills = 0;
         deaths = 0;
@@ -86,8 +82,24 @@ public class CharacterManager : MonoBehaviour{
         timeToRespawn = 3f;
 
         actionsAreBlocked = false;
-        isMountedOnTurret = false;
     }
+
+    private void SetupControllerLights()
+    {
+        var device = playerInput.devices[0];
+
+        if (device.GetType() == typeof(DualSenseGamepadHID))
+        {
+            DualSenseGamepadHID dualsense = (DualSenseGamepadHID)device;
+            dualsense.SetLightBarColor(color);
+        }
+        if (device.GetType() == typeof(DualShock4GamepadHID))
+        {
+            DualShock4GamepadHID dualshock4 = (DualShock4GamepadHID)device;
+            dualshock4.SetLightBarColor(color);
+        }
+    }
+
 
     public void ResetStats(){
         InitializePlayerVariables();
@@ -97,6 +109,8 @@ public class CharacterManager : MonoBehaviour{
         Character = _character;
 
         characterObject = GameObject.Instantiate(Character.characterModel[0], transform.position, transform.rotation, this.transform);
+        characterTombstone = _character.tombstone;
+
         characterHealthSystem.Initialize();
         characterMovementSystem.Initialize();
         characterWeaponSystem.SetGunPosition();
@@ -167,14 +181,6 @@ public class CharacterManager : MonoBehaviour{
 
 
 
-
-    public void SetTeam(TeamColor _teamColor){
-        teamColor = _teamColor;
-    }
-
-    public int GetScore(){
-        return score;
-    }
 
     public void IncreaseLives(int _amount){
         totalLives += _amount;
@@ -252,18 +258,25 @@ public class CharacterManager : MonoBehaviour{
 
     public void PlayerScoredKill(GameObject character){
         kills++;
+
         OnPlayerScoredKill?.Invoke(character);
     }
 
     public void PlayerDied(GameObject character){
         deaths++;
-        if(!unlimitedLives){
+
+        if(!unlimitedLives)
+        {
             totalLives--;
         }
+
         BeginRespawnProcess();
+
         characterInventory.DropAllInventory();
 
-        Instantiate(GameManager.Instance.DeathSpot, character.transform.position, Quaternion.Euler(0, 0, 0), this.transform);
+        GameObject tombstone = Instantiate(characterTombstone, character.transform.position, Quaternion.Euler(0, 0, 0));
+        Destroy(tombstone, timeToRespawn);
+
         OnPlayerDied?.Invoke(character);
     }
 
