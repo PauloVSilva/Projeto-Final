@@ -19,11 +19,8 @@ public class PlayerUIPanel : MonoBehaviour{
     [SerializeField] private Image characterSprite;
     [SerializeField] private TextMeshProUGUI playerIndex;
     [SerializeField] private TextMeshProUGUI characterName;
-    [SerializeField] private TextMeshProUGUI playerTeam;
     [SerializeField] private Slider _playerHealthBar;
-    [SerializeField] private Slider _playerStaminaBar;
     [SerializeField] private Slider _playerShadowHealthBar;
-    [SerializeField] private Slider _playerShadowStaminaBar;
  
     [Space(5)]
     [Header("Stats")]
@@ -43,30 +40,51 @@ public class PlayerUIPanel : MonoBehaviour{
     [SerializeField] private TextMeshProUGUI weaponAmmoTotal;
 
 
-
-
-    private void Start(){
-        SetStatsInactive();
+    private void Start()
+    {
+        UpdatePanels();
         InitializeBars();
     }
 
-    private void OnDisable(){
+    private void OnDestroy()
+    {
         UnassignPlayer();
     }
 
-    private void SetStatsActive(){
-        playerInfo.gameObject.SetActive(true);
-        joinMessage.gameObject.SetActive(false);
+
+    private void UpdatePanels()
+    {
+        playerInfo.gameObject.SetActive(player != null);
+        joinMessage.gameObject.SetActive(player == null);
+    }
+    
+    private void InitializeBars(){
+        _playerHealthBar.minValue = 0;
+        _playerShadowHealthBar.minValue = 0;
     }
 
-    private void SetStatsInactive(){
-        playerInfo.gameObject.SetActive(false);
-        joinMessage.gameObject.SetActive(true);
-    }
+    
+    public void AssignPlayer(PlayerInput playerInput)
+    {
+        StartCoroutine(AssignPlayerDelay(playerInput));
+        IEnumerator AssignPlayerDelay(PlayerInput playerInput)
+        {
+            yield return new WaitForSeconds(0.01f);
+            player = playerInput;
 
+            player.transform.TryGetComponent(out CharacterManager _characterManager);
+
+            characterManager = _characterManager;
+            characterWeaponSystem = characterManager.characterWeaponSystem;
+
+            SubscribeToPlayerEvents();
+        }
+    }
+    
     private void SubscribeToPlayerEvents(){
+        characterManager.OnCharacterChosen += AssignCharacter;
+
         characterManager.OnPlayerHealthUpdated += UpdateHealth;
-        characterManager.OnPlayerStaminaUpdated += UpdateStamina;
         characterManager.OnPlayerScoreChanged += UpdateScore;
 
         characterManager.OnPlayerPickedUpWeapon += DisplayWeapon;
@@ -77,12 +95,67 @@ public class PlayerUIPanel : MonoBehaviour{
         characterManager.OnPlayerScoredKill += UpdateKillCount;
         characterManager.OnPlayerDied += UpdateDeathCount;
 
-        characterManager.OnPlayerStatsReset += UpdatePanel;
+        characterManager.OnPlayerStatsReset += UpdatePanelStats;
+    }
+
+    public void AssignCharacter()
+    {
+        StartCoroutine(AssignCharacterDelay());
+        IEnumerator AssignCharacterDelay()
+        {
+            yield return new WaitForSeconds(0.01f);
+
+            UpdatePanels();
+            InitializeStats();
+            CheckForWeapon();
+        }
+    }
+    
+    private void InitializeStats(){
+        characterSprite.sprite = characterManager.Character.sprite[0];
+
+        playerIndex.text = (player.playerIndex + 1).ToString();
+        mainInfoPanel.GetComponent<Image>().color = characterManager.UIColor;
+
+        characterName.text = characterManager.Character.characterName.ToString();
+
+        _playerHealthBar.maxValue = characterManager.characterHealthSystem.MaxHealth;
+        _playerHealthBar.value = characterManager.characterHealthSystem.CurrentHealth;
+
+        _playerShadowHealthBar.maxValue = _playerHealthBar.maxValue;
+        _playerShadowHealthBar.value = _playerHealthBar.value;
+
+        _playerTotalLives.text = characterManager.totalLives.ToString();
+        playerKillCount.text = characterManager.kills.ToString();
+        playerDeathCount.text = characterManager.deaths.ToString();
+        playerScore.text = characterManager.score.ToString();
+
+        StartCoroutine(UpdateShadowBars());
+    }
+
+    private void CheckForWeapon(){
+        if(characterWeaponSystem.CharacterWeapon == null) HideWeapon();
+        else
+        {
+            Weapon _weapon = characterWeaponSystem.CharacterWeapon;
+            DisplayWeapon(_weapon);
+        }
+    }
+
+    public void UnassignPlayer()
+    {
+        if (player == null) return;
+
+        player = null;
+        UpdatePanels();
+        UnsubscribeToPlayerEvents();
+        characterManager = null;
     }
 
     private void UnsubscribeToPlayerEvents(){
+        characterManager.OnCharacterChosen -= AssignCharacter;
+
         characterManager.OnPlayerHealthUpdated -= UpdateHealth;
-        characterManager.OnPlayerStaminaUpdated -= UpdateStamina;
         characterManager.OnPlayerScoreChanged -= UpdateScore;
 
         characterManager.OnPlayerPickedUpWeapon -= DisplayWeapon;
@@ -93,101 +166,19 @@ public class PlayerUIPanel : MonoBehaviour{
         characterManager.OnPlayerScoredKill -= UpdateKillCount;
         characterManager.OnPlayerDied -= UpdateDeathCount;
 
-        characterManager.OnPlayerStatsReset -= UpdatePanel;
+        characterManager.OnPlayerStatsReset -= UpdatePanelStats;
     }
 
-    private void UpdatePanel(){
-        InitializeStats();
-        CheckForWeapon();
-    }
-
-    private void InitializeStats(){
-        characterSprite.sprite = characterManager.Character.sprite[0];
-        playerIndex.text = (player.playerIndex + 1).ToString();
-        characterName.text = characterManager.Character.characterName.ToString();
-
-        //if(characterManager.teamColor == TeamColor.none)    playerTeam.text = null;
-        //else playerTeam.text = characterManager.teamColor.ToString();
-
-        _playerHealthBar.maxValue = characterManager.characterHealthSystem.MaxHealth;
-        _playerHealthBar.value = characterManager.characterHealthSystem.CurrentHealth;
-        
-        _playerStaminaBar.maxValue = characterManager.characterMovementSystem.MaxStamina;
-        _playerStaminaBar.value = characterManager.characterMovementSystem.CurrentStamina;
-
-        _playerShadowHealthBar.maxValue = _playerHealthBar.maxValue;
-        _playerShadowHealthBar.value = _playerHealthBar.value;
-
-        _playerShadowStaminaBar.maxValue = _playerStaminaBar.maxValue;
-        _playerShadowStaminaBar.value = _playerStaminaBar.value;
-
-        _playerTotalLives.text = characterManager.totalLives.ToString();
-        playerKillCount.text = characterManager.kills.ToString();
-        playerDeathCount.text = characterManager.deaths.ToString();
-        playerScore.text = characterManager.score.ToString();
-
-        StartCoroutine(UpdateShadowBars());
-    }
-
-    private void InitializeBars(){
-        _playerHealthBar.minValue = 0;
-        _playerStaminaBar.minValue = 0;
-        _playerShadowHealthBar.minValue = 0;
-    }
-
-    public void AssignPlayer(PlayerInput playerInput){
-        StartCoroutine(AssignPlayerDelay(playerInput));
-    }
-
-    IEnumerator AssignPlayerDelay(PlayerInput playerInput){
-        yield return new WaitForSeconds(0.01f);
-        player = playerInput;
-        player.transform.GetComponent<CharacterManager>().OnCharacterChosen += AssignCharacter;
-    }
-
-    public void AssignCharacter(){
-        StartCoroutine(AssignCharacterDelay());
-    }
-
-    IEnumerator AssignCharacterDelay(){
-        yield return new WaitForSeconds(0.01f);
-        characterManager = player.transform.GetComponent<CharacterManager>();
-        characterWeaponSystem = player.transform.GetComponent<CharacterWeaponSystem>();
-        SetStatsActive();
-        SubscribeToPlayerEvents();
+    private void UpdatePanelStats(){
         InitializeStats();
         CheckForWeapon();
     }
 
 
-    private void CheckForWeapon(){
-        if(characterWeaponSystem.GetWeapon() != null){
-            Weapon _weapon = characterWeaponSystem.GetWeapon();
-            DisplayWeapon(_weapon);
-        }
-        else{
-            HideWeapon();
-        }
-    }
-
-    public void UnassignPlayer(){
-        if(player != null){
-            SetStatsInactive();
-            UnsubscribeToPlayerEvents();
-            player.transform.GetComponent<CharacterManager>().OnCharacterChosen -= AssignCharacter;
-            player = null;
-            characterManager = null;
-        }
-    }
 
     private void UpdateHealth(float _health, float _maxHealth){
         _health = (int)_health;
         _playerHealthBar.value = _health;
-    }
-
-    private void UpdateStamina(float _stamina, float _maxStamina){
-        _stamina = (int)_stamina;
-        _playerStaminaBar.value = _stamina;
     }
 
     IEnumerator UpdateShadowBars(){
@@ -198,13 +189,6 @@ public class PlayerUIPanel : MonoBehaviour{
         }
         if(_playerShadowHealthBar.value > _playerHealthBar.value){
             _playerShadowHealthBar.value--;
-        }
-        
-        if(_playerShadowStaminaBar.value < _playerStaminaBar.value){
-            _playerShadowStaminaBar.value++;
-        }
-        if(_playerShadowStaminaBar.value > _playerStaminaBar.value){
-            _playerShadowStaminaBar.value--;
         }
 
 

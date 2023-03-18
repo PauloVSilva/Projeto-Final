@@ -40,14 +40,25 @@ public class CharacterInventory : Inventory{
         }
     }
 
+    public void DropWeapon()
+    {
+        if(weaponSlot.stackSize > 0)
+        {
+            characterWeaponSystem.DropWeapon();
+            weaponSlot.DropItem();
+        }
+    }
+
     public void PickWeapon(GameObject _weapon){
-        if(characterWeaponSystem.PickUpWeapon(_weapon)){
+        if(characterWeaponSystem.PickUpWeapon(_weapon))
+        {
             AddToWeaponSlot(_weapon.GetComponent<Weapon>().item);
         }
     }
 
     public bool AddToWeaponSlot(ItemScriptableObject _item){
-        if(weaponSlot.stackSize == 0){
+        if(weaponSlot.stackSize == 0)
+        {
             weaponSlot.AddToSlot(_item);
             return true;
         }

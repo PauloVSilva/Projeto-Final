@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+
 public abstract class LevelManager : MonoBehaviour
 {
     [SerializeField] protected Pool[] objectsToPool;
+
     public GameObject[] levelSpawnPoints;
+
     public Camera mainCamera;
 
     private void Awake(){
@@ -19,11 +22,7 @@ public abstract class LevelManager : MonoBehaviour
     }
 
     private void Start(){
-        foreach(var playerInput in GameManager.Instance.playerList){
-            int index = playerInput.playerIndex % GameManager.Instance.spawnPoints.Length;
-            playerInput.transform.position = GameManager.Instance.spawnPoints[index].transform.position;
-        }
-
+        RepositionAllPlayers();
 
         InitializeLevel();
         
@@ -36,6 +35,15 @@ public abstract class LevelManager : MonoBehaviour
         ClearPools();
     }
 
+
+    protected void RepositionAllPlayers()
+    {
+        foreach (PlayerInput playerInput in GameManager.Instance.playerList)
+        {
+            int index = playerInput.playerIndex % levelSpawnPoints.Length;
+            playerInput.transform.position = levelSpawnPoints[index].transform.position;
+        }
+    }
 
     private void FullyResetPlayers()
     {
@@ -75,7 +83,7 @@ public abstract class LevelManager : MonoBehaviour
         }
     }
 
-    protected abstract void InitializeSingletonInstance();
+    protected virtual void InitializeSingletonInstance() { }
 
     protected abstract void InitializeLevel();
 }

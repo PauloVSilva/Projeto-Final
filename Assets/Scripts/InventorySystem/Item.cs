@@ -19,7 +19,7 @@ public abstract class Item : Entity{
     public bool CanBeStored => canBeStored;
 
     protected virtual void Awake(){
-        SetScriptableObjectVariables();
+        GetScriptableObjectVariables();
         InitializeItemComponents();
         InitializeItemVariables();
     }
@@ -38,7 +38,7 @@ public abstract class Item : Entity{
         isPooled = false;
     }
 
-    protected virtual void SetScriptableObjectVariables(){
+    protected virtual void GetScriptableObjectVariables(){
         maxAge = item.maxAge;
         canBeStored = item.canBeStored;
         pickUpRadius = item.pickUpRadius;
@@ -52,7 +52,7 @@ public abstract class Item : Entity{
         isBlinking = false;
     }
     
-    protected IEnumerator CanBePickedUpDelay(){
+    protected virtual IEnumerator CanBePickedUpDelay(){
         yield return new WaitForSeconds(0.5f);
         canBePickedUp = true;
     }
@@ -99,7 +99,8 @@ public abstract class Item : Entity{
         }
     }
 
-    protected virtual void OnDrawGizmos(){
+    protected virtual void OnDrawGizmos()
+    {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, pickUpRadius);
     }

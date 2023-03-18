@@ -977,7 +977,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7664362993089217216, guid: 74e99d23193568d48997c7ee9b4a8fec, type: 3}
       propertyPath: costToBuy
-      value: 300
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9080664918875891946, guid: 74e99d23193568d48997c7ee9b4a8fec, type: 3}
       propertyPath: m_RootOrder
@@ -3042,7 +3042,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7664362993089217216, guid: 74e99d23193568d48997c7ee9b4a8fec, type: 3}
       propertyPath: costToBuy
-      value: 300
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7664362993089217216, guid: 74e99d23193568d48997c7ee9b4a8fec, type: 3}
       propertyPath: machineState
@@ -4207,7 +4207,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7664362993089217216, guid: 74e99d23193568d48997c7ee9b4a8fec, type: 3}
       propertyPath: costToBuy
-      value: 550
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8212072158344372498, guid: 74e99d23193568d48997c7ee9b4a8fec, type: 3}
       propertyPath: inventorySlots.Array.size

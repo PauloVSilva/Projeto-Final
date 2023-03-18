@@ -44,7 +44,7 @@ public class LevelLoader : MonoBehaviour{
     }
 
     IEnumerator LoadAsynchronously(string sceneName){
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0f);
         AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
         while(!operation.isDone){
             progress = Mathf.Clamp01(operation.progress / .9f);

@@ -78,7 +78,7 @@ public class VendingMachine : DestructibleObject, InteractorInterface{
     
     public bool Interact(Interactor interactor){
         if(machineState == MachineState.fullyFunctional){
-            if(interactor.characterManager.score > costToBuy){
+            if(interactor.characterManager.score >= costToBuy){
                 interactor.characterManager.score -= costToBuy;
                 inventory.DropItem(0, dropPoint);
                 Debug.Log("bought");

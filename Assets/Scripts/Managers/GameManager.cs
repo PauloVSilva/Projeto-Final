@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+public enum GameState { None, MainMenu, Hub, MiniGame }
+
 public class GameManager : PersistentSingleton<GameManager>
 {
     public bool gameIsPaused;
-    public bool miniGameIsRunning;
 
-    public ItemsDatabank itemsDatabank;
+    [field:SerializeField] public GameState gameState { get; private set; }
 
     public Camera mainCamera;
     
@@ -20,20 +21,44 @@ public class GameManager : PersistentSingleton<GameManager>
     //EVENTS
     public event System.Action<PlayerInput> OnPlayerJoinedGame;
     public event System.Action<PlayerInput> OnPlayerLeftGame;
+    public event System.Action<GameState> OnGameStateChanged;
 
     protected override void Awake(){
         base.Awake();
 
         gameIsPaused = false;
-        miniGameIsRunning = false;
         
         joinAction.performed += context => {JoinAction(context); Debug.Log("Player Joined");};
     }
 
 
+    public void UpdateGameState(GameState _gameState)
+    {
+        gameState = _gameState;
+
+        switch (gameState)
+        {
+            case GameState.MainMenu:
+                joinAction.Disable(); 
+                break;
+            case GameState.Hub:
+                joinAction.Enable();
+                break;
+            case GameState.MiniGame:
+                joinAction.Disable();
+                break;
+        }
+
+        CanvasManager.instance.playerPanels.SetActive(gameState != GameState.MainMenu);
+        CanvasManager.instance.miniGameUI.SetActive(gameState != GameState.MainMenu);
+
+        OnGameStateChanged?.Invoke(gameState);
+    }
+
+
     private void OnPlayerJoined(PlayerInput playerInput)
     {
-        //This callback is called by PlayerInputManager whenever JoinAction method is performed
+        //This callback is called by PlayerInputManager whenever JoinAction method is performed after a player joins
         //So even though is might show up as "0 references" by intellisense, it is called by Unity automatically
 
         playerList.Add(playerInput);
@@ -44,8 +69,9 @@ public class GameManager : PersistentSingleton<GameManager>
     }
 
     private void OnPlayerLeft(PlayerInput playerInput)
-    { 
-        //THIS METHOD COMES FROM UNITY ITSELF
+    {
+        //This callback is called by PlayerInputManager after a player leaves
+        //So even though is might show up as "0 references" by intellisense, it is called by Unity automatically
     }
 
     public void JoinAction(InputAction.CallbackContext context){

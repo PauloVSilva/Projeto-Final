@@ -8,13 +8,13 @@ public class Food : Item, IPooledObjects{
     public int Value => value;
 
     private void Start(){
-        SetScriptableObjectVariables();
+        GetScriptableObjectVariables();
     }
 
-    protected override void SetScriptableObjectVariables(){
+    protected override void GetScriptableObjectVariables(){
         item = food;
         
-        base.SetScriptableObjectVariables();
+        base.GetScriptableObjectVariables();
 
         value = food.value;
     }

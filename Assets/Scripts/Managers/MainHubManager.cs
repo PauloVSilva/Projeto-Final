@@ -3,23 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class MainHubManager : LevelManager{
-    public static MainHubManager instance = null;
-
-    protected override void InitializeSingletonInstance(){
-        if(instance == null){
-            instance = this;
-        }
-        else if(instance != null){
-            Destroy(gameObject);
-        }
-    }
-
-    protected override void InitializeLevel(){
-        GameManager.Instance.joinAction.Enable();
-        GameManager.Instance.miniGameIsRunning = false;
-
-        CanvasManager.instance.playerPanels.SetActive(true);
-        CanvasManager.instance.miniGameUI.SetActive(true);
+public class MainHubManager : LevelManager
+{
+    protected override void InitializeLevel()
+    {
+        GameManager.Instance.UpdateGameState(GameState.Hub);
     }
 }

@@ -8,7 +8,8 @@ public class ItemID{
     public string itemIdentifier;
 }
 
-public class ItemsDatabank : MonoBehaviour{
+public class ItemsDatabank : PersistentSingleton<ItemsDatabank>
+{
     public List<ItemID> dataBank = new List<ItemID>();
 
     public ItemScriptableObject GetItem(string _itemIdentifier){

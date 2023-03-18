@@ -8,13 +8,13 @@ public class Coin : Item, IPooledObjects{
     public int Value => value;
 
     private void Start(){
-        SetScriptableObjectVariables();
+        GetScriptableObjectVariables();
     }
 
-    protected override void SetScriptableObjectVariables(){
+    protected override void GetScriptableObjectVariables(){
         item = coin;
         
-        base.SetScriptableObjectVariables();
+        base.GetScriptableObjectVariables();
 
         value = coin.value;
     }

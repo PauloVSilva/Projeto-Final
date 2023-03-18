@@ -81,6 +81,11 @@ public class Projectile : Entity, IPooledObjects{
         age = 0;
         isPooled = true;
         canDamage = true;
+
+        Color _color = playerOfOrigin.GetComponent<CharacterManager>().UIColor;
+
+        trailRenderer.startColor = _color;
+        trailRenderer.endColor = _color;
         trailRenderer.emitting = true;
     }
 

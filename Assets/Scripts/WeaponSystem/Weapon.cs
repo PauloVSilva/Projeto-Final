@@ -23,7 +23,6 @@ public class Weapon : Item{
     [SerializeField] private Size size;
     [SerializeField] public int ammoCapacity;
     [SerializeField] private float fireRate; //how many times it can shoot per second
-    [SerializeField] private float weight;
     [SerializeField] private float reloadTime;
 
     //VARIABLES FOR INTERNAL USE
@@ -33,8 +32,6 @@ public class Weapon : Item{
     [SerializeField] private float fullAutoReady; //firerate clock
     [SerializeField] private bool shooting;
     [SerializeField] private bool canShoot;
-    [SerializeField] private bool hammerIsCocked; //for revolvers
-    //[SerializeField] private bool pumpIsReady; //for shotguns
     [SerializeField] private bool triggerHeld;
 
     //OTHER ATTRIBUTES
@@ -50,10 +47,10 @@ public class Weapon : Item{
         FullAutoBehavior();
     }
 
-    protected override void SetScriptableObjectVariables(){
+    protected override void GetScriptableObjectVariables(){
         item = weapon;
 
-        base.SetScriptableObjectVariables();
+        base.GetScriptableObjectVariables();
 
         sprite = weapon.itemSprite;
         weaponName = weapon.itemName;
@@ -62,7 +59,6 @@ public class Weapon : Item{
         size = weapon.size;
         ammoCapacity = weapon.ammoCapacity;
         fireRate = weapon.fireRate;
-        weight = weapon.weight;
         reloadTime = weapon.reloadTime;
     }
 
@@ -73,15 +69,18 @@ public class Weapon : Item{
 
         holder = null;
         ammo = ammoCapacity;
-        //totalAmmo = 999;
         totalAmmo = ammoCapacity * 10;
         fullAutoClock = 0;
         fullAutoReady = 1 / fireRate;
         shooting = false;
         canShoot = true;
-        hammerIsCocked = false;
-        //pumpIsReady = false;
         triggerHeld = false;
+    }
+
+    protected override IEnumerator CanBePickedUpDelay()
+    {
+        yield return new WaitForSeconds(0.5f);
+        canBePickedUp = (holder == null);
     }
 
     protected void OnDisable(){
@@ -102,33 +101,25 @@ public class Weapon : Item{
         }
     }
 
-    public void OnCockHammer(InputAction.CallbackContext context){
-        if(context.performed){
-            //Debug.Log("hammer pressed");
-            hammerIsCocked = true;
-        }
-    }
-
     public void OnPressTrigger(InputAction.CallbackContext context){
-        if(context.performed){
+        if(context.performed)
+        {
             StopCoroutine(Reload());
-            if(ammo - (int)projectileToCast.cost >= 0){
-                if(actionType == ActionType.manual && hammerIsCocked && canShoot){
+            if(ammo - (int)projectileToCast.cost >= 0)
+            {
+                if(actionType == ActionType.semiAuto && canShoot)
+                {
                     Fire();
                 }
-                if(actionType == ActionType.semiAuto && canShoot){
-                    Fire();
-                }
-                if(actionType == ActionType.fullAuto){
+                if(actionType == ActionType.fullAuto)
+                {
                     shooting = true;
                 }
             }
             triggerHeld = true;
         }
-        if(context.canceled){
-            if(actionType.ToString() == "semiAuto"){
-                hammerIsCocked = true;
-            }
+        if(context.canceled)
+        {
             canShoot = true;
             shooting = false;
             triggerHeld = false;
@@ -192,7 +183,6 @@ public class Weapon : Item{
 
             CastProjectile();
             ammo -= projectileToCast.cost;
-            hammerIsCocked = false;
             canShoot = false;
             fullAutoClock = 0;
 
@@ -202,10 +192,11 @@ public class Weapon : Item{
             {
                 StartCoroutine(Reload());
             }
-            if(totalAmmo == 0)
+            if(ammo == 0 && totalAmmo == 0)
             {
-                //Dropped();
-                holder.transform.GetComponent<CharacterWeaponSystem>()?.DropWeapon();
+                holder.transform.TryGetComponent(out CharacterInventory characterInventory);
+
+                characterInventory.DropWeapon();
 
                 canBePickedUp = false;
                 age = maxAge - 10;

@@ -600,14 +600,22 @@ MonoBehaviour:
   characterInventory: {fileID: 5021916059996529337}
   characterWeaponSystem: {fileID: -123166407121015900}
   characterInteractor: {fileID: 0}
+  characterItemsDisplay: {fileID: 0}
   Character: {fileID: 0}
   characterObject: {fileID: 0}
-  colors:
+  characterTombstone: {fileID: 0}
+  lightColors:
   - {r: 0, g: 0, b: 1, a: 1}
   - {r: 1, g: 0, b: 0, a: 1}
   - {r: 0, g: 1, b: 0, a: 1}
   - {r: 1, g: 0, b: 1, a: 1}
-  color: {r: 1, g: 1, b: 1, a: 1}
+  UIColors:
+  - {r: 0.32694018, g: 0.48223406, b: 0.745283, a: 1}
+  - {r: 0.745283, g: 0.26366144, b: 0.26366144, a: 1}
+  - {r: 0.29156286, g: 0.6792453, b: 0.3127232, a: 1}
+  - {r: 0.754717, g: 0.34531865, b: 0.7334146, a: 1}
+  lightColor: {r: 0, g: 0, b: 0, a: 0}
+  UIColor: {r: 0, g: 0, b: 0, a: 0}
   score: 0
   kills: 0
   deaths: 0
@@ -685,7 +693,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterManager: {fileID: -7353346912697764937}
   playerInputHandler: {fileID: 7408531066293585715}
-  weapon: {fileID: 0}
+  <CharacterWeapon>k__BackingField: {fileID: 0}
   gunPosition: {fileID: 0}
 --- !u!143 &87397543814161862
 CharacterController:

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using TMPro;
+using DG.Tweening;
 
 public class MiniGameUIManager : MonoBehaviour{
 
@@ -40,23 +41,23 @@ public class MiniGameUIManager : MonoBehaviour{
     }
 
     private void SubscribeToMiniGameEvents(){
-        MiniGameManager.instance.OnCountDownTicks += DisplayCountDown;
-        MiniGameManager.instance.OnGameGoalIsSet += SetGameGoalText;
+        MiniGameManager.instance.OnGameStateAdvances += AdaptToMiniGameState;
+
+        MiniGameManager.instance.OnCountDownTick += DisplayCountDown;
         MiniGameManager.instance.OnPlayerWins += AnnounceWinner;
-        MiniGameManager.instance.OnGameEnds += DisablePanels;
 
         isSubscribed = true;
     }
 
     private void UnsubscribeFromMiniGameEvents(){
-        if(isSubscribed){
-            MiniGameManager.instance.OnCountDownTicks -= DisplayCountDown;
-            MiniGameManager.instance.OnGameGoalIsSet -= SetGameGoalText;
-            MiniGameManager.instance.OnPlayerWins -= AnnounceWinner;
-            MiniGameManager.instance.OnGameEnds -= DisablePanels;
+        if (!isSubscribed) return;
 
-            isSubscribed = false;
-        }
+        MiniGameManager.instance.OnGameStateAdvances -= AdaptToMiniGameState;
+
+        MiniGameManager.instance.OnCountDownTick -= DisplayCountDown;
+        MiniGameManager.instance.OnPlayerWins -= AnnounceWinner;
+        
+        isSubscribed = false;
     }
 
     public void InitializeVariables(){
@@ -67,50 +68,58 @@ public class MiniGameUIManager : MonoBehaviour{
         countDownMessage.text = "_COUNTDOWN_MESSAGE";
         countDownBoard.text = "_COUNTDOWN_TIME";
         winnerBoard.text = "_WINNER_MESSAGE";
-        gameGoalReminder.text = "_GOAL_REMINDER";
+        //gameGoalReminder.text = "_GOAL_REMINDER";
+        SetGameGoalText();
     }
 
-    private void DisablePanels(){
-        countDownMessage.gameObject.SetActive(false);
-        countDownBoard.gameObject.SetActive(false);
-        winnerBoard.gameObject.SetActive(false);
-        gameGoalReminder.gameObject.SetActive(false);
+
+    private void AdaptToMiniGameState(MiniGameState miniGameState)
+    {
+        countDownMessage.gameObject.SetActive(miniGameState == MiniGameState.preparation);
+        countDownBoard.gameObject.SetActive(miniGameState == MiniGameState.preparation);
+
+        gameGoalReminder.gameObject.SetActive(miniGameState == MiniGameState.gameIsRunning);
+
+        winnerBoard.gameObject.SetActive(miniGameState == MiniGameState.gameOver);
     }
 
-    public void DisplayCountDown(int seconds){
-        if(seconds > 0 && seconds < 6){
-            if(MiniGameManager.instance.gameState == MiniGameState.preparation){
-                countDownMessage.gameObject.SetActive(true);
-                countDownMessage.text = gameBeginsInSeconds;
-            }
-            if(MiniGameManager.instance.gameState == MiniGameState.gameOver){
-                countDownMessage.gameObject.SetActive(true);
-                countDownMessage.text = returningToLobbyInSeconds;
-            }
+    private void DisplayCountDown(int seconds)
+    {
+        if(seconds > 0 && seconds < 6)
+        {
+            countDownMessage.gameObject.SetActive(true);
             countDownBoard.gameObject.SetActive(true);
+
+            if (MiniGameManager.instance.miniGameState == MiniGameState.preparation) countDownMessage.text = gameBeginsInSeconds;
+            if (MiniGameManager.instance.miniGameState == MiniGameState.gameOver) countDownMessage.text = returningToLobbyInSeconds;
+
             countDownBoard.text = seconds.ToString();
         }
-        if(seconds == 0){
-            if(MiniGameManager.instance.gameState == MiniGameState.preparation){
-                countDownBoard.text = go;
-            }
+
+        if(seconds == 0)
+        {
+            if(MiniGameManager.instance.miniGameState == MiniGameState.preparation) countDownBoard.text = go;
             StartCoroutine(CleanCountDownBoard());
+            IEnumerator CleanCountDownBoard()
+            {
+                yield return new WaitForSeconds(0.5f);
+                countDownMessage.transform.DOScale(Vector3.zero, 0.5f);
+                countDownBoard.transform.DOScale(Vector3.zero, 0.5f);
+
+                yield return new WaitForSeconds(0.5f);
+                countDownMessage.gameObject.SetActive(false);
+                countDownBoard.gameObject.SetActive(false);
+                countDownMessage.transform.DOScale(Vector3.one, 0.0f);
+                countDownBoard.transform.DOScale(Vector3.one, 0.0f);
+            }
         }
     }
 
-    IEnumerator CleanCountDownBoard(){
-        yield return new WaitForSeconds(1f);
-        countDownMessage.gameObject.SetActive(false);
-        countDownBoard.gameObject.SetActive(false);
+    private void SetGameGoalText(){
+        gameGoalReminder.text = MiniGameOptionsMenu.instance.GetMiniGameGoalDescription();
     }
 
-    public void SetGameGoalText(string text){
-        gameGoalReminder.gameObject.SetActive(true);
-        gameGoalReminder.text = text;
-    }
-
-    public void AnnounceWinner(PlayerInput playerInput){
-        winnerBoard.gameObject.SetActive(true);
+    private void AnnounceWinner(PlayerInput playerInput){
         winnerBoard.text = MessageManager.instance.GetPlayerVictoryMessage(playerInput.playerIndex + 1);
     }
 }

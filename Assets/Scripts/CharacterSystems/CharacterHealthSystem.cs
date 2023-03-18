@@ -32,10 +32,12 @@ public class CharacterHealthSystem : HealthSystem{
     public void Initialize(){
         GetScriptableObjectVariables();
         InitializeVariables();
+
         StartCoroutine(OnEntityBornDelay());
         IEnumerator OnEntityBornDelay(){
-            yield return new WaitForSeconds(0.05f);
-            characterManager.PlayerBorn(gameObject);
+            yield return new WaitForSeconds(0.05f); //delay necessary to make sure object has been instantiated
+            characterManager.InvokeOnPlayerBorn(gameObject);
+            characterManager.UpdateCharacterState(CharacterState.Alive);
         }
     }
 
@@ -55,11 +57,13 @@ public class CharacterHealthSystem : HealthSystem{
 
     private void Update(){
         RegenerateHealth();
-        LastDamageSourceRememberTime();
+        LastDamageSourceRetentionTime();
     }
 
     private void RegenerateHealth(){
-        if(IsAlive && CanRegenHealth)
+        if (characterManager.characterState == CharacterState.Dead) return;
+
+        if (IsAlive && CanRegenHealth)
         {
             CurrentHealth = Math.Min(CurrentHealth += HealthRegenRate * Time.deltaTime, MaxHealth);
             SendHealthUpdateEvent();
@@ -77,7 +81,7 @@ public class CharacterHealthSystem : HealthSystem{
         }
     }
 
-    private void LastDamageSourceRememberTime()
+    private void LastDamageSourceRetentionTime()
     {
         lastDamagingPlayerTime = Math.Max(lastDamagingPlayerTime -= Time.deltaTime, 0);
 
@@ -89,7 +93,7 @@ public class CharacterHealthSystem : HealthSystem{
 
     private void SendHealthUpdateEvent()
     {
-        characterManager.PlayerHealthUpdated(CurrentHealth, MaxHealth);
+        characterManager.InvokeOnPlayerHealthUpdated(CurrentHealth, MaxHealth);
     }
 
     public void TakeDamage(float damageTaken)
@@ -120,7 +124,7 @@ public class CharacterHealthSystem : HealthSystem{
             }
         }
         
-        characterManager.PlayerWasDamaged(damageTaken);
+        characterManager.InvokeOnPlayerWasDamaged(damageTaken);
         HealthRegenCooldown = 1f;
         CanRegenHealth = false;
         SendHealthUpdateEvent();
@@ -130,7 +134,7 @@ public class CharacterHealthSystem : HealthSystem{
     public override void Heal(float heal)
     {
         CurrentHealth = Math.Min(CurrentHealth += heal, MaxHealth);
-        characterManager.PlayerWasHealed(heal);
+        characterManager.InvokeOnPlayerWasHealed(heal);
         SendHealthUpdateEvent();
     }
 
@@ -139,12 +143,12 @@ public class CharacterHealthSystem : HealthSystem{
         IsAlive = false;
         IsInvulnerable = true;
         CurrentHealth = 0;
+
         characterManager.PlayerDied(gameObject);
+        characterManager.UpdateCharacterState(CharacterState.Dead);
 
         if(_damageSource != null && _damageSource.CompareTag("Player"))
         {
-            //_damageSource.transform.GetComponent<CharacterManager>().PlayerScoredKill(_damageSource);
-
             _damageSource.transform.TryGetComponent(out CharacterManager _characterManager);
             _characterManager.PlayerScoredKill(_damageSource);
         }

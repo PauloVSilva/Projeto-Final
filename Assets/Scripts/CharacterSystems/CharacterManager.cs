@@ -7,8 +7,11 @@ using UnityEngine.InputSystem.DualShock;
 
 public enum Animal{hedgehog, pangolin, threeBandedArmadillo}
 
+public enum CharacterState { Alive, Dead }
+
 public class CharacterManager : MonoBehaviour{
-    #region "SYSTEMS"
+    #region "COMPONENTS"
+    [Header("Components")]
     [SerializeField] public PlayerInput playerInput;
     [SerializeField] public PlayerInputHandler playerInputHandler;
     [SerializeField] public CharacterHealthSystem characterHealthSystem;
@@ -16,15 +19,20 @@ public class CharacterManager : MonoBehaviour{
     [SerializeField] public CharacterInventory characterInventory;
     [SerializeField] public CharacterWeaponSystem characterWeaponSystem;
     [SerializeField] public Interactor characterInteractor;
+    [SerializeField] public CharacterDisplay characterItemsDisplay;
+    #endregion "COMPONENTS"
+
     [SerializeField] public CharacterStatsScriptableObject Character;
     [SerializeField] public GameObject characterObject;
     [SerializeField] public GameObject characterTombstone;
-    #endregion "SYSTEMS"
+    [SerializeField] private Color[] lightColors;
+    [SerializeField] private Color[] UIColors;
 
     #region "STATS"
-    [SerializeField] private Color[] colors;
-
-    public Color color;
+    [Header("Stats")]
+    public Color lightColor;
+    public Color UIColor;
+    public CharacterState characterState;
     public int score;
     public int kills;
     public int deaths;
@@ -35,27 +43,59 @@ public class CharacterManager : MonoBehaviour{
     #endregion "STATS"
 
     #region "EVENTS"
-    public event System.Action<GameObject, int> OnPlayerScoreChanged;
-    public event System.Action<GameObject> OnPlayerScoredKill;
-    public event System.Action<GameObject> OnPlayerDied;
-    public event System.Action<GameObject> OnPlayerBorn;
-    public event System.Action<float> OnPlayerWasDamaged;
-    public event System.Action<float> OnPlayerWasHealed;
-    public event System.Action<float, float> OnPlayerHealthUpdated; 
-    public event System.Action<float, float> OnPlayerStaminaUpdated; 
-    public event System.Action<Weapon> OnPlayerShotWeapon; 
-    public event System.Action<Weapon> OnPlayerReloadedWeapon;
-    public event System.Action<Weapon> OnPlayerPickedUpWeapon;
-    public event System.Action OnPlayerDroppedWeapon;
-    public event System.Action OnPlayerStatsReset;
-    public event System.Action OnCharacterChosen;
+    public event Action<CharacterState> OnCharacterStateChanged;
+    public event Action<GameObject, int> OnPlayerScoreChanged;
+    public event Action<GameObject> OnPlayerScoredKill;
+    public event Action<GameObject> OnPlayerDied;
+    public event Action<GameObject> OnPlayerBorn;
+    public event Action<float> OnPlayerWasDamaged;
+    public event Action<float> OnPlayerWasHealed;
+    public event Action<float, float> OnPlayerHealthUpdated;
+    public event Action<Weapon> OnPlayerShotWeapon; 
+    public event Action<Weapon> OnPlayerReloadedWeapon;
+    public event Action<Weapon> OnPlayerPickedUpWeapon;
+    public event Action OnPlayerDroppedWeapon;
+    public event Action OnPlayerStatsReset;
+    public event Action OnCharacterChosen;
     #endregion "EVENTS"
 
+    #region "Unity Callbacks"
     private void Awake(){
         InitializeComponents();
         InitializePlayerVariables();
         SetupControllerLights();
     }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if (IsBlocked()) return;
+
+        if (other.gameObject.GetComponent<Item>() != null && other.gameObject.GetComponent<Item>().CanBePickedUp)
+        {
+            //Debug.Log("Collided");
+            if (other.gameObject.GetComponent<Coin>())
+            {
+                if (characterInventory.AddToInventory(other.gameObject.GetComponent<Item>().item))
+                {
+                    other.GetComponent<Coin>().PickedUp(this.gameObject);
+                }
+            }
+
+            if (other.gameObject.GetComponent<Food>())
+            {
+                other.GetComponent<Food>().PickedUp(this.gameObject);
+            }
+
+            if (other.gameObject.GetComponent<Weapon>() && other.gameObject.GetComponent<Weapon>().ammo > 0 && other.gameObject.GetComponent<Weapon>().totalAmmo > 0)
+            {
+                if (!IsArmed())
+                {
+                    characterInventory.PickWeapon(other.gameObject);
+                }
+            }
+        }
+    }
+    #endregion "Unity Callbacks"
 
     private void InitializeComponents(){
         characterObject = null;
@@ -72,7 +112,10 @@ public class CharacterManager : MonoBehaviour{
     }
 
     private void InitializePlayerVariables(){
-        color = colors[playerInput.playerIndex];
+        lightColor = lightColors[playerInput.playerIndex];
+        UIColor = UIColors[playerInput.playerIndex];
+
+        characterState = CharacterState.Alive;
 
         score = 0;
         kills = 0;
@@ -91,15 +134,22 @@ public class CharacterManager : MonoBehaviour{
         if (device.GetType() == typeof(DualSenseGamepadHID))
         {
             DualSenseGamepadHID dualsense = (DualSenseGamepadHID)device;
-            dualsense.SetLightBarColor(color);
+            dualsense.SetLightBarColor(lightColor);
         }
         if (device.GetType() == typeof(DualShock4GamepadHID))
         {
             DualShock4GamepadHID dualshock4 = (DualShock4GamepadHID)device;
-            dualshock4.SetLightBarColor(color);
+            dualshock4.SetLightBarColor(lightColor);
         }
     }
 
+
+    public void UpdateCharacterState(CharacterState _characterState)
+    {
+        characterState = _characterState;
+
+        OnCharacterStateChanged?.Invoke(characterState);
+    }
 
     public void ResetStats(){
         InitializePlayerVariables();
@@ -108,37 +158,19 @@ public class CharacterManager : MonoBehaviour{
     public void SpawnCharacter(CharacterStatsScriptableObject _character){
         Character = _character;
 
-        characterObject = GameObject.Instantiate(Character.characterModel[0], transform.position, transform.rotation, this.transform);
+        characterObject = Instantiate(Character.characterModel[0], transform.position, transform.rotation, this.transform);
         characterTombstone = _character.tombstone;
+
+        characterItemsDisplay = characterObject.GetComponent<CharacterDisplay>();
 
         characterHealthSystem.Initialize();
         characterMovementSystem.Initialize();
-        characterWeaponSystem.SetGunPosition();
+
+        characterWeaponSystem.SetGunPosition(characterItemsDisplay.gunPosition);
 
         transform.parent = GameManager.Instance.transform;
         playerInput.SwitchCurrentActionMap("Player");
         OnCharacterChosen?.Invoke();
-    }
-
-    public void OnTriggerEnter(Collider other){
-        if(!IsBlocked()){
-            if(other.gameObject.GetComponent<Item>() != null && other.gameObject.GetComponent<Item>().CanBePickedUp){
-                //Debug.Log("Collided");
-                if(other.gameObject.GetComponent<Coin>()){
-                    if(characterInventory.AddToInventory(other.gameObject.GetComponent<Item>().item)){
-                        other.GetComponent<Coin>().PickedUp(this.gameObject);
-                    }
-                }
-                if(other.gameObject.GetComponent<Food>()){
-                    other.GetComponent<Food>().PickedUp(this.gameObject);
-                }
-                if(other.gameObject.GetComponent<Weapon>()){
-                    if(!IsArmed()){
-                        characterInventory.PickWeapon(other.gameObject);
-                    }
-                }
-            }
-        }
     }
 
     public void RefreshStatsUponRespawning(){
@@ -150,14 +182,14 @@ public class CharacterManager : MonoBehaviour{
     public void BeginRespawnProcess(){
         if(CanRespawn()){
             StartCoroutine(RespawnCharacterDelay());
+            IEnumerator RespawnCharacterDelay()
+            {
+                yield return new WaitForSeconds(timeToRespawn);
+                RespawnCharacter();
+            }
         }
         characterObject.SetActive(false);
         BlockActions();
-    }
-
-    IEnumerator RespawnCharacterDelay(){
-        yield return new WaitForSeconds(timeToRespawn);
-        RespawnCharacter();
     }
 
     public void RespawnCharacter(){
@@ -259,16 +291,13 @@ public class CharacterManager : MonoBehaviour{
     public void PlayerScoredKill(GameObject character){
         kills++;
 
-        OnPlayerScoredKill?.Invoke(character);
+        InvokeOnPlayerScoredKill(character);
     }
 
     public void PlayerDied(GameObject character){
         deaths++;
 
-        if(!unlimitedLives)
-        {
-            totalLives--;
-        }
+        if (!unlimitedLives) totalLives--;
 
         BeginRespawnProcess();
 
@@ -277,42 +306,48 @@ public class CharacterManager : MonoBehaviour{
         GameObject tombstone = Instantiate(characterTombstone, character.transform.position, Quaternion.Euler(0, 0, 0));
         Destroy(tombstone, timeToRespawn);
 
+        InvokeOnPlayerDied(character);
+    }
+
+    public void InvokeOnPlayerScoredKill(GameObject character)
+    {
+        OnPlayerScoredKill?.Invoke(character);
+    }
+
+    public void InvokeOnPlayerDied(GameObject character)
+    {
         OnPlayerDied?.Invoke(character);
     }
 
-    public void PlayerBorn(GameObject character){
+    public void InvokeOnPlayerBorn(GameObject character){
         OnPlayerBorn?.Invoke(character);
     }
 
-    public void PlayerWasDamaged(float _damageAmount){
+    public void InvokeOnPlayerWasDamaged(float _damageAmount){
         OnPlayerWasDamaged?.Invoke(_damageAmount);
     }
 
-    public void PlayerWasHealed(float _healAmount){
+    public void InvokeOnPlayerWasHealed(float _healAmount){
         OnPlayerWasHealed?.Invoke(_healAmount);
     }
 
-    public void PlayerHealthUpdated(float _currentHealth, float _maxHealth){
+    public void InvokeOnPlayerHealthUpdated(float _currentHealth, float _maxHealth){
         OnPlayerHealthUpdated?.Invoke(_currentHealth, _maxHealth);
     }
 
-    public void PlayerStaminaUpdated(float _currentStamina, float _maxStamina){
-        OnPlayerStaminaUpdated?.Invoke(_currentStamina, _maxStamina);
-    }
-
-    public void PlayerShotWeapon(Weapon _weapon){
+    public void InvokeOnPlayerShotWeapon(Weapon _weapon){
         OnPlayerShotWeapon?.Invoke(_weapon);
     }
 
-    public void PlayerReloadedWeapon(Weapon _weapon){
+    public void InvokeOnPlayerReloadedWeapon(Weapon _weapon){
         OnPlayerReloadedWeapon?.Invoke(_weapon);
     }
 
-    public void PlayerPickedUpWeapon(Weapon _weapon){
+    public void InvokeOnPlayerPickedUpWeapon(Weapon _weapon){
         OnPlayerPickedUpWeapon?.Invoke(_weapon);
     }
 
-    public void PlayerDroppedWeapon(){
+    public void InvokeOnPlayerDroppedWeapon(){
         OnPlayerDroppedWeapon?.Invoke();
     }
     #endregion "Methods that invoke events"

@@ -6,76 +6,71 @@ using UnityEngine.InputSystem;
 public class CharacterWeaponSystem : MonoBehaviour{
     [SerializeField] private CharacterManager characterManager;
     [SerializeField] private PlayerInputHandler playerInputHandler;
-    [SerializeField] private Weapon weapon;
+    [field: SerializeField] public Weapon CharacterWeapon { get; private set; }
     [SerializeField] private Transform gunPosition;
 
     private void Start(){
-        characterManager = GetComponent<CharacterManager>();
+        InitiazeComponents();
         SubscribeToEvents();
     }
 
-    public void SetGunPosition(){
-        gunPosition = characterManager.characterObject.GetComponent<CharacterItemsDisplay>().gunPosition.transform;
+
+    private void InitiazeComponents()
+    {
+        characterManager = GetComponent<CharacterManager>();
     }
 
-    private void SubscribeToEvents(){
-        //INPUT EVENTS
-        playerInputHandler.OnCharacterCockHammer += OnCockHammer;
+    private void SubscribeToEvents()
+    {
         playerInputHandler.OnCharacterPressTrigger += OnPressTrigger;
-        playerInputHandler.OnCharacterReload += OnReload;
     }
 
-    public void OnCockHammer(InputAction.CallbackContext context){
-        weapon?.OnCockHammer(context);
+
+    public void SetGunPosition(Transform _gunPosition)
+    {
+        gunPosition = _gunPosition;
     }
 
-    public void OnPressTrigger(InputAction.CallbackContext context){
-        weapon?.OnPressTrigger(context);
-    }
-
-    public void OnReload(InputAction.CallbackContext context){
-        weapon?.OnReload(context);
+    public void OnPressTrigger(InputAction.CallbackContext context)
+    {
+        CharacterWeapon?.OnPressTrigger(context);
     }
 
     public void DropWeapon(){
-        weapon.transform.parent = null;
-        weapon.Dropped();
-        weapon = null;
-        characterManager.PlayerDroppedWeapon();
+        CharacterWeapon.transform.parent = null;
+        CharacterWeapon.Dropped();
+        CharacterWeapon = null;
+        characterManager.InvokeOnPlayerDroppedWeapon();
     }
 
     public void DestroyWeapon(){
-        Destroy(weapon.transform.gameObject);
-        weapon = null;
+        Destroy(CharacterWeapon.transform.gameObject);
+        CharacterWeapon = null;
     }
 
     public bool PickUpWeapon(GameObject _weapon){
-        if(gunPosition == null){
-            return false;
-        }
+        if (gunPosition == null) return false;
 
-        weapon = _weapon.GetComponent<Weapon>();
+        CharacterWeapon = _weapon.GetComponent<Weapon>();
         
-        weapon.transform.parent = this.transform;
-        weapon.transform.rotation = this.transform.rotation;
-        weapon.transform.position = gunPosition.transform.position;
+        CharacterWeapon.transform.parent = transform;
+        CharacterWeapon.transform.rotation = gunPosition.transform.rotation;
+        CharacterWeapon.transform.position = gunPosition.transform.position;
 
-        weapon.PickedUp(this.gameObject);
-        characterManager.PlayerPickedUpWeapon(weapon); //this method calls a method that invokes an event. Pretty spaghetti I know
+        CharacterWeapon.PickedUp(gameObject);
+
+        characterManager.InvokeOnPlayerPickedUpWeapon(CharacterWeapon); //this method calls a method that invokes an event. Pretty spaghetti I know
 
         return true;
     }
 
-    public void WeaponFired(){
-        characterManager.PlayerShotWeapon(weapon);
+    public void WeaponFired()
+    {
+        characterManager.InvokeOnPlayerShotWeapon(CharacterWeapon);
     }
 
-    public void WeaponReloaded(){
-        characterManager.PlayerReloadedWeapon(weapon);
+    public void WeaponReloaded()
+    {
+        characterManager.InvokeOnPlayerReloadedWeapon(CharacterWeapon);
     }
-
-    public Weapon GetWeapon(){
-        return weapon;
-    }
-
 }

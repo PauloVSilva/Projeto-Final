@@ -17,4 +17,3 @@ MonoBehaviour:
   miniGameName: Sharpshooter
   miniGamesGoalsAvaliable:
   - {fileID: 11400000, guid: c2dcb18e0c5979e419982c4c6b28325a, type: 2}
-  - {fileID: 11400000, guid: 0118f5c5c6a25e1489080670f563e50e, type: 2}
