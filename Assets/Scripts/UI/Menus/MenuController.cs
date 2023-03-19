@@ -36,19 +36,37 @@ public abstract class MenuController : MonoBehaviour
 
     public void Open()
     {
-        menuContainer.SetActive(true);
-        GainControl();
+        Open(null);
+    }
 
-        SetUpFooterButtons();
-        SetUpTabs();
-        SubscribeToInputActions();
+    public void Open(PlayerInput _playerInput)
+    {
+        if(_playerInput != null) AssignPlayerToMenu(_playerInput);
+
+        StartCoroutine(OpenDelay());
+        IEnumerator OpenDelay()
+        {
+            yield return new WaitForEndOfFrame();
+
+            menuContainer.SetActive(true);
+            GainControl();
+
+            SetUpFooterButtons();
+            SetUpTabs();
+            SubscribeToInputActions();
+        }
     }
 
     public void Close()
     {
-        GainControl();
-        UnsubscribeFromInputActions();
-        menuContainer.SetActive(false);
+        StartCoroutine(CloseDelay());
+        IEnumerator CloseDelay()
+        {
+            yield return new WaitForEndOfFrame();
+
+            UnsubscribeFromInputActions();
+            menuContainer.SetActive(false);
+        }
     }
 
     public void GainControl()
@@ -56,8 +74,10 @@ public abstract class MenuController : MonoBehaviour
         firstSelected.Select();
     }
     
-    public void Back()
+    protected void Back()
     {
+        //this method calls a method that calls Close()
+        //pretty messy I know
         CanvasManager.Instance.CloseMenu();
     }
 
@@ -85,12 +105,11 @@ public abstract class MenuController : MonoBehaviour
     {
         if(playerInput == null) return;
 
-
-        for(int i = 0; i < footerButtons.Count(); i++)
-        {
-            footerButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = canvasButtonsList[i].buttonString;
-            footerButtons[i].GetComponentInChildren<Image>().sprite = canvasButtonsList[i].buttonSprite[(int)playerDevice]; 
-        }
+            for (int i = 0; i < footerButtons.Count(); i++)
+            {
+                footerButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = canvasButtonsList[i].buttonString;
+                footerButtons[i].GetComponentInChildren<Image>().sprite = canvasButtonsList[i].buttonSprite[(int)playerDevice];
+            }
 
     }
 
@@ -98,17 +117,17 @@ public abstract class MenuController : MonoBehaviour
     {
         if (tabGroup == null) return;
 
-        for (int i = 0; i < tabGroup.buttonTypes.Count(); i++)
-        {
-            for (int j = 0; j < CanvasManager.Instance.canvasButtonsList.Count(); j++)
+            for (int i = 0; i < tabGroup.buttonTypes.Count(); i++)
             {
-                if (tabGroup.buttonTypes[i] == CanvasManager.Instance.canvasButtonsList[j].buttonType)
+                for (int j = 0; j < CanvasManager.Instance.canvasButtonsList.Count(); j++)
                 {
-                    tabGroup.tabLabels[i].sprite = CanvasManager.Instance.canvasButtonsList[j].buttonSprite[(int)playerDevice];
-                    break;
+                    if (tabGroup.buttonTypes[i] == CanvasManager.Instance.canvasButtonsList[j].buttonType)
+                    {
+                        tabGroup.tabLabels[i].sprite = CanvasManager.Instance.canvasButtonsList[j].buttonSprite[(int)playerDevice];
+                        break;
+                    }
                 }
             }
-        }
     }
 
     private void SubscribeToInputActions()
@@ -116,6 +135,9 @@ public abstract class MenuController : MonoBehaviour
         if(playerInput == null) return;
 
         //InputActionAsset playerActions = playerInput.actions;
+
+        playerInput.TryGetComponent(out CharacterManager _characterManager);
+        _characterManager.playerInputHandler.PlayerOpenedMenu();
 
         for(int i = 0; i < buttonTypes.Count(); i++)
         {
@@ -134,12 +156,15 @@ public abstract class MenuController : MonoBehaviour
     {
         if(playerInput == null) return;
 
+        playerInput.TryGetComponent(out CharacterManager _characterManager);
+        _characterManager.playerInputHandler.PlayerClosedMenu();
+
         playerInput.actions["Back"].performed -= PlayerPressedBackButton;
         playerInput.actions["PreviousTab"].performed -= PlayerPressedPreviousTabButton;
         playerInput.actions["NextTab"].performed -= PlayerPressedNextTabButton;
     }
 
-    protected void AssignPlayerToMenu(PlayerInput _playerInput)
+    private void AssignPlayerToMenu(PlayerInput _playerInput)
     {
         playerInput = _playerInput;
         inputSystemUIInputModule.actionsAsset = playerInput.actions;

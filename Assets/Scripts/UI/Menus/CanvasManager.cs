@@ -38,17 +38,12 @@ public class CanvasManager : Singleton<CanvasManager>
         //SwitchMenu(Menu.MiniGameSetupMenu); this line is only used if I want a specific menu to pop up as soon as the scene opens
     }
 
-    public void OpenMenu(int menuIndex)
-    {
-        OpenMenu((Menu)menuIndex);
-    }
-
-    public void SwitchMenu(int menuIndex)
-    {
-        SwitchMenu((Menu)menuIndex);
-    }
-
     public void OpenMenu(Menu _menu)
+    {
+        OpenMenu(_menu, null);
+    }
+
+    public void OpenMenu(Menu _menu, PlayerInput _playerInput)
     {
         MenuController desiredMenu = menuControllersList.Find(x => x.menu == _menu);
 
@@ -56,7 +51,7 @@ public class CanvasManager : Singleton<CanvasManager>
         {
             currentMenu = desiredMenu;
             allActiveMenus.Add(currentMenu);
-            currentMenu.Open();
+            currentMenu.Open(_playerInput);
         }
         else
         {
@@ -68,6 +63,12 @@ public class CanvasManager : Singleton<CanvasManager>
     {
         CloseMenu();
         OpenMenu(_menu);
+    }
+
+    public void SwitchMenu(Menu _menu, PlayerInput _playerInput)
+    {
+        CloseMenu();
+        OpenMenu(_menu, _playerInput);
     }
 
     public void CloseMenu()

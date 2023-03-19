@@ -32,11 +32,14 @@ public class MiniGameOptionsMenu : MenuController
 
     public void MenuOpened(PlayerInput _playerInput, MiniGameScriptableObject _miniGame)
     {
-        AssignPlayerToMenu(_playerInput);
-        InitializeMenu(_miniGame);
+        CanvasManager.Instance.OpenMenu(menu, _playerInput);
+
+        InitializeMenuVariables(_miniGame);
+
+        GameManager.Instance.UpdateGameState(GameState.Paused);
     }
 
-    public void InitializeMenu(MiniGameScriptableObject _miniGame)
+    public void InitializeMenuVariables(MiniGameScriptableObject _miniGame)
     {
         miniGameIndex = 0;
 
@@ -47,9 +50,6 @@ public class MiniGameOptionsMenu : MenuController
         miniGameGoalAmount = 1 * displayedMiniGameGoal.goalMultiplier;
 
         UpdateMenu();
-
-        CanvasManager.Instance.OpenMenu(this.menu);
-        GameManager.Instance.UpdateGameState(GameState.Paused);
     }
 
     public void UpdateMenu()

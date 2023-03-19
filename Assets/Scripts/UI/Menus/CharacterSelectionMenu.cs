@@ -9,7 +9,6 @@ using TMPro;
 
 public class CharacterSelectionMenu : MenuController
 {
-    private CharacterManager characterManager; //not really necessary
     private CharacterStatsScriptableObject displayedCharacter;
     private int index;
     private string greetMessage;
@@ -26,28 +25,27 @@ public class CharacterSelectionMenu : MenuController
 
     private void ListenToPlayerJoined()
     {
-        GameManager.Instance.OnPlayerJoinedGame += MenuOpened;
+        GameManager.Instance.OnPlayerJoinedGame += NewPlayerJoined;
     }
 
-    public void MenuOpened(PlayerInput _playerInput)
+    public void NewPlayerJoined(PlayerInput _playerInput)
     {
-        AssignPlayerToMenu(_playerInput);
-        InitializeMenu();
+        CanvasManager.Instance.OpenMenu(menu, _playerInput);
+
+        InitializeMenuVariables();
+
+        GameManager.Instance.UpdateGameState(GameState.Paused);
     }
 
-    private void InitializeMenu()
+    private void InitializeMenuVariables()
     {
         greetMessage = MessageManager.instance.GetGreetMessage(playerInput.playerIndex + 1);
         playerControllingMenu.text = greetMessage;
         
         index = 0;
-        characterManager = playerInput.GetComponent<CharacterManager>();
         displayedCharacter = characterList[index];
 
         UpdateCharacter();
-
-        CanvasManager.Instance.OpenMenu(this.menu);
-        GameManager.Instance.UpdateGameState(GameState.Paused);
     }
 
     private void UpdateCharacter()
@@ -79,7 +77,9 @@ public class CharacterSelectionMenu : MenuController
     {
         CharacterStatsScriptableObject selectedCharacter = displayedCharacter;
 
-        characterManager.SpawnCharacter(selectedCharacter);
+        playerInput.TryGetComponent(out CharacterManager _characterManager);
+
+        _characterManager.SpawnCharacter(selectedCharacter);
         
         Back();
     }

@@ -22,9 +22,17 @@ public class PlayerInputHandler : MonoBehaviour{
     public event System.Action<InputAction.CallbackContext> OnPlayerPressedNextTabButton;
 
 
-    private void Start(){
+    private void Awake()
+    {
+        InitializeComponents();
+    }
+
+
+    private void InitializeComponents()
+    {
         playerInput = GetComponent<PlayerInput>();
     }
+
 
     public void PlayerOpenedMenu(){
         playerInput.SwitchCurrentActionMap("UI");

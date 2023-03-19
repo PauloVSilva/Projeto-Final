@@ -16,59 +16,57 @@ public class InteractionPromptUI : MonoBehaviour{
     [SerializeField] private TextMeshProUGUI promptText;
     public bool isDisplayed = false;
 
-    private void Start(){
+    private void Start()
+    {
         //mainCam = Camera.main;
         mainCam = GameManager.Instance.mainCamera;
         uiPanel.SetActive(false);
     }
 
-    private void LateUpdate(){
-        if(mainCam == null){
+    private void LateUpdate()
+    {
+        if(mainCam == null)
+        {
             mainCam = Camera.main;
         }
+
         var rotation = mainCam.transform.rotation;
         transform.LookAt(transform.position + rotation * Vector3.forward, rotation * Vector3.up);
     }
 
-    public void SetPrompt(PlayerInput playerInput, string _promptText){
+    public void SetPrompt(PlayerInput playerInput, string _promptText)
+    {
         promptText.text = _promptText;
 
         CanvasButtonDisplay canvasButtonDisplay = new CanvasButtonDisplay();
-        for(int i = 0; i < CanvasManager.Instance.canvasButtonsList.Count; i++){
-            if(buttonLabel[0] == CanvasManager.Instance.canvasButtonsList[i].buttonType){
+
+        for(int i = 0; i < CanvasManager.Instance.canvasButtonsList.Count; i++)
+        {
+            if(buttonLabel[0] == CanvasManager.Instance.canvasButtonsList[i].buttonType)
+            {
                 canvasButtonDisplay = CanvasManager.Instance.canvasButtonsList[i];
                 break;
             }
         }
-        
-        if(playerInput != null){
-            //Debug.Log(playerInput.devices[0].GetType().ToString());
-            if(playerInput.devices[0].GetType().ToString() == "UnityEngine.InputSystem.DualShock.FastDualShock4GamepadHID"){
-                promptImage.sprite = canvasButtonDisplay.buttonSprite[1];
-            }
-            else{
-                promptImage.sprite = canvasButtonDisplay.buttonSprite[0];
-            }
-        }
 
+        promptImage.sprite = canvasButtonDisplay.buttonSprite[(int)playerInput.GetComponent<CharacterManager>().playerDevice];
     }
 
-    public void ClearPrompt(){
+    public void ClearPrompt()
+    {
         promptText.text = null;
     }
 
-    public void OpenPanel(){
-        if(!isDisplayed){
-            uiPanel.SetActive(true);
-            isDisplayed = true;
-        }
+    public void OpenPanel()
+    {
+        isDisplayed = true;
+        uiPanel.SetActive(isDisplayed);
     }
 
-    public void ClosePanel(){
-        if(isDisplayed){
-            uiPanel.SetActive(false);
-            isDisplayed = false;
-        }
+    public void ClosePanel()
+    {
+        isDisplayed = false;
+        uiPanel.SetActive(isDisplayed);
     }
 
 }

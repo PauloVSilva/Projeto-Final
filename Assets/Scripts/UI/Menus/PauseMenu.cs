@@ -9,8 +9,6 @@ using TMPro;
 
 public class PauseMenu : MenuController
 {
-    private string pauseMessage;
-
     protected override void Start()
     {
         base.Start();
@@ -25,22 +23,22 @@ public class PauseMenu : MenuController
 
     private void SubscribeToPlayerButtonPress(PlayerInput _playerInput)
     {
-        _playerInput.GetComponent<PlayerInputHandler>().OnCharacterPressMenuButton += MenuOpened;
+        _playerInput.GetComponent<PlayerInputHandler>().OnCharacterPressMenuButton += ButtonPressed;
     }
 
-    public void MenuOpened(PlayerInput _playerInput)
+    private void ButtonPressed(PlayerInput _playerInput)
     {
-        AssignPlayerToMenu(_playerInput);
-        InitializeMenu();
-    }
+        CanvasManager.Instance.OpenMenu(menu, _playerInput);
 
-    private void InitializeMenu()
-    {
-        pauseMessage = MessageManager.instance.GetPauseMessage(playerInput.playerIndex + 1);
-        playerControllingMenu.text = pauseMessage;
+        InitializeMenuVariables();
 
-        CanvasManager.Instance.OpenMenu(this.menu);
         GameManager.Instance.UpdateGameState(GameState.Paused);
+    }
+
+    private void InitializeMenuVariables()
+    {
+        string pauseMessage = MessageManager.instance.GetPauseMessage(playerInput.playerIndex + 1);
+        playerControllingMenu.text = pauseMessage;
     }
 
 
@@ -58,6 +56,7 @@ public class PauseMenu : MenuController
     }
 
     public void DropOut(){
+        playerInput.GetComponent<PlayerInputHandler>().OnCharacterPressMenuButton -= ButtonPressed;
         GameManager.Instance.UnregisterPlayer(playerInput);
         Resume();
     }
