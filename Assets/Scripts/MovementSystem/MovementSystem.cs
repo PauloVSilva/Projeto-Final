@@ -49,11 +49,7 @@ public class MovementSystem : MonoBehaviour{
 
     private void FixedUpdate()
     {
-        if (characterManager.Character == null)
-        {
-            Debug.Log("Character is null");
-            return;
-        }
+        if (characterManager.Character == null) return;
 
         AngleCalculator();
         MovementBehaviour();

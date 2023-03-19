@@ -9,7 +9,8 @@ public enum MiniGame{sharpShooter, dimeDrop, rocketRace}
 public enum MiniGameGoal{killCount, lastStanding, time, scoreAmount, race}
 public enum MiniGameState{none, preparation, gameSetUp, gameIsRunning, gameOverSetUp, gameOver, returnToHub}
 
-public abstract class MiniGameManager : LevelManager{
+public abstract class MiniGameManager : LevelManager
+{
     [SerializeField] public static MiniGameManager instance;
 
     //MINIGAME VARIABLES
@@ -24,12 +25,12 @@ public abstract class MiniGameManager : LevelManager{
     [SerializeField] protected int countDown;
 
     //MINIGAME ACTION EVENTS
-    public event System.Action<int> OnCountDownTick;
-    public event System.Action<MiniGameState> OnGameStateAdvances;
-    public event System.Action<PlayerInput> OnPlayerWins;
+    public static event Action<int> OnCountDownTick;
+    public static event Action<MiniGameState> OnGameStateAdvances;
+    public static event Action<PlayerInput> OnPlayerWins;
 
 
-    protected void Update()
+    private void Update()
     {
         if (miniGameState == MiniGameState.gameIsRunning)
         {
@@ -154,7 +155,7 @@ public abstract class MiniGameManager : LevelManager{
 
     private void ReturnToHub()
     {
-        LevelLoader.instance.LoadLevel("MainHub");
+        LevelLoader.Instance.LoadLevel("MainHub");
     }
 
     protected void InvokeOnPlayerWins(PlayerInput playerInput)

@@ -4,34 +4,33 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
 
-public class SharpshooterManager : MiniGameManager{
-    [SerializeField] private List<PlayerInput> playersAlive = new List<PlayerInput>();
+public class SharpshooterManager : MiniGameManager
+{
     public int killCountGoal;
-    public int lastStandingLives;
 
     protected override void MiniGameSpecificSetup()
     {
         //Called as soon as the level starts
+        if (miniGame != MiniGame.sharpShooter) return;
 
-        if(miniGame == MiniGame.sharpShooter)
+        if(gameGoal == MiniGameGoal.killCount)
         {
-            if(gameGoal == MiniGameGoal.killCount)
+            killCountGoal = MiniGameOptionsMenu.instance.GetMiniGameGoalAmount();
+
+            foreach (var playerInput in GameManager.Instance.playerList)
             {
-                killCountGoal = MiniGameOptionsMenu.instance.GetMiniGameGoalAmount();
-                foreach (var playerInput in GameManager.Instance.playerList){
-                    playerInput.GetComponent<CharacterManager>().OnPlayerScoredKill += VerifyKillCountWinCondition;
-                }
+                playerInput.GetComponent<CharacterManager>().OnPlayerScoredKill += VerifyKillCountWinCondition;
             }
-
-            WeaponScriptableObject initialWeapon = (WeaponScriptableObject)ItemsDatabank.Instance.GetItem("double_action_revolver");
-            foreach(PlayerInput playerInput in GameManager.Instance.playerList)
-            {
-                GameObject _weaponSO = Instantiate(initialWeapon.itemModel, playerInput.transform.position, playerInput.transform.rotation);
-
-                playerInput.transform.TryGetComponent(out CharacterManager characterManager);
-
-                characterManager.characterInventory.PickWeapon(_weaponSO);
-            }
+        }
+        
+        WeaponScriptableObject initialWeapon = (WeaponScriptableObject)ItemsDatabank.Instance.GetItem("double_action_revolver");
+        foreach(PlayerInput playerInput in GameManager.Instance.playerList)
+        {
+            GameObject _weaponSO = Instantiate(initialWeapon.itemModel, playerInput.transform.position, playerInput.transform.rotation);
+        
+            playerInput.transform.TryGetComponent(out CharacterManager characterManager);
+        
+            characterManager.characterInventory.PickWeapon(_weaponSO);
         }
     }
 

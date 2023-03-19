@@ -17,7 +17,8 @@ public class InteractionPromptUI : MonoBehaviour{
     public bool isDisplayed = false;
 
     private void Start(){
-        mainCam = Camera.main;
+        //mainCam = Camera.main;
+        mainCam = GameManager.Instance.mainCamera;
         uiPanel.SetActive(false);
     }
 
@@ -33,9 +34,9 @@ public class InteractionPromptUI : MonoBehaviour{
         promptText.text = _promptText;
 
         CanvasButtonDisplay canvasButtonDisplay = new CanvasButtonDisplay();
-        for(int i = 0; i < CanvasManager.instance.canvasButtonsList.Count; i++){
-            if(buttonLabel[0] == CanvasManager.instance.canvasButtonsList[i].buttonType){
-                canvasButtonDisplay = CanvasManager.instance.canvasButtonsList[i];
+        for(int i = 0; i < CanvasManager.Instance.canvasButtonsList.Count; i++){
+            if(buttonLabel[0] == CanvasManager.Instance.canvasButtonsList[i].buttonType){
+                canvasButtonDisplay = CanvasManager.Instance.canvasButtonsList[i];
                 break;
             }
         }

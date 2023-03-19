@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CameraController : MonoBehaviour{
+public class CameraController : MonoBehaviour
+{
     Vector3 gizmoPos, gizmoPosMin, gizmoPosMax;
     public Vector3 fixedOffset, dynamicOffset;
     public float smoothSpeed;
@@ -13,6 +14,30 @@ public class CameraController : MonoBehaviour{
     private void Start()
     {
         SubscribeToEvents();
+    }
+
+    private void FixedUpdate(){
+        if (objectsTracked.Count == 1)
+        {
+            Vector3 desiredPosition = objectsTracked[0].transform.position + fixedOffset;
+            Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * Time.deltaTime);
+            transform.position = smoothedPosition;
+        }
+        else if (objectsTracked.Count > 1)
+        {
+            Vector3 desiredPosition = FindCentroid() + fixedOffset;
+            Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition + FindDynamicOffset(), smoothSpeed * Time.deltaTime);
+            transform.position = smoothedPosition;
+            //gizmoPos = FindCentroid();
+            //gizmoPosMin = FindMinPos();
+            //gizmoPosMax = FindMaxPos();
+        }
+        else
+        {
+            Vector3 desiredPosition = new Vector3(0, 0, 0) + fixedOffset;
+            Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * Time.deltaTime);
+            transform.position = smoothedPosition;
+        }
     }
 
     private void OnDestroy()
@@ -25,23 +50,44 @@ public class CameraController : MonoBehaviour{
     {
         GameManager.Instance.OnPlayerJoinedGame += TrackPlayer;
         GameManager.Instance.OnPlayerLeftGame += UntrackPlayer;
+
+        MiniGameManager.OnPlayerWins += TrackWinner;
     }
 
     private void UnsubscribeFromEvents()
     {
         GameManager.Instance.OnPlayerJoinedGame -= TrackPlayer;
         GameManager.Instance.OnPlayerLeftGame -= UntrackPlayer;
+
+        MiniGameManager.OnPlayerWins -= TrackWinner;
     }
 
 
     public void ResetTrackedList()
     {
+        foreach (PlayerInput playerInput in GameManager.Instance.playerList)
+        {
+            UntrackPlayer(playerInput);
+        }
+
         objectsTracked.Clear();
 
         foreach (PlayerInput playerInput in GameManager.Instance.playerList)
         {
             TrackPlayer(playerInput);
         }
+    }
+
+    private void TrackWinner(PlayerInput _playerInput)
+    {
+        foreach (PlayerInput playerInput in GameManager.Instance.playerList)
+        {
+            UntrackPlayer(playerInput);
+        }
+
+        objectsTracked.Clear();
+
+        AddCharacter(_playerInput.transform.gameObject);
     }
 
     private void TrackPlayer(PlayerInput playerInput)
@@ -70,27 +116,6 @@ public class CameraController : MonoBehaviour{
     private void RemoveCharacter(GameObject character)
     {
         objectsTracked.Remove(character);
-    }
-
-    void FixedUpdate(){
-        if (objectsTracked.Count == 1){
-            Vector3 desiredPosition = objectsTracked[0].transform.position + fixedOffset;
-            Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * Time.deltaTime);
-            transform.position = smoothedPosition;
-        }
-        else if (objectsTracked.Count > 1){
-            Vector3 desiredPosition = FindCentroid() + fixedOffset;
-            Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition + FindDynamicOffset(), smoothSpeed * Time.deltaTime);
-            transform.position = smoothedPosition;
-            //gizmoPos = FindCentroid();
-            //gizmoPosMin = FindMinPos();
-            //gizmoPosMax = FindMaxPos();
-        }
-        else{
-            Vector3 desiredPosition = new Vector3(0, 0, 0) + fixedOffset;
-            Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * Time.deltaTime);
-            transform.position = smoothedPosition;
-        }
     }
 
     Vector3 FindCentroid(){

@@ -12,18 +12,10 @@ public class Pool{
     }
 }
 
-public class ObjectPooler : MonoBehaviour{
-
-    public static ObjectPooler instance;
-
-    private void Awake(){
-        if(instance == null){
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else if(instance != null){
-            Destroy(gameObject);
-        }
+public class ObjectPooler : Singleton<ObjectPooler> 
+{
+    protected override void Awake(){
+        base.Awake();
     }
 
     public List<Pool> pools;
@@ -108,7 +100,7 @@ public class ObjectPooler : MonoBehaviour{
     }
 
     public GameObject SpawnFromPool(GameObject prefab, Vector3 position, Quaternion rotation){
-        return SpawnFromPool(prefab, position, rotation, ObjectPooler.instance.gameObject);
+        return SpawnFromPool(prefab, position, rotation, ObjectPooler.Instance.gameObject);
     }
 
     public GameObject SpawnFromPool(GameObject prefab, Vector3 position, Quaternion rotation, GameObject parent){

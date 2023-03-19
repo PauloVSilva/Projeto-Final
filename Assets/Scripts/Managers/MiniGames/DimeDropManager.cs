@@ -4,22 +4,21 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
 
-public class DimeDropManager : MiniGameManager{
+public class DimeDropManager : MiniGameManager
+{
     [SerializeField] protected GameObject[] coins;
     public int scoreAmountGoal;
-    public int timeLimitGoal;
 
     protected override void MiniGameSpecificSetup()
     {
-        if(miniGame == MiniGame.dimeDrop)
+        if (miniGame != MiniGame.dimeDrop) return;
+
+        if(gameGoal == MiniGameGoal.scoreAmount)
         {
-            if(gameGoal == MiniGameGoal.scoreAmount)
+            scoreAmountGoal = MiniGameOptionsMenu.instance.GetMiniGameGoalAmount();
+            foreach(var playerInput in GameManager.Instance.playerList)
             {
-                scoreAmountGoal = MiniGameOptionsMenu.instance.GetMiniGameGoalAmount();
-                foreach(var playerInput in GameManager.Instance.playerList)
-                {
-                    playerInput.GetComponent<CharacterManager>().OnPlayerScoreChanged += VerifyScoreAmountWinCondition;
-                }
+                playerInput.GetComponent<CharacterManager>().OnPlayerScoreChanged += VerifyScoreAmountWinCondition;
             }
         }
     }

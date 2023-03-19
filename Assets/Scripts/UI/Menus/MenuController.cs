@@ -6,8 +6,10 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
 using TMPro;
+using UnityEngine.InputSystem.DualShock;
 
-public abstract class MenuController : MonoBehaviour{
+public abstract class MenuController : MonoBehaviour
+{
     public Menu menu;
     [SerializeField] private GameObject menuContainer;
     [SerializeField] private Button firstSelected;
@@ -15,7 +17,9 @@ public abstract class MenuController : MonoBehaviour{
 
     private List<CanvasButtonDisplay> canvasButtonsList = new List<CanvasButtonDisplay>();
     private List<GameObject> footerButtons = new List<GameObject>();
-    protected PlayerInput playerInput;
+
+    [SerializeField] protected PlayerInput playerInput;
+    [SerializeField] protected Device playerDevice;
 
     [SerializeField] protected ButtonType[] buttonTypes;
     [SerializeField] protected TextMeshProUGUI menuName;
@@ -24,125 +28,145 @@ public abstract class MenuController : MonoBehaviour{
     [SerializeField] protected GameObject footer;
     [SerializeField] protected InputSystemUIInputModule inputSystemUIInputModule;
 
-    protected virtual void Start(){
-        CreateFooterButtons();
+    protected virtual void Start()
+    {
+        CreateEmptyFooterButtons();
     }
 
 
-    public void Open(){
+    public void Open()
+    {
         menuContainer.SetActive(true);
         GainControl();
-        SetUpCanvasButtons();
+
+        SetUpFooterButtons();
+        SetUpTabs();
         SubscribeToInputActions();
     }
 
-    public void Close(){
-        menuContainer.SetActive(false);
+    public void Close()
+    {
+        GainControl();
         UnsubscribeFromInputActions();
+        menuContainer.SetActive(false);
     }
 
-    public void GainControl(){
+    public void GainControl()
+    {
         firstSelected.Select();
     }
     
-    public void Back(){
-        CanvasManager.instance.CloseMenu();
+    public void Back()
+    {
+        CanvasManager.Instance.CloseMenu();
     }
 
-    private void CreateFooterButtons(){
-        if(buttonTypes.Count() < 1)
-            return;
+    private void CreateEmptyFooterButtons()
+    {
+        if(buttonTypes.Count() < 1) return;
 
-        for(int i = 0; i < buttonTypes.Count(); i++){
-            for(int j = 0; j < CanvasManager.instance.canvasButtonsList.Count(); j++){
-                if(buttonTypes[i] == CanvasManager.instance.canvasButtonsList[j].buttonType){
-                    canvasButtonsList.Add(CanvasManager.instance.canvasButtonsList[j]);
+        for(int i = 0; i < buttonTypes.Count(); i++)
+        {
+            for(int j = 0; j < CanvasManager.Instance.canvasButtonsList.Count(); j++)
+            {
+                if(buttonTypes[i] == CanvasManager.Instance.canvasButtonsList[j].buttonType)
+                {
+                    canvasButtonsList.Add(CanvasManager.Instance.canvasButtonsList[j]);
                     break;
                 }
             }
-            GameObject ButtonDisplay = Instantiate(CanvasManager.instance.buttonDisplayPrefab);
+            GameObject ButtonDisplay = Instantiate(CanvasManager.Instance.buttonDisplayPrefab);
             ButtonDisplay.transform.SetParent(footer.transform, false);
             footerButtons.Add(ButtonDisplay);
         }
     }
 
-    private void SetUpCanvasButtons(){
-        if(playerInput == null)
-            return;
-
-        Device device;
-        if(playerInput.devices[0].GetType().ToString() == "UnityEngine.InputSystem.DualShock.FastDualShock4GamepadHID")
-            device = Device.DualShock;
-        else
-            device = Device.Keyboard;
+    private void SetUpFooterButtons()
+    {
+        if(playerInput == null) return;
 
 
-        for(int i = 0; i < footerButtons.Count(); i++){
+        for(int i = 0; i < footerButtons.Count(); i++)
+        {
             footerButtons[i].GetComponentInChildren<TextMeshProUGUI>().text = canvasButtonsList[i].buttonString;
-            footerButtons[i].GetComponentInChildren<Image>().sprite = canvasButtonsList[i].buttonSprite[(int)device]; 
-        }
-
-
-        if(tabGroup == null)
-            return;
-
-
-        for(int i = 0; i < tabGroup.buttonTypes.Count(); i++){
-            for(int j = 0; j < CanvasManager.instance.canvasButtonsList.Count(); j++){
-                if(tabGroup.buttonTypes[i] == CanvasManager.instance.canvasButtonsList[j].buttonType){
-                    tabGroup.tabLabels[i].sprite = CanvasManager.instance.canvasButtonsList[j].buttonSprite[(int)device];
-                    break;
-                }
-            }
+            footerButtons[i].GetComponentInChildren<Image>().sprite = canvasButtonsList[i].buttonSprite[(int)playerDevice]; 
         }
 
     }
 
-    private void SubscribeToInputActions(){
-        if(playerInput == null)
-            return;
+    private void SetUpTabs()
+    {
+        if (tabGroup == null) return;
+
+        for (int i = 0; i < tabGroup.buttonTypes.Count(); i++)
+        {
+            for (int j = 0; j < CanvasManager.Instance.canvasButtonsList.Count(); j++)
+            {
+                if (tabGroup.buttonTypes[i] == CanvasManager.Instance.canvasButtonsList[j].buttonType)
+                {
+                    tabGroup.tabLabels[i].sprite = CanvasManager.Instance.canvasButtonsList[j].buttonSprite[(int)playerDevice];
+                    break;
+                }
+            }
+        }
+    }
+
+    private void SubscribeToInputActions()
+    {
+        if(playerInput == null) return;
 
         //InputActionAsset playerActions = playerInput.actions;
 
-        for(int i = 0; i < buttonTypes.Count(); i++){
+        for(int i = 0; i < buttonTypes.Count(); i++)
+        {
             if(buttonTypes[i].ToString() == "Back")
                 playerInput.actions["Back"].performed += PlayerPressedBackButton;
 
-            if(tabGroup != null){
+            if(tabGroup != null)
+            {
                 playerInput.actions["PreviousTab"].performed += PlayerPressedPreviousTabButton;
                 playerInput.actions["NextTab"].performed += PlayerPressedNextTabButton;
             }
         }
     }
 
-    private void UnsubscribeFromInputActions(){
-        if(playerInput == null)
-            return;
+    private void UnsubscribeFromInputActions()
+    {
+        if(playerInput == null) return;
 
         playerInput.actions["Back"].performed -= PlayerPressedBackButton;
         playerInput.actions["PreviousTab"].performed -= PlayerPressedPreviousTabButton;
         playerInput.actions["NextTab"].performed -= PlayerPressedNextTabButton;
     }
 
-    protected virtual void AssignPlayerToMenu(PlayerInput _playerInput){
+    protected void AssignPlayerToMenu(PlayerInput _playerInput)
+    {
         playerInput = _playerInput;
         inputSystemUIInputModule.actionsAsset = playerInput.actions;
+
+        playerInput.TryGetComponent(out CharacterManager characterManager);
+        Debug.Log(characterManager.playerDevice);
+        playerDevice = characterManager.playerDevice;
+
         //_playerInput.InputSystemUIInputModule = inputSystemUIInputModule;
         //playerInput.GetComponent<PlayerInputHandler>().OnPlayerPressedBackButton += PlayerPressedBackButton;
     }
 
-    protected virtual void PlayerPressedBackButton(InputAction.CallbackContext context){
-        if(CanvasManager.instance.currentMenu == this)
-            CanvasManager.instance.CloseMenu();
+    protected void PlayerPressedBackButton(InputAction.CallbackContext context)
+    {
+        if(CanvasManager.Instance.currentMenu == this)
+            CanvasManager.Instance.CloseMenu();
     }
 
-    protected virtual void PlayerPressedPreviousTabButton(InputAction.CallbackContext context){
-        if(CanvasManager.instance.currentMenu == this)
+    protected void PlayerPressedPreviousTabButton(InputAction.CallbackContext context)
+    {
+        if(CanvasManager.Instance.currentMenu == this)
             tabGroup?.SelectPreviousTab();
     }
 
-    protected virtual void PlayerPressedNextTabButton(InputAction.CallbackContext context){
-        if(CanvasManager.instance.currentMenu == this)
+    protected void PlayerPressedNextTabButton(InputAction.CallbackContext context)
+    {
+        if(CanvasManager.Instance.currentMenu == this)
             tabGroup?.SelectNextTab();
     }
 }

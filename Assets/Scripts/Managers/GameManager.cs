@@ -1,15 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public enum GameState { None, MainMenu, Hub, MiniGame }
+public enum GameState { None, MainMenu, Hub, MiniGame, Paused }
 
-public class GameManager : PersistentSingleton<GameManager>
+public class GameManager : Singleton<GameManager>
 {
-    public bool gameIsPaused;
-
     [field:SerializeField] public GameState gameState { get; private set; }
+    [field:SerializeField] public GameState previousState { get; private set; }
 
     public Camera mainCamera;
     
@@ -26,7 +26,7 @@ public class GameManager : PersistentSingleton<GameManager>
     protected override void Awake(){
         base.Awake();
 
-        gameIsPaused = false;
+        LevelLoader.Instance.LoadLevel("MainMenu");
         
         joinAction.performed += context => {JoinAction(context); Debug.Log("Player Joined");};
     }
@@ -35,6 +35,8 @@ public class GameManager : PersistentSingleton<GameManager>
     public void UpdateGameState(GameState _gameState)
     {
         gameState = _gameState;
+
+        if (gameState != GameState.Paused) previousState = _gameState;
 
         switch (gameState)
         {
@@ -47,12 +49,19 @@ public class GameManager : PersistentSingleton<GameManager>
             case GameState.MiniGame:
                 joinAction.Disable();
                 break;
+            case GameState.Paused:
+                joinAction.Disable();
+                break;
         }
 
-        CanvasManager.instance.playerPanels.SetActive(gameState != GameState.MainMenu);
-        CanvasManager.instance.miniGameUI.SetActive(gameState != GameState.MainMenu);
+        Time.timeScale = Convert.ToSingle(gameState != GameState.Paused);
 
         OnGameStateChanged?.Invoke(gameState);
+    }
+
+    public void RestorePreviousState()
+    {
+        UpdateGameState(previousState);
     }
 
 
@@ -74,7 +83,7 @@ public class GameManager : PersistentSingleton<GameManager>
         //So even though is might show up as "0 references" by intellisense, it is called by Unity automatically
     }
 
-    public void JoinAction(InputAction.CallbackContext context){
+    private void JoinAction(InputAction.CallbackContext context){
         PlayerInputManager.instance.JoinPlayerFromActionIfNotAlreadyJoined(context);
     }
 

@@ -206,7 +206,7 @@ public class Weapon : Item{
     }
 
     private void CastProjectile(){
-        if(ObjectPooler.instance.SpawnFromPool(projectileToCast.projectileModel, castPoint.position, castPoint.rotation, this.gameObject) == null)
+        if(ObjectPooler.Instance.SpawnFromPool(projectileToCast.projectileModel, castPoint.position, castPoint.rotation, this.gameObject) == null)
         {
             Debug.LogWarning("Something went wrong. Object Pooler couldn't Spawn " + projectileToCast.projectileModel);
         }

@@ -76,7 +76,7 @@ public class Projectile : Entity, IPooledObjects{
         weaponOfOrigin = this.transform.parent.gameObject;
         playerOfOrigin = weaponOfOrigin.transform.parent.gameObject;
 
-        this.transform.parent = ObjectPooler.instance.transform;
+        this.transform.parent = ObjectPooler.Instance.transform;
 
         age = 0;
         isPooled = true;

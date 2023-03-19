@@ -22,7 +22,7 @@ public class Coin : Item, IPooledObjects{
     public void OnObjectSpawn(){ //replaces Start()
         InitializeItemVariables();
 
-        this.transform.parent = ObjectPooler.instance.transform;
+        this.transform.parent = ObjectPooler.Instance.transform;
 
         transform.Rotate(0, 0, 0);
 

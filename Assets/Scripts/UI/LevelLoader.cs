@@ -5,8 +5,8 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 
-public class LevelLoader : MonoBehaviour{
-    public static LevelLoader instance = null;
+public class LevelLoader : Singleton<LevelLoader>
+{
     [SerializeField] private GameObject loadingScreen;
     [SerializeField] private Slider slider;
     [SerializeField] private TextMeshProUGUI percentage;
@@ -14,46 +14,65 @@ public class LevelLoader : MonoBehaviour{
     private string loadingString;
     private float progress;
 
+    [SerializeField] private string currentSceneName;
+    [SerializeField] private int currentSceneID;
+
     public event System.Action OnSceneLoaded;
 
-    private void Awake(){
-        InitializeSingletonInstance();
+    protected override void Awake()
+    {
+        base.Awake();
         InitializeVariables();
     }
 
-    private void InitializeSingletonInstance(){
-        if(instance == null){
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else if(instance != null){
-            Destroy(gameObject);
-        }
-    }
-
-    private void InitializeVariables(){
+    private void InitializeVariables()
+    {
         loadingString = "Loading";
         progress = 0f;
     }
 
-    public void LoadLevel(string sceneName){
+    public void LoadLevel(string sceneName)
+    {
         GameManager.Instance.mainCamera = null;
-        StartCoroutine(LoadAsynchronously(sceneName));
+        StartCoroutine(LoadAsynchronously(sceneName, true));
         loading.text = loadingString;
         loadingScreen.SetActive(true);
     }
 
-    IEnumerator LoadAsynchronously(string sceneName){
+    IEnumerator LoadAsynchronously(string sceneName, bool replaceCurrent)
+    {
         yield return new WaitForSeconds(0f);
-        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
-        while(!operation.isDone){
+
+        if (replaceCurrent && currentSceneName != "")
+        {
+            AsyncOperation subOperation = SceneManager.UnloadSceneAsync(currentSceneName);
+
+            while (!subOperation.isDone)
+            {
+                yield return null;
+            }
+            if (subOperation.isDone)
+            {
+                currentSceneName = sceneName;
+            }
+        }
+        else
+        {
+            currentSceneName = sceneName;
+        }
+
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+        while (!operation.isDone)
+        {
             progress = Mathf.Clamp01(operation.progress / .9f);
             progress = Mathf.Round(progress * 100f);
             slider.value = progress;
             percentage.text = progress + "%";
             yield return null;
         }
-        if(operation.isDone){
+
+        if (operation.isDone)
+        {
             OnSceneLoaded?.Invoke();
 
             loadingScreen.SetActive(false);

@@ -78,7 +78,7 @@ public class CharacterInventory : Inventory{
     public override void DropAllInventory(){
         for(int i = 0; i < inventorySlots.Count; i++){
             while(inventorySlots[i].stackSize > 0){
-                GameObject droppedItem = ObjectPooler.instance.SpawnFromPool(inventorySlots[i].item.itemModel, this.transform.position, this.transform.rotation);
+                GameObject droppedItem = ObjectPooler.Instance.SpawnFromPool(inventorySlots[i].item.itemModel, this.transform.position, this.transform.rotation);
                 if(droppedItem == null){
                     Debug.LogWarning("Object Pooler couldn't Spawn " + inventorySlots[i].item.itemModel + ". Item will be instantiated instead.");
                     Instantiate(inventorySlots[i].item.itemModel, this.gameObject.transform.position, this.gameObject.transform.rotation);

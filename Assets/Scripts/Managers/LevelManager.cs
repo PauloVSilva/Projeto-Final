@@ -12,7 +12,8 @@ public abstract class LevelManager : MonoBehaviour
 
     public Camera mainCamera;
 
-    private void Awake(){
+    private void Awake()
+    {
         InitializeSingletonInstance();
 
         GameManager.Instance.spawnPoints = levelSpawnPoints;
@@ -21,17 +22,20 @@ public abstract class LevelManager : MonoBehaviour
         FullyResetPlayers();
     }
 
-    private void Start(){
+    private void Start()
+    {
         RepositionAllPlayers();
 
         InitializeLevel();
         
-        if(!AddObjectsToPool()){
+        if(!AddObjectsToPool())
+        {
             Debug.LogError("Something went wrong. ObjectPooler couldn't be initialized. Return to main menu.");
         }
     }
 
-    private void OnDestroy(){
+    private void OnDestroy()
+    {
         ClearPools();
     }
 
@@ -58,28 +62,31 @@ public abstract class LevelManager : MonoBehaviour
     }
 
 
-    private bool AddObjectsToPool(){
-        if(ObjectPooler.instance == null){
-            return false;
-        }
-        if(objectsToPool.Length == 0){
+    private bool AddObjectsToPool()
+    {
+        if(ObjectPooler.Instance == null) return false;
+
+        if(objectsToPool.Length == 0)
+        {
             Debug.LogWarning("LEVEL HAS NO OBJECTS TO POOL!!!");
             return false;
         }
-        foreach(Pool pool in objectsToPool){
-            ObjectPooler.instance.AddPool(pool);
+
+        foreach(Pool pool in objectsToPool)
+        {
+            ObjectPooler.Instance.AddPool(pool);
         }
+
         return true;
     }
 
     private void ClearPools()
     {
-        if (objectsToPool.Length > 0)
+        if (objectsToPool.Length <= 0) return;
+
+        foreach (Pool pool in objectsToPool)
         {
-            foreach (Pool pool in objectsToPool)
-            {
-                ObjectPooler.instance.RemovePool(pool);
-            }
+            ObjectPooler.Instance.RemovePool(pool);
         }
     }
 

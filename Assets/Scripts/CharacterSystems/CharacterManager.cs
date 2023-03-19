@@ -30,6 +30,7 @@ public class CharacterManager : MonoBehaviour{
 
     #region "STATS"
     [Header("Stats")]
+    public Device playerDevice;
     public Color lightColor;
     public Color UIColor;
     public CharacterState characterState;
@@ -135,11 +136,18 @@ public class CharacterManager : MonoBehaviour{
         {
             DualSenseGamepadHID dualsense = (DualSenseGamepadHID)device;
             dualsense.SetLightBarColor(lightColor);
+            playerDevice = Device.DualShock;
+
         }
         if (device.GetType() == typeof(DualShock4GamepadHID))
         {
             DualShock4GamepadHID dualshock4 = (DualShock4GamepadHID)device;
             dualshock4.SetLightBarColor(lightColor);
+            playerDevice = Device.DualShock;
+        }
+        else
+        {
+            playerDevice = Device.Keyboard;
         }
     }
 
@@ -170,6 +178,7 @@ public class CharacterManager : MonoBehaviour{
 
         transform.parent = GameManager.Instance.transform;
         playerInput.SwitchCurrentActionMap("Player");
+
         OnCharacterChosen?.Invoke();
     }
 
@@ -238,7 +247,7 @@ public class CharacterManager : MonoBehaviour{
 
     public bool CanMove(){
         if(actionsAreBlocked) return false;
-        if(GameManager.Instance.gameIsPaused) return false;
+        if(GameManager.Instance.gameState == GameState.Paused) return false;
         
         return true;
     }

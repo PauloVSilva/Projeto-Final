@@ -7,8 +7,9 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
 using TMPro;
 
-public class CharacterSelectionMenu : MenuController{
-    private CharacterManager characterManager;
+public class CharacterSelectionMenu : MenuController
+{
+    private CharacterManager characterManager; //not really necessary
     private CharacterStatsScriptableObject displayedCharacter;
     private int index;
     private string greetMessage;
@@ -30,8 +31,7 @@ public class CharacterSelectionMenu : MenuController{
 
     public void MenuOpened(PlayerInput _playerInput)
     {
-        base.AssignPlayerToMenu(_playerInput);
-
+        AssignPlayerToMenu(_playerInput);
         InitializeMenu();
     }
 
@@ -46,35 +46,31 @@ public class CharacterSelectionMenu : MenuController{
 
         UpdateCharacter();
 
-        CanvasManager.instance.OpenMenu(this.menu);
-        StartCoroutine(PauseMenu.instance.FreezeGameDelay());
+        CanvasManager.Instance.OpenMenu(this.menu);
+        GameManager.Instance.UpdateGameState(GameState.Paused);
     }
 
-    private void UpdateCharacter(){
+    private void UpdateCharacter()
+    {
         characterSprite.sprite = displayedCharacter.sprite[0];
         characterName.text = displayedCharacter.characterName.ToString();
     }
 
 
     #region BUTTONS
-    public void NextCharacter(){
-        if(index < characterList.Count - 1){
-            index++;
-        }
-        else{
-            index = 0;
-        }
+    public void NextCharacter()
+    {
+        index = (index + 1) % characterList.Count;
+
         displayedCharacter = characterList[index];
         UpdateCharacter();
     }
 
-    public void PreviousCharacter(){
-        if(index > 0){
-            index--;
-        }
-        else{
-            index = characterList.Count - 1;
-        }
+    public void PreviousCharacter()
+    {
+        index--;
+        if(index < 0) index = characterList.Count - 1;
+
         displayedCharacter = characterList[index];
         UpdateCharacter();
     }
@@ -82,8 +78,10 @@ public class CharacterSelectionMenu : MenuController{
     public void ConfirmCharacter()
     {
         CharacterStatsScriptableObject selectedCharacter = displayedCharacter;
+
         characterManager.SpawnCharacter(selectedCharacter);
-        base.Back();
+        
+        Back();
     }
     #endregion BUTTONS
 }

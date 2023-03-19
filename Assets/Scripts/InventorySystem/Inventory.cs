@@ -38,7 +38,7 @@ public class Inventory : MonoBehaviour{
     public virtual void DropItem(int index, Transform dropPoint){
         Debug.Log("DropItem on slot " + index);
         if(GetItemOnSlot(index) != null){
-            if(ObjectPooler.instance.SpawnFromPool(GetItemOnSlot(index).itemModel, dropPoint.position, dropPoint.rotation) == null){
+            if(ObjectPooler.Instance.SpawnFromPool(GetItemOnSlot(index).itemModel, dropPoint.position, dropPoint.rotation) == null){
                 Debug.LogWarning("Object Pooler couldn't Spawn " + GetItemOnSlot(index).itemModel + ". Item will be instantiated instead.");
                 Instantiate(GetItemOnSlot(index).itemModel, dropPoint.position, dropPoint.rotation);
             }
@@ -49,7 +49,7 @@ public class Inventory : MonoBehaviour{
     public virtual void DropAllInventory(){
         for(int i = 0; i < inventorySlots.Count; i++){
             while(inventorySlots[i].stackSize > 0){
-                if(ObjectPooler.instance.SpawnFromPool(inventorySlots[i].item.itemModel, this.transform.position, this.transform.rotation) == null){
+                if(ObjectPooler.Instance.SpawnFromPool(inventorySlots[i].item.itemModel, this.transform.position, this.transform.rotation) == null){
                     Debug.LogWarning("Object Pooler couldn't Spawn " + inventorySlots[i].item.itemModel + ". Item will be instantiated instead.");
                     Instantiate(inventorySlots[i].item.itemModel, this.gameObject.transform.position, this.gameObject.transform.rotation);
                 }

@@ -8,7 +8,7 @@ public class ItemID{
     public string itemIdentifier;
 }
 
-public class ItemsDatabank : PersistentSingleton<ItemsDatabank>
+public class ItemsDatabank : Singleton<ItemsDatabank>
 {
     public List<ItemID> dataBank = new List<ItemID>();
 

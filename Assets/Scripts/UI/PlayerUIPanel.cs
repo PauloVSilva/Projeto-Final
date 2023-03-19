@@ -69,7 +69,7 @@ public class PlayerUIPanel : MonoBehaviour{
         StartCoroutine(AssignPlayerDelay(playerInput));
         IEnumerator AssignPlayerDelay(PlayerInput playerInput)
         {
-            yield return new WaitForSeconds(0.01f);
+            yield return new WaitForSecondsRealtime(0.01f);
             player = playerInput;
 
             player.transform.TryGetComponent(out CharacterManager _characterManager);
@@ -103,7 +103,7 @@ public class PlayerUIPanel : MonoBehaviour{
         StartCoroutine(AssignCharacterDelay());
         IEnumerator AssignCharacterDelay()
         {
-            yield return new WaitForSeconds(0.01f);
+            yield return new WaitForSecondsRealtime(0.01f);
 
             UpdatePanels();
             InitializeStats();

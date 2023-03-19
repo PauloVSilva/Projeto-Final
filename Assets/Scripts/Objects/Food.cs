@@ -22,7 +22,7 @@ public class Food : Item, IPooledObjects{
     public void OnObjectSpawn(){ //replaces Start()
         InitializeItemVariables();
 
-        this.transform.parent = ObjectPooler.instance.transform;
+        this.transform.parent = ObjectPooler.Instance.transform;
 
         isPooled = true;
     }

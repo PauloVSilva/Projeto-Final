@@ -12,6 +12,6 @@ public class MainMenuManager : MonoBehaviour{
     private void InitializeMainMenu()
     {
         GameManager.Instance.UpdateGameState(GameState.MainMenu);
-        CanvasManager.instance.OpenMenu(Menu.MainMenu);
+        CanvasManager.Instance.OpenMenu(Menu.MainMenu);
     }
 }
