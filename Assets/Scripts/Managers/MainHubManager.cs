@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class MainHubManager : LevelManager
+public class MainHubManager : MonoBehaviour
 {
-    protected override void InitializeLevel()
+    private void Start()
     {
         GameManager.Instance.UpdateGameState(GameState.Hub);
     }

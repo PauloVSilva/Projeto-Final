@@ -26,6 +26,33 @@ public class PlayerUIManager : MonoBehaviour
     private void AdaptToGameState(GameState gameState)
     {
         playerPanelsContainer.SetActive(gameState != GameState.MainMenu);
+
+        switch (gameState)
+        {
+            case GameState.MiniGame:
+                DisableUnassigned();
+                break;
+            case GameState.Hub:
+                EnableAll();
+                break;
+        }
+    }
+
+
+    private void EnableAll()
+    {
+        foreach (PlayerUIPanel playerUIPanel in playerUIPanels)
+        {
+            playerUIPanel.gameObject.SetActive(true);
+        }
+    }
+
+    private void DisableUnassigned()
+    {
+        foreach (PlayerUIPanel playerUIPanel in playerUIPanels)
+        {
+            if(playerUIPanel.player == null) playerUIPanel.gameObject.SetActive(false);
+        }
     }
 
     private void PlayerJoinedGame(PlayerInput playerInput)

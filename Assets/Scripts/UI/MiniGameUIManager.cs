@@ -98,8 +98,8 @@ public class MiniGameUIManager : MonoBehaviour
 
         if(seconds > 0 && seconds < 6)
         {
-            if (MiniGameManager.instance.miniGameState == MiniGameState.preparation) countDownMessage.text = gameBeginsInSeconds;
-            if (MiniGameManager.instance.miniGameState == MiniGameState.gameOver) countDownMessage.text = returningToLobbyInSeconds;
+            if (MiniGameManager.Instance.miniGameState == MiniGameState.preparation) countDownMessage.text = gameBeginsInSeconds;
+            if (MiniGameManager.Instance.miniGameState == MiniGameState.gameOver) countDownMessage.text = returningToLobbyInSeconds;
 
             countDownBoard.text = seconds.ToString();
 
@@ -113,7 +113,7 @@ public class MiniGameUIManager : MonoBehaviour
 
         if(seconds == 0)
         {
-            if (MiniGameManager.instance.miniGameState == MiniGameState.preparation) countDownBoard.text = go;
+            if (MiniGameManager.Instance.miniGameState == MiniGameState.preparation) countDownBoard.text = go;
 
             StartCoroutine(CleanCountDownBoard());
             IEnumerator CleanCountDownBoard()

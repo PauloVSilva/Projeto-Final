@@ -43,19 +43,23 @@ public class PauseMenu : MenuController
 
 
     #region BUTTONS
-    public void Resume(){
+    public void Resume()
+    {
         Back();
     }
 
-    public void Controls(){
+    public void Controls()
+    {
         CanvasManager.Instance.OpenMenu(Menu.ControlsMenu);
     }
 
-    public void Settings(){
+    public void Settings()
+    {
         CanvasManager.Instance.OpenMenu(Menu.SettingsMenu);
     }
 
-    public void DropOut(){
+    public void DropOut()
+    {
         playerInput.GetComponent<PlayerInputHandler>().OnCharacterPressMenuButton -= ButtonPressed;
         GameManager.Instance.UnregisterPlayer(playerInput);
         Resume();

@@ -14,7 +14,6 @@ public class GameManager : Singleton<GameManager>
     public Camera mainCamera;
     
     public List<PlayerInput> playerList = new List<PlayerInput>();
-    public GameObject[] spawnPoints;
 
     public InputAction joinAction;
 

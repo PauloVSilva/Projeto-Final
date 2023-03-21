@@ -8,16 +8,27 @@ using TMPro;
 
 public class MiniGameOptionsMenu : MenuController
 {
-    public static MiniGameOptionsMenu instance;
+    public static MiniGameOptionsMenu instance; //this is an anomaly
+
     private List<MiniGameGoalScriptableObject> miniGameGoalsList;
     private MiniGameGoalScriptableObject displayedMiniGameGoal;
     private int miniGameGoalAmount;
     private int miniGameIndex;
+
+    [Header("Goal")]
+    [Space(5)]
+    [SerializeField] private Image gameIcon;
+
     [SerializeField] private Image goalSprite;
     [SerializeField] private TextMeshProUGUI goalName;
     [SerializeField] private TextMeshProUGUI goalDescription;
     [SerializeField] private TextMeshProUGUI goalKeyword;
     [SerializeField] private TextMeshProUGUI goalAmount;
+
+    [Header("Buttons")]
+    [Space(5)]
+    [SerializeField] private Button nextGoalButton;
+    [SerializeField] private Button previousGoalButton;
 
 
     private void Awake()
@@ -39,12 +50,17 @@ public class MiniGameOptionsMenu : MenuController
         GameManager.Instance.UpdateGameState(GameState.Paused);
     }
 
-    public void InitializeMenuVariables(MiniGameScriptableObject _miniGame)
+    private void InitializeMenuVariables(MiniGameScriptableObject _miniGame)
     {
         miniGameIndex = 0;
 
         menuName.text = _miniGame.miniGameName;
+        gameIcon.sprite = _miniGame.miniGameSprite;
+
         miniGameGoalsList = _miniGame.miniGamesGoalsAvaliable.ToList();
+
+        nextGoalButton.gameObject.SetActive(miniGameGoalsList.Count != 1);
+        previousGoalButton.gameObject.SetActive(miniGameGoalsList.Count != 1);
 
         displayedMiniGameGoal = miniGameGoalsList[miniGameIndex];
         miniGameGoalAmount = 1 * displayedMiniGameGoal.goalMultiplier;
@@ -52,7 +68,7 @@ public class MiniGameOptionsMenu : MenuController
         UpdateMenu();
     }
 
-    public void UpdateMenu()
+    private void UpdateMenu()
     {
         goalSprite.sprite = displayedMiniGameGoal.goalSprite;
         goalName.text = displayedMiniGameGoal.goalName.ToString();
@@ -79,11 +95,14 @@ public class MiniGameOptionsMenu : MenuController
 
     
     #region BUTTONS
-    public void NextGoal(){
-        if(miniGameIndex < miniGameGoalsList.Count - 1){
+    public void NextGoal()
+    {
+        if(miniGameIndex < miniGameGoalsList.Count - 1)
+        {
             miniGameIndex++;
         }
-        else{
+        else
+        {
             miniGameIndex = 0;
         }
         displayedMiniGameGoal = miniGameGoalsList[miniGameIndex];
@@ -91,11 +110,14 @@ public class MiniGameOptionsMenu : MenuController
         UpdateMenu();
     }
 
-    public void PreviousGoal(){
-        if(miniGameIndex > 0){
+    public void PreviousGoal()
+    {
+        if(miniGameIndex > 0)
+        {
             miniGameIndex--;
         }
-        else{
+        else
+        {
             miniGameIndex = miniGameGoalsList.Count - 1;
         }
         displayedMiniGameGoal = miniGameGoalsList[miniGameIndex];
@@ -103,12 +125,14 @@ public class MiniGameOptionsMenu : MenuController
         UpdateMenu();
     }
 
-    public void IncreaseGoalAmount(){
+    public void IncreaseGoalAmount()
+    {
         miniGameGoalAmount += displayedMiniGameGoal.goalMultiplier;
         UpdateMenu();
     }
 
-    public void DecreaseGoalAmount(){
+    public void DecreaseGoalAmount()
+    {
         miniGameGoalAmount -= displayedMiniGameGoal.goalMultiplier;
         if(miniGameGoalAmount < displayedMiniGameGoal.goalMultiplier){
             miniGameGoalAmount = displayedMiniGameGoal.goalMultiplier;
@@ -116,13 +140,15 @@ public class MiniGameOptionsMenu : MenuController
         UpdateMenu();
     }
 
-    public void ConfirmSettings(){
-        base.Back();
+    public void ConfirmSettings()
+    {
+        Back();
         LevelLoader.Instance.LoadLevel(menuName.text);
     }
 
-    public void CancelSelection(){
-        base.Back();
+    public void CancelSelection()
+    {
+        Back();
     }
     #endregion BUTTONS
 }

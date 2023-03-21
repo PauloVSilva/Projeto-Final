@@ -6,7 +6,6 @@ using System;
 
 public class DimeDropManager : MiniGameManager
 {
-    [SerializeField] protected GameObject[] coins;
     public int scoreAmountGoal;
 
     protected override void MiniGameSpecificSetup()
@@ -43,11 +42,6 @@ public class DimeDropManager : MiniGameManager
         {
             playerInput.GetComponent<CharacterManager>().OnPlayerScoreChanged -= VerifyScoreAmountWinCondition;
         }
-
-        //coins = GameObject.FindGameObjectsWithTag("Coin");
-        //foreach(var coin in coins){
-        //    coin.GetComponent<Coin>().canBePickedUp = false;
-        //}
 
         UpdateMiniGameState(MiniGameState.gameOver);
     }

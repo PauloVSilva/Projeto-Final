@@ -3,94 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-
-public abstract class LevelManager : MonoBehaviour
+//in the future, this class will no longer be abstract and will derive from Singleton<LevelManager>
+//public class LevelManager : Singleton<LevelManager>
+public class LevelManager : Singleton<LevelManager>
 {
-    [SerializeField] protected Pool[] objectsToPool;
+    [field: SerializeField] public Level currentLevel { get; private set; }
 
-    public GameObject[] levelSpawnPoints;
-
-    public Camera mainCamera;
-
-    private void Awake()
+    protected override void Awake()
     {
-        InitializeSingletonInstance();
-
-        GameManager.Instance.spawnPoints = levelSpawnPoints;
-        GameManager.Instance.mainCamera = mainCamera;
-
-        FullyResetPlayers();
-    }
-
-    private void Start()
-    {
-        RepositionAllPlayers();
-
-        InitializeLevel();
-        
-        if(!AddObjectsToPool())
-        {
-            Debug.LogError("Something went wrong. ObjectPooler couldn't be initialized. Return to main menu.");
-        }
-    }
-
-    private void OnDestroy()
-    {
-        ClearPools();
+        base.Awake();
     }
 
 
-    protected void RepositionAllPlayers()
+    public void SetLevel(Level _level)
     {
-        foreach (PlayerInput playerInput in GameManager.Instance.playerList)
-        {
-            int index = playerInput.playerIndex % levelSpawnPoints.Length;
-            playerInput.transform.position = levelSpawnPoints[index].transform.position;
-        }
+        currentLevel = _level;
     }
 
-    private void FullyResetPlayers()
-    {
-        if (GameManager.Instance.playerList.Count == 0) return;
-
-        mainCamera.GetComponent<CameraController>().ResetTrackedList();
-
-        foreach (PlayerInput playerInput in GameManager.Instance.playerList)
-        {
-            playerInput.GetComponent<CharacterManager>().FullReset();
-        }
-    }
-
-
-    private bool AddObjectsToPool()
-    {
-        if(ObjectPooler.Instance == null) return false;
-
-        if(objectsToPool.Length == 0)
-        {
-            Debug.LogWarning("LEVEL HAS NO OBJECTS TO POOL!!!");
-            return false;
-        }
-
-        foreach(Pool pool in objectsToPool)
-        {
-            ObjectPooler.Instance.AddPool(pool);
-        }
-
-        return true;
-    }
-
-    private void ClearPools()
-    {
-        if (objectsToPool.Length <= 0) return;
-
-        foreach (Pool pool in objectsToPool)
-        {
-            ObjectPooler.Instance.RemovePool(pool);
-        }
-    }
-
-    protected virtual void InitializeSingletonInstance() { }
-
-    protected abstract void InitializeLevel();
 }

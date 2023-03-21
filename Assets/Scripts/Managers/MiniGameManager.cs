@@ -9,18 +9,14 @@ public enum MiniGame{sharpShooter, dimeDrop, rocketRace}
 public enum MiniGameGoal{killCount, lastStanding, time, scoreAmount, race}
 public enum MiniGameState{none, preparation, gameSetUp, gameIsRunning, gameOverSetUp, gameOver, returnToHub}
 
-public abstract class MiniGameManager : LevelManager
+public abstract class MiniGameManager : Singleton<MiniGameManager>
 {
-    [SerializeField] public static MiniGameManager instance;
-
     //MINIGAME VARIABLES
     [SerializeField] public MiniGameGoalScriptableObject miniGameSetup;
     [SerializeField] public MiniGame miniGame;
     [SerializeField] public MiniGameGoal gameGoal;
     [SerializeField] public MiniGameState miniGameState;
 
-
-    [SerializeField] protected GameObject[] itemSpawnersList;
     [SerializeField] public float timeElapsed;
     [SerializeField] protected int countDown;
 
@@ -29,6 +25,15 @@ public abstract class MiniGameManager : LevelManager
     public static event Action<MiniGameState> OnGameStateAdvances;
     public static event Action<PlayerInput> OnPlayerWins;
 
+    protected override void Awake()
+    {
+        base.Awake();
+    }
+
+    private void Start()
+    {
+        InitializeLevel();
+    }
 
     private void Update()
     {
@@ -39,19 +44,8 @@ public abstract class MiniGameManager : LevelManager
         }
     }
 
-    protected override void InitializeSingletonInstance()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else if (instance != null)
-        {
-            Destroy(gameObject);
-        }
-    }
 
-    protected override void InitializeLevel()
+    protected void InitializeLevel()
     {
         GameManager.Instance.UpdateGameState(GameState.MiniGame);
 
@@ -126,13 +120,7 @@ public abstract class MiniGameManager : LevelManager
 
     protected void StartGame()
     {
-        if(itemSpawnersList.Length > 0)
-        {
-            foreach (var spawner in itemSpawnersList)
-            {
-                spawner.GetComponent<Spawner>().spawnerEnabled = true;
-            }
-        }
+        LevelManager.Instance.currentLevel.SetSpawnersEnabled(true);
 
         foreach (var playerInput in GameManager.Instance.playerList)
         {
@@ -144,13 +132,7 @@ public abstract class MiniGameManager : LevelManager
 
     protected virtual void GameOverSetUp()
     {
-        if (itemSpawnersList.Length > 0)
-        {
-            foreach (var spawner in itemSpawnersList)
-            {
-                spawner.GetComponent<Spawner>().spawnerEnabled = false;
-            }
-        }
+        LevelManager.Instance.currentLevel.SetSpawnersEnabled(false);
     }
 
     private void ReturnToHub()

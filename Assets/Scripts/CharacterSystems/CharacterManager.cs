@@ -202,8 +202,10 @@ public class CharacterManager : MonoBehaviour{
     }
 
     public void RespawnCharacter(){
-        int randomIndex = UnityEngine.Random.Range(0, GameManager.Instance.spawnPoints.Length);
-        this.transform.position = GameManager.Instance.spawnPoints[randomIndex].transform.position;
+        //int randomIndex = UnityEngine.Random.Range(0, GameManager.Instance.spawnPoints.Length);
+        //this.transform.position = GameManager.Instance.spawnPoints[randomIndex].transform.position;
+        LevelManager.Instance.currentLevel.SpawnPlayerRandomly(playerInput);
+
         characterObject.SetActive(true);
         UnblockActions();
         RefreshStatsUponRespawning();
@@ -274,7 +276,10 @@ public class CharacterManager : MonoBehaviour{
         //send that to the UI
         characterInventory.ClearInventory();
         ResetStats();
-        this.transform.position = GameManager.Instance.spawnPoints[0].transform.position;
+
+        //this.transform.position = GameManager.Instance.spawnPoints[0].transform.position;
+        LevelManager.Instance.currentLevel.SpawnPlayerRandomly(playerInput);
+
         characterObject.SetActive(true);
         UnblockActions();
         characterHealthSystem.Initialize();

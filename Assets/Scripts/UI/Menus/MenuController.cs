@@ -12,8 +12,9 @@ public abstract class MenuController : MonoBehaviour
 {
     public Menu menu;
     [SerializeField] private GameObject menuContainer;
+    [SerializeField] private GameObject footer;
+    [SerializeField] private InputSystemUIInputModule inputSystemUIInputModule;
     [SerializeField] private Button firstSelected;
-
 
     private List<CanvasButtonDisplay> canvasButtonsList = new List<CanvasButtonDisplay>();
     private List<GameObject> footerButtons = new List<GameObject>();
@@ -25,8 +26,6 @@ public abstract class MenuController : MonoBehaviour
     [SerializeField] protected TextMeshProUGUI menuName;
     [SerializeField] protected TextMeshProUGUI playerControllingMenu;
     [SerializeField] protected TabGroup tabGroup;
-    [SerializeField] protected GameObject footer;
-    [SerializeField] protected InputSystemUIInputModule inputSystemUIInputModule;
 
     protected virtual void Start()
     {
