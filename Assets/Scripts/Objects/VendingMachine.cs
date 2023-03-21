@@ -4,7 +4,7 @@ using UnityEngine;
     
 public enum MachineState{fullyFunctional, malfunctioning, broken}
 
-public class VendingMachine : DestructibleObject, InteractorInterface{
+public class VendingMachine : DestructibleObject, IInteractor{
     [SerializeField] ItemScriptableObject itemSold;
     [SerializeField] private MeshRenderer meshRenderer;
     [SerializeField] private Material[] materials;

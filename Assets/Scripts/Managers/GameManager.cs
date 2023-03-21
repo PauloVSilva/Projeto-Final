@@ -73,7 +73,7 @@ public class GameManager : Singleton<GameManager>
 
         OnPlayerJoinedGame?.Invoke(playerInput);
 
-        joinAction.Enable();
+        LevelManager.Instance.currentLevel.SpawnPlayerRandomly(playerInput);
     }
 
     private void OnPlayerLeft(PlayerInput playerInput)
@@ -82,11 +82,13 @@ public class GameManager : Singleton<GameManager>
         //So even though is might show up as "0 references" by intellisense, it is called by Unity automatically
     }
 
-    private void JoinAction(InputAction.CallbackContext context){
+    private void JoinAction(InputAction.CallbackContext context)
+    {
         PlayerInputManager.instance.JoinPlayerFromActionIfNotAlreadyJoined(context);
     }
 
-    public void UnregisterPlayer(PlayerInput playerInput){
+    public void UnregisterPlayer(PlayerInput playerInput)
+    {
         playerList.Remove(playerInput);
 
         OnPlayerLeftGame?.Invoke(playerInput);

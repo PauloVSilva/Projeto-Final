@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 public class Interactor : MonoBehaviour{
     public CharacterManager characterManager;
     private InteractionPromptUI interactionPromptUI;
-    private InteractorInterface interactable;
+    private IInteractor interactable;
     [SerializeField] private Transform interactionPoint;
     [SerializeField] private float interactionPointRadius;
     [SerializeField] private LayerMask interactableMask;
@@ -26,7 +26,7 @@ public class Interactor : MonoBehaviour{
         numFound = Physics.OverlapSphereNonAlloc(interactionPoint.position, interactionPointRadius, _collider, interactableMask);
         
         if (numFound > 0){
-            interactable = _collider[0].GetComponent<InteractorInterface>();
+            interactable = _collider[0].GetComponent<IInteractor>();
             if (interactable != null && !interactionPromptUI.isDisplayed){
                 interactionPromptUI.SetPrompt(characterManager.playerInput, interactable.PromptString);
                 interactionPromptUI.OpenPanel();

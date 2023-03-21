@@ -18,7 +18,7 @@ public abstract class MiniGameManager : Singleton<MiniGameManager>
     [SerializeField] public MiniGameState miniGameState;
 
     [SerializeField] public float timeElapsed;
-    [SerializeField] protected int countDown;
+    [SerializeField] private int countDown;
 
     //MINIGAME ACTION EVENTS
     public static event Action<int> OnCountDownTick;
