@@ -55,6 +55,12 @@ public class Level : MonoBehaviour
 
     private void RepositionAllPlayers()
     {
+        foreach(PlayerInput playerInput in GameManager.Instance.playerList)
+        {
+            playerInput.TryGetComponent(out CharacterManager characterManager);
+            characterManager.ReplaceCharacter();
+        }
+
         for(int i = 0; i < GameManager.Instance.playerList.Count; i++)
         {
             int index = i % spawnList.Count;

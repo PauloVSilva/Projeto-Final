@@ -11,6 +11,7 @@ public enum CharacterState { Alive, Dead }
 
 public class CharacterManager : MonoBehaviour{
     #region "COMPONENTS"
+    [Space(5)]
     [Header("Components")]
     [SerializeField] public PlayerInput playerInput;
     [SerializeField] public PlayerInputHandler playerInputHandler;
@@ -29,6 +30,7 @@ public class CharacterManager : MonoBehaviour{
     [SerializeField] private Color[] UIColors;
 
     #region "STATS"
+    [Space(5)]
     [Header("Stats")]
     public Device playerDevice;
     public Color lightColor;
@@ -166,20 +168,35 @@ public class CharacterManager : MonoBehaviour{
     public void SpawnCharacter(CharacterStatsScriptableObject _character){
         Character = _character;
 
-        characterObject = Instantiate(Character.characterModel[0], transform.position, transform.rotation, this.transform);
+        //characterObject = Instantiate(Character.characterModel[0], transform.position, transform.rotation, this.transform);
+        //int index = (int)MiniGameManager.Instance.miniGame + 1;
+        //characterObject = Instantiate(Character.characterModel[index], transform.position, transform.rotation, this.transform);
+        ReplaceCharacter();
+
         characterTombstone = _character.tombstone;
 
-        characterItemsDisplay = characterObject.GetComponent<CharacterDisplay>();
+        //characterItemsDisplay = characterObject.GetComponent<CharacterDisplay>();
 
         characterHealthSystem.Initialize();
         characterMovementSystem.Initialize();
 
-        characterWeaponSystem.SetGunPosition(characterItemsDisplay.gunPosition);
+        //characterWeaponSystem.SetGunPosition(characterItemsDisplay.gunPosition);
 
         transform.parent = GameManager.Instance.transform;
         playerInput.SwitchCurrentActionMap("Player");
 
         OnCharacterChosen?.Invoke();
+    }
+
+    public void ReplaceCharacter()
+    {
+        if(characterObject != null) Destroy(characterObject);
+
+        int index = (int)MiniGameManager.Instance.miniGame + 1;
+
+        characterObject = Instantiate(Character.characterModel[index], transform.position, transform.rotation, this.transform);
+        characterItemsDisplay = characterObject.GetComponent<CharacterDisplay>();
+        characterWeaponSystem.SetGunPosition(characterItemsDisplay.gunPosition);
     }
 
     public void RefreshStatsUponRespawning(){
