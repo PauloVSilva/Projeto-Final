@@ -2,21 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MessageManager : MonoBehaviour{
-    public static MessageManager instance;
+public class MessageManager : Singleton<MessageManager>
+{
     [SerializeField] private string[] greetMessages;
     [SerializeField] private string[] pauseMessages;
     [SerializeField] private string[] killMessages;
     [SerializeField] private string[] playerVictoryMessages;
-
-    private void Awake(){
-        if(instance == null){
-            instance = this;
-        }
-        else{
-            Destroy(this);
-        }
-    }
 
     public string StringEditor(string message, string oldPart, string newPart){
         if(message.Contains(oldPart)){

@@ -37,21 +37,7 @@ public class GameManager : Singleton<GameManager>
 
         if (gameState != GameState.Paused) previousState = _gameState;
 
-        switch (gameState)
-        {
-            case GameState.MainMenu:
-                joinAction.Disable(); 
-                break;
-            case GameState.Hub:
-                joinAction.Enable();
-                break;
-            case GameState.MiniGame:
-                joinAction.Disable();
-                break;
-            case GameState.Paused:
-                joinAction.Disable();
-                break;
-        }
+        EnableNewPlayers(gameState == GameState.Hub);
 
         Time.timeScale = Convert.ToSingle(gameState != GameState.Paused);
 
@@ -63,6 +49,11 @@ public class GameManager : Singleton<GameManager>
         UpdateGameState(previousState);
     }
 
+    private void EnableNewPlayers(bool _enabled)
+    {
+        if(_enabled) joinAction.Enable();
+        else joinAction.Disable();
+    }
 
     private void OnPlayerJoined(PlayerInput playerInput)
     {

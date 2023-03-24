@@ -114,6 +114,7 @@ public class MiniGameUIManager : MonoBehaviour
         if(seconds == 0)
         {
             if (MiniGameManager.Instance.miniGameState == MiniGameState.preparation) countDownBoard.text = go;
+            if (MiniGameManager.Instance.miniGameState == MiniGameState.gameOver) countDownBoard.text = "Returning to lobby yay ^-^";
 
             StartCoroutine(CleanCountDownBoard());
             IEnumerator CleanCountDownBoard()
@@ -131,11 +132,12 @@ public class MiniGameUIManager : MonoBehaviour
         }
     }
 
-    private void SetGameGoalText(){
-        gameGoalReminder.text = MiniGameOptionsMenu.instance.GetMiniGameGoalDescription();
+    private void SetGameGoalText()
+    {
+        gameGoalReminder.text = MiniGameManager.Instance.goalDescription;
     }
 
     private void AnnounceWinner(PlayerInput playerInput){
-        winnerBoard.text = MessageManager.instance.GetPlayerVictoryMessage(playerInput.playerIndex + 1);
+        winnerBoard.text = MessageManager.Instance.GetPlayerVictoryMessage(playerInput.playerIndex + 1);
     }
 }

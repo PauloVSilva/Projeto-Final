@@ -39,7 +39,7 @@ public class CharacterSelectionMenu : MenuController
 
     private void InitializeMenuVariables()
     {
-        greetMessage = MessageManager.instance.GetGreetMessage(playerInput.playerIndex + 1);
+        greetMessage = MessageManager.Instance.GetGreetMessage(playerInput.playerIndex + 1);
         playerControllingMenu.text = greetMessage;
         
         index = 0;

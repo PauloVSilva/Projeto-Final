@@ -681,7 +681,6 @@ GameObject:
   - component: {fileID: 145745866}
   - component: {fileID: 145745864}
   - component: {fileID: 145745865}
-  - component: {fileID: 145745863}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -689,40 +688,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &145745863
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 145745861}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9132821c67889ea41aa3429914950882, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  greetMessages:
-  - Welcome player $index!
-  - Hello there player $index!
-  - Player $index just joined!
-  - Player $index is in the house!
-  - Greetings stranger!
-  - I'm so happy to see you!
-  pauseMessages:
-  - Player $index froze the world
-  - Player $index needs a break
-  - Player $index paused the game
-  - Player $index is grabbing a snack
-  - PLAYER $index NEEDS TO PEE!!!
-  killMessages:
-  - Player $killer sent Player $dead to Davy Jones' locker
-  - Player $killer slained Player $dead
-  - Player $killer erased Player $dead
-  - Player $dead is sleeping with the fishes
-  playerVictoryMessages:
-  - Player $index wins
-  - Player $index knows how to play the game
-  - Player $index is the new king
 --- !u!114 &145745864
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1961,7 +1926,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 999b8de2900c1b54db2cf45ad9d45925, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentLevel: {fileID: 0}
+  <currentLevel>k__BackingField: {fileID: 0}
 --- !u!1 &617591295
 GameObject:
   m_ObjectHideFlags: 0
@@ -3756,6 +3721,72 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cdeb5e1840029044a1019cd089eff1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1616951341
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1616951342}
+  - component: {fileID: 1616951343}
+  m_Layer: 0
+  m_Name: MessageManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1616951342
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1616951341}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2116158314}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1616951343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1616951341}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9132821c67889ea41aa3429914950882, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  greetMessages:
+  - Welcome player $index!
+  - Hello there player $index!
+  - Player $index just joined!
+  - Player $index is in the house!
+  - Greetings stranger!
+  - I'm so happy to see you!
+  pauseMessages:
+  - Player $index froze the world
+  - Player $index needs a break
+  - Player $index paused the game
+  - Player $index is grabbing a snack
+  - PLAYER $index NEEDS TO PEE!!!
+  killMessages:
+  - Player $killer sent Player $dead to Davy Jones' locker
+  - Player $killer slained Player $dead
+  - Player $killer erased Player $dead
+  - Player $dead is sleeping with the fishes
+  playerVictoryMessages:
+  - Player $index wins
+  - Player $index knows how to play the game
+  - Player $index is the new king
 --- !u!1 &1786241987
 GameObject:
   m_ObjectHideFlags: 0
@@ -3874,6 +3905,58 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &2007598863
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2007598864}
+  - component: {fileID: 2007598865}
+  m_Layer: 0
+  m_Name: MiniGameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2007598864
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2007598863}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2116158314}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2007598865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2007598863}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fa5da7a8feeefc4f8fef187e16afc67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  miniGameSetup: {fileID: 0}
+  miniGame: 0
+  gameGoal: 0
+  miniGameState: 0
+  goalAmount: 0
+  timeElapsed: 0
+  goalDescription: 
+  countDown: 0
 --- !u!1 &2116158313
 GameObject:
   m_ObjectHideFlags: 0
@@ -3904,6 +3987,8 @@ Transform:
   m_Children:
   - {fileID: 145745866}
   - {fileID: 605457346}
+  - {fileID: 2007598864}
+  - {fileID: 1616951342}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

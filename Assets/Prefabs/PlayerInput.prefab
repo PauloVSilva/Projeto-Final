@@ -284,15 +284,15 @@ GameObject:
   m_Component:
   - component: {fileID: 7408531066293585713}
   - component: {fileID: 7408531066293585714}
+  - component: {fileID: 87397543814161862}
   - component: {fileID: 7408531066293585715}
   - component: {fileID: -7353346912697764937}
   - component: {fileID: -3360404993604576978}
   - component: {fileID: 2604168369563993407}
   - component: {fileID: 5021916059996529337}
   - component: {fileID: -123166407121015900}
-  - component: {fileID: 87397543814161862}
   - component: {fileID: 7683125629432157685}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: PlayerInput
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -569,6 +569,24 @@ MonoBehaviour:
   m_DefaultActionMap: UI
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!143 &87397543814161862
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7408531066293585716}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Height: 2
+  m_Radius: 1
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7408531066293585715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -614,8 +632,10 @@ MonoBehaviour:
   - {r: 0.745283, g: 0.26366144, b: 0.26366144, a: 1}
   - {r: 0.29156286, g: 0.6792453, b: 0.3127232, a: 1}
   - {r: 0.754717, g: 0.34531865, b: 0.7334146, a: 1}
+  playerDevice: 0
   lightColor: {r: 0, g: 0, b: 0, a: 0}
   UIColor: {r: 0, g: 0, b: 0, a: 0}
+  characterState: 0
   score: 0
   kills: 0
   deaths: 0
@@ -695,24 +715,6 @@ MonoBehaviour:
   playerInputHandler: {fileID: 7408531066293585715}
   <CharacterWeapon>k__BackingField: {fileID: 0}
   gunPosition: {fileID: 0}
---- !u!143 &87397543814161862
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7408531066293585716}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Height: 2
-  m_Radius: 1
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7683125629432157685
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -32,7 +32,10 @@ public class InteractableToy : MonoBehaviour, IInteractor
     {
         if(GameManager.Instance.playerList.Count > 1)
         {
-            MiniGameOptionsMenu.instance.MenuOpened(interactor.characterManager.playerInput, miniGame);
+            //MiniGameOptionsMenu.instance.MenuOpened(interactor.characterManager.playerInput, miniGame);
+            CanvasManager.Instance.OpenMenu(Menu.MiniGameSetupMenu, interactor.characterManager.playerInput);
+            CanvasManager.Instance.currentMenu.TryGetComponent(out MiniGameOptionsMenu miniGameOptionsMenu);
+            miniGameOptionsMenu.SetUpMenu(miniGame);
         }
         else
         {

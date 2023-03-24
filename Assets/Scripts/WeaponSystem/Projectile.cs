@@ -9,6 +9,8 @@ public class Projectile : Entity, IPooledObjects{
     public ProjectileScriptableObject ProjectileToCast;
 
     //ATTRIBUTES FROM SCRIPTABLE OBJECT
+    [Space(5)]
+    [Header("Scriptable Object")]
     [SerializeField] public Sprite sprite;
     [SerializeField] public string projectileName;
     [SerializeField] public CollisionType collisionType;
@@ -17,26 +19,33 @@ public class Projectile : Entity, IPooledObjects{
     [SerializeField] public float speed;
 
     //VARIABLES FOR INTERNAL USE
+    [Space(5)]
+    [Header("Internal use")]
     [SerializeField] private bool canDamage;
 
     //OTHER ATTRIBUTES
+    [Space(5)]
+    [Header("Other")]
     [SerializeField] private BoxCollider myCollider;
     [SerializeField] private Rigidbody myRigidbody;
     [SerializeField] private GameObject playerOfOrigin;
     [SerializeField] private GameObject weaponOfOrigin;
     [SerializeField] private TrailRenderer trailRenderer;
 
-    private void Awake(){
+    private void Awake()
+    {
         GetScriptableObjectVariables();
         InitializeVariables();
     }
 
-    protected override void Update(){
+    protected override void Update()
+    {
         AgeBehaviour();
         SpeedBehaviour();
     }
 
-    private void GetScriptableObjectVariables(){
+    private void GetScriptableObjectVariables()
+    {
         sprite = ProjectileToCast.sprite;
         projectileName = ProjectileToCast.projectileName;
         collisionType = ProjectileToCast.collisionType;
@@ -46,7 +55,8 @@ public class Projectile : Entity, IPooledObjects{
         speed = ProjectileToCast.speed;
     }
 
-    private void InitializeVariables(){
+    private void InitializeVariables()
+    {
         myCollider = GetComponent<BoxCollider>();
         myCollider.isTrigger = true;
         myRigidbody = GetComponent<Rigidbody>();
@@ -68,7 +78,9 @@ public class Projectile : Entity, IPooledObjects{
         }
     }
 
-    public void OnObjectSpawn(){ //replaces Start()
+    public void OnObjectSpawn()
+    { 
+        //replaces Start()
         myRigidbody.velocity = Vector3.zero;
         myRigidbody.angularVelocity = Vector3.zero;
         myRigidbody.AddForce(transform.forward * ProjectileToCast.speed, ForceMode.Impulse);
@@ -89,8 +101,10 @@ public class Projectile : Entity, IPooledObjects{
         trailRenderer.emitting = true;
     }
 
-    private void OnTriggerEnter(Collider other){
-        if(other.gameObject.GetComponent<HealthSystem>() != null && canDamage){
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.GetComponent<HealthSystem>() != null && canDamage)
+        {
             other.GetComponent<HealthSystem>().TakeDamage(playerOfOrigin, ProjectileToCast.damageAmount);
             Despawn();
         }

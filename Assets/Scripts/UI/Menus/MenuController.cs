@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
 using TMPro;
 using UnityEngine.InputSystem.DualShock;
+using DG.Tweening;
 
 public abstract class MenuController : MonoBehaviour
 {
@@ -48,6 +49,7 @@ public abstract class MenuController : MonoBehaviour
             yield return new WaitForEndOfFrame();
 
             menuContainer.SetActive(true);
+
             GainControl();
 
             SetUpFooterButtons();
@@ -114,7 +116,7 @@ public abstract class MenuController : MonoBehaviour
 
     private void SetUpTabs()
     {
-        if (tabGroup == null) return;
+        if (tabGroup == null || playerInput == null) return;
 
             for (int i = 0; i < tabGroup.buttonTypes.Count(); i++)
             {

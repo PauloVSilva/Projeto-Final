@@ -8,8 +8,6 @@ using TMPro;
 
 public class MiniGameOptionsMenu : MenuController
 {
-    public static MiniGameOptionsMenu instance; //this is an anomaly
-
     private List<MiniGameGoalScriptableObject> miniGameGoalsList;
     private MiniGameGoalScriptableObject displayedMiniGameGoal;
     private int miniGameGoalAmount;
@@ -31,23 +29,15 @@ public class MiniGameOptionsMenu : MenuController
     [SerializeField] private Button previousGoalButton;
 
 
-    private void Awake()
+    public void SetUpMenu(MiniGameScriptableObject _miniGame)
     {
-        if(instance == null){
-            instance = this;
-        }
-        else if(instance != null){
-            Destroy(gameObject);
-        }
+        SetMiniGame(_miniGame);
+        GameManager.Instance.UpdateGameState(GameState.Paused);
     }
 
-    public void MenuOpened(PlayerInput _playerInput, MiniGameScriptableObject _miniGame)
+    private void SetMiniGame(MiniGameScriptableObject _miniGame)
     {
-        CanvasManager.Instance.OpenMenu(menu, _playerInput);
-
         InitializeMenuVariables(_miniGame);
-
-        GameManager.Instance.UpdateGameState(GameState.Paused);
     }
 
     private void InitializeMenuVariables(MiniGameScriptableObject _miniGame)
@@ -73,24 +63,9 @@ public class MiniGameOptionsMenu : MenuController
         goalSprite.sprite = displayedMiniGameGoal.goalSprite;
         goalName.text = displayedMiniGameGoal.goalName.ToString();
         //goalDescription.text = displayedMiniGameGoal.goalDescription.ToString();
-        goalDescription.text = MessageManager.instance.StringEditor(displayedMiniGameGoal.goalDescription.ToString(), "$VALUE", miniGameGoalAmount.ToString());
+        goalDescription.text = MessageManager.Instance.StringEditor(displayedMiniGameGoal.goalDescription.ToString(), "$VALUE", miniGameGoalAmount.ToString());
         goalKeyword.text = displayedMiniGameGoal.goalKeyword.ToString();
         goalAmount.text = miniGameGoalAmount.ToString();
-    }
-
-    public MiniGameGoalScriptableObject GetMiniGameGoal()
-    {
-        return displayedMiniGameGoal;
-    }
-
-    public string GetMiniGameGoalDescription()
-    {
-        return goalDescription.text;
-    }
-
-    public int GetMiniGameGoalAmount()
-    {
-        return miniGameGoalAmount;
     }
 
     
@@ -143,6 +118,11 @@ public class MiniGameOptionsMenu : MenuController
     public void ConfirmSettings()
     {
         Back();
+
+        MiniGameManager.Instance.SetMiniGame(displayedMiniGameGoal);
+        MiniGameManager.Instance.SetGoalAmount(miniGameGoalAmount);
+        MiniGameManager.Instance.SetGoalDescription(goalDescription.text);
+
         LevelLoader.Instance.LoadLevel(menuName.text);
     }
 

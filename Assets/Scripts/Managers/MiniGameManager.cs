@@ -5,11 +5,11 @@ using UnityEngine.InputSystem;
 using System;
 using System.Threading;
 
-public enum MiniGame{sharpShooter, dimeDrop, rocketRace}
-public enum MiniGameGoal{killCount, lastStanding, time, scoreAmount, race}
+public enum MiniGame{none = -1, sharpShooter, dimeDrop, rocketRace}
+public enum MiniGameGoal{none = -1, killCount, lastStanding, time, scoreAmount, race}
 public enum MiniGameState{none, preparation, gameSetUp, gameIsRunning, gameOverSetUp, gameOver, returnToHub}
 
-public abstract class MiniGameManager : Singleton<MiniGameManager>
+public class MiniGameManager : Singleton<MiniGameManager>
 {
     //MINIGAME VARIABLES
     [SerializeField] public MiniGameGoalScriptableObject miniGameSetup;
@@ -17,7 +17,9 @@ public abstract class MiniGameManager : Singleton<MiniGameManager>
     [SerializeField] public MiniGameGoal gameGoal;
     [SerializeField] public MiniGameState miniGameState;
 
+    [SerializeField] private int goalAmount;
     [SerializeField] public float timeElapsed;
+    [SerializeField] public string goalDescription;
     [SerializeField] private int countDown;
 
     //MINIGAME ACTION EVENTS
@@ -32,7 +34,8 @@ public abstract class MiniGameManager : Singleton<MiniGameManager>
 
     private void Start()
     {
-        InitializeLevel();
+        InitializeVariables();
+        SubscribeToEvents();
     }
 
     private void Update()
@@ -44,8 +47,63 @@ public abstract class MiniGameManager : Singleton<MiniGameManager>
         }
     }
 
+    private void OnDestroy()
+    {
+        UnsubscribeFromEvents();
+    }
 
-    protected void InitializeLevel()
+
+    private void InitializeVariables()
+    {
+        miniGameSetup = null;
+        miniGame = MiniGame.none;
+        gameGoal = MiniGameGoal.none;
+        miniGameState = MiniGameState.none;
+
+        goalAmount = -1;
+        timeElapsed = 0;
+        goalDescription = string.Empty;
+    }
+
+    private void SubscribeToEvents()
+    {
+        LevelLoader.Instance.OnSceneLoaded += CheckForMiniGame;
+    }
+
+    private void UnsubscribeFromEvents()
+    {
+        LevelLoader.Instance.OnSceneLoaded += CheckForMiniGame;
+    }
+
+
+    private void CheckForMiniGame()
+    {
+        if(miniGameSetup != null)
+        {
+            InitializeLevel();
+        }
+    }
+
+
+    public void SetMiniGame(MiniGameGoalScriptableObject _miniGameSetup)
+    {
+        miniGameSetup = _miniGameSetup;
+
+        miniGame = miniGameSetup.parentMiniGame.minigame;
+        gameGoal = miniGameSetup.miniGameGoal;
+    }
+
+    public void SetGoalAmount(int _amount)
+    {
+        goalAmount = _amount;
+    }
+
+    public void SetGoalDescription(string _description)
+    {
+        goalDescription = _description;
+    }
+
+    private void InitializeLevel()
     {
         GameManager.Instance.UpdateGameState(GameState.MiniGame);
 
@@ -54,17 +112,12 @@ public abstract class MiniGameManager : Singleton<MiniGameManager>
             playerInput.GetComponent<CharacterManager>().BlockActions();
         }
 
-        miniGameSetup = MiniGameOptionsMenu.instance.GetMiniGameGoal();
-
-        miniGame = miniGameSetup.parentMiniGame.minigame;
-        gameGoal = miniGameSetup.miniGameGoal;
-
         MiniGameSpecificSetup();
 
         UpdateMiniGameState(MiniGameState.preparation);
     }
 
-    protected void UpdateMiniGameState(MiniGameState _miniGameState)
+    private void UpdateMiniGameState(MiniGameState _miniGameState)
     {
         miniGameState = _miniGameState;
 
@@ -90,10 +143,68 @@ public abstract class MiniGameManager : Singleton<MiniGameManager>
         }
     }
 
-    protected virtual void CheckMiniGameEvents(){}
+    private void CheckMiniGameEvents()
+    {
 
+    }
 
-    protected abstract void MiniGameSpecificSetup();
+    private void MiniGameSpecificSetup()
+    {
+        if(miniGame == MiniGame.sharpShooter)
+        {
+            if (gameGoal == MiniGameGoal.killCount)
+            {
+                foreach (var playerInput in GameManager.Instance.playerList)
+                {
+                    playerInput.GetComponent<CharacterManager>().OnPlayerScoredKill += VerifyKillCountWinCondition;
+                }
+            }
+
+            WeaponScriptableObject initialWeapon = (WeaponScriptableObject)ItemsDatabank.Instance.GetItem("double_action_revolver");
+            foreach (PlayerInput playerInput in GameManager.Instance.playerList)
+            {
+                GameObject _weaponSO = Instantiate(initialWeapon.itemModel, playerInput.transform.position, playerInput.transform.rotation);
+
+                playerInput.transform.TryGetComponent(out CharacterManager characterManager);
+
+                characterManager.characterInventory.PickWeapon(_weaponSO);
+            }
+        }
+        if(miniGame == MiniGame.dimeDrop)
+        {
+            if (gameGoal == MiniGameGoal.scoreAmount)
+            {
+                foreach (var playerInput in GameManager.Instance.playerList)
+                {
+                    playerInput.GetComponent<CharacterManager>().OnPlayerScoreChanged += VerifyScoreAmountWinCondition;
+                }
+            }
+        }
+    }
+
+    private void VerifyKillCountWinCondition(GameObject player)
+    {
+        if (gameGoal == MiniGameGoal.killCount)
+        {
+            if (player.GetComponent<CharacterManager>().kills >= goalAmount)
+            {
+                UpdateMiniGameState(MiniGameState.gameOverSetUp);
+                InvokeOnPlayerWins(player.GetComponent<PlayerInput>());
+            }
+        }
+    }
+
+    private void VerifyScoreAmountWinCondition(GameObject player, int _score)
+    {
+        if (gameGoal == MiniGameGoal.scoreAmount)
+        {
+            if (_score >= goalAmount)
+            {
+                UpdateMiniGameState(MiniGameState.gameOverSetUp);
+                InvokeOnPlayerWins(player.GetComponent<PlayerInput>());
+            }
+        }
+    }
 
     private void InitiateCountDown()
     {
@@ -107,8 +218,7 @@ public abstract class MiniGameManager : Singleton<MiniGameManager>
 
         if(countDown == 0)
         {
-            miniGameState++;
-            UpdateMiniGameState(miniGameState);
+            UpdateMiniGameState(++miniGameState);
         }
         else
         {
@@ -118,7 +228,7 @@ public abstract class MiniGameManager : Singleton<MiniGameManager>
         }
     }
 
-    protected void StartGame()
+    private void StartGame()
     {
         LevelManager.Instance.currentLevel.SetSpawnersEnabled(true);
 
@@ -130,17 +240,36 @@ public abstract class MiniGameManager : Singleton<MiniGameManager>
         UpdateMiniGameState(MiniGameState.gameIsRunning);
     }
 
-    protected virtual void GameOverSetUp()
+    private void GameOverSetUp()
     {
         LevelManager.Instance.currentLevel.SetSpawnersEnabled(false);
+
+        if(miniGame == MiniGame.sharpShooter)
+        {
+            foreach (var playerInput in GameManager.Instance.playerList)
+            {
+                playerInput.GetComponent<CharacterManager>().OnPlayerScoredKill -= VerifyKillCountWinCondition;
+            }
+        }
+        if(miniGame == MiniGame.dimeDrop)
+        {
+            foreach (var playerInput in GameManager.Instance.playerList)
+            {
+                playerInput.GetComponent<CharacterManager>().OnPlayerScoreChanged -= VerifyScoreAmountWinCondition;
+            }
+        }
+
+        UpdateMiniGameState(MiniGameState.gameOver);
     }
 
     private void ReturnToHub()
     {
+        InitializeVariables();
+
         LevelLoader.Instance.LoadLevel("MainHub");
     }
 
-    protected void InvokeOnPlayerWins(PlayerInput playerInput)
+    private void InvokeOnPlayerWins(PlayerInput playerInput)
     {
         OnPlayerWins?.Invoke(playerInput);
     }

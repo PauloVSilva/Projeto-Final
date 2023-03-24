@@ -37,7 +37,7 @@ public class PauseMenu : MenuController
 
     private void InitializeMenuVariables()
     {
-        string pauseMessage = MessageManager.instance.GetPauseMessage(playerInput.playerIndex + 1);
+        string pauseMessage = MessageManager.Instance.GetPauseMessage(playerInput.playerIndex + 1);
         playerControllingMenu.text = pauseMessage;
     }
 

@@ -11,11 +11,14 @@ public enum Size{handGun, longGun}
 
 [RequireComponent(typeof(AudioSource))]
 
-public class Weapon : Item{
+public class Weapon : Item
+{
     [SerializeField] private WeaponScriptableObject weapon;
     [SerializeField] public ProjectileScriptableObject projectileToCast;
 
     //ATTRIBUTES FROM SCRIPTABLE OBJECT
+    [Space(5)]
+    [Header("Scriptable Object")]
     [SerializeField] public Sprite sprite;
     [SerializeField] public string weaponName;
     [SerializeField] private ActionType actionType;
@@ -26,6 +29,8 @@ public class Weapon : Item{
     [SerializeField] private float reloadTime;
 
     //VARIABLES FOR INTERNAL USE
+    [Space(5)]
+    [Header("Internal use")]
     [SerializeField] public int ammo = 0;
     [SerializeField] public int totalAmmo = 0;
     [SerializeField] private float fullAutoClock;
@@ -35,19 +40,33 @@ public class Weapon : Item{
     [SerializeField] private bool triggerHeld;
 
     //OTHER ATTRIBUTES
+    [Space(5)]
+    [Header("Other")]
     [SerializeField] private Transform castPoint;
     [SerializeField] protected SphereCollider gunCollider;
     [SerializeField] public GameObject holder;
 
     [SerializeField] private AudioSource audioData;
 
-    protected override void Update(){
+    [SerializeField] private FieldOfView fieldOfView;
+    [SerializeField] private GameObject closestTarget;
+
+    protected override void Update()
+    {
         AgeBehaviour();
         CollectableBehaviour();
         FullAutoBehavior();
+
+        SearchForTargets();
     }
 
-    protected override void GetScriptableObjectVariables(){
+    protected void OnDisable()
+    {
+        StopCoroutine(Reload());
+    }
+
+    protected override void GetScriptableObjectVariables()
+    {
         item = weapon;
 
         base.GetScriptableObjectVariables();
@@ -62,10 +81,13 @@ public class Weapon : Item{
         reloadTime = weapon.reloadTime;
     }
 
-    protected override void InitializeItemVariables(){
+    protected override void InitializeItemVariables()
+    {
         base.InitializeItemVariables();
 
         audioData = GetComponent<AudioSource>();
+
+        fieldOfView = GetComponentInChildren<FieldOfView>();
 
         holder = null;
         ammo = ammoCapacity;
@@ -83,25 +105,52 @@ public class Weapon : Item{
         canBePickedUp = (holder == null);
     }
 
-    protected void OnDisable(){
-        StopCoroutine(Reload());
-    }
-
-    private void FullAutoBehavior(){
-        if(actionType == ActionType.fullAuto){
-            if(shooting && fullAutoClock >= 1 / fireRate){
+    private void FullAutoBehavior()
+    {
+        if(actionType == ActionType.fullAuto)
+        {
+            if(shooting && fullAutoClock >= 1 / fireRate)
+            {
                 Fire();
             }
-            if(fullAutoClock > 1 / fireRate){
+            if(fullAutoClock > 1 / fireRate)
+            {
                 fullAutoClock = 1 / fireRate;
             }
-            if(fullAutoClock < 1 / fireRate){
+            if(fullAutoClock < 1 / fireRate)
+            {
                 fullAutoClock += Time.deltaTime;
             }
         }
     }
 
-    public void OnPressTrigger(InputAction.CallbackContext context){
+    private void SearchForTargets()
+    {
+        if (fieldOfView == null) return;
+
+        if (fieldOfView.visibleTargets.Count < 1)
+        {
+            closestTarget = null;
+            return;
+        }
+
+        float closest = float.MaxValue;
+
+        foreach (var item in fieldOfView.visibleTargets)
+        {
+            float distance = Vector3.Distance(transform.position, item.position);
+
+            if(distance < closest)
+            {
+                closest = distance;
+
+                closestTarget = item.transform.gameObject;
+            }
+        }
+    }
+
+    public void OnPressTrigger(InputAction.CallbackContext context)
+    {
         if(context.performed)
         {
             StopCoroutine(Reload());
@@ -126,16 +175,20 @@ public class Weapon : Item{
         }
     }
 
-    public void OnReload(InputAction.CallbackContext context){
-        if(context.performed){
-            if(CanReload()){
+    public void OnReload(InputAction.CallbackContext context)
+    {
+        if(context.performed)
+        {
+            if(CanReload())
+            {
                 StartCoroutine(Reload());
             }
         }
     }
 
     private bool CanReload(){
-        if(!triggerHeld && (ammo < ammoCapacity && totalAmmo > 0)){
+        if(!triggerHeld && (ammo < ammoCapacity && totalAmmo > 0))
+        {
             return true;
         }
         return false;
@@ -157,7 +210,8 @@ public class Weapon : Item{
         }
     }
 
-    public void PickedUp(GameObject character){
+    public void PickedUp(GameObject character)
+    {
         holder = character;
         canBePickedUp = false;
         age = 0;
@@ -167,7 +221,8 @@ public class Weapon : Item{
         itemRigidbody.useGravity = false;
     }
 
-    public void Dropped(){
+    public void Dropped()
+    {
         holder = null;
         itemCollider.enabled = true;
         gunCollider.enabled = true;
@@ -176,8 +231,10 @@ public class Weapon : Item{
         StartCoroutine(CanBePickedUpDelay());
     }
 
-    private void Fire(){
-        if(ammo - projectileToCast.cost >= 0){
+    private void Fire()
+    {
+        if(ammo - projectileToCast.cost >= 0)
+        {
             //play gun fire sound
             audioData.Play(0);
 
@@ -205,10 +262,25 @@ public class Weapon : Item{
         }
     }
 
-    private void CastProjectile(){
-        if(ObjectPooler.Instance.SpawnFromPool(projectileToCast.projectileModel, castPoint.position, castPoint.rotation, this.gameObject) == null)
+    private void CastProjectile()
+    {
+        GameObject projectile;
+
+        if(closestTarget != null)
+        {
+            Vector3 direction_to_model = closestTarget.transform.position - transform.position;
+            Quaternion rotation = Quaternion.LookRotation(direction_to_model, Vector3.up);
+
+            projectile = ObjectPooler.Instance.SpawnFromPool(projectileToCast.projectileModel, castPoint.position, rotation, this.gameObject);
+        }
+        else
+        {
+            projectile = ObjectPooler.Instance.SpawnFromPool(projectileToCast.projectileModel, castPoint.position, castPoint.rotation, this.gameObject);
+        }
+
+        if (projectile == null)
         {
             Debug.LogWarning("Something went wrong. Object Pooler couldn't Spawn " + projectileToCast.projectileModel);
-        }
+        } 
     }
 }
