@@ -4,13 +4,21 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Character", menuName = "CharacterStats")]
 
-public class CharacterStatsScriptableObject : ScriptableObject{
+[System.Serializable]
+public class CharacterSkin
+{
+    public GameObject characterModel;
+    public Sprite characterSprite;
+    public string characterName;
+}
+
+public class CharacterStatsScriptableObject : ScriptableObject
+{
     [Space(5)]
     [Header("Models/Skins")]
-    public GameObject[] characterModel;
+    public CharacterSkin[] characterSkin;
+
     public GameObject tombstone;
-    public Sprite[] sprite;
-    public string characterName;
 
     [Space(5)]
     [Header("Size")]
@@ -38,5 +46,4 @@ public class CharacterStatsScriptableObject : ScriptableObject{
     public int jumpStaminaCost;
     public int dashStaminaCost;
     public int sprintStaminaCost;
-
 } 

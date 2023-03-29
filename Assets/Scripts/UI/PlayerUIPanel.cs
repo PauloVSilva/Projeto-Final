@@ -4,8 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using TMPro;
+using System;
 
-public class PlayerUIPanel : MonoBehaviour{
+public class PlayerUIPanel : MonoBehaviour
+{
     public PlayerInput player;
     private CharacterManager characterManager;
     private CharacterWeaponSystem characterWeaponSystem;
@@ -81,7 +83,8 @@ public class PlayerUIPanel : MonoBehaviour{
         }
     }
     
-    private void SubscribeToPlayerEvents(){
+    private void SubscribeToPlayerEvents()
+    {
         characterManager.OnCharacterChosen += AssignCharacter;
 
         characterManager.OnPlayerHealthUpdated += UpdateHealth;
@@ -111,13 +114,13 @@ public class PlayerUIPanel : MonoBehaviour{
         }
     }
     
-    private void InitializeStats(){
-        characterSprite.sprite = characterManager.Character.sprite[0];
+    private void InitializeStats()
+    {
+        characterSprite.sprite = characterManager.characterSkin.characterSprite;
+        characterName.text = characterManager.characterSkin.characterName;
 
         playerIndex.text = (player.playerIndex + 1).ToString();
         mainInfoPanel.GetComponent<Image>().color = characterManager.UIColor;
-
-        characterName.text = characterManager.Character.characterName.ToString();
 
         _playerHealthBar.maxValue = characterManager.characterHealthSystem.MaxHealth;
         _playerHealthBar.value = characterManager.characterHealthSystem.CurrentHealth;
@@ -181,16 +184,18 @@ public class PlayerUIPanel : MonoBehaviour{
         _playerHealthBar.value = _health;
     }
 
-    IEnumerator UpdateShadowBars(){
+    IEnumerator UpdateShadowBars()
+    {
         yield return new WaitForSeconds(0.001f);
 
-        if(_playerShadowHealthBar.value < _playerHealthBar.value){
+        if(_playerShadowHealthBar.value < _playerHealthBar.value)
+        {
             _playerShadowHealthBar.value++;
         }
-        if(_playerShadowHealthBar.value > _playerHealthBar.value){
+        if(_playerShadowHealthBar.value > _playerHealthBar.value)
+        {
             _playerShadowHealthBar.value--;
         }
-
 
         StartCoroutine(UpdateShadowBars());
     }

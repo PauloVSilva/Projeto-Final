@@ -12,12 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e24147a9db9bab4faf85e6a3a675b7d, type: 3}
   m_Name: CharacterStatsSO_Arturito
   m_EditorClassIdentifier: 
-  characterModel:
-  - {fileID: 8463049207392376651, guid: a40a1569d3a5552479b1ddc3b59e995e, type: 3}
+  characterSkin:
+  - characterModel: {fileID: 8463049207392376651, guid: a40a1569d3a5552479b1ddc3b59e995e, type: 3}
+    characterSprite: {fileID: 21300000, guid: 01dbf05326305424b9899deec2520fb6, type: 3}
+    characterName: Arturito
+  - characterModel: {fileID: 8463049207392376651, guid: 815d5050adbca9c479e07b9d2ca50798, type: 3}
+    characterSprite: {fileID: 21300000, guid: 01dbf05326305424b9899deec2520fb6, type: 3}
+    characterName: Cowboy Arturito
   tombstone: {fileID: 1045390783213288524, guid: cafb86b1b51ac5743b6e3691f456f500, type: 3}
-  sprite:
-  - {fileID: 21300000, guid: 01dbf05326305424b9899deec2520fb6, type: 3}
-  characterName: Arturito
   characterControllerCenter: {x: 0, y: 0.4, z: 0}
   characterControllerRadius: 0.5
   characterControllerHeight: 1

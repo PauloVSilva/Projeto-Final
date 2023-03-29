@@ -50,8 +50,8 @@ public class CharacterSelectionMenu : MenuController
 
     private void UpdateCharacter()
     {
-        characterSprite.sprite = displayedCharacter.sprite[0];
-        characterName.text = displayedCharacter.characterName.ToString();
+        characterSprite.sprite = displayedCharacter.characterSkin[0].characterSprite;
+        characterName.text = displayedCharacter.characterSkin[0].characterName;
     }
 
 

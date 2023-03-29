@@ -24,6 +24,7 @@ public class CharacterManager : MonoBehaviour{
     #endregion "COMPONENTS"
 
     [SerializeField] public CharacterStatsScriptableObject Character;
+    [SerializeField] public CharacterSkin characterSkin;
     [SerializeField] public GameObject characterObject;
     [SerializeField] public GameObject characterTombstone;
     [SerializeField] private Color[] lightColors;
@@ -165,27 +166,20 @@ public class CharacterManager : MonoBehaviour{
         InitializePlayerVariables();
     }
 
-    public void SpawnCharacter(CharacterStatsScriptableObject _character){
+    public void SpawnCharacter(CharacterStatsScriptableObject _character)
+    {
         Character = _character;
 
-        //characterObject = Instantiate(Character.characterModel[0], transform.position, transform.rotation, this.transform);
-        //int index = (int)MiniGameManager.Instance.miniGame + 1;
-        //characterObject = Instantiate(Character.characterModel[index], transform.position, transform.rotation, this.transform);
         ReplaceCharacter();
 
         characterTombstone = _character.tombstone;
 
-        //characterItemsDisplay = characterObject.GetComponent<CharacterDisplay>();
-
         characterHealthSystem.Initialize();
         characterMovementSystem.Initialize();
 
-        //characterWeaponSystem.SetGunPosition(characterItemsDisplay.gunPosition);
-
         transform.parent = GameManager.Instance.transform;
-        playerInput.SwitchCurrentActionMap("Player");
 
-        OnCharacterChosen?.Invoke();
+        playerInput.SwitchCurrentActionMap("Player");
     }
 
     public void ReplaceCharacter()
@@ -194,19 +188,29 @@ public class CharacterManager : MonoBehaviour{
 
         int index = (int)MiniGameManager.Instance.miniGame + 1;
 
-        characterObject = Instantiate(Character.characterModel[index], transform.position, transform.rotation, this.transform);
+        int skinsCount = Character.characterSkin.Length;
+
+        if (index > skinsCount) characterSkin = Character.characterSkin[0];
+        else characterSkin = Character.characterSkin[index];
+
+        characterObject = Instantiate(characterSkin.characterModel, transform.position, transform.rotation, transform);
         characterItemsDisplay = characterObject.GetComponent<CharacterDisplay>();
         characterWeaponSystem.SetGunPosition(characterItemsDisplay.gunPosition);
+
+        OnCharacterChosen?.Invoke();
     }
 
-    public void RefreshStatsUponRespawning(){
+    public void RefreshStatsUponRespawning()
+    {
         characterHealthSystem.Initialize();
         characterMovementSystem.Initialize();
     }
 
 
-    public void BeginRespawnProcess(){
-        if(CanRespawn()){
+    public void BeginRespawnProcess()
+    {
+        if(CanRespawn())
+        {
             StartCoroutine(RespawnCharacterDelay());
             IEnumerator RespawnCharacterDelay()
             {
@@ -218,9 +222,8 @@ public class CharacterManager : MonoBehaviour{
         BlockActions();
     }
 
-    public void RespawnCharacter(){
-        //int randomIndex = UnityEngine.Random.Range(0, GameManager.Instance.spawnPoints.Length);
-        //this.transform.position = GameManager.Instance.spawnPoints[randomIndex].transform.position;
+    public void RespawnCharacter()
+    {
         LevelManager.Instance.currentLevel.SpawnPlayerRandomly(playerInput);
 
         characterObject.SetActive(true);
@@ -266,7 +269,7 @@ public class CharacterManager : MonoBehaviour{
 
     public bool CanMove(){
         if(actionsAreBlocked) return false;
-        if(GameManager.Instance.gameState == GameState.Paused) return false;
+        if(GameManager.Instance.GameState == GameState.Paused) return false;
         
         return true;
     }

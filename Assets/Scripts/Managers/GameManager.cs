@@ -8,8 +8,8 @@ public enum GameState { None, MainMenu, Hub, MiniGame, Paused }
 
 public class GameManager : Singleton<GameManager>
 {
-    [field:SerializeField] public GameState gameState { get; private set; }
-    [field:SerializeField] public GameState previousState { get; private set; }
+    [field:SerializeField] public GameState GameState { get; private set; }
+    [field:SerializeField] public GameState PreviousState { get; private set; }
 
     public Camera mainCamera;
     
@@ -33,20 +33,20 @@ public class GameManager : Singleton<GameManager>
 
     public void UpdateGameState(GameState _gameState)
     {
-        gameState = _gameState;
+        GameState = _gameState;
 
-        if (gameState != GameState.Paused) previousState = _gameState;
+        if (GameState != GameState.Paused) PreviousState = _gameState;
 
-        EnableNewPlayers(gameState == GameState.Hub);
+        EnableNewPlayers(GameState == GameState.Hub);
 
-        Time.timeScale = Convert.ToSingle(gameState != GameState.Paused);
+        Time.timeScale = Convert.ToSingle(GameState != GameState.Paused);
 
-        OnGameStateChanged?.Invoke(gameState);
+        OnGameStateChanged?.Invoke(GameState);
     }
 
     public void RestorePreviousState()
     {
-        UpdateGameState(previousState);
+        UpdateGameState(PreviousState);
     }
 
     private void EnableNewPlayers(bool _enabled)
