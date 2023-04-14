@@ -28,18 +28,18 @@ public class MovementSystem : MonoBehaviour{
     public float AirTime {get; protected set;}
     public float AirDamage {get; protected set;}
 
-    public float angleY;
-    public int quadrant;
-    public float velocityX;
-    public float velocityZ;
+    [SerializeField] private float angleY;
+    [SerializeField] private int quadrant;
+    [SerializeField] private float velocityX;
+    [SerializeField] private float velocityZ;
 
-    private float velocityStopThreshold;
-    private float velocityDecelerationMultiplier;
+    [SerializeField] private float velocityStopThreshold;
+    [SerializeField] private float velocityDecelerationMultiplier;
 
     //OTHER VARIABLES
     [SerializeField] private Vector3 playerVelocity;
-    public bool groundedPlayer {get; protected set;}
-    public float gravityValue {get; protected set;}
+    public bool GroundedPlayer {get; protected set;}
+    public float GravityValue {get; protected set;}
     [SerializeField] private Vector3 move;
 
     private void Awake(){
@@ -52,6 +52,7 @@ public class MovementSystem : MonoBehaviour{
         if (characterManager.Character == null) return;
 
         AngleCalculator();
+        FakePhysics();
         MovementBehaviour();
         DashBehaviour();
         AirTimeDamage();
@@ -122,12 +123,14 @@ public class MovementSystem : MonoBehaviour{
     }
 
 
-    public void Initialize(){
+    public void Initialize()
+    {
         GetScriptableObjectVariables();
         InitializeVariables();
     }
 
-    private void GetScriptableObjectVariables(){
+    private void GetScriptableObjectVariables()
+    {
         controller.radius = characterManager.Character.characterControllerRadius;
         controller.height = characterManager.Character.characterControllerHeight;
         controller.center = characterManager.Character.characterControllerCenter;
@@ -137,8 +140,9 @@ public class MovementSystem : MonoBehaviour{
         TotalJumps = characterManager.Character.totalJumps;
     }
 
-    private void InitializeVariables(){
-        gravityValue = -9.81f;
+    private void InitializeVariables()
+    {
+        GravityValue = -9.81f;
 
         playerVelocity = new Vector3(0, 0, 0);
         move = new Vector3(0, 0, 0);
@@ -167,12 +171,12 @@ public class MovementSystem : MonoBehaviour{
 
     private void AirTimeDamage()
     {
-        if(!groundedPlayer && playerVelocity.y < 0)
+        if(!GroundedPlayer && playerVelocity.y < 0)
         {
             AirTime += Time.deltaTime;
             AirDamage = (playerVelocity.y * -1);
         }
-        if(groundedPlayer)
+        if(GroundedPlayer)
         {
             if(AirTime > 1)
             {
@@ -203,41 +207,64 @@ public class MovementSystem : MonoBehaviour{
         }
     }
 
-    private void MovementBehaviour(){
-        groundedPlayer = controller.isGrounded;
+    private void MovementBehaviour()
+    {
+        GroundedPlayer = controller.isGrounded;
 
-        if (groundedPlayer && playerVelocity.y < 0){
+        if (GroundedPlayer && playerVelocity.y < 0)
+        {
             playerVelocity.y = 0f;
             JumpsRemaining = TotalJumps;
         }
 
-        if (move != Vector3.zero){
-            gameObject.transform.forward = move;
-        }
-        controller.Move(move * Time.deltaTime * MoveSpeed); //player input - horizontal movement
+        if (move == Vector3.zero) return;
 
-        playerVelocity.y += /*(AirTime * -1f) + */ 3 * gravityValue * Time.deltaTime;
+        //float x = Mathf.LerpAngle(gameObject.transform.forward.x, move.x, Time.deltaTime * 25f);
+        //float y = Mathf.LerpAngle(gameObject.transform.forward.y, move.y, Time.deltaTime * 25f);
+        //float z = Mathf.LerpAngle(gameObject.transform.forward.z, move.z, Time.deltaTime * 25f);
+        //
+        //Debug.Log("transform " + gameObject.transform.forward);
+        //Debug.Log("move " + move);
+        //
+        //gameObject.transform.forward = new Vector3(x, y, z);
 
-        if(playerVelocity.x != 0f){
-            playerVelocity.x -= (velocityDecelerationMultiplier * playerVelocity.x) * Time.deltaTime;
-            if(playerVelocity.x > 0f && playerVelocity.x < velocityStopThreshold){
-                playerVelocity.x = 0f;
-            }
-            if(playerVelocity.x < 0f && playerVelocity.x > -velocityStopThreshold){
-                playerVelocity.x = 0f;
-            }
-        }
-        if(playerVelocity.z != 0f){
-            playerVelocity.z -= (velocityDecelerationMultiplier * playerVelocity.z) * Time.deltaTime;
-            if(playerVelocity.z > 0f && playerVelocity.z < velocityStopThreshold){
-                playerVelocity.z = 0f;
-            }
-            if(playerVelocity.z < 0f && playerVelocity.z > -velocityStopThreshold){
-                playerVelocity.z = 0f;
-            }
-        }
+        gameObject.transform.forward = move;
 
+        controller.Move(MoveSpeed * Time.deltaTime * move); //player input - horizontal movement
+    }
+
+    private void FakePhysics()
+    {
+        playerVelocity.y += /*(AirTime * -1f) + */ 3 * GravityValue * Time.deltaTime;
         controller.Move(playerVelocity * Time.deltaTime); //fake physics - vertical movement
+
+        if (playerVelocity.x != 0f)
+        {
+            playerVelocity.x -= (velocityDecelerationMultiplier * playerVelocity.x) * Time.deltaTime;
+
+            if (playerVelocity.x > 0f && playerVelocity.x < velocityStopThreshold)
+            {
+                playerVelocity.x = 0f;
+            }
+            if (playerVelocity.x < 0f && playerVelocity.x > -velocityStopThreshold)
+            {
+                playerVelocity.x = 0f;
+            }
+        }
+
+        if (playerVelocity.z != 0f)
+        {
+            playerVelocity.z -= (velocityDecelerationMultiplier * playerVelocity.z) * Time.deltaTime;
+
+            if (playerVelocity.z > 0f && playerVelocity.z < velocityStopThreshold)
+            {
+                playerVelocity.z = 0f;
+            }
+            if (playerVelocity.z < 0f && playerVelocity.z > -velocityStopThreshold)
+            {
+                playerVelocity.z = 0f;
+            }
+        }
     }
 
     private void DashBehaviour(){
@@ -263,7 +290,7 @@ public class MovementSystem : MonoBehaviour{
 
     private void Jump()
     {
-        playerVelocity.y = Mathf.Sqrt(JumpStrength * -3.0f * gravityValue);
+        playerVelocity.y = Mathf.Sqrt(JumpStrength * -3.0f * GravityValue);
         JumpsRemaining--;
         AirTime = 0;
     }
@@ -283,34 +310,34 @@ public class MovementSystem : MonoBehaviour{
 
     public void OnMove(InputAction.CallbackContext context)
     {
+        if (!characterManager.CanMove()) return;
         if (IsDashing) return;
 
-        if(characterManager.CanMove())
-        {
-            Vector2 movement = context.ReadValue<Vector2>();
-            move = new Vector3(movement.x, 0, movement.y);
-        }
+        Vector2 input = context.ReadValue<Vector2>();
+        Vector3 movement = new(input.x, 0, input.y);
+
+        move = movement;
     }
 
     public void OnJump(InputAction.CallbackContext context)
     {
-        if(context.performed && characterManager.CanMove())
+        if (!characterManager.CanMove()) return;
+        if (JumpsRemaining < 1) return;
+
+        if (context.performed)
         {
-            if(JumpsRemaining > 0)
-            {
-                Jump();
-            }
+            Jump();
         }
     }
 
     public void OnDash(InputAction.CallbackContext context)
     {
-        if(context.performed && characterManager.CanMove())
+        if (!characterManager.CanMove()) return;
+        if (!CanDash) return;
+
+        if (context.performed)
         {
-            if(CanDash)
-            {
-                Dash();
-            }
+            Dash();
         }
     }
 

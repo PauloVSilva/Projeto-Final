@@ -64,10 +64,17 @@ public class CharacterManager : MonoBehaviour{
     #endregion "EVENTS"
 
     #region "Unity Callbacks"
-    private void Awake(){
+    private void Awake()
+    {
         InitializeComponents();
         InitializePlayerVariables();
         SetupControllerLights();
+        SubscribeToEvents();
+    }
+
+    private void OnDestroy()
+    {
+        UnsubscribeFromEvents();
     }
 
     public void OnTriggerEnter(Collider other)
@@ -135,22 +142,43 @@ public class CharacterManager : MonoBehaviour{
     {
         var device = playerInput.devices[0];
 
-        if (device.GetType() == typeof(DualSenseGamepadHID))
-        {
-            DualSenseGamepadHID dualsense = (DualSenseGamepadHID)device;
-            dualsense.SetLightBarColor(lightColor);
-            playerDevice = Device.DualShock;
-
-        }
         if (device.GetType() == typeof(DualShock4GamepadHID))
         {
+            playerDevice = Device.DualShock;
             DualShock4GamepadHID dualshock4 = (DualShock4GamepadHID)device;
             dualshock4.SetLightBarColor(lightColor);
+        }
+        else if (device.GetType() == typeof(DualSenseGamepadHID))
+        {
             playerDevice = Device.DualShock;
+            DualSenseGamepadHID dualsense = (DualSenseGamepadHID)device;
+            dualsense.SetLightBarColor(lightColor);
         }
         else
         {
             playerDevice = Device.Keyboard;
+        }
+    }
+
+    private void SubscribeToEvents()
+    {
+        GameManager.Instance.OnGameStateChanged += AdaptToGameState;
+    }
+
+    private void UnsubscribeFromEvents()
+    {
+        GameManager.Instance.OnGameStateChanged += AdaptToGameState;
+    }
+
+    private void AdaptToGameState(GameState gameState)
+    {
+        if (gameState == GameState.Paused)
+        {
+            playerInputHandler.PlayerOpenedMenu();
+        }
+        else
+        {
+            playerInputHandler.PlayerClosedMenu();
         }
     }
 
@@ -162,7 +190,8 @@ public class CharacterManager : MonoBehaviour{
         OnCharacterStateChanged?.Invoke(characterState);
     }
 
-    public void ResetStats(){
+    public void ResetStats()
+    {
         InitializePlayerVariables();
     }
 

@@ -744,8 +744,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ffa7d5962dfe094fb2c6beae87fc869, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <gameState>k__BackingField: 0
-  <previousState>k__BackingField: 0
+  <GameState>k__BackingField: 0
+  <PreviousState>k__BackingField: 0
   mainCamera: {fileID: 0}
   playerList: []
   joinAction:
