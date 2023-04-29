@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 using TMPro;
 using DG.Tweening;
 
+[RequireComponent(typeof(AudioSource))]
 public class MiniGameUIManager : MonoBehaviour
 {
     [SerializeField] private GameObject miniGameUIContainer;
@@ -15,17 +16,16 @@ public class MiniGameUIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI winnerBoard;
     [SerializeField] private TextMeshProUGUI gameGoalReminder;
 
+    private AudioSource audioSource;
+    public AudioClip victorySound;
 
     private string go;
     private string returningToLobbyInSeconds;
     private string gameBeginsInSeconds;
 
-
-    //Just to be clear, events here mean the event actions baked in the language
-    //These are NOT mini game events such as reaching X spot or stuff
-
     private void Start()
     {
+        InitializeComponents();
         SubscribeToEvents();
         InitializeVariables();
     }
@@ -48,6 +48,7 @@ public class MiniGameUIManager : MonoBehaviour
         MiniGameManager.OnGameStateAdvances += AdaptToMiniGameState;
         MiniGameManager.OnCountDownTick += DisplayCountDown;
         MiniGameManager.OnPlayerWins += AnnounceWinner;
+        MiniGameManager.OnMiniGameEnds += InitializeVariables;
     }
 
     private void UnsubscribeFromEvents()
@@ -56,22 +57,26 @@ public class MiniGameUIManager : MonoBehaviour
         MiniGameManager.OnGameStateAdvances -= AdaptToMiniGameState;
         MiniGameManager.OnCountDownTick -= DisplayCountDown;
         MiniGameManager.OnPlayerWins -= AnnounceWinner;
+        MiniGameManager.OnMiniGameEnds -= InitializeVariables;
     }
 
-    private void InitializeVariables(){
+    private void InitializeComponents()
+    {
+        audioSource = GetComponent<AudioSource>();
+        audioSource.playOnAwake = false;
+        audioSource.loop = false;
+    }
+
+    private void InitializeVariables()
+    {
         go = "Go!";
         returningToLobbyInSeconds = "Returning to lobby in ";
         gameBeginsInSeconds = "Game begins in ";
 
-        //countDownMessage.text = "_COUNTDOWN_MESSAGE";
-        //countDownBoard.text = "_COUNTDOWN_TIME";
-        //winnerBoard.text = "_WINNER_MESSAGE";
-        //gameGoalReminder.text = "_GOAL_REMINDER";
-
-        countDownMessage.text = "";
-        countDownBoard.text = "";
-        winnerBoard.text = "";
-        gameGoalReminder.text = "";
+        countDownMessage.text = string.Empty;
+        countDownBoard.text = string.Empty;
+        winnerBoard.text = string.Empty;
+        gameGoalReminder.text = string.Empty;
 
         //SetGameGoalText();
     }
@@ -124,8 +129,8 @@ public class MiniGameUIManager : MonoBehaviour
                 countDownBoard.transform.DOScale(Vector3.zero, 0.5f);
 
                 yield return new WaitForSeconds(0.5f);
-                countDownMessage.text = "";
-                countDownBoard.text = "";
+                countDownMessage.text = string.Empty;
+                countDownBoard.text = string.Empty;
                 countDownMessage.transform.DOScale(Vector3.one, 0.0f);
                 countDownBoard.transform.DOScale(Vector3.one, 0.0f);
             }
@@ -137,7 +142,10 @@ public class MiniGameUIManager : MonoBehaviour
         gameGoalReminder.text = MiniGameManager.Instance.goalDescription;
     }
 
-    private void AnnounceWinner(PlayerInput playerInput){
+    private void AnnounceWinner(PlayerInput playerInput)
+    {
+        audioSource.PlayOneShot(victorySound);
+
         winnerBoard.text = MessageManager.Instance.GetPlayerVictoryMessage(playerInput.playerIndex + 1);
     }
 }

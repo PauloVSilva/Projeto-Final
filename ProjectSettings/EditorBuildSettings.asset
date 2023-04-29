@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Sharpshooter.unity
     guid: 2d28bc4cfa413ea45bc9b90a1b4c9016
+  - enabled: 1
+    path: Assets/Scenes/Rocket Race.unity
+    guid: 4dc140bda93785e429b41a06762dc860
   m_configObjects: {}

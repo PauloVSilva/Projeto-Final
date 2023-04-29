@@ -26,6 +26,7 @@ public class MiniGameManager : Singleton<MiniGameManager>
     public static event Action<int> OnCountDownTick;
     public static event Action<MiniGameState> OnGameStateAdvances;
     public static event Action<PlayerInput> OnPlayerWins;
+    public static event Action OnMiniGameEnds;
 
     protected override void Awake()
     {
@@ -53,7 +54,7 @@ public class MiniGameManager : Singleton<MiniGameManager>
     }
 
 
-    private void InitializeVariables()
+    public void InitializeVariables()
     {
         miniGameSetup = null;
         miniGame = MiniGame.none;
@@ -106,11 +107,7 @@ public class MiniGameManager : Singleton<MiniGameManager>
     private void InitializeLevel()
     {
         GameManager.Instance.UpdateGameState(GameState.MiniGame);
-
-        foreach (var playerInput in GameManager.Instance.playerList)
-        {
-            playerInput.GetComponent<CharacterManager>().BlockActions();
-        }
+        GameManager.Instance.BlockAllPlayerActions(true);
 
         MiniGameSpecificSetup();
 
@@ -231,11 +228,7 @@ public class MiniGameManager : Singleton<MiniGameManager>
     private void StartGame()
     {
         LevelManager.Instance.currentLevel.SetSpawnersEnabled(true);
-
-        foreach (var playerInput in GameManager.Instance.playerList)
-        {
-            playerInput.GetComponent<CharacterManager>().UnblockActions();
-        }
+        GameManager.Instance.BlockAllPlayerActions(false);
 
         UpdateMiniGameState(MiniGameState.gameIsRunning);
     }
@@ -262,9 +255,11 @@ public class MiniGameManager : Singleton<MiniGameManager>
         UpdateMiniGameState(MiniGameState.gameOver);
     }
 
-    private void ReturnToHub()
+    public void ReturnToHub()
     {
         InitializeVariables();
+
+        OnMiniGameEnds?.Invoke();
 
         LevelLoader.Instance.LoadLevel("MainHub");
     }

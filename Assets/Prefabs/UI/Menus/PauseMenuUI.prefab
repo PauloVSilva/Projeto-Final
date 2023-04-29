@@ -1144,13 +1144,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menu: 4
   menuContainer: {fileID: 5878613362251438992}
+  footer: {fileID: 6029239982987235951}
+  inputSystemUIInputModule: {fileID: 6029239982039373296}
   firstSelected: {fileID: 6029239980978697101}
+  playerInput: {fileID: 0}
+  playerDevice: 0
   buttonTypes: 02000000010000000000000004000000
   menuName: {fileID: 6029239982764546470}
   playerControllingMenu: {fileID: 6029239981558357750}
   tabGroup: {fileID: 3896536822671316352}
-  footer: {fileID: 6029239982987235951}
-  inputSystemUIInputModule: {fileID: 6029239982039373296}
 --- !u!1 &6029239981433301399
 GameObject:
   m_ObjectHideFlags: 0
@@ -1497,7 +1499,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Quit to main menu
+  m_text: Quit to main hub
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
@@ -1860,6 +1862,7 @@ MonoBehaviour:
   m_TrackedDeviceOrientationAction: {fileID: -5359411091631403044, guid: f86ed6558109e824b9f6dc4cc63b69c1, type: 3}
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
+  m_CursorLockBehavior: 0
 --- !u!1 &6029239982175355745
 GameObject:
   m_ObjectHideFlags: 0

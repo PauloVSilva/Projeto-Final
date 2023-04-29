@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(SphereCollider))]
-
+[RequireComponent(typeof(AudioSource))]
 public abstract class Item : Entity{
     public ItemScriptableObject item {get; protected set;}
     [SerializeField] protected bool canBePickedUp;
@@ -14,19 +14,25 @@ public abstract class Item : Entity{
     protected SphereCollider itemCollider;
     protected Rigidbody itemRigidbody;
     [SerializeField] protected Renderer objectRenderer;
+    protected AudioSource audioSource;
 
     public bool CanBePickedUp => canBePickedUp;
     public bool CanBeStored => canBeStored;
 
-    protected virtual void Awake(){
+    protected virtual void Awake()
+    {
         GetScriptableObjectVariables();
         InitializeItemComponents();
         InitializeItemVariables();
     }
 
-    private void InitializeItemComponents(){
+    private void InitializeItemComponents()
+    {
         itemCollider = GetComponent<SphereCollider>();
         itemRigidbody = GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();
+        audioSource.loop = false;
+        audioSource.playOnAwake = false;
 
         objectRenderer.enabled = true;
         itemCollider.isTrigger = true;

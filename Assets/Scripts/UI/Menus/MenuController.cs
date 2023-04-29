@@ -46,9 +46,9 @@ public abstract class MenuController : MonoBehaviour
         StartCoroutine(OpenDelay());
         IEnumerator OpenDelay()
         {
-            yield return new WaitForEndOfFrame();
-
             menuContainer.SetActive(true);
+
+            yield return new WaitForEndOfFrame();
 
             GainControl();
 
@@ -138,9 +138,9 @@ public abstract class MenuController : MonoBehaviour
         //InputActionAsset playerActions = playerInput.actions;
 
         playerInput.TryGetComponent(out CharacterManager _characterManager);
-        _characterManager.playerInputHandler.PlayerOpenedMenu();
+        _characterManager.playerInputHandler.DisableActions(true);
 
-        for(int i = 0; i < buttonTypes.Count(); i++)
+        for (int i = 0; i < buttonTypes.Count(); i++)
         {
             if(buttonTypes[i].ToString() == "Back")
                 playerInput.actions["Back"].performed += PlayerPressedBackButton;
@@ -158,7 +158,7 @@ public abstract class MenuController : MonoBehaviour
         if(playerInput == null) return;
 
         playerInput.TryGetComponent(out CharacterManager _characterManager);
-        _characterManager.playerInputHandler.PlayerClosedMenu();
+        _characterManager.playerInputHandler.DisableActions(false);
 
         playerInput.actions["Back"].performed -= PlayerPressedBackButton;
         playerInput.actions["PreviousTab"].performed -= PlayerPressedPreviousTabButton;

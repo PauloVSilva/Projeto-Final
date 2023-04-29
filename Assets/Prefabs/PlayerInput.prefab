@@ -292,6 +292,8 @@ GameObject:
   - component: {fileID: 5021916059996529337}
   - component: {fileID: -123166407121015900}
   - component: {fileID: 7683125629432157685}
+  - component: {fileID: 7646582173356827928}
+  - component: {fileID: 760425581946958973}
   m_Layer: 3
   m_Name: PlayerInput
   m_TagString: Player
@@ -405,19 +407,7 @@ MonoBehaviour:
     m_ActionId: 4a396afb-24f2-46fa-af83-987a7c3e9702
     m_ActionName: Player/Dash[/Keyboard/f,/DualShock4GamepadHID/buttonEast]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 7408531066293585715}
-        m_TargetAssemblyTypeName: PlayerInputHandler, Assembly-CSharp
-        m_MethodName: OnCockHammer
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: 2508eb02-76ec-4f17-82fb-863490316c5d
     m_ActionName: Player/CockHammer[/Mouse/rightButton,/DualShock4GamepadHID/rightStick/down]
   - m_PersistentCalls:
@@ -437,35 +427,11 @@ MonoBehaviour:
     m_ActionId: 7109d714-3273-4a3e-bf8f-39528b8bb9d6
     m_ActionName: Player/PressTrigger[/Mouse/leftButton,/DualShock4GamepadHID/rightTrigger]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 7408531066293585715}
-        m_TargetAssemblyTypeName: PlayerInputHandler, Assembly-CSharp
-        m_MethodName: OnReload
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: 16799694-9ddd-4288-b11f-5957eae188dd
     m_ActionName: Player/ReloadWeapon[/Keyboard/r,/DualShock4GamepadHID/buttonWest]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 7408531066293585715}
-        m_TargetAssemblyTypeName: PlayerInputHandler, Assembly-CSharp
-        m_MethodName: OnSprint
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: ed2a7086-5a45-4131-9f98-eefd8a9d34b5
     m_ActionName: Player/Sprint[/Keyboard/leftShift,/DualShock4GamepadHID/leftStickPress]
   - m_PersistentCalls:
@@ -564,6 +530,22 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 87c0382b-d6ec-4981-9a88-7417d559e352
     m_ActionName: UI/NextTab[/Keyboard/e,/DualSenseGamepadHID/rightShoulder,/DualShock4GamepadHID/rightShoulder]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7408531066293585715}
+        m_TargetAssemblyTypeName: PlayerInputHandler, Assembly-CSharp
+        m_MethodName: OnThrust
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 99f845e3-b89c-4c41-8391-e9088d591d01
+    m_ActionName: Player/Thrust[/Keyboard/space,/DualShock4GamepadHID/buttonSouth,/DualSenseGamepadHID1/buttonSouth]
   m_NeverAutoSwitchControlSchemes: 1
   m_DefaultControlScheme: 
   m_DefaultActionMap: UI
@@ -619,7 +601,14 @@ MonoBehaviour:
   characterWeaponSystem: {fileID: -123166407121015900}
   characterInteractor: {fileID: 0}
   characterItemsDisplay: {fileID: 0}
+  audioSource: {fileID: 0}
+  characterDying: {fileID: 8300000, guid: 0cec6c7b5800d2449a82d4ca931920f1, type: 3}
+  scoreIncreased: {fileID: 8300000, guid: 4fe1d2963eb1ae24198a55e23a7e5d2f, type: 3}
   Character: {fileID: 0}
+  characterSkin:
+    characterModel: {fileID: 0}
+    characterSprite: {fileID: 0}
+    characterName: 
   characterObject: {fileID: 0}
   characterTombstone: {fileID: 0}
   lightColors:
@@ -669,10 +658,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16bb2bab1f2fa204cace804b197aa24e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  controller: {fileID: 0}
+  rb: {fileID: 0}
+  <WalkSpeed>k__BackingField: 0
+  <JumpStrength>k__BackingField: 0
+  <TotalJumps>k__BackingField: 0
+  <MoveSpeed>k__BackingField: 0
+  <CanDash>k__BackingField: 0
+  <IsDashing>k__BackingField: 0
+  <DashDuration>k__BackingField: 0
+  <DashTime>k__BackingField: 0
+  <DashCooldown>k__BackingField: 0
+  <JumpsRemaining>k__BackingField: 0
+  <AirTime>k__BackingField: 0
+  <AirDamage>k__BackingField: 0
+  <IsThrusting>k__BackingField: 0
   angleY: 0
   quadrant: 0
   velocityX: 0
   velocityZ: 0
+  velocityStopThreshold: 0
+  velocityDecelerationMultiplier: 0
   playerVelocity: {x: 0, y: 0, z: 0}
   move: {x: 0, y: 0, z: 0}
 --- !u!114 &5021916059996529337
@@ -734,6 +740,118 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   numFound: 0
+--- !u!54 &7646582173356827928
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7408531066293585716}
+  serializedVersion: 2
+  m_Mass: 0.1
+  m_Drag: 0.5
+  m_AngularDrag: 0.01
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 1
+  m_Constraints: 56
+  m_CollisionDetection: 2
+--- !u!82 &760425581946958973
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7408531066293585716}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 33479f38ceda5fd459bd456fc91e0af5, type: 2}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &8183921002881906039
 GameObject:
   m_ObjectHideFlags: 0

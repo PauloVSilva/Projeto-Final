@@ -12,6 +12,7 @@ public class PlayerInputHandler : MonoBehaviour{
     public event System.Action<InputAction.CallbackContext> OnCharacterMove;
     public event System.Action<InputAction.CallbackContext> OnCharacterJump;
     public event System.Action<InputAction.CallbackContext> OnCharacterDash;
+    public event System.Action<InputAction.CallbackContext> OnCharacterThrust;
     public event System.Action<InputAction.CallbackContext> OnCharacterInteractWithObject;
     public event System.Action<InputAction.CallbackContext> OnCharacterPressTrigger;
     public event System.Action<InputAction.CallbackContext> OnCharacterDropItem;
@@ -33,23 +34,13 @@ public class PlayerInputHandler : MonoBehaviour{
         playerInput = GetComponent<PlayerInput>();
     }
 
+    public void DisableActions(bool _disabled)
+    {
+        if (playerInput == null) return;
 
-    public void PlayerOpenedMenu(){
-        playerInput.SwitchCurrentActionMap("UI");
+        if(_disabled) playerInput.SwitchCurrentActionMap("UI");
+        else playerInput.SwitchCurrentActionMap("Player");
     }
-
-    public void DisableActions(){
-        playerInput.SwitchCurrentActionMap("UI");
-    }
-
-    public void PlayerClosedMenu(){
-        RestoreActions();
-    }
-
-    public void RestoreActions(){
-        playerInput.SwitchCurrentActionMap("Player");
-    }
-
 
 
     public void OnPressMenuButton(InputAction.CallbackContext context){
@@ -68,6 +59,11 @@ public class PlayerInputHandler : MonoBehaviour{
 
     public void OnDash(InputAction.CallbackContext context){
         OnCharacterDash?.Invoke(context);
+    }
+
+    public void OnThrust(InputAction.CallbackContext context)
+    {
+        OnCharacterThrust?.Invoke(context);
     }
 
     public void OnInteractWithObject(InputAction.CallbackContext context){

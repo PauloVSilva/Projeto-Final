@@ -9,6 +9,7 @@ public enum Animal{hedgehog, pangolin, threeBandedArmadillo}
 
 public enum CharacterState { Alive, Dead }
 
+[RequireComponent(typeof(AudioSource))]
 public class CharacterManager : MonoBehaviour{
     #region "COMPONENTS"
     [Space(5)]
@@ -21,6 +22,9 @@ public class CharacterManager : MonoBehaviour{
     [SerializeField] public CharacterWeaponSystem characterWeaponSystem;
     [SerializeField] public Interactor characterInteractor;
     [SerializeField] public CharacterDisplay characterItemsDisplay;
+    [SerializeField] public AudioSource audioSource;
+    [SerializeField] public AudioClip characterDying;
+    [SerializeField] public AudioClip scoreIncreased;
     #endregion "COMPONENTS"
 
     [SerializeField] public CharacterStatsScriptableObject Character;
@@ -113,6 +117,10 @@ public class CharacterManager : MonoBehaviour{
         characterTombstone = null;
 
         playerInput = GetComponent<PlayerInput>();
+        audioSource = GetComponent<AudioSource>();
+        audioSource.playOnAwake = false;
+        audioSource.loop = false;
+
         playerInputHandler = GetComponent<PlayerInputHandler>();
 
         characterHealthSystem = GetComponent<CharacterHealthSystem>();
@@ -172,14 +180,7 @@ public class CharacterManager : MonoBehaviour{
 
     private void AdaptToGameState(GameState gameState)
     {
-        if (gameState == GameState.Paused)
-        {
-            playerInputHandler.PlayerOpenedMenu();
-        }
-        else
-        {
-            playerInputHandler.PlayerClosedMenu();
-        }
+        playerInputHandler.DisableActions(gameState == GameState.Paused);
     }
 
 
@@ -226,6 +227,15 @@ public class CharacterManager : MonoBehaviour{
         characterItemsDisplay = characterObject.GetComponent<CharacterDisplay>();
         characterWeaponSystem.SetGunPosition(characterItemsDisplay.gunPosition);
 
+
+        //forgive me father for I have sinned
+        characterMovementSystem.controller.enabled = MiniGameManager.Instance.miniGame != MiniGame.rocketRace;
+
+        characterMovementSystem.rb.detectCollisions = MiniGameManager.Instance.miniGame == MiniGame.rocketRace;
+        characterMovementSystem.rb.useGravity = MiniGameManager.Instance.miniGame == MiniGame.rocketRace;
+        characterMovementSystem.rb.isKinematic = MiniGameManager.Instance.miniGame != MiniGame.rocketRace;
+        //
+
         OnCharacterChosen?.Invoke();
     }
 
@@ -248,7 +258,7 @@ public class CharacterManager : MonoBehaviour{
             }
         }
         characterObject.SetActive(false);
-        BlockActions();
+        BlockActions(true);
     }
 
     public void RespawnCharacter()
@@ -256,21 +266,16 @@ public class CharacterManager : MonoBehaviour{
         LevelManager.Instance.currentLevel.SpawnPlayerRandomly(playerInput);
 
         characterObject.SetActive(true);
-        UnblockActions();
+        BlockActions(false);
         RefreshStatsUponRespawning();
     }
 
-    public void BlockActions(){
-        actionsAreBlocked = true;
-        playerInputHandler.DisableActions();
+    public void BlockActions(bool _blocked)
+    {
+        actionsAreBlocked = _blocked;
+
+        playerInputHandler.DisableActions(actionsAreBlocked);
     }
-
-    public void UnblockActions(){
-        actionsAreBlocked = false;
-        playerInputHandler.RestoreActions();
-    }
-
-
 
 
 
@@ -330,7 +335,7 @@ public class CharacterManager : MonoBehaviour{
         LevelManager.Instance.currentLevel.SpawnPlayerRandomly(playerInput);
 
         characterObject.SetActive(true);
-        UnblockActions();
+        BlockActions(false);
         characterHealthSystem.Initialize();
         characterMovementSystem.Initialize();
         OnPlayerStatsReset?.Invoke();
@@ -344,6 +349,9 @@ public class CharacterManager : MonoBehaviour{
 
     public void IncreaseScore(int value){
         score += value;
+
+        audioSource.PlayOneShot(scoreIncreased, 0.25f);
+
         OnPlayerScoreChanged?.Invoke(gameObject, score);
     }
 
@@ -357,8 +365,11 @@ public class CharacterManager : MonoBehaviour{
         InvokeOnPlayerScoredKill(character);
     }
 
-    public void PlayerDied(GameObject character){
+    public void PlayerDied(GameObject character)
+    {
         deaths++;
+
+        audioSource.PlayOneShot(characterDying);
 
         if (!unlimitedLives) totalLives--;
 

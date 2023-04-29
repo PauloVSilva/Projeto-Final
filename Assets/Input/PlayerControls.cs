@@ -73,6 +73,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""Thrust"",
+                    ""type"": ""Button"",
+                    ""id"": ""99f845e3-b89c-4c41-8391-e9088d591d01"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Dash"",
                     ""type"": ""Button"",
                     ""id"": ""4a396afb-24f2-46fa-af83-987a7c3e9702"",
@@ -380,6 +389,28 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""PauseMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""21083014-fed8-4f9c-a2ce-029cf4e7516d"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KB+M"",
+                    ""action"": ""Thrust"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b9fba967-a611-410e-a9f0-49d42b759b12"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Thrust"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1032,6 +1063,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
+        m_Player_Thrust = m_Player.FindAction("Thrust", throwIfNotFound: true);
         m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
         m_Player_CockHammer = m_Player.FindAction("CockHammer", throwIfNotFound: true);
         m_Player_PressTrigger = m_Player.FindAction("PressTrigger", throwIfNotFound: true);
@@ -1116,6 +1148,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_Jump;
+    private readonly InputAction m_Player_Thrust;
     private readonly InputAction m_Player_Dash;
     private readonly InputAction m_Player_CockHammer;
     private readonly InputAction m_Player_PressTrigger;
@@ -1130,6 +1163,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
+        public InputAction @Thrust => m_Wrapper.m_Player_Thrust;
         public InputAction @Dash => m_Wrapper.m_Player_Dash;
         public InputAction @CockHammer => m_Wrapper.m_Player_CockHammer;
         public InputAction @PressTrigger => m_Wrapper.m_Player_PressTrigger;
@@ -1159,6 +1193,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Jump.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
                 @Jump.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
                 @Jump.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
+                @Thrust.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnThrust;
+                @Thrust.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnThrust;
+                @Thrust.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnThrust;
                 @Dash.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
                 @Dash.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
                 @Dash.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
@@ -1193,6 +1230,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
+                @Thrust.started += instance.OnThrust;
+                @Thrust.performed += instance.OnThrust;
+                @Thrust.canceled += instance.OnThrust;
                 @Dash.started += instance.OnDash;
                 @Dash.performed += instance.OnDash;
                 @Dash.canceled += instance.OnDash;
@@ -1366,6 +1406,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnSprint(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
+        void OnThrust(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
         void OnCockHammer(InputAction.CallbackContext context);
         void OnPressTrigger(InputAction.CallbackContext context);

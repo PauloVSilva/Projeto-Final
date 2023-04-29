@@ -6,27 +6,30 @@ using UnityEngine.InputSystem;
 
 public class MovementSystem : MonoBehaviour{
     private CharacterManager characterManager;
-    private CharacterHealthSystem characterHealthSystem;
     private PlayerInputHandler playerInputHandler;
-    private CharacterController controller;
+
+    public CharacterController controller;
+    public Rigidbody rb;
 
     //VARIABLES THAT WILL COME FROM CHARACTER SCRIPTABLE OBJECT
-    public float WalkSpeed {get; protected set;}
-    public float JumpStrength {get; protected set;}
-    public int TotalJumps {get; protected set;}
-    
+    [field: SerializeField] public float WalkSpeed {get; protected set;}
+    [field: SerializeField] public float JumpStrength {get; protected set;}
+    [field: SerializeField] public int TotalJumps {get; protected set;}
+
     //VARIABLES FOR INTERNAL USE
-    public float MoveSpeed {get; protected set;}
+    [field:SerializeField] public float MoveSpeed {get; protected set;}
 
-    public bool CanDash {get; protected set;}
-    public bool IsDashing {get; protected set;}
-    public float DashDuration {get; protected set;}
-    public float DashTime {get; protected set;}
-    public float DashCooldown {get; protected set;}
+    [field:SerializeField] public bool CanDash {get; protected set;}
+    [field:SerializeField] public bool IsDashing {get; protected set;}
+    [field:SerializeField] public float DashDuration {get; protected set;}
+    [field:SerializeField] public float DashTime {get; protected set;}
+    [field:SerializeField] public float DashCooldown {get; protected set;}
 
-    public int JumpsRemaining {get; protected set;}
-    public float AirTime {get; protected set;}
-    public float AirDamage {get; protected set;}
+    [field:SerializeField] public int JumpsRemaining {get; protected set;}
+    [field:SerializeField] public float AirTime {get; protected set;}
+    [field:SerializeField] public float AirDamage {get; protected set;}
+
+    [field:SerializeField] public bool IsThrusting { get; protected set; }
 
     [SerializeField] private float angleY;
     [SerializeField] private int quadrant;
@@ -42,7 +45,8 @@ public class MovementSystem : MonoBehaviour{
     public float GravityValue {get; protected set;}
     [SerializeField] private Vector3 move;
 
-    private void Awake(){
+    private void Awake()
+    {
         InitializeComponents();
         SubscribeToEvents();
     }
@@ -51,11 +55,18 @@ public class MovementSystem : MonoBehaviour{
     {
         if (characterManager.Character == null) return;
 
-        AngleCalculator();
-        FakePhysics();
-        MovementBehaviour();
-        DashBehaviour();
-        AirTimeDamage();
+        if(MiniGameManager.Instance.miniGame != MiniGame.rocketRace)
+        {
+            AngleCalculator();
+            FakePhysics();
+            MovementBehaviour();
+            DashBehaviour();
+            AirTimeDamage();
+        }
+        else
+        {
+            ThrustBehaviour();
+        }
     }
 
     private void OnDestroy()
@@ -65,22 +76,13 @@ public class MovementSystem : MonoBehaviour{
 
     private void OnControllerColliderHit(ControllerColliderHit other)
     {
-        if (other.transform.GetComponent<CharacterManager>() == null)
-        {
-            //Debug.Log("CharacterManager not found on character");
-            return;
-        }
+        if (other.transform.GetComponent<CharacterManager>() == null) return;
 
         other.transform.TryGetComponent(out CharacterManager otherCharacter);
 
         if (AirTime > 0.25)
         {
             otherCharacter.characterHealthSystem.TakeDamage(this.gameObject, 10 + AirDamage * 2);
-        }
-
-        if (AirTime > 1.5)
-        {
-            characterManager.characterHealthSystem.TakeDamage(AirDamage * 0.5f);
         }
 
         AirTime = 0;
@@ -100,11 +102,13 @@ public class MovementSystem : MonoBehaviour{
     }
 
 
-    private void InitializeComponents(){
+    private void InitializeComponents()
+    {
         playerInputHandler = GetComponent<PlayerInputHandler>();
         characterManager = GetComponent<CharacterManager>();
-        characterHealthSystem = GetComponent<CharacterHealthSystem>();
+
         controller = GetComponent<CharacterController>();
+        rb = GetComponent<Rigidbody>();
     }
 
 
@@ -113,6 +117,7 @@ public class MovementSystem : MonoBehaviour{
         playerInputHandler.OnCharacterMove += OnMove;
         playerInputHandler.OnCharacterJump += OnJump;
         playerInputHandler.OnCharacterDash += OnDash;
+        playerInputHandler.OnCharacterThrust += OnThrust;
     }
 
     private void UnsubscribeFromEvents()
@@ -120,6 +125,7 @@ public class MovementSystem : MonoBehaviour{
         playerInputHandler.OnCharacterMove -= OnMove;
         playerInputHandler.OnCharacterJump -= OnJump;
         playerInputHandler.OnCharacterDash -= OnDash;
+        playerInputHandler.OnCharacterThrust -= OnThrust;
     }
 
 
@@ -176,12 +182,9 @@ public class MovementSystem : MonoBehaviour{
             AirTime += Time.deltaTime;
             AirDamage = (playerVelocity.y * -1);
         }
+
         if(GroundedPlayer)
         {
-            if(AirTime > 1)
-            {
-                characterManager.characterHealthSystem.TakeDamage(AirDamage);
-            }
             AirTime = 0;
         }
     }
@@ -288,8 +291,28 @@ public class MovementSystem : MonoBehaviour{
 
     }
 
+    private void ActivateThrust(bool _activateThrust)
+    {
+        IsThrusting = _activateThrust;
+        Debug.Log(_activateThrust);
+    }
+
+    private void ThrustBehaviour()
+    {
+        if(IsThrusting)
+        {
+            rb.AddRelativeForce(Vector3.up * 100 * Time.deltaTime);
+        }
+    }
+
+    private void ProcessRotation()
+    {
+        //Debug.Log("Processing rotation");
+    }
+
     private void Jump()
     {
+        //Debug.Log("Jumping");
         playerVelocity.y = Mathf.Sqrt(JumpStrength * -3.0f * GravityValue);
         JumpsRemaining--;
         AirTime = 0;
@@ -313,16 +336,24 @@ public class MovementSystem : MonoBehaviour{
         if (!characterManager.CanMove()) return;
         if (IsDashing) return;
 
-        Vector2 input = context.ReadValue<Vector2>();
-        Vector3 movement = new(input.x, 0, input.y);
+        if (controller.enabled)
+        {
+            Vector2 input = context.ReadValue<Vector2>();
+            Vector3 movement = new(input.x, 0, input.y);
 
-        move = movement;
+            move = movement;
+        }
+        else
+        {
+            ProcessRotation();
+        }
     }
 
     public void OnJump(InputAction.CallbackContext context)
     {
         if (!characterManager.CanMove()) return;
         if (JumpsRemaining < 1) return;
+        if (MiniGameManager.Instance.miniGame == MiniGame.rocketRace) return;
 
         if (context.performed)
         {
@@ -334,10 +365,26 @@ public class MovementSystem : MonoBehaviour{
     {
         if (!characterManager.CanMove()) return;
         if (!CanDash) return;
+        if (MiniGameManager.Instance.miniGame == MiniGame.rocketRace) return;
 
         if (context.performed)
         {
             Dash();
+        }
+    }
+
+    public void OnThrust(InputAction.CallbackContext context)
+    {
+        if (!characterManager.CanMove()) return;
+        if (MiniGameManager.Instance.miniGame != MiniGame.rocketRace) return;
+
+        if (context.performed)
+        {
+            ActivateThrust(true);
+        }
+        else if (context.canceled)
+        {
+            ActivateThrust(false);
         }
     }
 

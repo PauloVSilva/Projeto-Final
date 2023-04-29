@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Linq;
 
+[RequireComponent(typeof(AudioSource))]
 public class Level : MonoBehaviour
 {
     public List<PlayerSpawn> spawnList = new List<PlayerSpawn>();
@@ -12,6 +13,8 @@ public class Level : MonoBehaviour
     public List<Coin> coins = new List<Coin>(); //intended to be used for DimeDrop
 
     public Camera mainCamera; //not sure if necessary
+    private AudioSource audioSource;
+    public AudioClip levelTheme;
 
     [SerializeField] private bool playerSpawnEnabled;
 
@@ -39,10 +42,24 @@ public class Level : MonoBehaviour
         ClearPools();
     }
 
+    private void Update()
+    {
+        PlayTheme();
+    }
+
+
+    private void PlayTheme()
+    {
+        if(!audioSource.isPlaying) audioSource.Play();
+    }
 
     private void InitializeVariables()
     {
         playerSpawnEnabled = true;
+
+        audioSource = GetComponent<AudioSource>();
+        audioSource.clip = levelTheme;
+        audioSource.volume = 0.5f;
     }
 
 

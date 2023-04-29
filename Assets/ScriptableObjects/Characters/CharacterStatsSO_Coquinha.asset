@@ -19,6 +19,12 @@ MonoBehaviour:
   - characterModel: {fileID: 8463049207392376651, guid: 94f3709a6eac6464dba7fb1177502ea1, type: 3}
     characterSprite: {fileID: 21300000, guid: 3206d78ae0ecdd744b7a793690f74c70, type: 3}
     characterName: Cowboy Coquinha
+  - characterModel: {fileID: 8463049207392376651, guid: 143d2d626509f4f459912e4bfc94c720, type: 3}
+    characterSprite: {fileID: 21300000, guid: 3206d78ae0ecdd744b7a793690f74c70, type: 3}
+    characterName: Miner Coquinha
+  - characterModel: {fileID: 8463049207392376651, guid: d9e138c627f03fe48aa475b856b0937f, type: 3}
+    characterSprite: {fileID: 21300000, guid: 3206d78ae0ecdd744b7a793690f74c70, type: 3}
+    characterName: Rocket Coquinha
   tombstone: {fileID: 1045390783213288524, guid: cafb86b1b51ac5743b6e3691f456f500, type: 3}
   characterControllerCenter: {x: 0, y: 0.4, z: 0}
   characterControllerRadius: 0.5

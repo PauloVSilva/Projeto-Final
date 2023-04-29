@@ -2,12 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Coin : Item, IPooledObjects{
+public class Coin : Item, IPooledObjects
+{
     [SerializeField] private CoinScriptableObject coin;
     [SerializeField] private int value;
+
+    [SerializeField] private AudioClip pickUpSFX;
     public int Value => value;
 
-    private void Start(){
+    private void Start()
+    {
         GetScriptableObjectVariables();
     }
 
@@ -29,8 +33,14 @@ public class Coin : Item, IPooledObjects{
         isPooled = true;
     }
 
-    public void PickedUp(GameObject _gameObject){
+    public void PickedUp(GameObject _gameObject)
+    {
+        //who the fuck had the idea to pass a GO as refe.... oh it was me
         _gameObject.GetComponent<CharacterManager>().IncreaseScore(value);
+
+        //I gotta make this work later
+        //audioSource.PlayOneShot(pickUpSFX);
+
         Despawn();
     }
 }

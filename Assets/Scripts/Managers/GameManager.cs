@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -85,6 +86,22 @@ public class GameManager : Singleton<GameManager>
         OnPlayerLeftGame?.Invoke(playerInput);
 
         Destroy(playerInput.transform.gameObject);
+    }
+    
+    public void UnregisterAllPlayers()
+    {
+        while (playerList.Count() > 0)
+        {
+            UnregisterPlayer(playerList[0]);
+        }
+    }
+
+    public void BlockAllPlayerActions(bool _block)
+    {
+        foreach (var playerInput in playerList)
+        {
+            playerInput.GetComponent<CharacterManager>().BlockActions(_block);
+        }
     }
 
     /*public void LeaveAction(InputAction.CallbackContext context){

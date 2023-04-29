@@ -51,6 +51,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Thrust",
+                    "type": "Button",
+                    "id": "99f845e3-b89c-4c41-8391-e9088d591d01",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Dash",
                     "type": "Button",
                     "id": "4a396afb-24f2-46fa-af83-987a7c3e9702",
@@ -358,6 +367,28 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "PauseMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "21083014-fed8-4f9c-a2ce-029cf4e7516d",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KB+M",
+                    "action": "Thrust",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b9fba967-a611-410e-a9f0-49d42b759b12",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Thrust",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

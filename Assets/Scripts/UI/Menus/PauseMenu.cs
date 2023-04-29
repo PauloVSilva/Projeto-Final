@@ -69,12 +69,7 @@ public class PauseMenu : MenuController
     {
         Back();
 
-        while(GameManager.Instance.playerList.Count() > 0)
-        {
-            GameManager.Instance.UnregisterPlayer(GameManager.Instance.playerList[0]);
-        }
-
-        LevelLoader.Instance.LoadLevel("MainMenu");
+        MiniGameManager.Instance.ReturnToHub();
     }
     #endregion BUTTONS
 }

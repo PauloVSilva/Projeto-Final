@@ -9,8 +9,6 @@ public enum ChamberRefillType{pump, revolver}
 public enum ReloadType{singleBullet, magazine}
 public enum Size{handGun, longGun}
 
-[RequireComponent(typeof(AudioSource))]
-
 public class Weapon : Item
 {
     [SerializeField] private WeaponScriptableObject weapon;
@@ -46,7 +44,7 @@ public class Weapon : Item
     [SerializeField] protected SphereCollider gunCollider;
     [SerializeField] public GameObject holder;
 
-    [SerializeField] private AudioSource audioData;
+    [SerializeField] private AudioClip fireSFX;
 
     [SerializeField] private FieldOfView fieldOfView;
     [SerializeField] private GameObject closestTarget;
@@ -84,8 +82,6 @@ public class Weapon : Item
     protected override void InitializeItemVariables()
     {
         base.InitializeItemVariables();
-
-        audioData = GetComponent<AudioSource>();
 
         fieldOfView = GetComponentInChildren<FieldOfView>();
 
@@ -236,7 +232,8 @@ public class Weapon : Item
         if(ammo - projectileToCast.cost >= 0)
         {
             //play gun fire sound
-            audioData.Play(0);
+            //audioData.Play(0);
+            audioSource.PlayOneShot(fireSFX);
 
             CastProjectile();
             ammo -= projectileToCast.cost;

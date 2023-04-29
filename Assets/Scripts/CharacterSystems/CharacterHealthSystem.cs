@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterHealthSystem : HealthSystem{
+public class CharacterHealthSystem : HealthSystem
+{
     private CharacterManager characterManager;
 
     //VARIABLES THAT WILL COME FROM CHARACTER SCRIPTABLE OBJECT
@@ -21,32 +22,39 @@ public class CharacterHealthSystem : HealthSystem{
     public float lastDamagingPlayerTime;
 
 
-    private void Awake(){
+    private void Awake()
+    {
         InitializeComponents();
     }
 
-    private void InitializeComponents(){
+    private void InitializeComponents()
+    {
         characterManager = GetComponent<CharacterManager>();
     }
 
-    public void Initialize(){
+    public void Initialize()
+    {
         GetScriptableObjectVariables();
         InitializeVariables();
 
         StartCoroutine(OnEntityBornDelay());
-        IEnumerator OnEntityBornDelay(){
-            yield return new WaitForSeconds(0.05f); //delay necessary to make sure object has been instantiated
+        IEnumerator OnEntityBornDelay()
+        {
+            yield return new WaitForEndOfFrame();
+
             characterManager.InvokeOnPlayerBorn(gameObject);
             characterManager.UpdateCharacterState(CharacterState.Alive);
         }
     }
 
-    private void GetScriptableObjectVariables(){
+    private void GetScriptableObjectVariables()
+    {
         MaxHealth = characterManager.Character.maxHealth;
         HealthRegenRate = characterManager.Character.healthRegenRate;
     }
 
-    public override void InitializeVariables(){
+    public override void InitializeVariables()
+    {
         lastDamagingPlayer = null;
 
         CurrentHealth = MaxHealth;
@@ -55,12 +63,14 @@ public class CharacterHealthSystem : HealthSystem{
         SendHealthUpdateEvent();
     }
 
-    private void Update(){
+    private void Update()
+    {
         RegenerateHealth();
         LastDamageSourceRetentionTime();
     }
 
-    private void RegenerateHealth(){
+    private void RegenerateHealth()
+    {
         if (characterManager.characterState == CharacterState.Dead) return;
 
         if (IsAlive && CanRegenHealth)

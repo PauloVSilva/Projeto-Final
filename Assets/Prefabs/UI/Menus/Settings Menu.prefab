@@ -2526,6 +2526,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menu: 2
   menuContainer: {fileID: 5370005678265178383}
+  footer: {fileID: 0}
+  inputSystemUIInputModule: {fileID: 0}
   firstSelected: {fileID: 4401638891471813432}
   playerInput: {fileID: 0}
   playerDevice: 0
@@ -2533,8 +2535,6 @@ MonoBehaviour:
   menuName: {fileID: 4401638891948404646}
   playerControllingMenu: {fileID: 0}
   tabGroup: {fileID: 0}
-  footer: {fileID: 0}
-  inputSystemUIInputModule: {fileID: 0}
   audioMixer: {fileID: 24100000, guid: 33479f38ceda5fd459bd456fc91e0af5, type: 2}
   resolutionDropdown: {fileID: 4401638892347052332}
 --- !u!1 &4401638891842135779

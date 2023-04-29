@@ -19,6 +19,12 @@ MonoBehaviour:
   - characterModel: {fileID: 8463049207392376651, guid: 815d5050adbca9c479e07b9d2ca50798, type: 3}
     characterSprite: {fileID: 21300000, guid: 01dbf05326305424b9899deec2520fb6, type: 3}
     characterName: Cowboy Arturito
+  - characterModel: {fileID: 8463049207392376651, guid: f50bd60cc6676e34990f113d0fb568e8, type: 3}
+    characterSprite: {fileID: 21300000, guid: 01dbf05326305424b9899deec2520fb6, type: 3}
+    characterName: Miner Arturito
+  - characterModel: {fileID: 8463049207392376651, guid: 40835a035d24b354680a69db1b409c7e, type: 3}
+    characterSprite: {fileID: 21300000, guid: 01dbf05326305424b9899deec2520fb6, type: 3}
+    characterName: Rocket Arturito
   tombstone: {fileID: 1045390783213288524, guid: cafb86b1b51ac5743b6e3691f456f500, type: 3}
   characterControllerCenter: {x: 0, y: 0.4, z: 0}
   characterControllerRadius: 0.5

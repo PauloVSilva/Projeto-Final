@@ -7,8 +7,13 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
 using TMPro;
 
+[RequireComponent(typeof(AudioSource))]
 public class CharacterSelectionMenu : MenuController
 {
+    private AudioSource audioSource;
+    public AudioClip kidsCheering;
+
+
     private CharacterStatsScriptableObject displayedCharacter;
     private int index;
     private string greetMessage;
@@ -19,6 +24,10 @@ public class CharacterSelectionMenu : MenuController
     protected override void Start()
     {
         base.Start();
+
+        audioSource = GetComponent<AudioSource>();
+        audioSource.playOnAwake = false;
+        audioSource.loop = false;
 
         ListenToPlayerJoined();
     }
@@ -31,6 +40,8 @@ public class CharacterSelectionMenu : MenuController
     public void NewPlayerJoined(PlayerInput _playerInput)
     {
         CanvasManager.Instance.OpenMenu(menu, _playerInput);
+
+        audioSource.PlayOneShot(kidsCheering);
 
         InitializeMenuVariables();
 
