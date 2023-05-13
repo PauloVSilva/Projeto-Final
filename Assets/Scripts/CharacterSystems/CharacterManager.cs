@@ -369,8 +369,6 @@ public class CharacterManager : MonoBehaviour{
     {
         deaths++;
 
-        audioSource.PlayOneShot(characterDying);
-
         if (!unlimitedLives) totalLives--;
 
         BeginRespawnProcess();
@@ -397,8 +395,10 @@ public class CharacterManager : MonoBehaviour{
         OnPlayerBorn?.Invoke(character);
     }
 
-    public void InvokeOnPlayerWasDamaged(float _damageAmount){
+    public void InvokeOnPlayerWasDamaged(float _damageAmount)
+    {
         OnPlayerWasDamaged?.Invoke(_damageAmount);
+        audioSource.PlayOneShot(characterDying);
     }
 
     public void InvokeOnPlayerWasHealed(float _healAmount){

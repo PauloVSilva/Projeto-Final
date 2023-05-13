@@ -296,15 +296,16 @@ MonoBehaviour:
   persistenceRequired: 0
   age: 0
   maxAge: 60
+  <item>k__BackingField: {fileID: 0}
   canBePickedUp: 1
-  objectRenderer: {fileID: 4115066245624394644}
+  objectRenderers:
+  - {fileID: 4115066245624394644}
+  - {fileID: 7343258675932599172}
   weapon: {fileID: 11400000, guid: a4cb0423e6895604384039af18b86e81, type: 2}
   projectileToCast: {fileID: 11400000, guid: b9715341ef4f538409e4b1f8319ac05d, type: 2}
   sprite: {fileID: 0}
   weaponName: 
   actionType: 0
-  chamberRefillType: 0
-  size: 0
   ammoCapacity: 0
   fireRate: 1
   reloadTime: 0
@@ -319,6 +320,8 @@ MonoBehaviour:
   gunCollider: {fileID: 8551919635874863448}
   holder: {fileID: 0}
   fireSFX: {fileID: 8300000, guid: 40567bd39c611e84ea7a15f54ef9b0c0, type: 3}
+  fireVFX: {fileID: 195742, guid: 87ec4cfdb94bc304d93b79a05e27ce88, type: 3}
+  collectableVFX: {fileID: 0}
   fieldOfView: {fileID: 0}
   closestTarget: {fileID: 0}
 --- !u!82 &4881275861602404810

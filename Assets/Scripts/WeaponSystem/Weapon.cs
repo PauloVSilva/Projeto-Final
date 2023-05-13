@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
-    
+using DG.Tweening;
+
 public enum ActionType{manual, semiAuto, fullAuto}
 public enum ChamberRefillType{pump, revolver}
 public enum ReloadType{singleBullet, magazine}
@@ -20,8 +21,6 @@ public class Weapon : Item
     [SerializeField] public Sprite sprite;
     [SerializeField] public string weaponName;
     [SerializeField] private ActionType actionType;
-    [SerializeField] private ChamberRefillType chamberRefillType;
-    [SerializeField] private Size size;
     [SerializeField] public int ammoCapacity;
     [SerializeField] private float fireRate; //how many times it can shoot per second
     [SerializeField] private float reloadTime;
@@ -45,6 +44,8 @@ public class Weapon : Item
     [SerializeField] public GameObject holder;
 
     [SerializeField] private AudioClip fireSFX;
+    [SerializeField] private GameObject fireVFX;
+    [SerializeField] private GameObject collectableVFX;
 
     [SerializeField] private FieldOfView fieldOfView;
     [SerializeField] private GameObject closestTarget;
@@ -53,8 +54,8 @@ public class Weapon : Item
     {
         AgeBehaviour();
         CollectableBehaviour();
-        FullAutoBehavior();
 
+        FullAutoBehavior();
         SearchForTargets();
     }
 
@@ -72,8 +73,8 @@ public class Weapon : Item
         sprite = weapon.itemSprite;
         weaponName = weapon.itemName;
         actionType = weapon.actionType;
-        chamberRefillType = weapon.chamberRefillType;
-        size = weapon.size;
+        //chamberRefillType = weapon.chamberRefillType;
+        //size = weapon.size;
         ammoCapacity = weapon.ammoCapacity;
         fireRate = weapon.fireRate;
         reloadTime = weapon.reloadTime;
@@ -101,6 +102,7 @@ public class Weapon : Item
         canBePickedUp = (holder == null);
     }
 
+
     private void FullAutoBehavior()
     {
         if(actionType == ActionType.fullAuto)
@@ -118,6 +120,19 @@ public class Weapon : Item
                 fullAutoClock += Time.deltaTime;
             }
         }
+    }
+
+    protected override void CollectableBehaviour()
+    {
+        base.CollectableBehaviour();
+
+        if(collectableVFX == null)
+        {
+            Debug.Log("VFX is null");
+            return;
+        }
+
+        collectableVFX.SetActive(canBePickedUp);
     }
 
     private void SearchForTargets()
@@ -144,6 +159,7 @@ public class Weapon : Item
             }
         }
     }
+
 
     public void OnPressTrigger(InputAction.CallbackContext context)
     {
@@ -229,33 +245,38 @@ public class Weapon : Item
 
     private void Fire()
     {
-        if(ammo - projectileToCast.cost >= 0)
+        if (ammo - projectileToCast.cost < 0) return;
+
+        CastProjectile();
+        ammo -= projectileToCast.cost;
+        canShoot = false;
+        fullAutoClock = 0;
+
+        holder.transform.GetComponent<CharacterWeaponSystem>().WeaponFired(); //line should be reworked
+
+        if (ammo == 0) //reload
         {
-            //play gun fire sound
-            //audioData.Play(0);
-            audioSource.PlayOneShot(fireSFX);
+            StartCoroutine(Reload());
+        }
+        if (ammo == 0 && totalAmmo == 0) //drop weapon
+        {
+            holder.transform.TryGetComponent(out CharacterInventory characterInventory);
 
-            CastProjectile();
-            ammo -= projectileToCast.cost;
-            canShoot = false;
-            fullAutoClock = 0;
+            characterInventory.DropWeapon();
 
-            holder.transform.GetComponent<CharacterWeaponSystem>().WeaponFired();
+            canBePickedUp = false;
+            age = maxAge - 10;
+        }
 
-            if(ammo == 0)
-            {
-                StartCoroutine(Reload());
-            }
-            if(ammo == 0 && totalAmmo == 0)
-            {
-                holder.transform.TryGetComponent(out CharacterInventory characterInventory);
+        audioSource.PlayOneShot(fireSFX);
 
-                characterInventory.DropWeapon();
-
-                canBePickedUp = false;
-                age = maxAge - 10;
-            }
-
+        GameObject _fireVFX = Instantiate(fireVFX, castPoint.transform.position, castPoint.transform.rotation);
+        StartCoroutine(ClearVFX());
+        IEnumerator ClearVFX()
+        {
+            yield return new WaitForSeconds(0.25f);
+            _fireVFX.transform.DOScale(0.5f, 0.25f);
+            Destroy(_fireVFX, 0.25f);
         }
     }
 

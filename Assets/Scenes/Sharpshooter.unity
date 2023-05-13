@@ -6003,7 +6003,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 081f58ce106f604459b543d172c3a769, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fixedOffset: {x: 0, y: 10, z: -10}
+  fixedOffset: {x: 0, y: 5, z: -5}
   dynamicOffset: {x: 0, y: 0, z: 0}
   smoothSpeed: 5
   objectsTracked: []

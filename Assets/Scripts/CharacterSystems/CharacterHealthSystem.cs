@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,6 +7,9 @@ using UnityEngine;
 public class CharacterHealthSystem : HealthSystem
 {
     private CharacterManager characterManager;
+
+    [SerializeField] private GameObject deathVFX;
+    [SerializeField] private GameObject damageVFX;
 
     //VARIABLES THAT WILL COME FROM CHARACTER SCRIPTABLE OBJECT
     public override float MaxHealth {get; protected set;}
@@ -162,5 +166,9 @@ public class CharacterHealthSystem : HealthSystem
             _damageSource.transform.TryGetComponent(out CharacterManager _characterManager);
             _characterManager.PlayerScoredKill(_damageSource);
         }
+
+        Vector3 pos = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
+        GameObject _deathVFX = Instantiate(deathVFX, pos, transform.rotation, null);
+        Destroy(_deathVFX, 1f);
     }
 }

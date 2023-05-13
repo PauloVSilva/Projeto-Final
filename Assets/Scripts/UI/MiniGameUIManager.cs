@@ -139,7 +139,7 @@ public class MiniGameUIManager : MonoBehaviour
 
     private void SetGameGoalText()
     {
-        gameGoalReminder.text = MiniGameManager.Instance.goalDescription;
+        gameGoalReminder.text = MiniGameManager.Instance.GoalDescription;
     }
 
     private void AnnounceWinner(PlayerInput playerInput)

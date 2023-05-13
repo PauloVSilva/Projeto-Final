@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
 using System.Threading;
+using Unity.VisualScripting;
 
 public enum MiniGame{none = -1, sharpShooter, dimeDrop, rocketRace}
 public enum MiniGameGoal{none = -1, killCount, lastStanding, time, scoreAmount, race}
@@ -11,16 +12,19 @@ public enum MiniGameState{none, preparation, gameSetUp, gameIsRunning, gameOverS
 
 public class MiniGameManager : Singleton<MiniGameManager>
 {
-    //MINIGAME VARIABLES
-    [SerializeField] public MiniGameGoalScriptableObject miniGameSetup;
-    [SerializeField] public MiniGame miniGame;
-    [SerializeField] public MiniGameGoal gameGoal;
-    [SerializeField] public MiniGameState miniGameState;
+    [SerializeField] private GameObject victoryVFX;
 
-    [SerializeField] private int goalAmount;
-    [SerializeField] public float timeElapsed;
-    [SerializeField] public string goalDescription;
-    [SerializeField] private int countDown;
+    [field: Header("Mini Game properties")]
+    [field: Space(5)]
+    [field: SerializeField] public MiniGameGoalScriptableObject miniGameSetup { get; private set; }
+    [field: SerializeField] public MiniGame miniGame { get; private set; }
+    [field: SerializeField] public MiniGameGoal gameGoal { get; private set; }
+    [field: SerializeField] public MiniGameState miniGameState { get; private set; }
+
+    [field: SerializeField] public int GoalAmount { get; private set; }
+    [field: SerializeField] public float TimeElapsed { get; private set; }
+    [field: SerializeField] public string GoalDescription { get; private set; }
+    [field: SerializeField] public int CountDown { get; private set; }
 
     //MINIGAME ACTION EVENTS
     public static event Action<int> OnCountDownTick;
@@ -43,7 +47,7 @@ public class MiniGameManager : Singleton<MiniGameManager>
     {
         if (miniGameState == MiniGameState.gameIsRunning)
         {
-            timeElapsed += Time.deltaTime;
+            TimeElapsed += Time.deltaTime;
             CheckMiniGameEvents();
         }
     }
@@ -61,9 +65,9 @@ public class MiniGameManager : Singleton<MiniGameManager>
         gameGoal = MiniGameGoal.none;
         miniGameState = MiniGameState.none;
 
-        goalAmount = -1;
-        timeElapsed = 0;
-        goalDescription = string.Empty;
+        GoalAmount = -1;
+        TimeElapsed = 0;
+        GoalDescription = string.Empty;
     }
 
     private void SubscribeToEvents()
@@ -96,12 +100,12 @@ public class MiniGameManager : Singleton<MiniGameManager>
 
     public void SetGoalAmount(int _amount)
     {
-        goalAmount = _amount;
+        GoalAmount = _amount;
     }
 
     public void SetGoalDescription(string _description)
     {
-        goalDescription = _description;
+        GoalDescription = _description;
     }
 
     private void InitializeLevel()
@@ -183,7 +187,7 @@ public class MiniGameManager : Singleton<MiniGameManager>
     {
         if (gameGoal == MiniGameGoal.killCount)
         {
-            if (player.GetComponent<CharacterManager>().kills >= goalAmount)
+            if (player.GetComponent<CharacterManager>().kills >= GoalAmount)
             {
                 UpdateMiniGameState(MiniGameState.gameOverSetUp);
                 InvokeOnPlayerWins(player.GetComponent<PlayerInput>());
@@ -195,7 +199,7 @@ public class MiniGameManager : Singleton<MiniGameManager>
     {
         if (gameGoal == MiniGameGoal.scoreAmount)
         {
-            if (_score >= goalAmount)
+            if (_score >= GoalAmount)
             {
                 UpdateMiniGameState(MiniGameState.gameOverSetUp);
                 InvokeOnPlayerWins(player.GetComponent<PlayerInput>());
@@ -205,7 +209,7 @@ public class MiniGameManager : Singleton<MiniGameManager>
 
     private void InitiateCountDown()
     {
-        countDown = 8;
+        CountDown = 8;
         StartCoroutine(CountDownClock());
     }
 
@@ -213,14 +217,14 @@ public class MiniGameManager : Singleton<MiniGameManager>
     {
         yield return new WaitForSeconds(1f);
 
-        if(countDown == 0)
+        if(CountDown == 0)
         {
             UpdateMiniGameState(++miniGameState);
         }
         else
         {
-            countDown--;
-            OnCountDownTick?.Invoke(countDown);
+            CountDown--;
+            OnCountDownTick?.Invoke(CountDown);
             StartCoroutine(CountDownClock());
         }
     }
@@ -264,8 +268,33 @@ public class MiniGameManager : Singleton<MiniGameManager>
         LevelLoader.Instance.LoadLevel("MainHub");
     }
 
+    public void QuitToMenu()
+    {
+        InitializeVariables();
+
+        OnMiniGameEnds?.Invoke();
+
+        LevelLoader.Instance.LoadLevel("MainMenu");
+    }
+
     private void InvokeOnPlayerWins(PlayerInput playerInput)
     {
         OnPlayerWins?.Invoke(playerInput);
+
+        StartCoroutine(VictoryVFX(6)); 
+        IEnumerator VictoryVFX(int times)
+        {
+            yield return new WaitForSeconds(0.5f);
+
+            GameObject _victoryVFX = Instantiate(victoryVFX, playerInput.transform.position, playerInput.transform.rotation);
+            Destroy(_victoryVFX, 2f);
+
+            if(times > 0)
+            {
+                StartCoroutine(VictoryVFX(--times));
+            }
+        }
     }
+
+
 }

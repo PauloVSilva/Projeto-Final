@@ -69,7 +69,7 @@ public class PauseMenu : MenuController
     {
         Back();
 
-        MiniGameManager.Instance.ReturnToHub();
+        MiniGameManager.Instance.QuitToMenu();
     }
     #endregion BUTTONS
 }

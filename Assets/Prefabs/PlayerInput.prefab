@@ -644,6 +644,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a548bd93fb0c5b4fac6c6e7d05dba0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deathVFX: {fileID: 119968, guid: e73000b12fb76244cbffd6abbf8bb6e4, type: 3}
+  damageVFX: {fileID: 0}
   lastDamagingPlayer: {fileID: 0}
   lastDamagingPlayerTime: 0
 --- !u!114 &2604168369563993407
@@ -660,6 +662,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller: {fileID: 0}
   rb: {fileID: 0}
+  dashVFX: {fileID: 125742, guid: 552b7b5872bf41745810a0b7bdabf440, type: 3}
+  jumpVFX: {fileID: 153256, guid: fe394d041df1a0547990f49cf653249f, type: 3}
   <WalkSpeed>k__BackingField: 0
   <JumpStrength>k__BackingField: 0
   <TotalJumps>k__BackingField: 0
@@ -673,6 +677,8 @@ MonoBehaviour:
   <AirTime>k__BackingField: 0
   <AirDamage>k__BackingField: 0
   <IsThrusting>k__BackingField: 0
+  mainThrustPower: 100
+  sidewaysThrustPower: 200
   angleY: 0
   quadrant: 0
   velocityX: 0
@@ -755,7 +761,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 56
-  m_CollisionDetection: 2
+  m_CollisionDetection: 3
 --- !u!82 &760425581946958973
 AudioSource:
   m_ObjectHideFlags: 0

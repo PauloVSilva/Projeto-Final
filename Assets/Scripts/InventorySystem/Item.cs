@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(SphereCollider))]
 [RequireComponent(typeof(AudioSource))]
 public abstract class Item : Entity{
-    public ItemScriptableObject item {get; protected set;}
+    [field: SerializeField] public ItemScriptableObject item { get; protected set; }
     [SerializeField] protected bool canBePickedUp;
     protected bool canBeStored;
     protected float pickUpRadius;
@@ -13,7 +13,7 @@ public abstract class Item : Entity{
     protected bool isBlinking;
     protected SphereCollider itemCollider;
     protected Rigidbody itemRigidbody;
-    [SerializeField] protected Renderer objectRenderer;
+    [SerializeField] protected Renderer[] objectRenderers;
     protected AudioSource audioSource;
 
     public bool CanBePickedUp => canBePickedUp;
@@ -34,7 +34,10 @@ public abstract class Item : Entity{
         audioSource.loop = false;
         audioSource.playOnAwake = false;
 
-        objectRenderer.enabled = true;
+        foreach (Renderer objectRenderer in objectRenderers)
+        {
+            objectRenderer.enabled = true;
+        }
         itemCollider.isTrigger = true;
         itemCollider.enabled = true;
         itemCollider.radius = pickUpRadius;
@@ -51,24 +54,28 @@ public abstract class Item : Entity{
         rotationSpeed = item.rotationSpeed;
     }
 
-    protected virtual void InitializeItemVariables(){
+    protected virtual void InitializeItemVariables()
+    {
         age = 0;
         canBePickedUp = false;
         StartCoroutine(CanBePickedUpDelay());
         isBlinking = false;
     }
     
-    protected virtual IEnumerator CanBePickedUpDelay(){
+    protected virtual IEnumerator CanBePickedUpDelay()
+    {
         yield return new WaitForSeconds(0.5f);
         canBePickedUp = true;
     }
 
-    protected override void Update(){
+    protected override void Update()
+    {
         AgeBehaviour();
         CollectableBehaviour();
     }
 
-    protected override void AgeBehaviour(){
+    protected override void AgeBehaviour()
+    {
         if(!persistenceRequired && canBePickedUp){
             if(age >= 0){
                 age += Time.deltaTime;
@@ -83,25 +90,39 @@ public abstract class Item : Entity{
         }
     }
 
-    protected virtual void CollectableBehaviour(){
+    protected virtual void CollectableBehaviour()
+    {
         if(canBePickedUp){
             transform.Rotate(Vector3.up * (rotationSpeed * Time.deltaTime));
         }
     }
 
-    IEnumerator Flash(float time){
+    private IEnumerator Flash(float time)
+    {
         yield return new WaitForSeconds(time);
-        if(isBlinking){
-            objectRenderer.enabled = !objectRenderer.enabled;
-            if (age < maxAge - 3){
+
+        if(isBlinking)
+        {
+            foreach (Renderer objectRenderer in objectRenderers)
+            {
+                objectRenderer.enabled = !objectRenderer.enabled;
+            }
+
+            if (age < maxAge - 3)
+            {
                 StartCoroutine(Flash(0.25f));
             }
-            else {
+            else 
+            {
                 StartCoroutine(Flash(0.1f));
             }
         }
-        else{
-            objectRenderer.enabled = true;
+        else
+        {
+            foreach (Renderer objectRenderer in objectRenderers)
+            {
+                objectRenderer.enabled = true;
+            }
         }
     }
 

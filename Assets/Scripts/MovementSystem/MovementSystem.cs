@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,6 +12,10 @@ public class MovementSystem : MonoBehaviour{
     public CharacterController controller;
     public Rigidbody rb;
 
+    [SerializeField] private GameObject dashVFX;
+    [SerializeField] private GameObject jumpVFX;
+
+    [field: Header("Movement properties")]
     //VARIABLES THAT WILL COME FROM CHARACTER SCRIPTABLE OBJECT
     [field: SerializeField] public float WalkSpeed {get; protected set;}
     [field: SerializeField] public float JumpStrength {get; protected set;}
@@ -30,6 +35,8 @@ public class MovementSystem : MonoBehaviour{
     [field:SerializeField] public float AirDamage {get; protected set;}
 
     [field:SerializeField] public bool IsThrusting { get; protected set; }
+    [SerializeField] private float mainThrustPower = 100f;
+    [SerializeField] private float sidewaysThrustPower = 100f;
 
     [SerializeField] private float angleY;
     [SerializeField] private int quadrant;
@@ -66,6 +73,7 @@ public class MovementSystem : MonoBehaviour{
         else
         {
             ThrustBehaviour();
+            ProcessRotation(move.x * sidewaysThrustPower);
         }
     }
 
@@ -222,14 +230,14 @@ public class MovementSystem : MonoBehaviour{
 
         if (move == Vector3.zero) return;
 
-        //float x = Mathf.LerpAngle(gameObject.transform.forward.x, move.x, Time.deltaTime * 25f);
+        /*//float x = Mathf.LerpAngle(gameObject.transform.forward.x, move.x, Time.deltaTime * 25f);
         //float y = Mathf.LerpAngle(gameObject.transform.forward.y, move.y, Time.deltaTime * 25f);
         //float z = Mathf.LerpAngle(gameObject.transform.forward.z, move.z, Time.deltaTime * 25f);
         //
         //Debug.Log("transform " + gameObject.transform.forward);
         //Debug.Log("move " + move);
         //
-        //gameObject.transform.forward = new Vector3(x, y, z);
+        //gameObject.transform.forward = new Vector3(x, y, z);*/
 
         gameObject.transform.forward = move;
 
@@ -294,28 +302,39 @@ public class MovementSystem : MonoBehaviour{
     private void ActivateThrust(bool _activateThrust)
     {
         IsThrusting = _activateThrust;
-        Debug.Log(_activateThrust);
     }
 
     private void ThrustBehaviour()
     {
         if(IsThrusting)
         {
-            rb.AddRelativeForce(Vector3.up * 100 * Time.deltaTime);
+            rb.AddRelativeForce(Vector3.up * mainThrustPower * Time.deltaTime);
         }
     }
 
-    private void ProcessRotation()
+    private void ProcessRotation(float potency)
     {
-        //Debug.Log("Processing rotation");
+        rb.freezeRotation = true;
+        transform.Rotate(Vector3.forward * potency * Time.deltaTime);
+        rb.freezeRotation = false;
     }
 
     private void Jump()
     {
-        //Debug.Log("Jumping");
         playerVelocity.y = Mathf.Sqrt(JumpStrength * -3.0f * GravityValue);
         JumpsRemaining--;
         AirTime = 0;
+
+        if (jumpVFX == null) return;
+
+        GameObject _jumpVFX = Instantiate(jumpVFX, transform.position, transform.rotation);
+        StartCoroutine(ClearVFX());
+        IEnumerator ClearVFX()
+        {
+            yield return new WaitForSeconds(0.25f);
+            _jumpVFX.transform.DOScale(0.5f, 0.25f);
+            Destroy(_jumpVFX, 0.25f);
+        }
     }
 
     private void Dash()
@@ -323,6 +342,17 @@ public class MovementSystem : MonoBehaviour{
         IsDashing = true;
         DashCooldown = 0.5f;
         CanDash = false;
+
+        if (dashVFX == null) return;
+
+        GameObject _dashVFX = Instantiate(dashVFX, transform.position, transform.rotation, transform);
+        StartCoroutine(ClearVFX());
+        IEnumerator ClearVFX()
+        {
+            yield return new WaitForSeconds(0.25f);
+            _dashVFX.transform.DOScale(0.0f, 0.25f);
+            Destroy(_dashVFX, 0.25f);
+        }
     }
 
     private void StopDash()
@@ -345,7 +375,10 @@ public class MovementSystem : MonoBehaviour{
         }
         else
         {
-            ProcessRotation();
+            Vector2 input = context.ReadValue<Vector2>();
+            Vector3 movement = new(input.x, 0, 0);
+
+            move = movement;
         }
     }
 

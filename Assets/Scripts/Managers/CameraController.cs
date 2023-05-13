@@ -5,9 +5,14 @@ using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour
 {
-    Vector3 gizmoPos, gizmoPosMin, gizmoPosMax;
-    public Vector3 fixedOffset, dynamicOffset;
+    private Vector3 gizmoPos;
+    private Vector3 gizmoPosMin;
+    private Vector3 gizmoPosMax;
+
+    [SerializeField] private Vector3 fixedOffset;
+
     public float smoothSpeed;
+
     public List<GameObject> objectsTracked = new List<GameObject>();
 
 
@@ -16,7 +21,8 @@ public class CameraController : MonoBehaviour
         SubscribeToEvents();
     }
 
-    private void FixedUpdate(){
+    private void FixedUpdate()
+    {
         if (objectsTracked.Count == 1)
         {
             Vector3 desiredPosition = objectsTracked[0].transform.position + fixedOffset;
@@ -166,12 +172,13 @@ public class CameraController : MonoBehaviour
         return new Vector3(maxX, maxY, maxZ);
     }
 
-    Vector3 FindDynamicOffset(){
+    Vector3 FindDynamicOffset()
+    {
         float distanceX, distanceZ;
         
         distanceX = FindMaxPos().x - FindMinPos().x;
         distanceZ = FindMaxPos().z - FindMinPos().z;
-        return new Vector3(0, (distanceX + distanceZ) * 0.25f, (distanceX + distanceZ) * -0.25f);
+        return new Vector3(0, (distanceX + distanceZ) * 0.35f, (distanceX + distanceZ) * -0.35f);
     }
 
     private void OnDrawGizmos(){

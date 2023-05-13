@@ -194,8 +194,10 @@ MonoBehaviour:
   persistenceRequired: 0
   age: 0
   maxAge: 30
+  <item>k__BackingField: {fileID: 0}
   canBePickedUp: 1
-  objectRenderer: {fileID: 2784413683903831768}
+  objectRenderers:
+  - {fileID: 2784413683903831768}
   coin: {fileID: 11400000, guid: c7929217662b1ca4d960b30ef0f2d58e, type: 2}
   value: 0
   pickUpSFX: {fileID: 8300000, guid: 4fe1d2963eb1ae24198a55e23a7e5d2f, type: 3}

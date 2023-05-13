@@ -922,7 +922,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fixedOffset: {x: 0, y: 10, z: -10}
-  dynamicOffset: {x: 0, y: 0, z: 0}
   smoothSpeed: 5
   objectsTracked: []
 --- !u!1 &217960769
@@ -1820,7 +1819,7 @@ MonoBehaviour:
   countDownBoard: {fileID: 1339460382}
   winnerBoard: {fileID: 951112194}
   gameGoalReminder: {fileID: 1026001020}
-  victorySound: {fileID: 8300000, guid: 95d86b76b78c65f439d9b14a323c0c25, type: 3}
+  victorySound: {fileID: 8300000, guid: 9b1faab92e46e614b8dc6aa64ccdeabc, type: 3}
 --- !u!82 &419656277
 AudioSource:
   m_ObjectHideFlags: 0
@@ -4059,14 +4058,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fa5da7a8feeefc4f8fef187e16afc67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  miniGameSetup: {fileID: 0}
-  miniGame: 0
-  gameGoal: 0
-  miniGameState: 0
-  goalAmount: 0
-  timeElapsed: 0
-  goalDescription: 
-  countDown: 0
+  victoryVFX: {fileID: 129898, guid: 36bdc02b23d9ca94d93bd715c0cca5c0, type: 3}
+  <miniGameSetup>k__BackingField: {fileID: 0}
+  <miniGame>k__BackingField: 0
+  <gameGoal>k__BackingField: 0
+  <miniGameState>k__BackingField: 0
+  <GoalAmount>k__BackingField: 0
+  <TimeElapsed>k__BackingField: 0
+  <GoalDescription>k__BackingField: 
+  <CountDown>k__BackingField: 0
 --- !u!1 &2116158313
 GameObject:
   m_ObjectHideFlags: 0
