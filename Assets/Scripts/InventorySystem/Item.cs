@@ -1,19 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 [RequireComponent(typeof(SphereCollider))]
 [RequireComponent(typeof(AudioSource))]
-public abstract class Item : Entity{
+public abstract class Item : Entity
+{
     [field: SerializeField] public ItemScriptableObject item { get; protected set; }
     [SerializeField] protected bool canBePickedUp;
+    [HideInInspector] public bool canSpin;
     protected bool canBeStored;
     protected float pickUpRadius;
     protected float rotationSpeed;
     protected bool isBlinking;
     protected SphereCollider itemCollider;
     protected Rigidbody itemRigidbody;
-    [SerializeField] protected Renderer[] objectRenderers;
+    protected Renderer[] objectRenderers;
     protected AudioSource audioSource;
 
     public bool CanBePickedUp => canBePickedUp;
@@ -34,10 +37,12 @@ public abstract class Item : Entity{
         audioSource.loop = false;
         audioSource.playOnAwake = false;
 
+        objectRenderers = GetComponentsInChildren<Renderer>().ToArray();
         foreach (Renderer objectRenderer in objectRenderers)
         {
             objectRenderer.enabled = true;
         }
+
         itemCollider.isTrigger = true;
         itemCollider.enabled = true;
         itemCollider.radius = pickUpRadius;
@@ -45,6 +50,8 @@ public abstract class Item : Entity{
         itemRigidbody.angularVelocity = Vector3.zero;
 
         isPooled = false;
+
+        transform.Rotate(0f, 0f, 0f, Space.World); //just to make sure object isn't rotated when it spawns
     }
 
     protected virtual void GetScriptableObjectVariables(){
@@ -58,6 +65,7 @@ public abstract class Item : Entity{
     {
         age = 0;
         canBePickedUp = false;
+        canSpin = true;
         StartCoroutine(CanBePickedUpDelay());
         isBlinking = false;
     }
@@ -76,15 +84,21 @@ public abstract class Item : Entity{
 
     protected override void AgeBehaviour()
     {
-        if(!persistenceRequired && canBePickedUp){
-            if(age >= 0){
+        if(!persistenceRequired && canBePickedUp)
+        {
+            if(age >= 0)
+            {
                 age += Time.deltaTime;
             }
-            if (age > maxAge - 10 && !isBlinking){
+
+            if (age > maxAge - 10 && !isBlinking)
+            {
                 isBlinking = true;
                 StartCoroutine(Flash(0.25f));
             }
-            if(age > maxAge){
+
+            if(age > maxAge)
+            {
                 Despawn();
             }
         }
@@ -92,7 +106,8 @@ public abstract class Item : Entity{
 
     protected virtual void CollectableBehaviour()
     {
-        if(canBePickedUp){
+        if(canBePickedUp && canSpin)
+        {
             transform.Rotate(Vector3.up * (rotationSpeed * Time.deltaTime));
         }
     }

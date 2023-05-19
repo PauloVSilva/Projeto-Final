@@ -3063,12 +3063,16 @@ MonoBehaviour:
     itemIdentifier: amethyst_coin
   - itemSO: {fileID: 11400000, guid: 5d242ed5600c1584fbc6be64e6c35a5c, type: 2}
     itemIdentifier: chicken
-  - itemSO: {fileID: 11400000, guid: d1e7c59ab49e75d4d8b77d4c0059aba8, type: 2}
-    itemIdentifier: revolver
   - itemSO: {fileID: 11400000, guid: 8a794cf3a90b5f246be5e3e1bd35faa5, type: 2}
     itemIdentifier: double_action_revolver
   - itemSO: {fileID: 11400000, guid: a4cb0423e6895604384039af18b86e81, type: 2}
     itemIdentifier: hand_cannon
+  - itemSO: {fileID: 11400000, guid: e878ea2e00b28b14984bcae9863a25e6, type: 2}
+    itemIdentifier: blaster_c
+  - itemSO: {fileID: 11400000, guid: edbc6ae29387e71429d4490361c7be18, type: 2}
+    itemIdentifier: blaster_d
+  - itemSO: {fileID: 11400000, guid: 81cf7615058237744b47c5145dbf154a, type: 2}
+    itemIdentifier: blaster_k
 --- !u!4 &1235641555
 Transform:
   m_ObjectHideFlags: 0

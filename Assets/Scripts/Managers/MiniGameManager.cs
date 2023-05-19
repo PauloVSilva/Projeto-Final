@@ -161,16 +161,21 @@ public class MiniGameManager : Singleton<MiniGameManager>
                 }
             }
 
-            WeaponScriptableObject initialWeapon = (WeaponScriptableObject)ItemsDatabank.Instance.GetItem("double_action_revolver");
+            WeaponScriptableObject initialWeapon = (WeaponScriptableObject)ItemsDatabank.Instance.GetItem("blaster_c");
+
             foreach (PlayerInput playerInput in GameManager.Instance.playerList)
             {
                 GameObject _weaponSO = Instantiate(initialWeapon.itemModel, playerInput.transform.position, playerInput.transform.rotation);
+
+                //that's just so fucking cursed
+                _weaponSO.GetComponent<Weapon>().canSpin = false;
 
                 playerInput.transform.TryGetComponent(out CharacterManager characterManager);
 
                 characterManager.characterInventory.PickWeapon(_weaponSO);
             }
         }
+
         if(miniGame == MiniGame.dimeDrop)
         {
             if (gameGoal == MiniGameGoal.scoreAmount)

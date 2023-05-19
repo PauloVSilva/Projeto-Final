@@ -48,14 +48,15 @@ public class CharacterWeaponSystem : MonoBehaviour{
         CharacterWeapon = null;
     }
 
-    public bool PickUpWeapon(GameObject _weapon){
+    public bool PickUpWeapon(GameObject _weapon)
+    {
         if (gunPosition == null) return false;
 
         CharacterWeapon = _weapon.GetComponent<Weapon>();
         
-        CharacterWeapon.transform.parent = transform;
         CharacterWeapon.transform.rotation = gunPosition.transform.rotation;
         CharacterWeapon.transform.position = gunPosition.transform.position;
+        CharacterWeapon.transform.parent = transform;
 
         CharacterWeapon.PickedUp(gameObject);
 

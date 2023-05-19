@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 using System;
 using DG.Tweening;
 
-public enum ActionType{manual, semiAuto, fullAuto}
+public enum ActionType { SemiAuto, FullAuto }
 public enum ChamberRefillType{pump, revolver}
 public enum ReloadType{singleBullet, magazine}
 public enum Size{handGun, longGun}
@@ -21,20 +21,20 @@ public class Weapon : Item
     [SerializeField] public Sprite sprite;
     [SerializeField] public string weaponName;
     [SerializeField] private ActionType actionType;
-    [SerializeField] public int ammoCapacity;
-    [SerializeField] private float fireRate; //how many times it can shoot per second
-    [SerializeField] private float reloadTime;
+    [SerializeField, Min(0)] public int ammoCapacity;
+    [SerializeField, Min(0)] private float fireRate; //how many times it can shoot per second
+    [SerializeField, Min(0)] private float reloadTime;
 
     //VARIABLES FOR INTERNAL USE
     [Space(5)]
     [Header("Internal use")]
-    [SerializeField] public int ammo = 0;
-    [SerializeField] public int totalAmmo = 0;
-    [SerializeField] private float fullAutoClock;
-    [SerializeField] private float fullAutoReady; //firerate clock
+    [SerializeField, Min(0)] public int ammo = 0;
+    [SerializeField, Min(0)] public int totalAmmo = 0;
+    [SerializeField, Min(0)] private float fullAutoTime; //time since last shot
+    [SerializeField, Min(0)] private float fullAutoClock; //time until it's ready to fire again
     [SerializeField] private bool shooting;
     [SerializeField] private bool canShoot;
-    [SerializeField] private bool triggerHeld;
+    [SerializeField] private bool reloading;
 
     //OTHER ATTRIBUTES
     [Space(5)]
@@ -89,11 +89,12 @@ public class Weapon : Item
         holder = null;
         ammo = ammoCapacity;
         totalAmmo = ammoCapacity * 10;
-        fullAutoClock = 0;
-        fullAutoReady = 1 / fireRate;
+        fullAutoTime = 0;
+        fullAutoClock = 1 / fireRate;
         shooting = false;
         canShoot = true;
-        triggerHeld = false;
+        reloading = false;
+        //triggerHeld = false;
     }
 
     protected override IEnumerator CanBePickedUpDelay()
@@ -105,20 +106,14 @@ public class Weapon : Item
 
     private void FullAutoBehavior()
     {
-        if(actionType == ActionType.fullAuto)
+        if(actionType == ActionType.FullAuto)
         {
-            if(shooting && fullAutoClock >= 1 / fireRate)
+            if(shooting && fullAutoTime >= fullAutoClock && ammo - (int)projectileToCast.cost >= 0)
             {
                 Fire();
             }
-            if(fullAutoClock > 1 / fireRate)
-            {
-                fullAutoClock = 1 / fireRate;
-            }
-            if(fullAutoClock < 1 / fireRate)
-            {
-                fullAutoClock += Time.deltaTime;
-            }
+
+            fullAutoTime = MathF.Min(fullAutoTime + Time.deltaTime, fullAutoClock);
         }
     }
 
@@ -165,29 +160,19 @@ public class Weapon : Item
     {
         if(context.performed)
         {
-            StopCoroutine(Reload());
-            if(ammo - (int)projectileToCast.cost >= 0)
-            {
-                if(actionType == ActionType.semiAuto && canShoot)
-                {
-                    Fire();
-                }
-                if(actionType == ActionType.fullAuto)
-                {
-                    shooting = true;
-                }
-            }
-            triggerHeld = true;
+            CanFireVerification();
         }
+
         if(context.canceled)
         {
             canShoot = true;
             shooting = false;
-            triggerHeld = false;
         }
+
+        //triggerHeld = context.performed;
     }
 
-    public void OnReload(InputAction.CallbackContext context)
+    /*public void OnReload(InputAction.CallbackContext context)
     {
         if(context.performed)
         {
@@ -196,20 +181,24 @@ public class Weapon : Item
                 StartCoroutine(Reload());
             }
         }
-    }
+    }*/
 
-    private bool CanReload(){
-        if(!triggerHeld && (ammo < ammoCapacity && totalAmmo > 0))
+    private bool CanReload()
+    {
+        if(ammo < ammoCapacity && totalAmmo > 0)
         {
             return true;
         }
+
         return false;
     }
     
-    IEnumerator Reload()
+    private IEnumerator Reload()
     {
-        if(CanReload())
+        if (CanReload() && !reloading)
         {
+            reloading = true;
+
             yield return new WaitForSeconds(reloadTime);
 
             for(int i = 0; i < ammoCapacity && totalAmmo > 0; i++)
@@ -219,6 +208,8 @@ public class Weapon : Item
             }
 
             holder.transform.GetComponent<CharacterWeaponSystem>()?.WeaponReloaded();
+
+            reloading = false;
         }
     }
 
@@ -240,25 +231,37 @@ public class Weapon : Item
         gunCollider.enabled = true;
         itemRigidbody.useGravity = true;
         persistenceRequired = false;
+        canSpin = true;
         StartCoroutine(CanBePickedUpDelay());
     }
 
-    private void Fire()
+
+    private void CanFireVerification()
     {
-        if (ammo - projectileToCast.cost < 0) return;
+        if (ammo - (int)projectileToCast.cost >= 0)
+        {
+            if (actionType == ActionType.SemiAuto && canShoot)
+            {
+                Fire();
+            }
 
-        CastProjectile();
-        ammo -= projectileToCast.cost;
-        canShoot = false;
-        fullAutoClock = 0;
+            if (actionType == ActionType.FullAuto)
+            {
+                shooting = true;
+            }
+        }
+    }
 
-        holder.transform.GetComponent<CharacterWeaponSystem>().WeaponFired(); //line should be reworked
+    private void EmptyGunCheck()
+    {
+        if (ammo > 0) return;
 
-        if (ammo == 0) //reload
+        if (totalAmmo > 0) //reload
         {
             StartCoroutine(Reload());
         }
-        if (ammo == 0 && totalAmmo == 0) //drop weapon
+
+        if (totalAmmo == 0) //drop weapon
         {
             holder.transform.TryGetComponent(out CharacterInventory characterInventory);
 
@@ -267,6 +270,17 @@ public class Weapon : Item
             canBePickedUp = false;
             age = maxAge - 10;
         }
+    }
+
+    private void Fire()
+    {
+        CastProjectile();
+
+        ammo -= projectileToCast.cost;
+        canShoot = false;
+        fullAutoTime = 0;
+
+        holder.transform.GetComponent<CharacterWeaponSystem>().WeaponFired(); //line should be reworked
 
         audioSource.PlayOneShot(fireSFX);
 
@@ -278,6 +292,8 @@ public class Weapon : Item
             _fireVFX.transform.DOScale(0.5f, 0.25f);
             Destroy(_fireVFX, 0.25f);
         }
+
+        EmptyGunCheck();
     }
 
     private void CastProjectile()
