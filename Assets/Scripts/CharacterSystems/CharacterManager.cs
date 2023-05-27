@@ -14,17 +14,18 @@ public class CharacterManager : MonoBehaviour{
     #region "COMPONENTS"
     [Space(5)]
     [Header("Components")]
-    [SerializeField] public PlayerInput playerInput;
-    [SerializeField] public PlayerInputHandler playerInputHandler;
-    [SerializeField] public CharacterHealthSystem characterHealthSystem;
-    [SerializeField] public MovementSystem characterMovementSystem;
-    [SerializeField] public CharacterInventory characterInventory;
-    [SerializeField] public CharacterWeaponSystem characterWeaponSystem;
-    [SerializeField] public Interactor characterInteractor;
-    [SerializeField] public CharacterDisplay characterItemsDisplay;
-    [SerializeField] public AudioSource audioSource;
-    [SerializeField] public AudioClip characterDying;
-    [SerializeField] public AudioClip scoreIncreased;
+    public PlayerInput playerInput;
+    public PlayerInputHandler playerInputHandler;
+    public CharacterHealthSystem characterHealthSystem;
+    public MovementSystem characterMovementSystem;
+    public CharacterInventory characterInventory;
+    public CharacterWeaponSystem characterWeaponSystem;
+    public Interactor characterInteractor;
+    public CharacterDisplay characterItemsDisplay;
+    public Animator animator;
+    public AudioSource audioSource;
+    public AudioClip characterDying;
+    public AudioClip scoreIncreased;
     #endregion "COMPONENTS"
 
     [SerializeField] public CharacterStatsScriptableObject Character;
@@ -73,12 +74,6 @@ public class CharacterManager : MonoBehaviour{
         InitializeComponents();
         InitializePlayerVariables();
         SetupControllerLights();
-        SubscribeToEvents();
-    }
-
-    private void OnDestroy()
-    {
-        UnsubscribeFromEvents();
     }
 
     public void OnTriggerEnter(Collider other)
@@ -112,7 +107,8 @@ public class CharacterManager : MonoBehaviour{
     }
     #endregion "Unity Callbacks"
 
-    private void InitializeComponents(){
+    private void InitializeComponents()
+    {
         characterObject = null;
         characterTombstone = null;
 
@@ -130,7 +126,8 @@ public class CharacterManager : MonoBehaviour{
         characterInteractor = GetComponent<Interactor>();
     }
 
-    private void InitializePlayerVariables(){
+    private void InitializePlayerVariables()
+    {
         lightColor = lightColors[playerInput.playerIndex];
         UIColor = UIColors[playerInput.playerIndex];
 
@@ -167,22 +164,6 @@ public class CharacterManager : MonoBehaviour{
             playerDevice = Device.Keyboard;
         }
     }
-
-    private void SubscribeToEvents()
-    {
-        GameManager.Instance.OnGameStateChanged += AdaptToGameState;
-    }
-
-    private void UnsubscribeFromEvents()
-    {
-        GameManager.Instance.OnGameStateChanged += AdaptToGameState;
-    }
-
-    private void AdaptToGameState(GameState gameState)
-    {
-        playerInputHandler.DisableActions(gameState == GameState.Paused);
-    }
-
 
     public void UpdateCharacterState(CharacterState _characterState)
     {
@@ -227,6 +208,8 @@ public class CharacterManager : MonoBehaviour{
         characterItemsDisplay = characterObject.GetComponent<CharacterDisplay>();
         characterWeaponSystem.SetGunPosition(characterItemsDisplay.gunPosition);
 
+        animator = characterObject.GetComponent<Animator>();
+
 
         //forgive me father for I have sinned
         characterMovementSystem.controller.enabled = MiniGameManager.Instance.miniGame != MiniGame.rocketRace;
@@ -257,13 +240,13 @@ public class CharacterManager : MonoBehaviour{
                 RespawnCharacter();
             }
         }
-        characterObject.SetActive(false);
-        BlockActions(true);
     }
 
     public void RespawnCharacter()
     {
         LevelManager.Instance.currentLevel.SpawnPlayerRandomly(playerInput);
+
+        animator.SetBool("Death", false);
 
         characterObject.SetActive(true);
         BlockActions(false);
@@ -373,10 +356,19 @@ public class CharacterManager : MonoBehaviour{
 
         BeginRespawnProcess();
 
+        animator.SetBool("Death", true);
+        BlockActions(true);
         characterInventory.DropAllInventory();
 
-        GameObject tombstone = Instantiate(characterTombstone, character.transform.position, Quaternion.Euler(0, 0, 0));
-        Destroy(tombstone, timeToRespawn);
+        StartCoroutine(DisappearDelay());
+        IEnumerator DisappearDelay()
+        {
+            yield return new WaitForSeconds(0.75f);
+
+            characterObject.SetActive(false);
+            GameObject tombstone = Instantiate(characterTombstone, character.transform.position, Quaternion.Euler(0, 0, 0));
+            Destroy(tombstone, timeToRespawn);
+        }
 
         InvokeOnPlayerDied(character);
     }

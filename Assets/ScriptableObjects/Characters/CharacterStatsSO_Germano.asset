@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e24147a9db9bab4faf85e6a3a675b7d, type: 3}
+  m_Name: CharacterStatsSO_Germano
+  m_EditorClassIdentifier: 
+  characterSkin:
+  - characterModel: {fileID: 6182162820492919152, guid: 241fcb862b837c349b2a9a7a07c4534a, type: 3}
+    characterSprite: {fileID: 21300000, guid: 01dbf05326305424b9899deec2520fb6, type: 3}
+    characterName: Germano
+  - characterModel: {fileID: 6182162820492919152, guid: 241fcb862b837c349b2a9a7a07c4534a, type: 3}
+    characterSprite: {fileID: 21300000, guid: 01dbf05326305424b9899deec2520fb6, type: 3}
+    characterName: Cowboy Germano
+  - characterModel: {fileID: 6182162820492919152, guid: 241fcb862b837c349b2a9a7a07c4534a, type: 3}
+    characterSprite: {fileID: 21300000, guid: 01dbf05326305424b9899deec2520fb6, type: 3}
+    characterName: Miner Germano
+  - characterModel: {fileID: 8463049207392376651, guid: 40835a035d24b354680a69db1b409c7e, type: 3}
+    characterSprite: {fileID: 21300000, guid: 01dbf05326305424b9899deec2520fb6, type: 3}
+    characterName: Rocket Germano
+  tombstone: {fileID: 1045390783213288524, guid: cafb86b1b51ac5743b6e3691f456f500, type: 3}
+  characterControllerCenter: {x: 0, y: 0.4, z: 0}
+  characterControllerRadius: 0.5
+  characterControllerHeight: 1
+  animal: 0
+  maxHealth: 100
+  healthRegenRate: 2
+  walkSpeed: 5
+  sprintSpeed: 10
+  maxStamina: 60
+  staminaRegenRate: 15
+  jumpStrength: 4
+  totalJumps: 2
+  jumpStaminaCost: 15
+  dashStaminaCost: 15
+  sprintStaminaCost: 15

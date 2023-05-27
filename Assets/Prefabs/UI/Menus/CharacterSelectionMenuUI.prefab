@@ -1139,6 +1139,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7295779518744197133}
   - component: {fileID: 4117301892939088377}
+  - component: {fileID: 5859722704315612711}
   m_Layer: 5
   m_Name: CharacterSelectionMenuUI
   m_TagString: Untagged
@@ -1181,18 +1182,121 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menu: 5
   menuContainer: {fileID: 8548903195941508639}
+  footer: {fileID: 7295779519171391066}
+  inputSystemUIInputModule: {fileID: 7295779519010110344}
   firstSelected: {fileID: 7295779519334501952}
+  playerInput: {fileID: 0}
+  playerDevice: 0
   buttonTypes: 0200000001000000
   menuName: {fileID: 7295779519338780909}
   playerControllingMenu: {fileID: 7295779517457599194}
   tabGroup: {fileID: 0}
-  footer: {fileID: 7295779519171391066}
-  inputSystemUIInputModule: {fileID: 7295779519010110344}
+  kidsCheering: {fileID: 0}
   characterList:
   - {fileID: 11400000, guid: c7e2521efd0808b42b9c18ec74ba4f18, type: 2}
   - {fileID: 11400000, guid: 07d6841bc7c356d468f0f64aed18444f, type: 2}
+  - {fileID: 11400000, guid: f1c9f9251a0548041a958d02b10657d9, type: 2}
+  - {fileID: 11400000, guid: f6aac919ad8873641af28f9b01cda6e5, type: 2}
+  - {fileID: 11400000, guid: 367c502a271aa0146acebcd544a95fb4, type: 2}
+  - {fileID: 11400000, guid: 8aae051cbb5b1c246a31fcd2f24aa36d, type: 2}
   characterSprite: {fileID: 7295779518752915781}
   characterName: {fileID: 7295779517468922927}
+--- !u!82 &5859722704315612711
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7295779518744197132}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &7295779518751520148
 GameObject:
   m_ObjectHideFlags: 0
@@ -1482,6 +1586,7 @@ MonoBehaviour:
   m_TrackedDeviceOrientationAction: {fileID: -5359411091631403044, guid: f86ed6558109e824b9f6dc4cc63b69c1, type: 3}
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
+  m_CursorLockBehavior: 0
 --- !u!1 &7295779519171391066
 GameObject:
   m_ObjectHideFlags: 0

@@ -321,6 +321,8 @@ public class MovementSystem : MonoBehaviour{
 
     private void Jump()
     {
+        characterManager.animator.SetBool("Jump", true);
+
         playerVelocity.y = Mathf.Sqrt(JumpStrength * -3.0f * GravityValue);
         JumpsRemaining--;
         AirTime = 0;
@@ -332,6 +334,7 @@ public class MovementSystem : MonoBehaviour{
         IEnumerator ClearVFX()
         {
             yield return new WaitForSeconds(0.25f);
+            characterManager.animator.SetBool("Jump", false);
             _jumpVFX.transform.DOScale(0.5f, 0.25f);
             Destroy(_jumpVFX, 0.25f);
         }
@@ -372,6 +375,9 @@ public class MovementSystem : MonoBehaviour{
             Vector3 movement = new(input.x, 0, input.y);
 
             move = movement;
+
+            characterManager.animator.SetBool("Run", movement != Vector3.zero && GroundedPlayer);
+            characterManager.animator.SetBool("Idle", movement == Vector3.zero && GroundedPlayer);
         }
         else
         {

@@ -28,11 +28,38 @@ public class PlayerInputHandler : MonoBehaviour{
         InitializeComponents();
     }
 
+    private void Start()
+    {
+        SubscribeToEvents();
+    }
+
+    private void OnDestroy()
+    {
+        UnsubscribeFromEvents();
+    }
+
 
     private void InitializeComponents()
     {
         playerInput = GetComponent<PlayerInput>();
     }
+
+    private void SubscribeToEvents()
+    {
+        GameManager.Instance.OnGameStateChanged += AdaptToGameState;
+    }
+
+    private void UnsubscribeFromEvents()
+    {
+        GameManager.Instance.OnGameStateChanged += AdaptToGameState;
+    }
+
+    private void AdaptToGameState(GameState gameState)
+    {
+        DisableActions(gameState == GameState.Paused);
+    }
+
+
 
     public void DisableActions(bool _disabled)
     {
