@@ -14,16 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterSkin:
   - characterModel: {fileID: 4807929556901506227, guid: 37ca9481308eb21419b60832e6f2292c, type: 3}
-    characterSprite: {fileID: 21300000, guid: 01dbf05326305424b9899deec2520fb6, type: 3}
+    characterSprite: {fileID: 21300000, guid: 57cc767a5e6143e41b81121cf9eddd10, type: 3}
     characterName: Carlosss
   - characterModel: {fileID: 4807929556901506227, guid: 37ca9481308eb21419b60832e6f2292c, type: 3}
-    characterSprite: {fileID: 21300000, guid: 01dbf05326305424b9899deec2520fb6, type: 3}
+    characterSprite: {fileID: 21300000, guid: 57cc767a5e6143e41b81121cf9eddd10, type: 3}
     characterName: Cowboy Carlosss
   - characterModel: {fileID: 4807929556901506227, guid: 37ca9481308eb21419b60832e6f2292c, type: 3}
-    characterSprite: {fileID: 21300000, guid: 01dbf05326305424b9899deec2520fb6, type: 3}
+    characterSprite: {fileID: 21300000, guid: 57cc767a5e6143e41b81121cf9eddd10, type: 3}
     characterName: Miner Carlosss
   - characterModel: {fileID: 8463049207392376651, guid: 40835a035d24b354680a69db1b409c7e, type: 3}
-    characterSprite: {fileID: 21300000, guid: 01dbf05326305424b9899deec2520fb6, type: 3}
+    characterSprite: {fileID: 21300000, guid: 57cc767a5e6143e41b81121cf9eddd10, type: 3}
     characterName: Rocket Carlosss
   tombstone: {fileID: 1045390783213288524, guid: cafb86b1b51ac5743b6e3691f456f500, type: 3}
   characterControllerCenter: {x: 0, y: 0.4, z: 0}

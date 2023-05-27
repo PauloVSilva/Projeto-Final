@@ -2329,6 +2329,30 @@ PrefabInstance:
       propertyPath: kidsCheering
       value: 
       objectReference: {fileID: 8300000, guid: 9b1faab92e46e614b8dc6aa64ccdeabc, type: 3}
+    - target: {fileID: 4117301892939088377, guid: e4422008e7397d54eb01bfa0a952da3d, type: 3}
+      propertyPath: characterList.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4117301892939088377, guid: e4422008e7397d54eb01bfa0a952da3d, type: 3}
+      propertyPath: characterList.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: f1c9f9251a0548041a958d02b10657d9, type: 2}
+    - target: {fileID: 4117301892939088377, guid: e4422008e7397d54eb01bfa0a952da3d, type: 3}
+      propertyPath: characterList.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: f6aac919ad8873641af28f9b01cda6e5, type: 2}
+    - target: {fileID: 4117301892939088377, guid: e4422008e7397d54eb01bfa0a952da3d, type: 3}
+      propertyPath: characterList.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 367c502a271aa0146acebcd544a95fb4, type: 2}
+    - target: {fileID: 4117301892939088377, guid: e4422008e7397d54eb01bfa0a952da3d, type: 3}
+      propertyPath: characterList.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: 8aae051cbb5b1c246a31fcd2f24aa36d, type: 2}
+    - target: {fileID: 4117301892939088377, guid: e4422008e7397d54eb01bfa0a952da3d, type: 3}
+      propertyPath: characterList.Array.data[4]
+      value: 
+      objectReference: {fileID: 11400000, guid: 8aae051cbb5b1c246a31fcd2f24aa36d, type: 2}
     - target: {fileID: 5859722704315612711, guid: e4422008e7397d54eb01bfa0a952da3d, type: 3}
       propertyPath: OutputAudioMixerGroup
       value: 

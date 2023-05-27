@@ -14,16 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterSkin:
   - characterModel: {fileID: 5279811246306103102, guid: afc3a3961977a2d4c87453ca4635a02d, type: 3}
-    characterSprite: {fileID: 21300000, guid: 01dbf05326305424b9899deec2520fb6, type: 3}
+    characterSprite: {fileID: 21300000, guid: f79fa917bc93c3e4ea3688d711dc6a04, type: 3}
     characterName: Pudu
   - characterModel: {fileID: 5279811246306103102, guid: afc3a3961977a2d4c87453ca4635a02d, type: 3}
-    characterSprite: {fileID: 21300000, guid: 01dbf05326305424b9899deec2520fb6, type: 3}
+    characterSprite: {fileID: 21300000, guid: f79fa917bc93c3e4ea3688d711dc6a04, type: 3}
     characterName: Cowboy Pudu
   - characterModel: {fileID: 5279811246306103102, guid: afc3a3961977a2d4c87453ca4635a02d, type: 3}
-    characterSprite: {fileID: 21300000, guid: 01dbf05326305424b9899deec2520fb6, type: 3}
+    characterSprite: {fileID: 21300000, guid: f79fa917bc93c3e4ea3688d711dc6a04, type: 3}
     characterName: Miner Pudu
   - characterModel: {fileID: 8463049207392376651, guid: 40835a035d24b354680a69db1b409c7e, type: 3}
-    characterSprite: {fileID: 21300000, guid: 01dbf05326305424b9899deec2520fb6, type: 3}
+    characterSprite: {fileID: 21300000, guid: f79fa917bc93c3e4ea3688d711dc6a04, type: 3}
     characterName: Rocket Pudu
   tombstone: {fileID: 1045390783213288524, guid: cafb86b1b51ac5743b6e3691f456f500, type: 3}
   characterControllerCenter: {x: 0, y: 0.4, z: 0}

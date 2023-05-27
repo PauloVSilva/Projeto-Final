@@ -14,16 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterSkin:
   - characterModel: {fileID: 6842458599697738422, guid: 084f2550b3b123a48959a794c72c6964, type: 3}
-    characterSprite: {fileID: 21300000, guid: 01dbf05326305424b9899deec2520fb6, type: 3}
+    characterSprite: {fileID: 21300000, guid: 60b8ea0c1f10f5c48a8c2813f575e207, type: 3}
     characterName: Gecko
   - characterModel: {fileID: 6842458599697738422, guid: 084f2550b3b123a48959a794c72c6964, type: 3}
-    characterSprite: {fileID: 21300000, guid: 01dbf05326305424b9899deec2520fb6, type: 3}
+    characterSprite: {fileID: 21300000, guid: 60b8ea0c1f10f5c48a8c2813f575e207, type: 3}
     characterName: Cowboy Gecko
   - characterModel: {fileID: 6842458599697738422, guid: 084f2550b3b123a48959a794c72c6964, type: 3}
-    characterSprite: {fileID: 21300000, guid: 01dbf05326305424b9899deec2520fb6, type: 3}
+    characterSprite: {fileID: 21300000, guid: 60b8ea0c1f10f5c48a8c2813f575e207, type: 3}
     characterName: Miner Gecko
   - characterModel: {fileID: 8463049207392376651, guid: 40835a035d24b354680a69db1b409c7e, type: 3}
-    characterSprite: {fileID: 21300000, guid: 01dbf05326305424b9899deec2520fb6, type: 3}
+    characterSprite: {fileID: 21300000, guid: 60b8ea0c1f10f5c48a8c2813f575e207, type: 3}
     characterName: Rocket Gecko
   tombstone: {fileID: 1045390783213288524, guid: cafb86b1b51ac5743b6e3691f456f500, type: 3}
   characterControllerCenter: {x: 0, y: 0.4, z: 0}

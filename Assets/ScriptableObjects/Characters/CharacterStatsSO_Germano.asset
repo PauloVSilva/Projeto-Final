@@ -14,16 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterSkin:
   - characterModel: {fileID: 6182162820492919152, guid: 241fcb862b837c349b2a9a7a07c4534a, type: 3}
-    characterSprite: {fileID: 21300000, guid: 01dbf05326305424b9899deec2520fb6, type: 3}
+    characterSprite: {fileID: 21300000, guid: 3847a79a3c82e0f4fa3cfaf0da2004b7, type: 3}
     characterName: Germano
   - characterModel: {fileID: 6182162820492919152, guid: 241fcb862b837c349b2a9a7a07c4534a, type: 3}
-    characterSprite: {fileID: 21300000, guid: 01dbf05326305424b9899deec2520fb6, type: 3}
+    characterSprite: {fileID: 21300000, guid: 3847a79a3c82e0f4fa3cfaf0da2004b7, type: 3}
     characterName: Cowboy Germano
   - characterModel: {fileID: 6182162820492919152, guid: 241fcb862b837c349b2a9a7a07c4534a, type: 3}
-    characterSprite: {fileID: 21300000, guid: 01dbf05326305424b9899deec2520fb6, type: 3}
+    characterSprite: {fileID: 21300000, guid: 3847a79a3c82e0f4fa3cfaf0da2004b7, type: 3}
     characterName: Miner Germano
   - characterModel: {fileID: 8463049207392376651, guid: 40835a035d24b354680a69db1b409c7e, type: 3}
-    characterSprite: {fileID: 21300000, guid: 01dbf05326305424b9899deec2520fb6, type: 3}
+    characterSprite: {fileID: 21300000, guid: 3847a79a3c82e0f4fa3cfaf0da2004b7, type: 3}
     characterName: Rocket Germano
   tombstone: {fileID: 1045390783213288524, guid: cafb86b1b51ac5743b6e3691f456f500, type: 3}
   characterControllerCenter: {x: 0, y: 0.4, z: 0}
