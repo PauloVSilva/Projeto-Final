@@ -134,6 +134,7 @@ MonoBehaviour:
   damageFeedback: {fileID: 0}
   floatingHealthBar: {fileID: 0}
   MaxHealth: 40
+  displayDamageTaken: 0
   audioData: {fileID: 0}
 --- !u!114 &8513328953137124569
 MonoBehaviour:
@@ -258,7 +259,6 @@ GameObject:
   - component: {fileID: 4329760040042751749}
   - component: {fileID: 1878918494883200632}
   - component: {fileID: 489672774666668423}
-  - component: {fileID: 1406271558097861710}
   - component: {fileID: 5148319583049965271}
   m_Layer: 0
   m_Name: Box_1
@@ -380,6 +380,7 @@ MonoBehaviour:
   damageFeedback: {fileID: 0}
   floatingHealthBar: {fileID: 0}
   MaxHealth: 300
+  displayDamageTaken: 0
   audioData: {fileID: 0}
 --- !u!114 &489672774666668423
 MonoBehaviour:
@@ -393,21 +394,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6048663dd5413b45a484b91e0135151, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1406271558097861710
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4735866186592904230}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9207b1549e590b548bc7d27dace972b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inventorySlots:
-  - item: {fileID: 11400000, guid: 5d242ed5600c1584fbc6be64e6c35a5c, type: 2}
-    stackSize: 3
 --- !u!82 &5148319583049965271
 AudioSource:
   m_ObjectHideFlags: 0
@@ -527,7 +513,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4736105589746967044}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

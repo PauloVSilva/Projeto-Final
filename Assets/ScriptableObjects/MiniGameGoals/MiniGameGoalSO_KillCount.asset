@@ -18,4 +18,4 @@ MonoBehaviour:
   goalName: Kill Count
   goalDescription: First player to get $VALUE kills wins
   goalKeyword: Kills
-  goalMultiplier: 1
+  goalMultiplier: 3

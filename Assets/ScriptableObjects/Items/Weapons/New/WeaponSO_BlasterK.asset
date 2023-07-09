@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf820d9f4a8ef754f9837c2c80bddd38, type: 3}
   m_Name: WeaponSO_BlasterK
   m_EditorClassIdentifier: 
-  itemName: Blaster K
+  itemName: Barricade
   itemSprite: {fileID: 21300000, guid: 027755ea0de09f0478b2871056c55061, type: 3}
   maxStackSize: 1
   itemModel: {fileID: 2526096355226271964, guid: 0e661845e58e5ca49baf8025e963a628, type: 3}
@@ -24,7 +24,7 @@ MonoBehaviour:
   chamberRefillType: 1
   reloadType: 1
   size: 0
-  ammoCapacity: 12
-  fireRate: 6
+  ammoCapacity: 25
+  fireRate: 10
   weight: 0
   reloadTime: 1.5

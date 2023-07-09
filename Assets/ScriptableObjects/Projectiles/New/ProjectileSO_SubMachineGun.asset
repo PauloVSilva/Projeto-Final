@@ -16,7 +16,7 @@ MonoBehaviour:
   sprite: {fileID: 0}
   projectileName: Submachine Gun Ammo
   collisionType: 0
-  damageAmount: 10
+  damageAmount: 6
   cost: 1
   maxAge: 10
   speed: 10

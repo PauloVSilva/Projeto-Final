@@ -13,17 +13,17 @@ MonoBehaviour:
   m_Name: CharacterStatsSO_Coquinha
   m_EditorClassIdentifier: 
   characterSkin:
-  - characterModel: {fileID: 8463049207392376651, guid: 9b9091537252df64c8ed4d61d881299a, type: 3}
-    characterSprite: {fileID: 21300000, guid: 3206d78ae0ecdd744b7a793690f74c70, type: 3}
+  - characterModel: {fileID: 4588993289961108478, guid: 20f01ec2aa2e40e44a080d8e68f3d693, type: 3}
+    characterSprite: {fileID: 21300000, guid: da06980dd7786cc488cd47c0d308e427, type: 3}
     characterName: Coquinha
-  - characterModel: {fileID: 8463049207392376651, guid: 94f3709a6eac6464dba7fb1177502ea1, type: 3}
-    characterSprite: {fileID: 21300000, guid: 3206d78ae0ecdd744b7a793690f74c70, type: 3}
+  - characterModel: {fileID: 4588993289961108478, guid: 20f01ec2aa2e40e44a080d8e68f3d693, type: 3}
+    characterSprite: {fileID: 21300000, guid: da06980dd7786cc488cd47c0d308e427, type: 3}
     characterName: Cowboy Coquinha
-  - characterModel: {fileID: 8463049207392376651, guid: 143d2d626509f4f459912e4bfc94c720, type: 3}
-    characterSprite: {fileID: 21300000, guid: 3206d78ae0ecdd744b7a793690f74c70, type: 3}
+  - characterModel: {fileID: 4588993289961108478, guid: 20f01ec2aa2e40e44a080d8e68f3d693, type: 3}
+    characterSprite: {fileID: 21300000, guid: da06980dd7786cc488cd47c0d308e427, type: 3}
     characterName: Miner Coquinha
-  - characterModel: {fileID: 8463049207392376651, guid: d9e138c627f03fe48aa475b856b0937f, type: 3}
-    characterSprite: {fileID: 21300000, guid: 3206d78ae0ecdd744b7a793690f74c70, type: 3}
+  - characterModel: {fileID: 4588993289961108478, guid: 20f01ec2aa2e40e44a080d8e68f3d693, type: 3}
+    characterSprite: {fileID: 21300000, guid: da06980dd7786cc488cd47c0d308e427, type: 3}
     characterName: Rocket Coquinha
   tombstone: {fileID: 1045390783213288524, guid: cafb86b1b51ac5743b6e3691f456f500, type: 3}
   characterControllerCenter: {x: 0, y: 0.4, z: 0}

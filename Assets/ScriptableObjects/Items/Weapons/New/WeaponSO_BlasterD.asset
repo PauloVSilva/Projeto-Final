@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf820d9f4a8ef754f9837c2c80bddd38, type: 3}
   m_Name: WeaponSO_BlasterD
   m_EditorClassIdentifier: 
-  itemName: Blaster D
+  itemName: Stampede
   itemSprite: {fileID: 21300000, guid: 5248c46401859cc4fb9508da37c02b25, type: 3}
   maxStackSize: 1
   itemModel: {fileID: 2526096355226271964, guid: f64ec181459d90d46953604b2c203700, type: 3}
@@ -24,7 +24,7 @@ MonoBehaviour:
   chamberRefillType: 1
   reloadType: 1
   size: 0
-  ammoCapacity: 30
+  ammoCapacity: 60
   fireRate: 4
   weight: 0
   reloadTime: 2

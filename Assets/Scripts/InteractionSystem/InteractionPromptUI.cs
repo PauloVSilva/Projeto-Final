@@ -34,6 +34,14 @@ public class InteractionPromptUI : MonoBehaviour{
         transform.LookAt(transform.position + rotation * Vector3.forward, rotation * Vector3.up);
     }
 
+    public void SetPrompt(string prompText)
+    {
+        promptText.text = prompText;
+
+        promptImage.sprite = null;
+        promptImage.enabled = false;
+    }
+
     public void SetPrompt(PlayerInput playerInput, string _promptText)
     {
         promptText.text = _promptText;
@@ -50,6 +58,7 @@ public class InteractionPromptUI : MonoBehaviour{
         }
 
         promptImage.sprite = canvasButtonDisplay.buttonSprite[(int)playerInput.GetComponent<CharacterManager>().playerDevice];
+        promptImage.enabled = true;
     }
 
     public void ClearPrompt()

@@ -35,8 +35,8 @@ public class Spawner : MonoBehaviour
 
     private void InitializeVariables()
     {
-        cooldown = 1f;
-        ready = 0f;
+        //cooldown = 1f;
+        ready = cooldown;
     }
 
     private void SpawnBehaviour()
@@ -69,6 +69,8 @@ public class Spawner : MonoBehaviour
         if(ObjectPooler.Instance.SpawnFromPool(randomObject, RandomNewSpawnPosition(), this.transform.rotation) == null)
         {
             Debug.LogWarning("Something went wrong. Object Pooler couldn't Spawn " + randomObject);
+            Debug.LogWarning("Object will be instantiated instead");
+            Instantiate(randomObject, RandomNewSpawnPosition(), transform.rotation);
         }
     }
 

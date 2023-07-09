@@ -30,6 +30,7 @@ public class Weapon : Item
     [Header("Internal use")]
     [SerializeField, Min(0)] public int ammo = 0;
     [SerializeField, Min(0)] public int totalAmmo = 0;
+    [SerializeField, Min(0)] private int ammoMultiplier;
     [SerializeField, Min(0)] private float fullAutoTime; //time since last shot
     [SerializeField, Min(0)] private float fullAutoClock; //time until it's ready to fire again
     [SerializeField] private bool shooting;
@@ -49,6 +50,8 @@ public class Weapon : Item
 
     [SerializeField] private FieldOfView fieldOfView;
     [SerializeField] private GameObject closestTarget;
+
+    [SerializeField] private Animator _animator;
 
     protected override void Update()
     {
@@ -85,10 +88,11 @@ public class Weapon : Item
         base.InitializeItemVariables();
 
         fieldOfView = GetComponentInChildren<FieldOfView>();
+        _animator = GetComponent<Animator>();
 
         holder = null;
         ammo = ammoCapacity;
-        totalAmmo = ammoCapacity * 10;
+        totalAmmo = ammoCapacity * ammoMultiplier;
         fullAutoTime = 0;
         fullAutoClock = 1 / fireRate;
         shooting = false;
@@ -127,7 +131,7 @@ public class Weapon : Item
             return;
         }
 
-        collectableVFX.SetActive(canBePickedUp);
+        collectableVFX.SetActive(canBePickedUp && ammo > 0);
     }
 
     private void SearchForTargets()
@@ -281,6 +285,15 @@ public class Weapon : Item
         fullAutoTime = 0;
 
         holder.transform.GetComponent<CharacterWeaponSystem>().WeaponFired(); //line should be reworked
+
+        /*_animator.SetBool("Fire", true);
+        StartCoroutine(Unfire());
+        IEnumerator Unfire()
+        {
+            yield return new WaitForSeconds(fireRate / 2);
+
+            _animator.SetBool("Fire", false);
+        }*/
 
         audioSource.PlayOneShot(fireSFX);
 

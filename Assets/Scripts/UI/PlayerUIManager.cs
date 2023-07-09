@@ -8,8 +8,14 @@ public class PlayerUIManager : MonoBehaviour
     [SerializeField] private GameObject playerPanelsContainer;
     public List<PlayerUIPanel> playerUIPanels = new List<PlayerUIPanel>();
 
+    public bool forceDisable;
+    public InputAction disable;
+
     private void Start()
     {
+        disable.performed += context => Disable();
+        disable.Enable();
+
         GameManager.Instance.OnGameStateChanged += AdaptToGameState;
         GameManager.Instance.OnPlayerJoinedGame += PlayerJoinedGame;
         GameManager.Instance.OnPlayerLeftGame += PlayerLeftGame;
@@ -23,8 +29,18 @@ public class PlayerUIManager : MonoBehaviour
     }
 
 
+    private void Disable()
+    {
+        forceDisable = !forceDisable;
+
+        playerPanelsContainer.SetActive(forceDisable);
+    }
+
+
     private void AdaptToGameState(GameState gameState)
     {
+        if (forceDisable) return;
+
         playerPanelsContainer.SetActive(gameState != GameState.MainMenu);
 
         switch (gameState)

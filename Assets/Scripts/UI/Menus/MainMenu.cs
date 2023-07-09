@@ -25,7 +25,8 @@ public class MainMenu : MenuController
 
     public void Credits()
     {
-        Debug.Log("Credits");
+        //Debug.Log("Credits");
+        CanvasManager.Instance.OpenMenu(Menu.CreditsMenu);
     }
 
     public void Quit()

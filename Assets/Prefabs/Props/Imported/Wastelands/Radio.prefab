@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 1689907769537565101}
   - component: {fileID: 6166195581118948037}
   - component: {fileID: 2129660279337984032}
-  - component: {fileID: 5406680131601682029}
   - component: {fileID: 6492914493276829638}
   m_Layer: 0
   m_Name: Radio
@@ -137,6 +136,7 @@ MonoBehaviour:
   damageFeedback: {fileID: 0}
   floatingHealthBar: {fileID: 0}
   MaxHealth: 100
+  displayDamageTaken: 0
   audioData: {fileID: 0}
 --- !u!114 &2129660279337984032
 MonoBehaviour:
@@ -150,23 +150,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6048663dd5413b45a484b91e0135151, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5406680131601682029
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4946845376111606595}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9207b1549e590b548bc7d27dace972b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inventorySlots:
-  - item: {fileID: 11400000, guid: c7929217662b1ca4d960b30ef0f2d58e, type: 2}
-    stackSize: 3
-  - item: {fileID: 11400000, guid: 1eb20debbac64284889ee3de1d880b9d, type: 2}
-    stackSize: 1
 --- !u!82 &6492914493276829638
 AudioSource:
   m_ObjectHideFlags: 0

@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 9104135525129310837}
   - component: {fileID: 7003549370542914929}
   - component: {fileID: 6427672892720726916}
-  - component: {fileID: 4443281915781755579}
   - component: {fileID: 4380715585116208342}
   m_Layer: 0
   m_Name: Barrel
@@ -137,7 +136,8 @@ MonoBehaviour:
   inventory: {fileID: 0}
   damageFeedback: {fileID: 0}
   floatingHealthBar: {fileID: 0}
-  MaxHealth: 700
+  MaxHealth: 400
+  displayDamageTaken: 0
   audioData: {fileID: 0}
 --- !u!114 &6427672892720726916
 MonoBehaviour:
@@ -151,23 +151,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6048663dd5413b45a484b91e0135151, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4443281915781755579
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2474255220044707701}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9207b1549e590b548bc7d27dace972b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inventorySlots:
-  - item: {fileID: 11400000, guid: 1eb20debbac64284889ee3de1d880b9d, type: 2}
-    stackSize: 8
-  - item: {fileID: 11400000, guid: c7929217662b1ca4d960b30ef0f2d58e, type: 2}
-    stackSize: 2
 --- !u!82 &4380715585116208342
 AudioSource:
   m_ObjectHideFlags: 0

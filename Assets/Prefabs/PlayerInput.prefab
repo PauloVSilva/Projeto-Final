@@ -601,6 +601,7 @@ MonoBehaviour:
   characterWeaponSystem: {fileID: -123166407121015900}
   characterInteractor: {fileID: 0}
   characterItemsDisplay: {fileID: 0}
+  animator: {fileID: 0}
   audioSource: {fileID: 0}
   characterDying: {fileID: 8300000, guid: 0cec6c7b5800d2449a82d4ca931920f1, type: 3}
   scoreIncreased: {fileID: 8300000, guid: 4fe1d2963eb1ae24198a55e23a7e5d2f, type: 3}
@@ -662,6 +663,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller: {fileID: 0}
   rb: {fileID: 0}
+  characterDash: {fileID: 8300000, guid: a550cb02580f00c40b4ba02aeff3acb4, type: 3}
+  characterJump: {fileID: 8300000, guid: a550cb02580f00c40b4ba02aeff3acb4, type: 3}
   dashVFX: {fileID: 125742, guid: 552b7b5872bf41745810a0b7bdabf440, type: 3}
   jumpVFX: {fileID: 153256, guid: fe394d041df1a0547990f49cf653249f, type: 3}
   <WalkSpeed>k__BackingField: 0
@@ -818,7 +821,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 0.5
       inSlope: 0
       outSlope: 0
       tangentMode: 0

@@ -71,7 +71,8 @@ public class PlayerInputHandler : MonoBehaviour{
 
 
     public void OnPressMenuButton(InputAction.CallbackContext context){
-        if(context.performed){
+        if(context.performed)
+        {
             OnCharacterPressMenuButton?.Invoke(playerInput);
         }
     }

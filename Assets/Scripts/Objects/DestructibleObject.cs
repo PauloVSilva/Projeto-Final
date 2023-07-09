@@ -4,17 +4,20 @@ using UnityEngine;
 
 [RequireComponent(typeof(AudioSource))]
 
-public class DestructibleObject : MonoBehaviour{
+public class DestructibleObject : MonoBehaviour
+{
     [SerializeField] protected DestructibleObjectHealthSystem healthSystem;
     [SerializeField] protected Inventory inventory;
     [SerializeField] protected DamageFeedback damageFeedback;
     [SerializeField] protected FloatingHealthBar floatingHealthBar;
     public int MaxHealth = 1;
+    public bool displayDamageTaken;
     //public int MaxHealth {get; protected set;}
 
     [SerializeField] private AudioSource audioData;
 
-    protected virtual void Awake(){
+    protected virtual void Awake()
+    {
         //MaxHealth = 300;
         InitializeComponents();
         InitializeVariables();
@@ -25,7 +28,8 @@ public class DestructibleObject : MonoBehaviour{
         InitializeOthers();
     }
 
-    protected virtual void InitializeComponents(){
+    protected virtual void InitializeComponents()
+    {
         healthSystem = GetComponent<DestructibleObjectHealthSystem>();
         inventory = GetComponent<Inventory>();
         //damageFeedback = GetComponent<DamageFeedback>();
@@ -39,24 +43,31 @@ public class DestructibleObject : MonoBehaviour{
 
     protected virtual void InitializeVariables(){}
 
-    protected virtual void SubscribeToEvents(){
+    protected virtual void SubscribeToEvents()
+    {
         healthSystem.OnDeath += ObjectDestroyed;
         healthSystem.OnDamaged += ObjectTookDamage;
     }
 
-    protected void InitializeOthers(){
+    protected void InitializeOthers()
+    {
         floatingHealthBar?.SetMaxHealth(healthSystem.MaxHealth);
     }
 
-    protected virtual void ObjectTookDamage(float _damage){
-        damageFeedback?.DisplayDamageTaken(_damage);
-        floatingHealthBar?.UpdateHealthBar(healthSystem.CurrentHealth);
+    protected virtual void ObjectTookDamage(float _damage)
+    {
+        if(displayDamageTaken)
+        {
+            damageFeedback?.DisplayDamageTaken(_damage);
+            floatingHealthBar?.UpdateHealthBar(healthSystem.CurrentHealth);
+        }
 
         //play destruction damage
         audioData.Play(0);
     }
 
-    protected virtual void ObjectDestroyed(){
+    protected virtual void ObjectDestroyed()
+    {
         //play destruction damage
         audioData.Play(0);
 

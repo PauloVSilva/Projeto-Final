@@ -12,6 +12,9 @@ public class MovementSystem : MonoBehaviour{
     public CharacterController controller;
     public Rigidbody rb;
 
+    [SerializeField] private AudioClip characterDash;
+    [SerializeField] private AudioClip characterJump;
+
     [SerializeField] private GameObject dashVFX;
     [SerializeField] private GameObject jumpVFX;
 
@@ -323,6 +326,8 @@ public class MovementSystem : MonoBehaviour{
     {
         characterManager.animator.SetBool("Jump", true);
 
+        characterManager.audioSource.PlayOneShot(characterJump);
+
         playerVelocity.y = Mathf.Sqrt(JumpStrength * -3.0f * GravityValue);
         JumpsRemaining--;
         AirTime = 0;
@@ -347,6 +352,8 @@ public class MovementSystem : MonoBehaviour{
         CanDash = false;
 
         if (dashVFX == null) return;
+
+        characterManager.audioSource.PlayOneShot(characterDash);
 
         GameObject _dashVFX = Instantiate(dashVFX, transform.position, transform.rotation, transform);
         StartCoroutine(ClearVFX());

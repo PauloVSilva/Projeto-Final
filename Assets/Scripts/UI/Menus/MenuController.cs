@@ -158,6 +158,7 @@ public abstract class MenuController : MonoBehaviour
         if(playerInput == null) return;
 
         playerInput.TryGetComponent(out CharacterManager _characterManager);
+
         _characterManager.playerInputHandler.DisableActions(false);
 
         playerInput.actions["Back"].performed -= PlayerPressedBackButton;

@@ -60,14 +60,18 @@ public class PauseMenu : MenuController
 
     public void DropOut()
     {
-        playerInput.GetComponent<PlayerInputHandler>().OnCharacterPressMenuButton -= ButtonPressed;
-        GameManager.Instance.UnregisterPlayer(playerInput);
         Resume();
+
+        playerInput.GetComponent<PlayerInputHandler>().OnCharacterPressMenuButton -= ButtonPressed;
+
+        GameManager.Instance.UnregisterPlayer(playerInput);
     }
 
     public void QuitToMainMenu()
     {
         Back();
+
+        GameManager.Instance.UnregisterAllPlayers();
 
         MiniGameManager.Instance.QuitToMenu();
     }

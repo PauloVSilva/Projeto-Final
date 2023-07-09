@@ -22,18 +22,32 @@ public class Interactor : MonoBehaviour{
         GetComponent<PlayerInputHandler>().OnCharacterInteractWithObject += OnInteractWithObject;
     }
 
-    private void Update(){
+    private void Update()
+    {
         numFound = Physics.OverlapSphereNonAlloc(interactionPoint.position, interactionPointRadius, _collider, interactableMask);
         
-        if (numFound > 0){
+        if (numFound > 0)
+        {
             interactable = _collider[0].GetComponent<IInteractor>();
-            if (interactable != null && !interactionPromptUI.isDisplayed){
-                interactionPromptUI.SetPrompt(characterManager.playerInput, interactable.PromptString);
-                interactionPromptUI.OpenPanel();
+
+            if (interactable != null && !interactionPromptUI.isDisplayed)
+            {
+                if(_collider[0].GetComponent<InteractableToy>() != null && _collider[0].GetComponent<InteractableToy>().MinPlayersRequired > GameManager.Instance.playerList.Count)
+                {
+                    interactionPromptUI.SetPrompt("This game requires a friend ^-^");
+                    interactionPromptUI.OpenPanel();
+                }
+                else
+                {
+                    interactionPromptUI.SetPrompt(characterManager.playerInput, interactable.PromptString);
+                    interactionPromptUI.OpenPanel();
+                }
             }
         }
-        else{
-            if(interactable != null){
+        else
+        {
+            if(interactable != null)
+            {
                 interactable = null;
                 interactionPromptUI.ClosePanel();
                 interactionPromptUI.ClearPrompt();

@@ -16,8 +16,34 @@ public class CameraController : MonoBehaviour
     public List<GameObject> objectsTracked = new List<GameObject>();
 
 
+    public int currentPlayerIndex;
+    public InputAction resetFocus;
+    public InputAction focusOnPreviousPlayer;
+    public InputAction focusOnNextPlayer;
+
+    public InputAction zoomIn;
+    public InputAction zoomOut;
+
+    public InputAction hover;
+    public Vector3 moveInput;
+    public float moveSpeed = 10;
+
+    public InputAction rotate;
+    public Vector3 rotateInput;
+    public float rotateSpeed = 30;
+
+    public InputAction enableCanvas;
+    public bool canvasEnabled = true;
+    public Animator myAnimator;
+    public GameObject altTitle;
+
     private void Start()
     {
+        currentPlayerIndex = 0;
+        CanvasManager.Instance.gameObject.SetActive(canvasEnabled);
+        if (altTitle != null) altTitle.SetActive(!canvasEnabled);
+
+        SetupSpecialActions();
         SubscribeToEvents();
     }
 
@@ -46,10 +72,160 @@ public class CameraController : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        Vector3 newPosition = transform.position;
+        newPosition.x += moveInput.x * moveSpeed * Time.deltaTime;
+        newPosition.y += moveInput.y * moveSpeed * Time.deltaTime;
+        newPosition.z += moveInput.z * moveSpeed * Time.deltaTime;
+
+        transform.Rotate(rotateInput.x * rotateSpeed * Time.deltaTime, rotateInput.y * rotateSpeed * Time.deltaTime, rotateInput.z * rotateSpeed * Time.deltaTime); 
+        
+        transform.position = newPosition;
+    }
+
     private void OnDestroy()
     {
         UnsubscribeFromEvents();
     }
+
+    private void SetupSpecialActions()
+    {
+        resetFocus.performed += context => ResetFocus();
+        focusOnPreviousPlayer.performed += context => FocusOnPreviousPlayer();
+        focusOnNextPlayer.performed += context => FocusOnNextPlayer();
+
+        zoomIn.performed += context => ZoomIn();
+        zoomOut.performed += context => ZoomOut();
+
+        hover.performed += MoveCamera;
+        hover.canceled += StopMove;
+
+        rotate.performed += RotateCamera;
+        rotate.canceled += StopRotate;
+
+        enableCanvas.performed += EnableCanvas;
+
+        //resetFocus.Enable();
+        //focusOnPreviousPlayer.Enable();
+        //focusOnNextPlayer.Enable();
+        //zoomIn.Enable();
+        //zoomOut.Enable();
+        //hover.Enable();
+        //rotate.Enable();
+        //enableCanvas.Enable();
+    }
+
+
+    private void ResetFocus()
+    {
+        ResetTrackedList();
+
+        foreach (PlayerInput playerInput in GameManager.Instance.playerList)
+        {
+            AddCharacter(playerInput.transform.gameObject);
+        }
+
+        Vector3 eulerRotation = new Vector3(45f, 0f, 0f);
+        transform.rotation = Quaternion.Euler(eulerRotation);
+        fixedOffset = new Vector3(0, 5, -5);
+    }
+
+    private void FocusOnPreviousPlayer()
+    {
+        currentPlayerIndex -= 1;
+        if (currentPlayerIndex == -1) currentPlayerIndex = GameManager.Instance.playerList.Count - 1;
+
+        foreach (PlayerInput playerInput in GameManager.Instance.playerList)
+        {
+            UntrackPlayer(playerInput);
+        }
+
+        objectsTracked.Clear();
+
+        AddCharacter(GameManager.Instance.playerList[currentPlayerIndex].gameObject);
+    }
+
+    private void FocusOnNextPlayer()
+    {
+        currentPlayerIndex += 1;
+        if (currentPlayerIndex == GameManager.Instance.playerList.Count) currentPlayerIndex = 0;
+
+        foreach (PlayerInput playerInput in GameManager.Instance.playerList)
+        {
+            UntrackPlayer(playerInput);
+        }
+
+        objectsTracked.Clear();
+
+        AddCharacter(GameManager.Instance.playerList[currentPlayerIndex].gameObject);
+    }
+
+    private void ZoomIn()
+    {
+        fixedOffset.y--;
+        fixedOffset.z++;
+    }
+
+    private void ZoomOut()
+    {
+        fixedOffset.y++;
+        fixedOffset.z--;
+    }
+
+    private void MoveCamera(InputAction.CallbackContext context)
+    {
+        Debug.Log("Move");
+
+        if (objectsTracked.Count > 0)
+        {
+            foreach (PlayerInput playerInput in GameManager.Instance.playerList)
+            {
+                UntrackPlayer(playerInput);
+            }
+
+            objectsTracked.Clear();
+        }
+
+        moveInput = context.ReadValue<Vector3>();
+    }
+
+    private void StopMove(InputAction.CallbackContext context)
+    {
+        moveInput = new Vector3(0, 0, 0);
+    }
+
+    private void RotateCamera(InputAction.CallbackContext context)
+    {
+        Debug.Log("Rotate");
+
+        if (objectsTracked.Count > 0)
+        {
+            foreach (PlayerInput playerInput in GameManager.Instance.playerList)
+            {
+                UntrackPlayer(playerInput);
+            }
+
+            objectsTracked.Clear();
+        }
+
+        rotateInput = context.ReadValue<Vector3>();
+    }
+
+    private void StopRotate(InputAction.CallbackContext context)
+    {
+        rotateInput = new Vector3(0, 0, 0);
+    }
+
+    private void EnableCanvas(InputAction.CallbackContext context)
+    {
+        canvasEnabled = !canvasEnabled;
+
+        CanvasManager.Instance.gameObject.SetActive(canvasEnabled);
+        if (altTitle != null) altTitle.SetActive(!canvasEnabled);
+        if (myAnimator != null) myAnimator.SetBool("Travel", !canvasEnabled);
+    }
+
 
 
     private void SubscribeToEvents()

@@ -220,8 +220,8 @@ public class PlayerUIPanel : MonoBehaviour
 
     private void UpdateAmmo(Weapon _weapon){
         weaponAmmo.text = _weapon.ammo.ToString();
-        weaponAmmoCapacity.text = "/" + _weapon.ammoCapacity.ToString();
-        weaponAmmoTotal.text = "(" + _weapon.totalAmmo.ToString() + ")";
+        //weaponAmmoCapacity.text = "/" + _weapon.ammoCapacity.ToString();
+        //weaponAmmoTotal.text = "(" + _weapon.totalAmmo.ToString() + ")";
     }
 
     private void UpdateKillCount(GameObject character){

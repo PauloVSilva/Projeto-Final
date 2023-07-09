@@ -23,12 +23,16 @@ public class GameManager : Singleton<GameManager>
     public event System.Action<PlayerInput> OnPlayerLeftGame;
     public event System.Action<GameState> OnGameStateChanged;
 
-    protected override void Awake(){
+    protected override void Awake()
+    {
         base.Awake();
-
-        LevelLoader.Instance.LoadLevel("MainMenu");
         
         joinAction.performed += context => {JoinAction(context); Debug.Log("Player Joined");};
+    }
+
+    private void Start()
+    {
+        LevelLoader.Instance.LoadLevel("MainMenu");
     }
 
 
@@ -85,7 +89,13 @@ public class GameManager : Singleton<GameManager>
 
         OnPlayerLeftGame?.Invoke(playerInput);
 
-        Destroy(playerInput.transform.gameObject);
+        StartCoroutine(DestroyDelay());
+        IEnumerator DestroyDelay()
+        {
+            yield return new WaitForEndOfFrame();
+
+            Destroy(playerInput.transform.gameObject);
+        }
     }
     
     public void UnregisterAllPlayers()

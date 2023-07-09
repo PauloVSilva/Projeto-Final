@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf820d9f4a8ef754f9837c2c80bddd38, type: 3}
   m_Name: WeaponSO_BlasterC
   m_EditorClassIdentifier: 
-  itemName: Blaster C
+  itemName: Maverick
   itemSprite: {fileID: 21300000, guid: 8ec79af8f678c1d49befed5e7d3dfc2c, type: 3}
   maxStackSize: 1
   itemModel: {fileID: 2526096355226271964, guid: e706d7dc57fdf504e927fbcdc18e79bf, type: 3}
@@ -24,7 +24,7 @@ MonoBehaviour:
   chamberRefillType: 1
   reloadType: 0
   size: 0
-  ammoCapacity: 6
+  ammoCapacity: 8
   fireRate: 1
   weight: 0
   reloadTime: 1

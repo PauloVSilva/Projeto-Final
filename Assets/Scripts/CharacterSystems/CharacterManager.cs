@@ -96,7 +96,7 @@ public class CharacterManager : MonoBehaviour{
                 other.GetComponent<Food>().PickedUp(this.gameObject);
             }
 
-            if (other.gameObject.GetComponent<Weapon>() && other.gameObject.GetComponent<Weapon>().ammo > 0 && other.gameObject.GetComponent<Weapon>().totalAmmo > 0)
+            if (other.gameObject.GetComponent<Weapon>() && other.gameObject.GetComponent<Weapon>().ammo > 0/* && other.gameObject.GetComponent<Weapon>().totalAmmo > 0*/)
             {
                 if (!IsArmed())
                 {

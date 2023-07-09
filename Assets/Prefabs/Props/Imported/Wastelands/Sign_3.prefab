@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 4767818662475653736}
   - component: {fileID: 4776314636396032258}
   - component: {fileID: 3761171902945469344}
-  - component: {fileID: 103183878538422847}
   - component: {fileID: 8089661063482165574}
   m_Layer: 0
   m_Name: Sign_3
@@ -31,7 +30,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 692986167826271489}
-  m_LocalRotation: {x: 0.000000021855694, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -136,6 +135,7 @@ MonoBehaviour:
   damageFeedback: {fileID: 0}
   floatingHealthBar: {fileID: 0}
   MaxHealth: 70
+  displayDamageTaken: 0
   audioData: {fileID: 0}
 --- !u!114 &3761171902945469344
 MonoBehaviour:
@@ -149,21 +149,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6048663dd5413b45a484b91e0135151, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &103183878538422847
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 692986167826271489}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9207b1549e590b548bc7d27dace972b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inventorySlots:
-  - item: {fileID: 11400000, guid: c7929217662b1ca4d960b30ef0f2d58e, type: 2}
-    stackSize: 2
 --- !u!82 &8089661063482165574
 AudioSource:
   m_ObjectHideFlags: 0
